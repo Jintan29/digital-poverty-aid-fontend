@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FristPage } from "../components/Form/FristPage";
+import { HumanCapital } from "../components/Form/HumanCapital";
 
 export const Form = () => {
   //ทดลองแสดงข้อมูลฟอร์ม
@@ -34,7 +35,9 @@ export const Form = () => {
       </div>
       
       <FristPage/>
-      
+      <HumanCapital/>
+
+
     </div>
   );
 };
