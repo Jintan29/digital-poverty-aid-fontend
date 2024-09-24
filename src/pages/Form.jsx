@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FristPage } from "../components/Form/FristPage";
 import { HumanCapital } from "../components/Form/HumanCapital";
+import Southern from "../components/Form/southern";
 
 export const Form = () => {
   //ทดลองแสดงข้อมูลฟอร์ม
@@ -36,7 +37,7 @@ export const Form = () => {
       
       <FristPage/>
       <HumanCapital/>
-
+      <Southern/>
 
     </div>
   );
