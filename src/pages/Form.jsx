@@ -10,16 +10,16 @@ export const Form = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    loadData();
+    // loadData();
   });
 
-  const loadData = async () => {
-    await axios
-      .get("http://localhost:8080/api/house-hold/lists")
-      //(res)=> setData(res.data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
+  // const loadData = async () => {
+  //   await axios
+  //     .get("http://localhost:8080/api/house-hold/lists")
+  //     //(res)=> setData(res.data)
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.log(err));
+  // };
 
   return (
     <div className="mx-5 my-5">
