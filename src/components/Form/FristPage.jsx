@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 //จัดการวันที่
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,26 +9,61 @@ import ThaiDatePicker from "./ThaiDatePicker";
 registerLocale("th", th);
 
 export const FristPage = () => {
+  //เก็บข้อมูลจาก input
+  const [formData, setFormData] = useState({
+    houseId: "",
+    greenBook: "",
+    hasGreenBook: false,
+    village: "",
+    houseNumber: "",
+    soi: "",
+    road: "",
+    subdistrict: "",
+    district: "",
+    province: "",
+    postalCode: "",
+    houseOwnerTitle: "นาย", // ค่า default เป็น นาย
+    houseOwnerName: "",
+    houseOwnerSurname: "",
+    houseOwnerID: "",
+  });
+
+  // Funcจัดการ input
+  const handleChange = (e) => {
+    const { id, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [id]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
   return (
     <div>
       <div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div class="mb-6 mx-10 mt-10">
             <label
-              for="email"
+              for="houseId"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               รหัสบ้าน
             </label>
             <input
               type="text"
-              id="house_Id"
+              id="houseId"
               class="bg-gray-50 border my-6 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="HC-XXXXXXX"
+              value={formData.houseId}
+              onChange={handleChange}
               required
             />
             <label
-              for="green_book"
+              for="greenBook"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               หมายเลขครัวเรือนเกษตรกร(สมุดเขียว)
@@ -37,10 +72,12 @@ export const FristPage = () => {
             {/* CheckBox1 */}
             <div class="flex items-center h-5 ">
               <input
-                id="remember"
+                id="hasGreenBook"
                 type="checkbox"
                 value=""
                 class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                checked={formData.hasGreenBook}
+                onChange={handleChange}
                 required
               />
               <label className="px-5">ไม่มี</label>
@@ -48,142 +85,163 @@ export const FristPage = () => {
             {/* CheckBox2 */}
             <div class="flex items-center h-5 mt-4">
               <input
-                id="remember"
+                id="hasGreenBook"
                 type="checkbox"
                 value=""
                 class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                checked={formData.hasGreenBook}
+                onChange={handleChange}
                 required
               />
               <label className="px-5">มี หมายเลข</label>
-              <input
-                type="text"
-                id="house_Id"
-                class="bg-gray-50 border my-6 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="หมายเลขครัวเรือนเกษตร"
-                required
-              />
+              {/* ถ้ามีจะแสดง Input*/}
+              {formData.hasGreenBook && (
+                <input
+                  type="text"
+                  id="greenBook"
+                  className="bg-gray-50 border my-6 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5"
+                  placeholder="หมายเลขครัวเรือนเกษตร"
+                  value={formData.greenBook}
+                  onChange={handleChange}
+                  required
+                />
+              )}
             </div>
           </div>
 
           <div class="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
             <div className="">
               <label
-                for="first_name"
+                for="village"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 ชื่อหมู่บ้าน
               </label>
               <input
                 type="text"
-                id="first_name"
+                id="village"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="John"
+                value={formData.village}
+                onChange={handleChange}
                 required
               />
             </div>
             <div>
               <label
-                for="last_name"
+                for="houseNumber"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 บ้านเลขที่
               </label>
               <input
                 type="text"
-                id="last_name"
+                id="houseNumber"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Doe"
+                placeholder=""
+                value={formData.houseNumber}
+                onChange={handleChange}
                 required
               />
             </div>
             <div>
               <label
-                for="company"
+                for="soi"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 ซอย
               </label>
               <input
                 type="text"
-                id="company"
+                id="soi"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Flowbite"
-                required
+                placeholder=""
+                value={formData.soi}
+                onChange={handleChange}
               />
             </div>
             <div>
               <label
-                for="phone"
+                for="road"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 ถนน
               </label>
               <input
-                type="tel"
-                id="phone"
+                type="text"
+                id="road"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="123-45-678"
-                pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                placeholder=""
+                value={formData.road}
+                onChange={handleChange}
                 required
               />
             </div>
             <div>
               <label
-                for="website"
+                for="subdistrict"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 ตำบล
               </label>
               <input
-                type="url"
-                id="website"
+                type="text"
+                id="subdistrict"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="flowbite.com"
+                value={formData.subdistrict}
+                onChange={handleChange}
                 required
               />
             </div>
             <div>
               <label
-                for="visitors"
+                for="district"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 อำเภอ
               </label>
               <input
-                type="number"
-                id="visitors"
+                type="text"
+                id="district"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
+                value={formData.district}
+                onChange={handleChange}
                 required
               />
             </div>
             <div>
               <label
-                for="visitors"
+                for="province"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 จังหวัด
               </label>
               <input
-                type="number"
-                id="visitors"
+                type="text"
+                id="province"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
+                value={formData.province}
+                onChange={handleChange}
                 required
               />
             </div>
             <div>
               <label
-                for="visitors"
+                for="postalCode"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 รหัสไปรษณีย์
               </label>
               <input
                 type="number"
-                id="visitors"
+                id="postalCode"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
+                value={formData.postalCode}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -198,19 +256,21 @@ export const FristPage = () => {
           <div className="mb-6 mx-10 grid gap-6  md:grid-cols-3">
             <div className="relative  rounded-md shadow-sm">
               <label
-                for="visitors"
+                for="houseOwnerName"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 ชื่อ เจ้าบ้าน ตามทะเบียนบ้าน
               </label>
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <label htmlFor="currency" className="sr-only">
-                  Currency
+                <label htmlFor="houseOwnerTitle" className="sr-only">
+                  Title
                 </label>
                 <select
-                  id="currency"
-                  name="currency"
+                  id="houseOwnerTitle"
+                  name="houseOwnerTitle"
                   className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
+                  value={formData.houseOwnerTitle}
+                  onChange={handleChange}
                 >
                   <option>นาย</option>
                   <option>นาง</option>
@@ -218,53 +278,59 @@ export const FristPage = () => {
                 </select>
               </div>
               <input
-                id="price"
-                name="text"
+                id="houseOwnerName"
+                name="houseOwnerName"
                 type="text"
                 placeholder=""
+                value={formData.houseOwnerName}
+                onChange={handleChange}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
             <div className="">
               <label
-                for="first_name"
+                for="houseOwnerSurname"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 นามสกุล
               </label>
               <input
                 type="text"
-                id="first_name"
+                id="houseOwnerSurname"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
+                value={formData.houseOwnerSurname}
+                onChange={handleChange}
                 required
               />
             </div>
             <div className="">
               <label
-                for="first_name"
+                for="houseOwnerID"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 หมายเลขบัตรประจำตัวประชาชน <b>เจ้าบ้าน</b>
               </label>
               <input
-                type="text"
-                id="first_name"
+                type="number"
+                id="houseOwnerID"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
+                value={formData.houseOwnerID}
+                onChange={handleChange}
                 required
               />
             </div>
           </div>
 
-          <div className="my-6 mx-10 mt-10">
+          {/* <div className="my-6 mx-10 mt-10">
             <h3>
               <b>ข้อมูล ผู้ให้ข้อมูล</b> (ต้องเป็นบุคคลที่อาศัยอยู่ในครัวเรือน
               หรือ ได้รับความยินยอมจากบุคคลในครัวเรือน ให้เป็นผู้ให้ข้อมูล)
             </h3>
-          </div>
+          </div> */}
 
-          <div className="mb-6 mx-10 grid gap-6  md:grid-cols-4 mt-5">
+          {/* <div className="mb-6 mx-10 grid gap-6  md:grid-cols-4 mt-5">
             <div className="relative  rounded-md shadow-sm">
               <label
                 for="visitors"
@@ -424,9 +490,9 @@ export const FristPage = () => {
                 required
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="my-6 mx-10 ">
+          {/* <div className="my-6 mx-10 ">
             <label
               for="first_name"
               class="block mb-2  font-medium text-gray-900 dark:text-white text-base"
@@ -435,15 +501,15 @@ export const FristPage = () => {
               ชัดเจน และยินยอมให้ใช้ข้อมูลที่มีการจัดเก็บตามวัตถุประสงค์
               ของโครงการเท่านั้น
             </label>
-          </div>
+          </div> */}
 
-          <div className="mt-6 mx-10 mb-3">
+          {/* <div className="mt-6 mx-10 mb-3">
             <h3>
               <b>สำหรับทีมสำรวจข้อมูล</b>
             </h3>
-          </div>
+          </div> */}
 
-          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-3  mx-10">
+          {/* <div class="grid gap-6 mb-6 mt-6 md:grid-cols-3  mx-10">
             <div className="relative  rounded-md shadow-sm">
               <label
                 for="visitors"
@@ -567,24 +633,24 @@ export const FristPage = () => {
                 required
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="mt-6 mx-10 ">
+          {/* <div className="mt-6 mx-10 ">
             <h4>
               <b>วันที่สำรวจ</b>
             </h4>
-          </div>
+          </div> */}
 
           {/* components เก็บวันที่ */}
-          <ThaiDatePicker />
+          {/* <ThaiDatePicker /> */}
 
-          <div className="mt-6 mx-10 ">
+          {/* <div className="mt-6 mx-10 ">
             <h3>
               <b>สำหรับ ผู้บันทึกข้อมูล</b>
             </h3>
-          </div>
+          </div> */}
 
-          <div class="grid gap-6 mb-6 mt-3 md:grid-cols-4  mx-10">
+          {/* <div class="grid gap-6 mb-6 mt-3 md:grid-cols-4  mx-10">
             <div className="relative  rounded-md shadow-sm">
               <label
                 for="visitors"
@@ -661,9 +727,9 @@ export const FristPage = () => {
                 placeholderText="เลือกวันที่"
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="my-6 mx-10 ">
+          {/* <div className="my-6 mx-10 ">
             <label
               for="first_name"
               class="block mb-2  font-medium text-gray-900 dark:text-white text-base"
@@ -689,38 +755,14 @@ export const FristPage = () => {
             </p>
             </div>
             
-          </div>
+          </div> */}
 
-          <div class="flex items-start mb-6">
-            {/* <div class="flex items-center h-5">
-              <input
-                id="remember"
-                type="checkbox"
-                value=""
-                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                required
-              />
-            </div> */}
-            {/* <label
-              for="remember"
-              class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              I agree with the{" "}
-              <a
-                href="#"
-                class="text-blue-600 hover:underline dark:text-blue-500"
-              >
-                terms and conditions
-              </a>
-              .
-            </label> */}
-          </div>
-          {/* <button
+          <button
             type="submit"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Submit
-          </button> */}
+          </button>
         </form>
       </div>
     </div>
