@@ -1,8 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { FristPage } from "../components/Form/FristPage";
-import { HumanCapital } from "../components/Form/HumanCapital";
-import GroupSamForm from "../components/Form/GroupSamForm";
+//import { FristPage } from "../components/Form/FristPage";
+//import { HumanCapital } from "../components/Form/HumanCapital";
+import Southern from "../components/Form/southern";
+//import GroupSamForm from "../components/Form/GroupSamForm";
+import Suggestions from "../components/Form/Suggestions";
+//import Naturalcapital from "../components/Form/Naturalcapital";
+
 
 
 export const Form = () => {
@@ -40,7 +44,11 @@ export const Form = () => {
       {/* <FristPage/> */}
 
       {/* กำลังสร้างการ loop */}
-      <HumanCapital/>
+      {/*<HumanCapital/>*/}
+      <Southern/>
+      <Suggestions/>
+      {/* <Naturalcapital/> */}
+    
 
       {/* <GroupSamForm/> */}
       
