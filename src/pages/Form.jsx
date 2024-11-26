@@ -1,14 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-//import { FristPage } from "../components/Form/FristPage";
-//import { HumanCapital } from "../components/Form/HumanCapital";
+import { FristPage } from "../components/Form/FristPage";
+import { HumanCapital } from "../components/Form/HumanCapital";
+import GroupSamForm from "../components/Form/GroupSamForm";
+import Financialcapital from "../components/Form/Financialcapital";
+import Socialcapital from "../components/Form/Socialcapital";
+import Naturalcapital from "../components/Form/Naturalcapital";
 import Southern from "../components/Form/southern";
-//import GroupSamForm from "../components/Form/GroupSamForm";
 import Suggestions from "../components/Form/Suggestions";
-//import Naturalcapital from "../components/Form/Naturalcapital";
 
 
-
+import Naturalcapital2 from "../components/Form/์Naturalcapital2";
 export const Form = () => {
   //ทดลองแสดงข้อมูลฟอร์ม
   const [data, setData] = useState([]);
@@ -44,16 +46,16 @@ export const Form = () => {
       {/* <FristPage/> */}
 
       {/* กำลังสร้างการ loop */}
+      {/* <HumanCapital/> */}
+      <Financialcapital/>
       {/*<HumanCapital/>*/}
       <Southern/>
       <Suggestions/>
       {/* <Naturalcapital/> */}
-    
 
-      {/* <GroupSamForm/> */}
-      
-      
-
+      <Socialcapital/>  
+      <Naturalcapital/> 
+      <Naturalcapital2/>
 
     </div>
   );
