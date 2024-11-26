@@ -6,31 +6,26 @@ import GroupSamForm from "../components/Form/GroupSamForm";
 import Financialcapital from "../components/Form/Financialcapital";
 import Socialcapital from "../components/Form/Socialcapital";
 import Naturalcapital from "../components/Form/Naturalcapital";
+import Southern from "../components/Form/southern";
+import Suggestions from "../components/Form/Suggestions";
 
-// import Testjj from "../components/Form/Testjj";
-// import Test1 from "../components/Form/Test1";
-// import Test2 from "../components/Form/Test2";
-// import Test3 from "../components/Form/Test3";
-// import Test4 from "../components/Form/Test4";
-// import Test5 from "../components/Form/Test5";
-// import Test6 from "../components/Form/Test6";
-// import T from "../components/Form/t"
+
 import Naturalcapital2 from "../components/Form/์Naturalcapital2";
 export const Form = () => {
   //ทดลองแสดงข้อมูลฟอร์ม
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    loadData();
+    // loadData();
   });
 
-  const loadData = async () => {
-    await axios
-      .get("http://localhost:8080/api/house-hold/lists")
-      //(res)=> setData(res.data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
+  // const loadData = async () => {
+  //   await axios
+  //     .get("http://localhost:8080/api/house-hold/lists")
+  //     //(res)=> setData(res.data)
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.log(err));
+  // };
 
   return (
     <div className="mx-5 my-5">
@@ -53,13 +48,11 @@ export const Form = () => {
       {/* กำลังสร้างการ loop */}
       {/* <HumanCapital/> */}
       <Financialcapital/>
-      {/* <GroupSamForm/> */}
-      {/* <Test1/> */}
-      {/* <Test2/> */}
-      {/* <Test3/> */}
-      {/* <Test4/> */}
-      {/* <Test5/> */}
-      {/* <Test6/>  */}
+      {/*<HumanCapital/>*/}
+      <Southern/>
+      <Suggestions/>
+      {/* <Naturalcapital/> */}
+
       <Socialcapital/>  
       <Naturalcapital/> 
       <Naturalcapital2/>
