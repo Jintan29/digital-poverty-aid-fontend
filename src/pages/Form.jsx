@@ -3,8 +3,19 @@ import React, { useEffect, useState } from "react";
 import { FristPage } from "../components/Form/FristPage";
 import { HumanCapital } from "../components/Form/HumanCapital";
 import GroupSamForm from "../components/Form/GroupSamForm";
+import Financialcapital from "../components/Form/Financialcapital";
+import Socialcapital from "../components/Form/Socialcapital";
+import Naturalcapital from "../components/Form/Naturalcapital";
 
-
+// import Testjj from "../components/Form/Testjj";
+// import Test1 from "../components/Form/Test1";
+// import Test2 from "../components/Form/Test2";
+// import Test3 from "../components/Form/Test3";
+// import Test4 from "../components/Form/Test4";
+// import Test5 from "../components/Form/Test5";
+// import Test6 from "../components/Form/Test6";
+// import T from "../components/Form/t"
+import Naturalcapital2 from "../components/Form/์Naturalcapital2";
 export const Form = () => {
   //ทดลองแสดงข้อมูลฟอร์ม
   const [data, setData] = useState([]);
@@ -40,12 +51,18 @@ export const Form = () => {
       {/* <FristPage/> */}
 
       {/* กำลังสร้างการ loop */}
-      <HumanCapital/>
-
+      {/* <HumanCapital/> */}
+      <Financialcapital/>
       {/* <GroupSamForm/> */}
-      
-      
-
+      {/* <Test1/> */}
+      {/* <Test2/> */}
+      {/* <Test3/> */}
+      {/* <Test4/> */}
+      {/* <Test5/> */}
+      {/* <Test6/>  */}
+      <Socialcapital/>  
+      <Naturalcapital/> 
+      <Naturalcapital2/>
 
     </div>
   );
