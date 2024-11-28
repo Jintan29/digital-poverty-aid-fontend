@@ -19,7 +19,7 @@ export const FristPage = ({
   const [formData, setFormData] = useState({
     Household: {
       house_code: "",
-      has_greenBook: null,
+      has_greenBook: false,
       green_book_id: "",
       village: "",
       house_number: "",
@@ -43,7 +43,7 @@ export const FristPage = ({
       national_id: "",
       phone: "",
       fam_total_member: null,
-      fam_toal_live: null,
+      fam_total_live: null,
       live_but_has_no_name_in_fam: null,
       total_has_name_not_live: null,
     },
@@ -57,10 +57,14 @@ export const FristPage = ({
       },
     ],
     DataRecorder: {
-      title: "นาย",
-      fname: "",
-      lname: "",
-      phone: "",
+      // title: "นาย",
+      // fname: "",
+      // lname: "",
+      // phone: "",
+      recder_title :"นาย",
+      recder_fname:'',
+      recder_lname:'',
+      recder_phone:''
     },
   });
 
@@ -142,7 +146,7 @@ export const FristPage = ({
     const updateData = { ...formData };
     
     //str->int
-    if (field === "fam_total_member" || field ==="fam_toal_live" || field ==="fam_toal_live" 
+    if (field === "fam_total_member" || field ==="fam_total_live" || field ==="fam_total_live" 
       || field === "live_but_has_no_name_in_fam"  || field === "total_has_name_not_live"
     ) {
       value = parseInt(value, 10);  // convert to base 10
@@ -739,7 +743,7 @@ export const FristPage = ({
 
             <div className="">
               <label
-                for="fam_toal_live"
+                for="fam_total_live"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 อาศัยอยู่จริงในครัวเรือน(คน)
@@ -747,8 +751,8 @@ export const FristPage = ({
               <input
                 type="number"
                 name="Informant"
-                id="fam_toal_live"
-                value={formData.Informant.fam_toal_live}
+                id="fam_total_live"
+                value={formData.Informant.fam_total_live}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุจำนวนสมาชิค"
                 required
@@ -970,7 +974,7 @@ export const FristPage = ({
               </label>
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
                 <select
-                  id="title"
+                  id="recder_title"
                   name="DataRecorder"
                   onChange={(e) =>
                     handleInputChange(
@@ -988,7 +992,7 @@ export const FristPage = ({
                 </select>
               </div>
               <input
-                id="fname"
+                id="recder_fname"
                 onChange={(e) =>
                   handleInputChange(e.target.name, e.target.id, e.target.value)
                 }
@@ -1011,11 +1015,12 @@ export const FristPage = ({
               <input
                 type="text"
                 required
+                id="recder_lname"
                 name="DataRecorder"
                 onChange={(e) =>
                   handleInputChange(e.target.name, e.target.id, e.target.value)
                 }
-                id="lname"
+                
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 value={formData.DataRecorder.lname}
@@ -1032,7 +1037,7 @@ export const FristPage = ({
               <input
                 type="number"
                 name="DataRecorder"
-                id="phone"
+                id="recder_phone"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 onChange={(e) =>
