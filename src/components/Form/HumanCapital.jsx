@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 
-export const HumanCapital = () => {
+export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
+
+
   //สถานะเริ่มต้นฟอร์ม
   const [members, setMembers] = useState([
     {
@@ -39,13 +41,20 @@ export const HumanCapital = () => {
     },
   ]);
 
+  //load data from main
+  useEffect(()=>{
+    if(mainFormData.HumanCapital && mainFormData.HumanCapital.members){ //ดูว่าหน้หลักมีข้อมูลหรือยัง
+      setMembers(mainFormData.HumanCapital.members)
+    }
+  },[mainFormData])
+
   const [isProcessing, setIsProcessing] = useState(false);
 
   const createMembers = async () => {
     setIsProcessing(true);
     try {
       console.log("ข้อมูลทั้งหมดที่ส่ง:", members);
-  
+
       // ส่งคำขอสำหรับสมาชิกแต่ละคน
       const requests = members.map((member) => {
         // เพิ่ม form_id ในข้อมูลที่ส่ง
@@ -53,22 +62,23 @@ export const HumanCapital = () => {
           ...member,
           form_id: 1, // ปรับตามค่าที่เหมาะสม
         };
-        return axios.post(
-          "http://localhost:8080/api/member-household/create-capital",
-          memberData
-        )
-        .then((response) => {
-          console.log("Response from server:", response.data);
-          return response.data;
-        })
-        .catch((error) => {
-          throw error;
-        });
+        return axios
+          .post(
+            "http://localhost:8080/api/member-household/create-capital",
+            memberData
+          )
+          .then((response) => {
+            console.log("Response from server:", response.data);
+            return response.data;
+          })
+          .catch((error) => {
+            throw error;
+          });
       });
-  
+
       // รอให้คำขอทั้งหมดเสร็จสิ้น
       await Promise.all(requests);
-  
+
       alert("ส่งข้อมูลสำเร็จ!");
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการสร้าง สมาชิกครัวเรือน:", error);
@@ -156,7 +166,6 @@ export const HumanCapital = () => {
     const updatedMembers = [...members]; //colne ค่า
 
     if (checked) {
-      
       updatedMembers[index].career = [...updatedMembers[index].career, value];
     } else {
       //ลูปกรองข้อมูลออก
@@ -196,15 +205,53 @@ export const HumanCapital = () => {
     setMembers(updatedMembers);
   };
 
-  useEffect(() => {
-    
-  }, [selectedCareer, selectedCareerMadeIncome,members]); // ฟังทุกครั้งที่ selectedCareer เปลี่ยนแปลง
+  useEffect(() => {}, [selectedCareer, selectedCareerMadeIncome, members]); // ฟังทุกครั้งที่ selectedCareer เปลี่ยนแปลง
+
+  // เพิ่มสถานะสำหรับเก็บการกระทำของปุ่มที่ถูกกด
+  const [submitAction, setSubmitAction] = useState("");
+
+  //func ส่งข้อมูลและเปลี่ยนหน้า
+  const handleSubmit = (e)=>{
+    if (e) e.preventDefault();
+
+    setMainFormData((prevData)=>({ //นำค่าใหม่ไปต่อท้าย
+      ...prevData,
+      HumanCapital:{ //สร้างฟิลด์นี้แล้วเอาข้อมูลไปใส่
+        members:members
+      }
+    }))
+
+    if(submitAction==='previous'){
+      setCurrentPage(1)
+    }else if(submitAction === "next"){
+      setCurrentPage(3)
+    }
+
+    // setCurrentPage(3)
+  }
+
+  //ย้อนกลับแบบไม่ validate
+  const handlePrevPage = ()=>{
+    setMainFormData((prevData)=>({ 
+      ...prevData,
+      HumanCapital:{ 
+        members:members
+      }
+    }))
+    setCurrentPage(1)
+  }
 
   return (
     <div>
+      <div className="ml-10">
+        <h2 className="text-black text-2xl font-bold  py-5">
+          ส่วนที่ 1 ทุนมนุษย์
+        </h2>
+      </div>
       {/* ทำการloop */}
+      <form onSubmit={e=>handleSubmit(e)} >
       {members.map((member, index) => (
-        <div className="mb-6 mx-10 mt-0 bg-blue-200 rounded-md">
+        <div className="mb-6 mx-10 mt-5 py-5 bg-blue-200 rounded-md">
           <div className="Container">
             <h3 className="text-black text-lg font-bold px-5 py-5">
               ข้อมูลสมาชิคครัวเรือนคนที่ {index + 1}
@@ -230,6 +277,7 @@ export const HumanCapital = () => {
                   onChange={(e) =>
                     handleInputChange(index, "title", e.target.value)
                   }
+                  
                   className="border border-transparent mb-5 bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
                 >
                   <option>นาย</option>
@@ -247,6 +295,7 @@ export const HumanCapital = () => {
                 onChange={(e) =>
                   handleInputChange(index, "fname", e.target.value)
                 }
+                required
                 placeholder=""
                 className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
@@ -342,7 +391,7 @@ export const HumanCapital = () => {
                 for="birthdate"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                วันเกิด(1/12/2546)
+                วันเกิด ตัวอย่าง (2546-04-13)
               </label>
               <input
                 type="text"
@@ -501,45 +550,39 @@ export const HumanCapital = () => {
               </div>
 
               <div className="flex items-end justify-between">
-
-                <div className="w-10/12"> 
-                <label
-                  htmlFor={`frequency_${index}_${welfareIndex}`}
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  ความถี่
-                </label>
-                <select
-                  id={`frequency_${index}_${welfareIndex}`}
-                  name={`frequency_${index}_${welfareIndex}`}
-                  value={welfare.frequency}
-                  onChange={(e) =>
-                    handleWelfareInputChange(
-                      index,
-                      welfareIndex,
-                      "frequency",
-                      e.target.value
-                    )
-                  }
-                  className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none focus:border-gray-500 focus:rounded-md"
-                >
-                  <option value="ทุกเดือน">ทุกเดือน</option>
-                  <option value="ครั้งเดียว">ครั้งเดียว</option>
-                </select>
-                </div>
-                
-                
-                  <button
-                    type="button"
-                    onClick={() => delSocialWelfare(index)}
-                    className="flex items-center justify-end py-2 px-4 mb-6 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-900 focus:outline-none"
+                <div className="w-10/12">
+                  <label
+                    htmlFor={`frequency_${index}_${welfareIndex}`}
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    <Icon
-                      icon="material-symbols:delete-rounded"
-                      className=""
-                    />
-                  </button>
-                
+                    ความถี่
+                  </label>
+                  <select
+                    id={`frequency_${index}_${welfareIndex}`}
+                    name={`frequency_${index}_${welfareIndex}`}
+                    value={welfare.frequency}
+                    onChange={(e) =>
+                      handleWelfareInputChange(
+                        index,
+                        welfareIndex,
+                        "frequency",
+                        e.target.value
+                      )
+                    }
+                    className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none focus:border-gray-500 focus:rounded-md"
+                  >
+                    <option value="ทุกเดือน">ทุกเดือน</option>
+                    <option value="ครั้งเดียว">ครั้งเดียว</option>
+                  </select>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => delSocialWelfare(index)}
+                  className="flex items-center justify-end py-2 px-4 mb-6 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-900 focus:outline-none"
+                >
+                  <Icon icon="material-symbols:delete-rounded" className="" />
+                </button>
               </div>
             </div>
           ))}
@@ -761,6 +804,7 @@ export const HumanCapital = () => {
                 onChange={(e) =>
                   handleCareerChange(index, "พืชเกษตร", e.target.checked)
                 }
+                checked={member.career.includes('พืชเกษตร')}
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
@@ -777,6 +821,7 @@ export const HumanCapital = () => {
                 onChange={(e) =>
                   handleCareerChange(index, "ประมง", e.target.checked)
                 }
+                checked={member.career.includes('ประมง')}
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
@@ -794,6 +839,7 @@ export const HumanCapital = () => {
                   handleCareerChange(index, "ปศุสัตว์", e.target.checked)
                 }
                 value="ปศุสัตว์"
+                checked={member.career.includes('ปศุสัตว์')}
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
@@ -814,6 +860,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.career.includes('รับจ้างภาคการเกษตร')}
                 value="รับจ้างภาคการเกษตร"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -836,6 +883,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.career.includes('รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)')}
                 value="รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -879,6 +927,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.career.includes('ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
                 value="ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -901,6 +950,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.career.includes('รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
                 value="รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -923,6 +973,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.career.includes('ธุรกิจส่วนตัว/งานบริการ')}
                 value="ธุรกิจส่วนตัว/งานบริการ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -956,15 +1007,20 @@ export const HumanCapital = () => {
 
             {/* ส่วน Input ปกติเดี๋ยวกลับมาทำ */}
 
-            <div className="">
-              <input
-                type="text"
-                id="first_name"
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="ระบุอาชีพ"
-                required
-              />
-            </div>
+            {member.career.includes("อื่นๆ") && (
+                <div className="">
+                  <input
+                    type="text"
+                    id={`career-other-${index}`}
+                    value={member.careerOther || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "careerOther", e.target.value)
+                    }
+                    className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="ระบุอาชีพอื่นๆ"
+                  />
+                </div>
+              )}
           </div>
 
           <div className="Container ml-5 ">
@@ -984,6 +1040,7 @@ export const HumanCapital = () => {
                   handleCareerMadeIncomeChange(index, "ไม่มี", e.target.checked)
                 }
                 value="ไม่มี"
+                checked={member.work_can_made_income.includes('ไม่มี')}
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
@@ -1005,6 +1062,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.work_can_made_income.includes('พืชเกษตร')}
                 value="พืชเกษตร"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -1023,6 +1081,7 @@ export const HumanCapital = () => {
                   handleCareerMadeIncomeChange(index, "ประมง", e.target.checked)
                 }
                 value="ประมง"
+                checked={member.work_can_made_income.includes('ประมง')}
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
@@ -1043,6 +1102,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.work_can_made_income.includes('ปศุสัตว์')}
                 value="ปศุสัตว์"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -1065,6 +1125,7 @@ export const HumanCapital = () => {
                   )
                 }
                 value="รับจ้างภาคการเกษตร"
+                checked={member.work_can_made_income.includes('รับจ้างภาคการเกษตร')}
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
@@ -1087,6 +1148,7 @@ export const HumanCapital = () => {
                   )
                 }
                 value="รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
+                checked={member.work_can_made_income.includes('รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)')}
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
@@ -1108,6 +1170,8 @@ export const HumanCapital = () => {
                   )
                 }
                 value="ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
+                checked={member.work_can_made_income.includes('ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน')}
+
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
@@ -1128,6 +1192,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.work_can_made_income.includes('ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
                 value="ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -1150,6 +1215,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.work_can_made_income.includes('รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
                 value="รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -1172,6 +1238,7 @@ export const HumanCapital = () => {
                     e.target.checked
                   )
                 }
+                checked={member.work_can_made_income.includes('ธุรกิจส่วนตัว/งานบริการ')}
                 value="ธุรกิจส่วนตัว/งานบริการ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -1192,6 +1259,7 @@ export const HumanCapital = () => {
                 onChange={(e) =>
                   handleCareerMadeIncomeChange(index, "อื่นๆ", e.target.checked)
                 }
+                checked={member.work_can_made_income.includes('อื่นๆ')}
                 value="อื่นๆ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -1209,7 +1277,6 @@ export const HumanCapital = () => {
                 id="first_name"
                 class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุอาชีพ"
-                required
               />
             </div>
           </div>
@@ -1236,30 +1303,62 @@ export const HumanCapital = () => {
           <button
             type="button"
             onClick={() => delMember(index)}
-            class="focus:outline-none px-6 mx-6 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm  py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+            class="flex justify-center focus:outline-none mb-3 px-8 mx-6 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm  py-2.5 me-2  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
           >
+            <Icon
+              icon="material-symbols:account-circle-off-rounded"
+              className="mr-2 mt-0.5 text-lg"
+            />
             ลบสมาชิคคนที่ {index + 1}
           </button>
         </div>
       ))}
+      
+      
 
-      <div className="flex gap-4 mt-4 mr-10">
+      <div className="flex  gap-4 mt-4 ml-12">
         <button
           type="button"
           onClick={addMember}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-auto"
+          className="flex justify-center bg-emerald-500 text-white px-4 py-2 rounded-lg "
         >
+          <Icon
+            icon="material-symbols:person-add-rounded"
+            className="mr-2 mt-0.5 text-lg"
+          />
           เพิ่มสมาชิคคนถัดไป
         </button>
 
-        <button
-          type="button"
-          onClick={createMembers}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-        >
-          บันทึกข้อมูลสมาชิค
+
+      </div>
+
+      <div className="flex justify-end">
+        <button 
+        type="button"
+        onClick={() => handlePrevPage()}
+        className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-3">
+        <Icon
+            icon="material-symbols:arrow-left-rounded"
+            width="25"
+            height="25"
+          />
+          หน้าก่อนหน้า
+        </button>
+
+        <button 
+        
+        type="submit"
+        onClick={() => setSubmitAction("next")}
+        className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-10">
+          หน้าถัดไป
+          <Icon
+            icon="material-symbols:arrow-right-rounded"
+            width="25"
+            height="25"
+          />
         </button>
       </div>
+      </form>
     </div>
   );
 };
