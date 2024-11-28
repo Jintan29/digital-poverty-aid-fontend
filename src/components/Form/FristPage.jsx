@@ -42,10 +42,10 @@ export const FristPage = ({
       title: "นาย",
       national_id: "",
       phone: "",
-      fam_total_member: 0,
-      fam_toal_live: 0,
-      live_but_has_no_name_in_fam: 0,
-      total_has_name_not_live: 0,
+      fam_total_member: null,
+      fam_toal_live: null,
+      live_but_has_no_name_in_fam: null,
+      total_has_name_not_live: null,
     },
     TeamServey: [
       {
@@ -140,6 +140,14 @@ export const FristPage = ({
 
   const handleInputChange = (subject, field, value) => {
     const updateData = { ...formData };
+    
+    //str->int
+    if (field === "fam_total_member" || field ==="fam_toal_live" || field ==="fam_toal_live" 
+      || field === "live_but_has_no_name_in_fam"  || field === "total_has_name_not_live"
+    ) {
+      value = parseInt(value, 10);  // convert to base 10
+    }
+
     updateData[subject][field] = value;
     setFormData(updateData);
   };
@@ -251,7 +259,7 @@ export const FristPage = ({
                   name="has_greenBook"
                   type="radio"
                   checked={!formData.has_greenBook}
-                  value='false'
+                  value="false"
                   onClick={(e) =>
                     setFormData((prev) => ({
                       ...prev,
