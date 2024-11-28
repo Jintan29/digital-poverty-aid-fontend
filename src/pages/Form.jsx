@@ -3,8 +3,15 @@ import React, { useEffect, useState } from "react";
 import { FristPage } from "../components/Form/FristPage";
 import { HumanCapital } from "../components/Form/HumanCapital";
 import PhysicalCapital from "../components/Form/PhysicalCapital";
-// import { PhysicalCapital } from "../components/Form/PhysicalCapital";
 import {Test1} from "../components/Form/Test1";
+import GroupSamForm from "../components/Form/GroupSamForm";
+import Financialcapital from "../components/Form/Financialcapital";
+import Socialcapital from "../components/Form/Socialcapital";
+import Naturalcapital from "../components/Form/Naturalcapital";
+import Southern from "../components/Form/southern";
+import Suggestions from "../components/Form/Suggestions";
+import Naturalcapital2 from "../components/Form/์Naturalcapital2";
+
 
 export const Form = () => {
   const [currentPage, setCurrentPage] = useState(1); //เปลี่ยนหน้า
@@ -42,6 +49,15 @@ export const Form = () => {
         </div>
         
       </div>
+
+      <Financialcapital/>
+
+      <Socialcapital/>  
+      <Naturalcapital/> 
+      <Naturalcapital2/>
+
+      <Southern/>
+      <Suggestions/>
 
     </>
   );
