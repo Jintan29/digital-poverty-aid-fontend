@@ -10,7 +10,7 @@ import Socialcapital from "../components/Form/Socialcapital";
 import Naturalcapital from "../components/Form/Naturalcapital";
 import Southern from "../components/Form/southern";
 import Suggestions from "../components/Form/Suggestions";
-import Naturalcapital2 from "../components/Form/์Naturalcapital2";
+import Naturalcapital2 from "../components/Form/Naturalcapital2";
 
 
 export const Form = () => {

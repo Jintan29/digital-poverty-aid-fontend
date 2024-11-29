@@ -41,7 +41,7 @@ function Naturalcapital() {
     );
 
 
-
+    const prefix = "อื่นๆ"
 
 
     //ส่วน1.1
@@ -109,13 +109,15 @@ function Naturalcapital() {
                         ...item,
                         PBresourceforlive: {
                             ...item.PBresourceforlive,
-                            description: id === "description_2" ? `อื่นๆ: ${value}` : value, // Check if id matches "description_2"
+                            description: id === "description_2" ? prefix : value, // Check if id matches "description_2"
                         },
                     }
                     : item
             )
         );
     };
+
+   
 
 
     const handleOtherInputChange = (event, index) => {
@@ -127,13 +129,14 @@ function Naturalcapital() {
                         ...item,
                         PBresourceforlive: {
                             ...item.PBresourceforlive,
-                            description: `อื่นๆ: ${value}`, // เก็บค่าที่กรอกจาก input พร้อมคำว่า "อื่นๆ: "
+                            description:`${prefix} ${value.trim()}`, // เก็บเฉพาะข้อความที่ผู้ใช้กรอก
                         },
                     }
                     : item
             )
         );
     };
+    
 
     //2
     const handlePBincomeChange = (event, index) => {
@@ -201,7 +204,7 @@ function Naturalcapital() {
                         ...item,
                         PBresourceforincome: {
                             ...item.PBresourceforincome,
-                            description: id === "description_2" ? `อื่นๆ: ${value}` : value, // Check if id matches "description_2"
+                            description: id === "description_2" ? prefix : value, // Check if id matches "description_2"
                         },
                     }
                     : item
@@ -218,7 +221,7 @@ function Naturalcapital() {
                         ...item,
                         PBresourceforincome: {
                             ...item.PBresourceforincome,
-                            description: `อื่นๆ: ${value}`, // เก็บค่าที่กรอกจาก input พร้อมคำว่า "อื่นๆ: "
+                            description: `${prefix} ${value.trim()}`, // เก็บค่าที่กรอกจาก input พร้อมคำว่า "อื่นๆ: "
                         },
                     }
                     : item
@@ -296,7 +299,7 @@ function Naturalcapital() {
     const handleSubmit = () => {
         console.log("Form Data Submitted:", formData);
         console.log("Form Data Submitted:", formData2);
-    }; 
+    };
 
     return (
         <>
@@ -324,6 +327,7 @@ function Naturalcapital() {
                                         id="is_use_PB_resoc_0"
                                         className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                         name={`is_use_PB_resoc_${index}`}
+                                        checked={formData[index]?.PBresourceforlive?.is_use_PB_resoc === false || false}
                                         onChange={(e) => handlePBliveChange(e, index)}
                                     />
                                     <span className="ml-2">ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่เพื่อยังชีพ</span>
@@ -334,10 +338,11 @@ function Naturalcapital() {
                                         id="is_use_PB_resoc_1"
                                         className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                         name={`is_use_PB_resoc_${index}`}
+                                        checked={formData[index]?.PBresourceforlive?.is_use_PB_resoc === true || false}
                                         onChange={(e) => handlePBliveChange(e, index)}
                                     />
                                     <span className="ml-2">ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร</span>
-                                    {data.PBresourceforlive.is_use_PB_resoc && (
+                                    {formData[index]?.PBresourceforlive?.is_use_PB_resoc && (
                                         <input
                                             type="text"
                                             placeholder="ระบุ..."
@@ -352,6 +357,7 @@ function Naturalcapital() {
                                 <input
                                     type="number"
                                     placeholder="ระยะห่างจากที่อยู่อาศัย.."
+                                    checked={formData[index]?.PBresourceforlive.distance}
                                     onChange={(e) => handleDistanceChange(e, index)} // เรียกฟังก์ชัน handleDistanceChange เมื่อมีการเปลี่ยนแปลงค่า
                                     className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                                 />
@@ -361,8 +367,9 @@ function Naturalcapital() {
                                 <input
                                     type="radio"
                                     className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                    id="description_0"
+                                    // id="description_0"
                                     name={`description_${index}`}
+                                    checked={formData[index]?.PBresourceforlive.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"}
                                     value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"
                                     onChange={(e) => handleRadioChange(e, index)}
                                 />
@@ -372,8 +379,9 @@ function Naturalcapital() {
                                 <input
                                     type="radio"
                                     className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                    id="description_1"
+                                    // id="description_1"
                                     name={`description_${index}`}
+                                    checked={formData[index]?.PBresourceforlive.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"}
                                     value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"
                                     onChange={(e) => handleRadioChange(e, index)}
                                 />
@@ -384,17 +392,19 @@ function Naturalcapital() {
                                     type="radio"
                                     className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                     id="description_2"
+                                    checked={formData[index]?.PBresourceforlive.description.startsWith(prefix)}
                                     name={`description_${index}`} // Use a unique name for each row
-                                    value="อื่นๆ"
+                                    value={prefix}
                                     onChange={(e) => handleRadioChange(e, index)}
                                 />
                                 <span className="ml-2">อื่นๆ</span>
-                                {formData2[index]?.PBresourceforlive?.description?.startsWith("อื่นๆ") && ( // Check if 'อื่นๆ' is selected for this specific index
+                                {formData[index]?.PBresourceforlive?.description?.startsWith(prefix) && ( // Check if 'อื่นๆ' is selected for this specific index
                                     <input
                                         type="text"
                                         placeholder="ระบุ..."
                                         className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                                         onChange={(e) => handleOtherInputChange(e, index)}
+                                        value={formData[index]?.PBresourceforlive.description.slice(prefix.length).trim()}
                                     />
                                 )}
                             </label>
@@ -435,6 +445,7 @@ function Naturalcapital() {
                                         className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                         id="is_use_PB_resoc_0"
                                         name={`is_use_PB_resoc_${index}`}
+                                        checked={formData2[index]?.PBresourceforincome?.is_use_PB_resoc === false || false}
                                         onChange={(e) => handlePBincomeChange(e, index)}
 
                                     />
@@ -445,12 +456,13 @@ function Naturalcapital() {
                                         type="radio"
                                         id="is_use_PB_resoc_1"
                                         name={`is_use_PB_resoc_${index}`}
+                                        checked={formData2[index]?.PBresourceforincome?.is_use_PB_resoc === true || false}
                                         className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                         onChange={(e) => handlePBincomeChange(e, index)}
                                     />
                                     <span className="ml-2">ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร</span>
                                     {
-                                        data.PBresourceforincome.is_use_PB_resoc && (
+                                        formData2[index]?.PBresourceforincome?.is_use_PB_resoc && (
                                             <input
                                                 type="text"
                                                 placeholder="ระบุ..."
@@ -467,6 +479,7 @@ function Naturalcapital() {
                                 <input
                                     type="number"
                                     onChange={(e) => handleIncomDistanceChange(e, index)}
+                                    checked={formData2[index]?.PBresourceforincome.distance}
                                     placeholder="ระยะห่างจากที่อยู่อาศัย.."
                                     className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                                 />
@@ -477,6 +490,7 @@ function Naturalcapital() {
                                     type="radio"
                                     id="description_0"
                                     name={`description_${index}`}
+                                    checked={formData2[index]?.PBresourceforincome.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"}
                                     className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                     value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"
                                     onChange={(e) => handleIncomeRadioChange(e, index)}
@@ -488,6 +502,7 @@ function Naturalcapital() {
                                     type="radio"
                                     id="description_1"
                                     name={`description_${index}`}
+                                    checked={formData2[index]?.PBresourceforincome.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"}
                                     className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                     value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"
                                     onChange={(e) => handleIncomeRadioChange(e, index)}
@@ -500,17 +515,19 @@ function Naturalcapital() {
                                     className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                     id="description_2"
                                     name={`description_${index}`}
-                                    value="อื่นๆ"
+                                    checked={formData2[index]?.PBresourceforincome.description.startsWith(prefix)}
+                                    value={prefix}
                                     onChange={(e) => handleIncomeRadioChange(e, index)}
                                 />
                                 <span className="ml-2">อื่นๆ</span>
                                 {
-                                    formData2[index]?.PBresourceforincome?.description?.startsWith("อื่นๆ") && (
+                                    formData2[index]?.PBresourceforincome?.description?.startsWith(prefix) && (
                                         <input
                                             type="text"
                                             placeholder="ระบุ..."
                                             className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                                             onChange={(e) => handleIncomeOtherInputChange(e, index)}
+                                            value={formData2[index]?.PBresourceforincome.description.slice(prefix.length).trim()}
                                         />
                                     )
                                 }

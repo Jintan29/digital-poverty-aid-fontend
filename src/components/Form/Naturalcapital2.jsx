@@ -24,7 +24,7 @@ function Naturalcapital2() {
     //false
     const handleHouseFChange = (event) => {
         const { name, value } = event.target;
-        setIsOtherChecked({});
+        setIsOtherChecked2({});
         if (name === "is_in_disaster" && value === "false") {
             setFormData((prevData) => ({
                 ...prevData,
@@ -119,7 +119,7 @@ function Naturalcapital2() {
     const handleOtherHouseChange = (e) => {
         const { id, checked } = e.target;
 
-        setIsOtherChecked((prevState) => ({
+        setIsOtherChecked2((prevState) => ({
             ...prevState,
             [id]: checked,
         }));
@@ -146,7 +146,7 @@ function Naturalcapital2() {
             setFormData((prevState) => ({
                 ...prevState,
                 Houseindisasterareas: prevState.Houseindisasterareas.filter(
-                    (group) => group.disaster_type !== otherFarmland
+                    (group) => group.disaster_type !== otherHouse
                 ),
             }));
             setOtherHouse(""); // ล้างค่าที่กรอกเมื่อยกเลิก checkbox
@@ -347,12 +347,12 @@ function Naturalcapital2() {
                                 className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                 id="is_in_disaster_0"
                                 name="is_in_disaster"
+                                checked={formData.Houseindisasterareas.is_in_disaster}
                                 value={false}
                                 onChange={handleHouseFChange}
                             />
                             <span className="ml-2">ไม่อยู่</span>
                         </label>
-
                         {/* Radio Button - อยู่ */}
                         <label className="flex items-center text-gray-700">
                             <input
@@ -360,6 +360,7 @@ function Naturalcapital2() {
                                 className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                 id="is_in_disaster_1"
                                 name="is_in_disaster"
+                                checked={formData.Houseindisasterareas.is_in_disaster}
                                 value={true}
                                 onChange={handleHouseTChange}
                             />
@@ -399,27 +400,27 @@ function Naturalcapital2() {
                                     {/*1*/}
                                     <tr>
                                         <td className="border px-4 py-3">
-                                            {/* Checkbox สำหรับเลือกประเภทภัยพิบัติ */}
                                             <label className="flex items-center space-x-2">
                                                 <input
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="อุทกภัย"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "อุทกภัย"
+                                                    )}
                                                     onChange={(e) =>
-                                                        handleHouseCheckboxChange(
-                                                            e.target.value,
-                                                            e.target.checked
-                                                        )
+                                                        handleHouseCheckboxChange(e.target.value, e.target.checked)
                                                     }
                                                 />
                                                 <span>อุทกภัย</span>
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            {/* Dropdown สำหรับเลือกความถี่ของภัยพิบัติ */}
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "อุทกภัย"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("อุทกภัย", e.target.value)
                                                 }
@@ -444,13 +445,12 @@ function Naturalcapital2() {
                                                 </option>
                                             </select>
                                         </td>
-                                        <td
-                                            className="border px-4 py-3 text-center flex"
-                                        //handleResponseChange
-                                        >
+                                        <td className="border px-4 py-3 text-center flex">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "อุทกภัย"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("อุทกภัย", e.target.value)
                                                 }
@@ -482,6 +482,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ดินโคลนถล่ม"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "ดินโคลนถล่ม"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -495,7 +498,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ดินโคลนถล่ม"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("ดินโคลนถล่ม", e.target.value)
                                                 }
@@ -526,7 +531,9 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ดินโคลนถล่ม"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("ดินโคลนถล่ม", e.target.value)
                                                 }
@@ -558,6 +565,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="วาตภัย"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "วาตภัย"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -571,7 +581,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "วาตภัย"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("วาตภัย", e.target.value)
                                                 }
@@ -601,7 +613,9 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "วาตภัย"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("วาตภัย", e.target.value)
                                                 }
@@ -634,6 +648,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="อัคคีภัย"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "อัคคีภัย"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -647,7 +664,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "อัคคีภัย"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("อัคคีภัย", e.target.value)
                                                 }
@@ -677,7 +696,9 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "อัคคีภัย"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("อัคคีภัย", e.target.value)
                                                 }
@@ -710,6 +731,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -725,7 +749,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม", e.target.value)
                                                 }
@@ -755,7 +781,10 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                //  
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม", e.target.value)
                                                 }
@@ -788,6 +817,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยแล้ง"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยแล้ง"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -801,7 +833,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยแล้ง"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("ภัยแล้ง", e.target.value)
                                                 }
@@ -831,7 +865,9 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยแล้ง"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("ภัยแล้ง", e.target.value)
                                                 }
@@ -864,6 +900,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ไฟจากไฟป่าและหมอกควัน"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "ไฟจากไฟป่าและหมอกควัน"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -877,7 +916,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ไฟจากไฟป่าและหมอกควัน"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("ไฟจากไฟป่าและหมอกควัน", e.target.value)
                                                 }
@@ -907,7 +948,9 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ไฟจากไฟป่าและหมอกควัน"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("ไฟจากไฟป่าและหมอกควัน", e.target.value)
                                                 }
@@ -940,6 +983,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยโรคระบาดในมนุษย์"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยโรคระบาดในมนุษย์"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -953,7 +999,10 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                //  
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยโรคระบาดในมนุษย์"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("ภัยโรคระบาดในมนุษย์", e.target.value)
                                                 }
@@ -983,7 +1032,10 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยโรคระบาดในมนุษย์"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("ภัยโรคระบาดในมนุษย์", e.target.value)
                                                 }
@@ -1015,6 +1067,9 @@ function Naturalcapital2() {
                                                 <input
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยจากแมลง สัตว์ ศัตรูพืชระบาด"
+                                                    )}
                                                     value="ภัยจากแมลง สัตว์ ศัตรูพืชระบาด"
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
@@ -1029,7 +1084,10 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                //  
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากแมลง สัตว์ ศัตรูพืชระบาด"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("ภัยจากแมลง สัตว์ ศัตรูพืชระบาด", e.target.value)
                                                 }
@@ -1059,7 +1117,10 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                //  
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากแมลง สัตว์ ศัตรูพืชระบาด"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("ภัยจากแมลง สัตว์ ศัตรูพืชระบาด", e.target.value)
                                                 }
@@ -1092,6 +1153,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยโรคระบาดสัตว์ และสัตว์น้ำ"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยโรคระบาดสัตว์ และสัตว์น้ำ"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -1105,7 +1169,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยโรคระบาดสัตว์ และสัตว์น้ำ"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("ภัยโรคระบาดสัตว์ และสัตว์น้ำ", e.target.value)
                                                 }
@@ -1135,7 +1201,9 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยโรคระบาดสัตว์ และสัตว์น้ำ"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("ภัยโรคระบาดสัตว์ และสัตว์น้ำ", e.target.value)
                                                 }
@@ -1168,6 +1236,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleHouseCheckboxChange(
                                                             e.target.value,
@@ -1181,7 +1252,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change("ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)", e.target.value)
                                                 }
@@ -1211,7 +1284,9 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change("ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)", e.target.value)
                                                 }
@@ -1229,7 +1304,6 @@ function Naturalcapital2() {
                                                     ชุมชนมีระบบบริหารจัดการรองรับภัยพิบัติ
                                                 </option>
                                                 <option value="ชุมชนมีระบบบริหารจัดการรองรับภัยพิบัติและสามารถฟื้นตัว เข้าสู่ภาวะปกติได้">
-                                                    {" "}
                                                     ชุมชนมีระบบบริหารจัดการรองรับภัยพิบัติและสามารถฟื้นตัว
                                                     เข้าสู่ภาวะปกติได้
                                                 </option>
@@ -1245,6 +1319,9 @@ function Naturalcapital2() {
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     id="disaster_type_10"
                                                     name="disaster_type"
+                                                    checked={formData.Houseindisasterareas.some(
+                                                        (group) => group.disaster_type === otherHouse
+                                                    )}
                                                     onChange={handleOtherHouseChange}
                                                 />
                                                 <span>อื่นๆ (ระบุ)</span>
@@ -1262,7 +1339,9 @@ function Naturalcapital2() {
                                         <td className="border px-4 py-3 text-center">
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === otherHouse
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncy2Change(otherHouse, e.target.value)
                                                 }
@@ -1292,7 +1371,9 @@ function Naturalcapital2() {
                                         >
                                             <select
                                                 className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Houseindisasterareas.find(
+                                                    (group) => group.disaster_type === otherHouse
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponse2Change(otherHouse, e.target.value)
                                                 }
@@ -1310,7 +1391,6 @@ function Naturalcapital2() {
                                                     ชุมชนมีระบบบริหารจัดการรองรับภัยพิบัติ
                                                 </option>
                                                 <option value="ชุมชนมีระบบบริหารจัดการรองรับภัยพิบัติและสามารถฟื้นตัว เข้าสู่ภาวะปกติได้">
-                                                    {" "}
                                                     ชุมชนมีระบบบริหารจัดการรองรับภัยพิบัติและสามารถฟื้นตัว
                                                     เข้าสู่ภาวะปกติได้
                                                 </option>
@@ -1338,6 +1418,7 @@ function Naturalcapital2() {
                                 className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                 id="is_in_disaster_0"
                                 name="is_in_disaster"
+                                checked={formData.Farmlandindisasterareas?.is_in_disaster === false || false}
                                 value={false}
                                 onChange={handleFarmlandFChange}
                             />
@@ -1349,6 +1430,7 @@ function Naturalcapital2() {
                                 className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                 id="is_in_disaster_1"
                                 name="is_in_disaster"
+                                checked={formData.Farmlandindisasterareas.is_in_disaster?.is_in_disaster === true || false}
                                 value={true}
                                 onChange={handleFarmlandTChange}
                             />
@@ -1381,6 +1463,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="อุทกภัย"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "อุทกภัย"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1393,7 +1478,9 @@ function Naturalcapital2() {
                                         </td>
                                         <td className="border px-4 py-3 text-center">
                                             <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "อุทกภัย"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "อุทกภัย",
@@ -1410,10 +1497,11 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex"
-                                        //handleResponseChange
                                         >
                                             <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                                                defaultValue=""
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "อุทกภัย"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "อุทกภัย",
@@ -1437,6 +1525,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ดินโคลนถล่ม"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "ดินโคลนถล่ม"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1449,7 +1540,9 @@ function Naturalcapital2() {
                                         </td>
                                         <td className="border px-4 py-3 text-center">
                                             <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ดินโคลนถล่ม"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "ดินโคลนถล่ม",
@@ -1466,7 +1559,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex" >
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ดินโคลนถล่ม"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "ดินโคลนถล่ม",
@@ -1490,6 +1586,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="วาตภัย"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "วาตภัย"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1501,7 +1600,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "วาตภัย"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "วาตภัย",
@@ -1518,7 +1620,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "วาตภัย"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "วาตภัย",
@@ -1542,6 +1647,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="อัคคีภัย"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "อัคคีภัย"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1553,7 +1661,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "อัคคีภัย"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "อัคคีภัย",
@@ -1570,7 +1681,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "อัคคีภัย"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "อัคคีภัย",
@@ -1594,6 +1708,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1605,7 +1722,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม",
@@ -1622,7 +1742,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "ภัยจากสารเคมีและวัตถุอันตราย/โรงงานอุตสาหกรรม",
@@ -1644,6 +1767,9 @@ function Naturalcapital2() {
                                             <label className="flex items-center space-x-2">
                                                 <input
                                                     type="checkbox"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยแล้ง"
+                                                    )}
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยแล้ง"
                                                     onChange={(e) =>
@@ -1657,7 +1783,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยแล้ง"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "ภัยแล้ง",
@@ -1671,11 +1800,13 @@ function Naturalcapital2() {
                                                 <option value="2-3 ครั้ง (ในรอบ5ปี)">2-3 ครั้ง (ในรอบ5ปี)</option>
                                                 <option value="ทุกปี (ปีละ 1 ครั้ง)">ทุกปี (ปีละ 1 ครั้ง)</option>
                                                 <option value="มากกว่าปีละ 1 ครั้ง">มากกว่าปีละ 1 ครั้ง</option>
-
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยแล้ง"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "ภัยแล้ง",
@@ -1699,6 +1830,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ไฟจากไฟป่าและหมอกควัน"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "ไฟจากไฟป่าและหมอกควัน"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1710,7 +1844,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ไฟจากไฟป่าและหมอกควัน"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "ไฟจากไฟป่าและหมอกควัน",
@@ -1727,7 +1864,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ไฟจากไฟป่าและหมอกควัน"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "ไฟจากไฟป่าและหมอกควัน",
@@ -1751,6 +1891,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยโรคระบาดในมนุษย์"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยโรคระบาดในมนุษย์"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1762,7 +1905,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยโรคระบาดในมนุษย์"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "ภัยโรคระบาดในมนุษย์",
@@ -1779,7 +1925,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยโรคระบาดในมนุษย์"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "ภัยโรคระบาดในมนุษย์",
@@ -1803,6 +1952,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยจากแมลง สัตว์ ศัตรูพืชระบาด"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยจากแมลง สัตว์ ศัตรูพืชระบาด"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1814,7 +1966,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากแมลง สัตว์ ศัตรูพืชระบาด"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "ภัยจากแมลง สัตว์ ศัตรูพืชระบาด",
@@ -1831,7 +1986,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากแมลง สัตว์ ศัตรูพืชระบาด"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "ภัยจากแมลง สัตว์ ศัตรูพืชระบาด",
@@ -1855,6 +2013,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยโรคระบาดสัตว์ และสัตว์น้ำ"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยโรคระบาดสัตว์ และสัตว์น้ำ"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1867,7 +2028,9 @@ function Naturalcapital2() {
                                         </td>
                                         <td className="border px-4 py-3 text-center">
                                             <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                                defaultValue=""
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยโรคระบาดสัตว์ และสัตว์น้ำ"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "ภัยโรคระบาดสัตว์ และสัตว์น้ำ",
@@ -1885,7 +2048,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยโรคระบาดสัตว์ และสัตว์น้ำ"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "ภัยโรคระบาดสัตว์ และสัตว์น้ำ",
@@ -1909,6 +2075,9 @@ function Naturalcapital2() {
                                                     type="checkbox"
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     value="ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === "ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)"
+                                                    )}
                                                     onChange={(e) =>
                                                         handleFarmlandCheckboxChange(
                                                             e.target.value,
@@ -1921,7 +2090,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)"
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         "ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)",
@@ -1938,7 +2110,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === "ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)"
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         "ภัยจากสถานการณ์ความไม่สงบ (ภัยจากมนุษย์)",
@@ -1963,14 +2138,15 @@ function Naturalcapital2() {
                                                     className="form-checkbox text-blue-600 mr-2 rounded"
                                                     id="disaster_type_10"
                                                     name="disaster_type"
+                                                    checked={formData.Farmlandindisasterareas.some(
+                                                        (group) => group.disaster_type === otherFarmland
+                                                    )}
                                                     onChange={handleOtherFarmlandChange}
                                                 />
                                                 <span>อื่นๆ (ระบุ)</span>
                                                 {
                                                     isOtherChecked.disaster_type_10 && (
                                                         <input type="text"
-                                                            //handleOtherInputFarmlandChange
-                                                            //handleOtherFarmlandChange  
                                                             value={otherFarmland}
                                                             onChange={handleOtherInputFarmlandChange}
                                                             placeholder="ระบุ..."
@@ -1982,7 +2158,10 @@ function Naturalcapital2() {
                                             </label>
                                         </td>
                                         <td className="border px-4 py-3 text-center">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === otherFarmland
+                                                )?.frequncy_disaster || ""}
                                                 onChange={(e) =>
                                                     handleFrequncyChange(
                                                         otherFarmland,
@@ -1999,7 +2178,10 @@ function Naturalcapital2() {
                                             </select>
                                         </td>
                                         <td className="border px-4 py-3 text-center flex">
-                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full" defaultValue=""
+                                            <select className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                                                value={formData.Farmlandindisasterareas.find(
+                                                    (group) => group.disaster_type === otherFarmland
+                                                )?.disaster_response || ""}
                                                 onChange={(e) =>
                                                     handleResponseChange(
                                                         otherFarmland,
