@@ -105,7 +105,7 @@ function Socialcapital() {
         }
     };
 
-    
+
     //radio
     const handleRadioChange = (e, field) => {
         const value = e.target.value;
@@ -286,6 +286,11 @@ function Socialcapital() {
                                             className="form-checkbox text-blue-600 mr-2 rounded"
                                             id="activity_group_0"
                                             name="activity_group"
+                                            checked={formData.Activitygrouptype.some(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มอาชีพ/การผลิต/แปรรูป (เช่น กลุ่มเมล็ดพันธุ์ กลุ่มทอผ้า/จักสาน/หัตถกรรม กลุ่มแปรรูปผลผลิต กลุ่มด้านการเกษตรและเลี้ยงสัตว์ กลุ่มปัจจัยการผลิต)"
+                                            )}
                                             value="กลุ่มอาชีพ/การผลิต/แปรรูป (เช่น กลุ่มเมล็ดพันธุ์ กลุ่มทอผ้า/จักสาน/หัตถกรรม กลุ่มแปรรูปผลผลิต กลุ่มด้านการเกษตรและเลี้ยงสัตว์ กลุ่มปัจจัยการผลิต)"
                                             onChange={(e) =>
                                                 handleActivityGroupChange(
@@ -304,7 +309,13 @@ function Socialcapital() {
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
                                         id="is_member_0"
                                         name="is_member"
-                                        defaultValue=""
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มอาชีพ/การผลิต/แปรรูป (เช่น กลุ่มเมล็ดพันธุ์ กลุ่มทอผ้า/จักสาน/หัตถกรรม กลุ่มแปรรูปผลผลิต กลุ่มด้านการเกษตรและเลี้ยงสัตว์ กลุ่มปัจจัยการผลิต)"
+                                            )?.is_member ?? ""
+                                        }
                                         onChange={(e) =>
                                             handleIsMemberChange(
                                                 "กลุ่มอาชีพ/การผลิต/แปรรูป (เช่น กลุ่มเมล็ดพันธุ์ กลุ่มทอผ้า/จักสาน/หัตถกรรม กลุ่มแปรรูปผลผลิต กลุ่มด้านการเกษตรและเลี้ยงสัตว์ กลุ่มปัจจัยการผลิต)",
@@ -321,7 +332,13 @@ function Socialcapital() {
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
                                         id="dependency_0"
                                         name="dependency"
-                                        defaultValue=""
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มอาชีพ/การผลิต/แปรรูป (เช่น กลุ่มเมล็ดพันธุ์ กลุ่มทอผ้า/จักสาน/หัตถกรรม กลุ่มแปรรูปผลผลิต กลุ่มด้านการเกษตรและเลี้ยงสัตว์ กลุ่มปัจจัยการผลิต)"
+                                            )?.dependency ?? ""
+                                        }
                                         onChange={(e) =>
                                             handleDependencyChange(
                                                 "กลุ่มอาชีพ/การผลิต/แปรรูป (เช่น กลุ่มเมล็ดพันธุ์ กลุ่มทอผ้า/จักสาน/หัตถกรรม กลุ่มแปรรูปผลผลิต กลุ่มด้านการเกษตรและเลี้ยงสัตว์ กลุ่มปัจจัยการผลิต)",
@@ -344,6 +361,11 @@ function Socialcapital() {
                                             className="form-checkbox text-blue-600 mr-2 rounded"
                                             id="activity_group_1"
                                             name="activity_group"
+                                            checked={formData.Activitygrouptype.some(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มการเงิน (เช่น กองทุนหมู่บ้าน กองทุนเงินล้าน กลุ่ม ออมทรัพย์)"
+                                            )}
                                             value="กลุ่มการเงิน (เช่น กองทุนหมู่บ้าน กองทุนเงินล้าน กลุ่ม ออมทรัพย์)"
                                             onChange={(e) =>
                                                 handleActivityGroupChange(
@@ -359,9 +381,15 @@ function Socialcapital() {
                                 </td>
                                 <td className="border px-4 py-3 text-center">
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                        defaultValue=""
                                         id="is_member_1"
                                         name="is_member"
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มการเงิน (เช่น กองทุนหมู่บ้าน กองทุนเงินล้าน กลุ่ม ออมทรัพย์)"
+                                            )?.is_member ?? ""
+                                        }
                                         onChange={(e) =>
                                             handleIsMemberChange(
                                                 "กลุ่มการเงิน (เช่น กองทุนหมู่บ้าน กองทุนเงินล้าน กลุ่ม ออมทรัพย์)",
@@ -376,9 +404,15 @@ function Socialcapital() {
                                 </td>
                                 <td className="border px-4 py-3 text-center ">
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                        defaultValue=""
                                         id="dependency_1"
                                         name="dependency"
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มการเงิน (เช่น กองทุนหมู่บ้าน กองทุนเงินล้าน กลุ่ม ออมทรัพย์)"
+                                            )?.dependency ?? ""
+                                        }
                                         onChange={(e) =>
                                             handleDependencyChange(
                                                 "กลุ่มการเงิน (เช่น กองทุนหมู่บ้าน กองทุนเงินล้าน กลุ่ม ออมทรัพย์)",
@@ -400,6 +434,13 @@ function Socialcapital() {
                                             type="checkbox"
                                             className="form-checkbox text-blue-600 mr-2 rounded"
                                             value="กลุ่มสวัสดิการสังคม (เช่น กลุ่มฌาปนกิจ กองทุนสวัสดิการชุมชน)"
+                                            id="activity_group_2"
+                                            name="activity_group"
+                                            checked={formData.Activitygrouptype.some(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มสวัสดิการสังคม (เช่น กลุ่มฌาปนกิจ กองทุนสวัสดิการชุมชน)"
+                                            )}
                                             onChange={(e) =>
                                                 handleActivityGroupChange(
                                                     e.target.value,
@@ -413,7 +454,15 @@ function Socialcapital() {
                                 </td>
                                 <td className="border px-4 py-3 text-center">
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                        defaultValue=""
+                                        id="is_member_2"
+                                        name="is_member"
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มสวัสดิการสังคม (เช่น กลุ่มฌาปนกิจ กองทุนสวัสดิการชุมชน)"
+                                            )?.is_member ?? ""
+                                        }
                                         onChange={(e) =>
                                             handleIsMemberChange(
                                                 "กลุ่มสวัสดิการสังคม (เช่น กลุ่มฌาปนกิจ กองทุนสวัสดิการชุมชน)",
@@ -428,7 +477,15 @@ function Socialcapital() {
                                 </td>
                                 <td className="border px-4 py-3 text-center ">
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                        defaultValue=""
+                                        id="dependency_2"
+                                        name="dependency"
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มสวัสดิการสังคม (เช่น กลุ่มฌาปนกิจ กองทุนสวัสดิการชุมชน)"
+                                            )?.dependency ?? ""
+                                        }
                                         onChange={(e) =>
                                             handleDependencyChange(
                                                 "กลุ่มสวัสดิการสังคม (เช่น กลุ่มฌาปนกิจ กองทุนสวัสดิการชุมชน)",
@@ -449,6 +506,13 @@ function Socialcapital() {
                                         <input
                                             type="checkbox"
                                             className="form-checkbox text-blue-600 mr-2 rounded"
+                                            id="activity_group_3"
+                                            name="activity_group"
+                                            checked={formData.Activitygrouptype.some(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มด้านสังคม (เช่น กลุ่มเยาวชน กลุ่มผู้สูงอายุ กลุ่มสตรี/แม่บ้าน กลุ่มศาสนา)"
+                                            )}
                                             value="กลุ่มด้านสังคม (เช่น กลุ่มเยาวชน กลุ่มผู้สูงอายุ กลุ่มสตรี/แม่บ้าน กลุ่มศาสนา)"
                                             onChange={(e) =>
                                                 handleActivityGroupChange(
@@ -465,7 +529,15 @@ function Socialcapital() {
                                 </td>
                                 <td className="border px-4 py-3 text-center">
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                        defaultValue=""
+                                        id="is_member_3"
+                                        name="is_member"
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มด้านสังคม (เช่น กลุ่มเยาวชน กลุ่มผู้สูงอายุ กลุ่มสตรี/แม่บ้าน กลุ่มศาสนา)"
+                                            )?.is_member ?? ""
+                                        }
                                         onChange={(e) =>
                                             handleIsMemberChange(
                                                 "กลุ่มด้านสังคม (เช่น กลุ่มเยาวชน กลุ่มผู้สูงอายุ กลุ่มสตรี/แม่บ้าน กลุ่มศาสนา)",
@@ -479,14 +551,22 @@ function Socialcapital() {
                                     </select>
                                 </td>
                                 <td className="border px-4 py-3 text-center ">
-                                    <select className="border rounded px-2 py-1 rounded-lg shadow-md" 
-                                    defaultValue=""
-                                    onChange={(e) =>
-                                        handleDependencyChange(
-                                            "กลุ่มด้านสังคม (เช่น กลุ่มเยาวชน กลุ่มผู้สูงอายุ กลุ่มสตรี/แม่บ้าน กลุ่มศาสนา)",
-                                            e.target.value
-                                        )
-                                    }
+                                    <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                        id="dependency_3"
+                                        name="dependency"
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มด้านสังคม (เช่น กลุ่มเยาวชน กลุ่มผู้สูงอายุ กลุ่มสตรี/แม่บ้าน กลุ่มศาสนา)"
+                                            )?.dependency ?? ""
+                                        }
+                                        onChange={(e) =>
+                                            handleDependencyChange(
+                                                "กลุ่มด้านสังคม (เช่น กลุ่มเยาวชน กลุ่มผู้สูงอายุ กลุ่มสตรี/แม่บ้าน กลุ่มศาสนา)",
+                                                e.target.value
+                                            )
+                                        }
                                     >
                                         <option value="" disabled>เลือกสถานะ</option>
                                         <option value="พึ่งพาได้มาก">พึ่งพาได้มาก</option>
@@ -501,6 +581,13 @@ function Socialcapital() {
                                         <input
                                             type="checkbox"
                                             className="form-checkbox text-blue-600 mr-2 rounded"
+                                            id="activity_group_4"
+                                            name="activity_group"
+                                            checked={formData.Activitygrouptype.some(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มทรัพยากรธรรมชาติ (เช่น กลุ่มอนุรักษ์ กลุ่มผู้ใช้น้ำ)"
+                                            )}
                                             value="กลุ่มทรัพยากรธรรมชาติ (เช่น กลุ่มอนุรักษ์ กลุ่มผู้ใช้น้ำ)"
                                             onChange={(e) =>
                                                 handleActivityGroupChange(
@@ -514,14 +601,22 @@ function Socialcapital() {
                                     </label>
                                 </td>
                                 <td className="border px-4 py-3 text-center">
-                                    <select className="border rounded px-2 py-1 rounded-lg shadow-md" 
-                                    defaultValue=""
-                                    onChange={(e) =>
-                                        handleIsMemberChange(
-                                            "กลุ่มทรัพยากรธรรมชาติ (เช่น กลุ่มอนุรักษ์ กลุ่มผู้ใช้น้ำ)",
-                                            e.target.value
-                                        )
-                                    }
+                                    <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                        id="is_member_4"
+                                        name="is_member"
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มทรัพยากรธรรมชาติ (เช่น กลุ่มอนุรักษ์ กลุ่มผู้ใช้น้ำ)"
+                                            )?.is_member ?? ""
+                                        }
+                                        onChange={(e) =>
+                                            handleIsMemberChange(
+                                                "กลุ่มทรัพยากรธรรมชาติ (เช่น กลุ่มอนุรักษ์ กลุ่มผู้ใช้น้ำ)",
+                                                e.target.value
+                                            )
+                                        }
                                     >
                                         <option value="" disabled>เลือกสถานะ</option>
                                         <option value={false}>ไม่เป็น</option>
@@ -529,14 +624,22 @@ function Socialcapital() {
                                     </select>
                                 </td>
                                 <td className="border px-4 py-3 text-center ">
-                                    <select className="border rounded px-2 py-1 rounded-lg shadow-md" 
-                                    defaultValue=""
-                                    onChange={(e) =>
-                                        handleDependencyChange(
-                                            "กลุ่มทรัพยากรธรรมชาติ (เช่น กลุ่มอนุรักษ์ กลุ่มผู้ใช้น้ำ)",
-                                            e.target.value
-                                        )
-                                    }
+                                    <select className="border rounded px-2 py-1 rounded-lg shadow-md"
+                                        id="dependency_4"
+                                        name="dependency"
+                                        value={
+                                            formData.Activitygrouptype.find(
+                                                (group) =>
+                                                    group.activity_group ===
+                                                    "กลุ่มทรัพยากรธรรมชาติ (เช่น กลุ่มอนุรักษ์ กลุ่มผู้ใช้น้ำ)"
+                                            )?.dependency ?? ""
+                                        }
+                                        onChange={(e) =>
+                                            handleDependencyChange(
+                                                "กลุ่มทรัพยากรธรรมชาติ (เช่น กลุ่มอนุรักษ์ กลุ่มผู้ใช้น้ำ)",
+                                                e.target.value
+                                            )
+                                        }
                                     >
                                         <option value="" disabled>เลือกสถานะ</option>
                                         <option value="พึ่งพาได้มาก">พึ่งพาได้มาก</option>
@@ -553,6 +656,9 @@ function Socialcapital() {
                                             className="form-checkbox text-blue-600 mr-2 rounded"
                                             id="activity_group_5"
                                             name="activity_group"
+                                            checked={formData.Activitygrouptype.some(
+                                                (group) => group.activity_group === otherActivity
+                                            )}
                                             onChange={handleOtherChange}
                                         />
                                         <span>
@@ -570,9 +676,11 @@ function Socialcapital() {
                                 </td>
                                 <td className="border px-4 py-3 text-center">
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                        defaultValue=""
                                         id="is_member_5"
                                         name="is_member"
+                                        value={formData.Activitygrouptype.find(
+                                            (group) => group.activity_group === otherActivity
+                                        )?.is_member || ""}
                                         onChange={(e) =>
                                             handleIsMemberChange(otherActivity, e.target.value)
                                         }
@@ -585,9 +693,11 @@ function Socialcapital() {
                                 </td>
                                 <td className="border px-4 py-3 text-center ">
                                     <select className="border rounded px-2 py-1 rounded-lg shadow-md"
-                                        defaultValue=""
                                         id="dependency_5"
                                         name="dependency"
+                                        value={formData.Activitygrouptype.find(
+                                            (group) => group.activity_group === otherActivity
+                                        )?.dependency || ""}
                                         onChange={(e) =>
                                             handleDependencyChange(otherActivity, e.target.value)
                                         }
@@ -614,6 +724,7 @@ function Socialcapital() {
                                     className="form-checkbox text-blue-600 rounded"
                                     id="activity_0"
                                     name="activity"
+                                    checked={formData.Activitytype[0].activity.includes("กิจกรรมทางศาสนา")}
                                     value="กิจกรรมทางศาสนา"
                                     onChange={(e) => handleCheckboxChange("Activitytype", "activity", e.target.value, e.target.checked)}
                                 />
@@ -624,6 +735,7 @@ function Socialcapital() {
                                     className="form-checkbox text-blue-600 rounded"
                                     id="activity_1"
                                     name="activity"
+                                    checked={formData.Activitytype[0].activity.includes("กิจกรรมประชาสัมพันธ์")}
                                     value="กิจกรรมประชาสัมพันธ์"
                                     onChange={(e) => handleCheckboxChange("Activitytype", "activity", e.target.value, e.target.checked)}
                                 />
@@ -634,6 +746,7 @@ function Socialcapital() {
                                     className="form-checkbox text-blue-600 rounded"
                                     id="activity_2"
                                     name="activity"
+                                   checked={formData.Activitytype[0].activity.includes("กิจกรรมทางการพัฒนา อนุรักษ์ และสิ่งแวดล้อม")}
                                     value="กิจกรรมทางการพัฒนา อนุรักษ์ และสิ่งแวดล้อม"
                                     onChange={(e) => handleCheckboxChange("Activitytype", "activity", e.target.value, e.target.checked)}
                                 />
@@ -644,6 +757,7 @@ function Socialcapital() {
                                     className="form-checkbox text-blue-600 rounded"
                                     id="activity_3"
                                     name="activity"
+                                    checked={!!isOtherChecked.activity_3}
                                     onChange={(e) => handleOtherCheckboxChange(e, "Activitytype", "activity", "อื่นๆ")}
                                 />
                                 <span>อื่นๆ (ระบุ)</span>
@@ -672,6 +786,7 @@ function Socialcapital() {
                             <label className="flex items-center space-x-2">
                                 <input type="radio"
                                     name="participation_level"
+                                    checked={formData.Activitytype[0].participation_level === "ไม่ร่วม"}
                                     className="form-radio text-blue-600 "
                                     value="ไม่ร่วม"
                                     onChange={(e) => handleRadioChange(e, 'participation_level')}
@@ -682,6 +797,7 @@ function Socialcapital() {
                                 <input type="radio"
                                     name="participation_level"
                                     className="form-radio text-blue-600 "
+                                    checked={formData.Activitytype[0].participation_level === "เข้าร่วมรับรู้ รับฟัง"}
                                     value="เข้าร่วมรับรู้ รับฟัง"
                                     onChange={(e) => handleRadioChange(e, 'participation_level')}
                                 />
@@ -691,6 +807,7 @@ function Socialcapital() {
                                 <input type="radio"
                                     name="participation_level"
                                     className="form-radio text-blue-600 "
+                                    checked={formData.Activitytype[0].participation_level === "แสดงความคิดเห็น"}
                                     value="แสดงความคิดเห็น"
                                     onChange={(e) => handleRadioChange(e, 'participation_level')}
                                 />
@@ -700,6 +817,7 @@ function Socialcapital() {
                                 <input type="radio"
                                     name="participation_level"
                                     className="form-radio text-blue-600 "
+                                    checked={formData.Activitytype[0].participation_level === "ตัดสินใจ"}
                                     value="ตัดสินใจ"
                                     onChange={(e) => handleRadioChange(e, 'participation_level')}
                                 />
@@ -716,6 +834,7 @@ function Socialcapital() {
                                 <input type="radio"
                                     name="frequency"
                                     className="form-radio text-blue-600"
+                                    checked={formData.Activitytype[0].frequncy === "ไม่เคยเข้าร่วมเลย"}
                                     value="ไม่เคยเข้าร่วมเลย"
                                     onChange={(e) => handleRadioChange(e, 'frequncy')}
                                 />
@@ -725,6 +844,7 @@ function Socialcapital() {
                                 <input type="radio"
                                     name="frequency"
                                     className="form-radio text-blue-600"
+                                    checked={formData.Activitytype[0].frequncy === "เข้าร่วมบางครั้ง"}
                                     value="เข้าร่วมบางครั้ง"
                                     onChange={(e) => handleRadioChange(e, 'frequncy')}
                                 />
@@ -734,6 +854,7 @@ function Socialcapital() {
                                 <input type="radio"
                                     name="frequency"
                                     className="form-radio text-blue-600"
+                                    checked={formData.Activitytype[0].frequncy === "เข้าร่วมทุกครั้ง"}
                                     value="เข้าร่วมทุกครั้ง"
                                     onChange={(e) => handleRadioChange(e, 'frequncy')}
                                 />
