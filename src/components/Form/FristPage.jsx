@@ -1,46 +1,231 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //จัดการวันที่
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import th from "date-fns/locale/th"; // นำเข้า locale ภาษาไทย
+import { Icon } from "@iconify/react";
 import ThaiDatePicker from "./ThaiDatePicker";
+import { Field } from "@headlessui/react";
 
 // ลงทะเบียน locale ภาษาไทย
 registerLocale("th", th);
 
-export const FristPage = () => {
+export const FristPage = ({
+  setCurrentPage,
+  setMainFormData,
+  mainFormData,
+}) => {
   //เก็บข้อมูลจาก input
   const [formData, setFormData] = useState({
-    houseId: "",
-    greenBook: "",
-    hasGreenBook: false,
-    village: "",
-    houseNumber: "",
-    soi: "",
-    road: "",
-    subdistrict: "",
-    district: "",
-    province: "",
-    postalCode: "",
-    houseOwnerTitle: "นาย", // ค่า default เป็น นาย
-    houseOwnerName: "",
-    houseOwnerSurname: "",
-    houseOwnerID: "",
+    Household: {
+      house_code: "",
+      has_greenBook: false,
+      green_book_id: "",
+      village: "",
+      house_number: "",
+      alley: "",
+      road: "",
+      subdistrict: "",
+      district: "",
+      province: "พิษณุโลก", // จังหวัด
+      postcode: "",
+      host_title: "นาย", // ค่า default เป็น นาย
+      host_fname: "",
+      host_lname: "",
+      host_national_id: "",
+      total_house_member: 0, //ค่อยมาเปลี่ยนค่าทีหลัง
+    },
+    //ตารางผู้ให้ข้อมูล
+    Informant: {
+      fname: "",
+      lname: "",
+      title: "นาย",
+      national_id: "",
+      phone: "",
+      fam_total_member: null,
+      fam_total_live: null,
+      live_but_has_no_name_in_fam: null,
+      total_has_name_not_live: null,
+    },
+    TeamServey: [
+      {
+        title: "นาย",
+        fname: "",
+        lname: "",
+        agency: "",
+        phone: "",
+      },
+    ],
+    DataRecorder: {
+      // title: "นาย",
+      // fname: "",
+      // lname: "",
+      // phone: "",
+      recder_title :"นาย",
+      recder_fname:'',
+      recder_lname:'',
+      recder_phone:''
+    },
   });
 
-  // Funcจัดการ input
-  const handleChange = (e) => {
-    const { id, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [id]: type === "checkbox" ? checked : value,
-    });
+  //เก็บอำเภอและตำบล
+  const districtSubdistrictMap = {
+    "ชาติตระการ": ["ป่าแดง", "ชาติตระการ", "สวนเมี่ยง", "บ้านดง", "บ่อภาค", "ท่าสะแก"],
+    "นครไทย": [
+      "นครไทย",
+      "หนองกะท้าว",
+      "บ้านแยง",
+      "เนินเพิ่ม",
+      "นาบัว",
+      "นครชุม",
+      "น้ำกุ่ม",
+      "ยางโกลน",
+      "บ่อโพธิ์",
+      "บ้านพร้าว",
+      "ห้วยเฮี้ย",
+    ],
+    "เนินมะปราง": ["ชมพู", "บ้านมุง", "ไทรย้อย", "วังโพรง", "บ้านน้อยซุ้มขี้เหล็ก", "เนินมะปราง", "วังยาง"],
+    "บางกระทุ่ม": [
+      "บางกระทุ่ม",
+      "บ้านไร่",
+      "โคกสลุด",
+      "สนามคลี",
+      "ท่าตาล",
+      "ไผ่ล้อม",
+      "นครป่าหมาก",
+      "เนินกุ่ม",
+      "วัดตายม",
+    ],
+    "บางระกำ": [
+      "บางระกำ",
+      "ปลักแรด",
+      "พันเสา",
+      "วังอิทก",
+      "บึงกอก",
+      "หนองกุลา",
+      "ชุมแสงสงคราม",
+      "นิคมพัฒนา",
+      "บ่อทอง",
+      "ท่านางงาม",
+      "คุยม่วง",
+    ],
+    "พรหมพิราม": [
+      "พรหมพิราม",
+      "ท่าช้าง",
+      "วงฆ้อง",
+      "มะตูม",
+      "หอกลอง",
+      "ศรีภิรมย์",
+      "ตลุกเทียม",
+      "วังวน",
+      "หนองแขม",
+      "มะต้อง",
+      "ทับยายเชียง",
+      "ดงประคำ",
+    ],
+    "วังทอง": [
+      "วังทอง",
+      "พันชาลี",
+      "แม่ระกา",
+      "บ้านกลาง",
+      "วังพิกุล",
+      "แก่งโสภา",
+      "ท่าหมื่นราม",
+      "วังนกแอ่น",
+      "หนองพระ",
+      "ชัยนาม",
+      "ดินทอง",
+    ],
+    "วัดโบสถ์": ["วัดโบสถ์", "ท่างาม", "ทองแท้", "บ้านยาง", "หินลาด", "คันโช้ง"],
+  };
+
+  //เก็บอำเภอที่เลือก
+  const [availableSubdistricts, setAvailableSubdistricts] = useState([]);
+
+  const handleInputChange = (subject, field, value) => {
+    const updateData = { ...formData };
+    
+    //str->int
+    if (field === "fam_total_member" || field ==="fam_total_live" || field ==="fam_total_live" 
+      || field === "live_but_has_no_name_in_fam"  || field === "total_has_name_not_live"
+    ) {
+      value = parseInt(value, 10);  // convert to base 10
+    }
+
+    updateData[subject][field] = value;
+    setFormData(updateData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    setMainFormData((prevData) => ({
+      ...prevData,
+      ...formData, //นำไปต่อท้ายค่าใน State เก่า
+    }));
+    setCurrentPage(2); //เปลี่ยนหน้า
   };
+
+  //input of teamservey
+  const handleTeamServeyChange = (index, field, value) => {
+
+    const updatedTeamServey = [...formData.TeamServey];
+    updatedTeamServey[index][field] = value;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      TeamServey: updatedTeamServey,
+    }));
+  };
+
+  //Add new member Teamservey
+  const handleAddTeamServey = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      TeamServey: [
+        ...prevData.TeamServey,
+        {
+          title: "นาย",
+          fname: "",
+          lname: "",
+          agency: "",
+          phone: "",
+        },
+      ],
+    }));
+  };
+
+  //Delteam
+  const handleDeleteTeamServey = (index) => {
+    setFormData((prevData) => {
+      const updatedTeamServey = [...prevData.TeamServey];
+      updatedTeamServey.splice(index, 1);
+      return {
+        ...prevData,
+        TeamServey: updatedTeamServey,
+      };
+    });
+  };
+
+  useEffect(() => {
+    if (mainFormData && Object.keys(mainFormData).length > 0) {
+      setFormData(mainFormData); // ข้อมูลที่เก็บไว้ใน mainFormData
+      if (mainFormData.Household && mainFormData.Household.district) { 
+        setAvailableSubdistricts(  //อำเภอ
+          districtSubdistrictMap[mainFormData.Household.district] || []
+        );
+      }
+    }
+  }, [mainFormData]); //คอยดูว่าข้อมูลจากฟอร์มหลักเก็บข้อมูลที่ส่งไปหรือยัง
+
+  // อัปเดตตำบลเมื่ออำเภอเปลี่ยนแปลง
+  useEffect(() => {
+    if (formData.Household.district) {
+      setAvailableSubdistricts(
+        districtSubdistrictMap[formData.Household.district] || [] //เอาค่าของตำบลที่เลือกไปใส่ไว้
+      );
+
+    }
+  }, [formData.Household.district]);
 
   return (
     <div>
@@ -48,18 +233,21 @@ export const FristPage = () => {
         <form onSubmit={handleSubmit}>
           <div class="mb-6 mx-10 mt-10">
             <label
-              for="houseId"
+              for="house_code"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               รหัสบ้าน
             </label>
             <input
               type="text"
-              id="houseId"
+              name="Household"
+              id="house_code"
               class="bg-gray-50 border my-6 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="HC-XXXXXXX"
-              value={formData.houseId}
-              onChange={handleChange}
+              value={formData.Household.house_code}
+              onChange={(e) =>
+                handleInputChange(e.target.name, e.target.id, e.target.value)
+              }
               required
             />
             <label
@@ -69,43 +257,68 @@ export const FristPage = () => {
               หมายเลขครัวเรือนเกษตรกร(สมุดเขียว)
             </label>
 
-            {/* CheckBox1 */}
-            <div class="flex items-center h-5 ">
-              <input
-                id="hasGreenBook"
-                type="checkbox"
-                value=""
-                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                checked={formData.hasGreenBook}
-                onChange={handleChange}
-                required
-              />
-              <label className="px-5">ไม่มี</label>
-            </div>
-            {/* CheckBox2 */}
-            <div class="flex items-center h-5 mt-4">
-              <input
-                id="hasGreenBook"
-                type="checkbox"
-                value=""
-                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                checked={formData.hasGreenBook}
-                onChange={handleChange}
-                required
-              />
-              <label className="px-5">มี หมายเลข</label>
-              {/* ถ้ามีจะแสดง Input*/}
-              {formData.hasGreenBook && (
+            <div className="flex flex-col  ml-3 ">
+              <div className="">
                 <input
-                  type="text"
-                  id="greenBook"
-                  className="bg-gray-50 border my-6 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5"
-                  placeholder="หมายเลขครัวเรือนเกษตร"
-                  value={formData.greenBook}
-                  onChange={handleChange}
-                  required
+                  name="has_greenBook"
+                  type="radio"
+                  checked={!formData.has_greenBook}
+                  value="false"
+                  onClick={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      Household: {
+                        ...prev.Household,
+                        has_greenBook: false,
+                      },
+                    }))
+                  }
+                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                 />
-              )}
+                <label className="px-3 text-m font-medium leading-6 text-gray-900">
+                  ไม่มี
+                </label>
+              </div>
+
+              <div className="row">
+                <input
+                  name="has_greenBook"
+                  type="radio"
+                  checked={formData.Household.has_greenBook}
+                  value="true"
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      Household: {
+                        ...prev.Household,
+                        has_greenBook: true,
+                      },
+                    }))
+                  }
+                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                />
+                <label className="px-3 text-m font-medium leading-6 text-gray-900">
+                  มี หมายเลข
+                </label>
+                {formData.Household.has_greenBook && (
+                  <input
+                    type="text"
+                    name="Household"
+                    id="green_book_id"
+                    value={formData.Household.green_book_id}
+                    onChange={(e) =>
+                      handleInputChange(
+                        e.target.name,
+                        e.target.id,
+                        e.target.value
+                      )
+                    }
+                    className="bg-gray-50 border my-6 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-1/2 p-2.5"
+                    placeholder="หมายเลขครัวเรือนเกษตร"
+                    required
+                  />
+                )}
+              </div>
             </div>
           </div>
 
@@ -120,44 +333,52 @@ export const FristPage = () => {
               <input
                 type="text"
                 id="village"
+                name="Household"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="John"
-                value={formData.village}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.village}
                 required
               />
             </div>
             <div>
               <label
-                for="houseNumber"
+                for="house_number"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 บ้านเลขที่
               </label>
               <input
                 type="text"
-                id="houseNumber"
+                name="Household"
+                id="house_number"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.houseNumber}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.house_number}
                 required
               />
             </div>
             <div>
               <label
-                for="soi"
+                for="alley"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 ซอย
               </label>
               <input
                 type="text"
-                id="soi"
+                name="Household"
+                id="alley"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.soi}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.alley}
               />
             </div>
             <div>
@@ -169,45 +390,14 @@ export const FristPage = () => {
               </label>
               <input
                 type="text"
+                name="Household"
                 id="road"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.road}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label
-                for="subdistrict"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                ตำบล
-              </label>
-              <input
-                type="text"
-                id="subdistrict"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="flowbite.com"
-                value={formData.subdistrict}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label
-                for="district"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                อำเภอ
-              </label>
-              <input
-                type="text"
-                id="district"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                value={formData.district}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.road}
                 required
               />
             </div>
@@ -220,28 +410,89 @@ export const FristPage = () => {
               </label>
               <input
                 type="text"
+                name="Household"
                 id="province"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.province}
-                onChange={handleChange}
-                required
+                disabled
+                value={formData.Household.province}
+                
               />
             </div>
             <div>
               <label
-                for="postalCode"
+                for="district"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                อำเภอ
+              </label>
+              <select
+                type="text"
+                name="Household"
+                id="district"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder=""
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.district}
+                required
+              >
+                <option value="">เลือกอำเภอ</option>
+                {Object.keys(districtSubdistrictMap).map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+
+              </select>
+            </div>
+            <div>
+              <label
+                for="subdistrict"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                ตำบล
+              </label>
+              <select
+                type="text"
+                id="subdistrict"
+                name="Household"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.subdistrict}
+                required
+                disabled={!formData.Household.district}
+              >
+                <option value="">เลือกตำบล</option>
+                {availableSubdistricts.map((subdistrict) => (
+                  <option key={subdistrict} value={subdistrict}>
+                    {subdistrict}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            
+            <div>
+              <label
+                for="postcode"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 รหัสไปรษณีย์
               </label>
               <input
                 type="number"
-                id="postalCode"
+                name="Household"
+                id="postcode"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.postalCode}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.postcode}
                 required
               />
             </div>
@@ -256,7 +507,7 @@ export const FristPage = () => {
           <div className="mb-6 mx-10 grid gap-6  md:grid-cols-3">
             <div className="relative  rounded-md shadow-sm">
               <label
-                for="houseOwnerName"
+                for="host_title"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 ชื่อ เจ้าบ้าน ตามทะเบียนบ้าน
@@ -266,11 +517,17 @@ export const FristPage = () => {
                   Title
                 </label>
                 <select
-                  id="houseOwnerTitle"
-                  name="houseOwnerTitle"
+                  id="host_title"
+                  name="Household"
                   className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
-                  value={formData.houseOwnerTitle}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    handleInputChange(
+                      e.target.name,
+                      e.target.id,
+                      e.target.value
+                    )
+                  }
+                  value={formData.Household.host_title}
                 >
                   <option>นาย</option>
                   <option>นาง</option>
@@ -278,73 +535,88 @@ export const FristPage = () => {
                 </select>
               </div>
               <input
-                id="houseOwnerName"
-                name="houseOwnerName"
+                id="host_fname"
+                name="Household"
+                required
                 type="text"
                 placeholder=""
-                value={formData.houseOwnerName}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.host_fname}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
             <div className="">
               <label
-                for="houseOwnerSurname"
+                for="host_lname"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 นามสกุล
               </label>
               <input
                 type="text"
-                id="houseOwnerSurname"
+                name="Household"
+                id="host_lname"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.houseOwnerSurname}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.host_lname}
                 required
               />
             </div>
             <div className="">
               <label
-                for="houseOwnerID"
+                for="host_national_id"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 หมายเลขบัตรประจำตัวประชาชน <b>เจ้าบ้าน</b>
               </label>
               <input
                 type="number"
-                id="houseOwnerID"
+                name="Household"
+                id="host_national_id"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.houseOwnerID}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.Household.host_national_id}
                 required
               />
             </div>
           </div>
 
-          {/* <div className="my-6 mx-10 mt-10">
+          <div className="my-6 mx-10 mt-10">
             <h3>
               <b>ข้อมูล ผู้ให้ข้อมูล</b> (ต้องเป็นบุคคลที่อาศัยอยู่ในครัวเรือน
               หรือ ได้รับความยินยอมจากบุคคลในครัวเรือน ให้เป็นผู้ให้ข้อมูล)
             </h3>
-          </div> */}
+          </div>
 
-          {/* <div className="mb-6 mx-10 grid gap-6  md:grid-cols-4 mt-5">
+          <div className="mb-6 mx-10 grid gap-6  md:grid-cols-4 mt-5">
             <div className="relative  rounded-md shadow-sm">
               <label
-                for="visitors"
+                for="fname"
+                name="Informant"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 ชื่อ ผู้ให้ข้อมูล
               </label>
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <label htmlFor="currency" className="sr-only">
-                  Currency
-                </label>
                 <select
-                  id="currency"
-                  name="currency"
+                  id="title"
+                  name="Informant"
+                  onChange={(e) =>
+                    handleInputChange(
+                      e.target.name,
+                      e.target.id,
+                      e.target.value
+                    )
+                  }
+                  value={formData.Informant.title}
                   className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
                 >
                   <option>นาย</option>
@@ -355,42 +627,54 @@ export const FristPage = () => {
                 </select>
               </div>
               <input
-                id="price"
-                name="text"
+                id="fname"
+                required
+                name="Informant"
                 type="text"
-                placeholder=""
+                value={formData.Informant.fname}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
             <div className="">
               <label
-                for="first_name"
+                for="lname"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 นามสกุล
               </label>
               <input
                 type="text"
-                id="first_name"
+                name="Informant"
+                id="lname"
+                value={formData.Informant.lname}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
                 required
               />
             </div>
 
             <div className="">
               <label
-                for="first_name"
+                for="national_id"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 หมายเลขบัตรประจำตัวประชาชน
               </label>
               <input
-                type="text"
-                id="first_name"
-                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
+                type="number"
+                name="Informant"
                 required
+                id="national_id"
+                value={formData.Informant.national_id}
+                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
               />
             </div>
 
@@ -402,25 +686,34 @@ export const FristPage = () => {
                 กรณีไม่มีบัตรให้ระบุว่า
               </label>
               <input
-                id="remember"
+                id="national_id"
+                name="Informant"
                 type="checkbox"
-                value=""
+                value={formData.Informant.national_id}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, "ไม่มีบัตร")
+                }
                 class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                required
+                //required
               />
               <label className="px-5">ไม่มีบัตร</label>
             </div>
 
             <div className="">
               <label
-                for="first_name"
+                for="phone"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 หมายเลขโทรศัพท์ (บ้าน/มือถือ)
               </label>
               <input
-                type="text"
-                id="first_name"
+                type="number"
+                name="Informant"
+                id="phone"
+                value={formData.Informant.phone}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุหมายเลขโทรศัพท์"
                 required
@@ -429,70 +722,90 @@ export const FristPage = () => {
 
             <div className="">
               <label
-                for="first_name"
+                for="fam_total_member"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 จำนวนสมาชิคตามทะเบียนบ้าน(คน)
               </label>
               <input
-                type="text"
-                id="first_name"
+                type="number"
+                name="Informant"
+                id="fam_total_member"
+                value={formData.Informant.fam_total_member}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุจำนวนสมาชิค"
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
                 required
               />
             </div>
 
             <div className="">
               <label
-                for="first_name"
+                for="fam_total_live"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 อาศัยอยู่จริงในครัวเรือน(คน)
               </label>
               <input
-                type="text"
-                id="first_name"
+                type="number"
+                name="Informant"
+                id="fam_total_live"
+                value={formData.Informant.fam_total_live}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุจำนวนสมาชิค"
                 required
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
               />
             </div>
 
             <div className="">
               <label
-                for="first_name"
+                for="live_but_has_no_name_in_fam"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 จำนวนสมาชิคที่อาศัยแต่ไม่มีชื่อในทะเบียนบ้าน(คน)
               </label>
               <input
-                type="text"
-                id="first_name"
+                type="number"
+                id="live_but_has_no_name_in_fam"
+                name="Informant"
+                value={formData.Informant.live_but_has_no_name_in_fam}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุจำนวนสมาชิค"
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
                 required
               />
             </div>
 
             <div className="">
               <label
-                for="first_name"
+                for="total_has_name_not_live"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 จำนวนสมาชิคที่ไม่ได้อาศัยแต่มีชื่อในทะเบียนบ้าน(คน)
               </label>
               <input
-                type="text"
-                id="first_name"
+                type="number"
+                name="Informant"
+                id="total_has_name_not_live"
+                value={formData.Informant.total_has_name_not_live}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุจำนวนสมาชิค"
                 required
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
               />
             </div>
-          </div> */}
+          </div>
 
-          {/* <div className="my-6 mx-10 ">
+          <div className="my-6 mx-10 ">
             <label
               for="first_name"
               class="block mb-2  font-medium text-gray-900 dark:text-white text-base"
@@ -501,156 +814,157 @@ export const FristPage = () => {
               ชัดเจน และยินยอมให้ใช้ข้อมูลที่มีการจัดเก็บตามวัตถุประสงค์
               ของโครงการเท่านั้น
             </label>
-          </div> */}
+          </div>
 
-          {/* <div className="mt-6 mx-10 mb-3">
+          <div className="mt-6 mx-10 mb-3">
             <h3>
               <b>สำหรับทีมสำรวจข้อมูล</b>
             </h3>
-          </div> */}
+          </div>
 
-          {/* <div class="grid gap-6 mb-6 mt-6 md:grid-cols-3  mx-10">
-            <div className="relative  rounded-md shadow-sm">
-              <label
-                for="visitors"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                1.ชื่อผู้สำรวจ
-              </label>
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <label htmlFor="currency" className="sr-only">
-                  Currency
-                </label>
-                <select
-                  id="currency"
-                  name="currency"
-                  className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
-                >
-                  <option>นาย</option>
-                  <option>นาง</option>
-                  <option>นางสาว</option>
-                </select>
+          <div class="mx-10">
+            {formData.TeamServey.map((teamData, index) => (
+              <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4" key={index}>
+                <div className="relative  rounded-md shadow-sm col-span-1">
+                  <label
+                    for="visitors"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                  >
+                    {index + 1}.ชื่อผู้สำรวจ
+                  </label>
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
+                    <select
+                      id="title"
+                      value={teamData.title}
+                      onChange={(e) =>
+                        handleTeamServeyChange(
+                          index,
+                          e.target.id,
+                          e.target.value
+                        )
+                      }
+                      // name="currency"
+                      className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
+                    >
+                      <option>นาย</option>
+                      <option>นาง</option>
+                      <option>นางสาว</option>
+                    </select>
+                  </div>
+                  <input
+                    id="fname"
+                    required
+                    value={teamData.fname}
+                    onChange={(e) =>
+                      handleTeamServeyChange(index, e.target.id, e.target.value)
+                    }
+                    type="text"
+                    placeholder=""
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="">
+                  <label
+                    for="lname"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    นามสกุล
+                  </label>
+                  <input
+                    type="text"
+                    value={teamData.lname}
+                    onChange={(e) =>
+                      handleTeamServeyChange(index, e.target.id, e.target.value)
+                    }
+                    id="lname"
+                    class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder=""
+                    required
+                  />
+                </div>
+                <div className="">
+                  <label
+                    for="agency"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    หน่วยงาน
+                  </label>
+                  <input
+                    id="agency"
+                    type="text"
+                    value={teamData.agency}
+                    onChange={(e) =>
+                      handleTeamServeyChange(index, e.target.id, e.target.value)
+                    }
+                    class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="ชื่อหน่วยงาน"
+                    required
+                  />
+                </div>
+
+                <div className="">
+                  <label
+                    for="phone"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    เบอร์โทรศัพท์
+                  </label>
+                  <input
+                    type="number"
+                    value={teamData.phone}
+                    onChange={(e) =>
+                      handleTeamServeyChange(index, e.target.id, e.target.value)
+                    }
+                    id="phone"
+                    class=" bg-gray-50 border w-9/12 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder=""
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteTeamServey(index)}
+                    className=" items-center py-2 px-4  ml-3  border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none"
+                  >
+                    <Icon
+                      icon="material-symbols:delete-forever-outline-rounded"
+                      className=""
+                    />
+                  </button>
+                </div>
               </div>
-              <input
-                id="price"
-                name="text"
-                type="text"
-                placeholder=""
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-            </div>
-
-            <div className="">
-              <label
-                for="first_name"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            ))}
+            <div className=" mb-6">
+              <button
+                type="button"
+                onClick={() => handleAddTeamServey()}
+                className="flex items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-400 hover:bg-emerald-600 focus:outline-none"
               >
-                นามสกุล
-              </label>
-              <input
-                type="text"
-                id="first_name"
-                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
+                <Icon
+                  icon="material-symbols:add-circle-outline-rounded"
+                  className="mr-2"
+                />
+                เพิ่มสมาชิคทีมสำรวจ
+              </button>
             </div>
+          </div>
 
-            <div className="">
-              <label
-                for="first_name"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                เบอร์โทรศัพท์
-              </label>
-              <input
-                type="text"
-                id="first_name"
-                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
-            </div>
-
-            <div className="relative  rounded-md shadow-sm">
-              <label
-                for="visitors"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                2.ชื่อผู้สำรวจ
-              </label>
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <label htmlFor="currency" className="sr-only">
-                  Currency
-                </label>
-                <select
-                  id="currency"
-                  name="currency"
-                  className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
-                >
-                  <option>นาย</option>
-                  <option>นาง</option>
-                  <option>นางสาว</option>
-                </select>
-              </div>
-              <input
-                id="price"
-                name="text"
-                type="text"
-                placeholder=""
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-            </div>
-
-            <div className="">
-              <label
-                for="first_name"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                นามสกุล
-              </label>
-              <input
-                type="text"
-                id="first_name"
-                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                for="first_name"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                เบอร์โทรศัพท์
-              </label>
-              <input
-                type="text"
-                id="first_name"
-                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
-            </div>
-          </div> */}
-
-          {/* <div className="mt-6 mx-10 ">
+          <div className="mt-6 mx-10 ">
             <h4>
               <b>วันที่สำรวจ</b>
             </h4>
-          </div> */}
+          </div>
 
           {/* components เก็บวันที่ */}
           {/* <ThaiDatePicker /> */}
 
-          {/* <div className="mt-6 mx-10 ">
+          <div className="mt-6 mx-10 ">
             <h3>
               <b>สำหรับ ผู้บันทึกข้อมูล</b>
             </h3>
-          </div> */}
+          </div>
 
-          {/* <div class="grid gap-6 mb-6 mt-3 md:grid-cols-4  mx-10">
+          <div class="grid gap-6 mb-6 mt-3 md:grid-cols-4  mx-10">
             <div className="relative  rounded-md shadow-sm">
               <label
                 for="visitors"
@@ -659,12 +973,17 @@ export const FristPage = () => {
                 ชื่อผู้บันทึก
               </label>
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <label htmlFor="currency" className="sr-only">
-                  Currency
-                </label>
                 <select
-                  id="currency"
-                  name="currency"
+                  id="recder_title"
+                  name="DataRecorder"
+                  onChange={(e) =>
+                    handleInputChange(
+                      e.target.name,
+                      e.target.id,
+                      e.target.value
+                    )
+                  }
+                  value={formData.DataRecorder.title}
                   className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
                 >
                   <option>นาย</option>
@@ -673,42 +992,58 @@ export const FristPage = () => {
                 </select>
               </div>
               <input
-                id="price"
-                name="text"
+                id="recder_fname"
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                name="DataRecorder"
                 type="text"
+                required
                 placeholder=""
+                value={formData.DataRecorder.fname}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
 
             <div className="">
               <label
-                for="first_name"
+                for="lname"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 นามสกุล
               </label>
               <input
                 type="text"
-                id="first_name"
+                required
+                id="recder_lname"
+                name="DataRecorder"
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                required
+                value={formData.DataRecorder.lname}
               />
             </div>
 
             <div className="">
               <label
-                for="first_name"
+                for="phone"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 เบอร์โทรศัพท์
               </label>
               <input
-                type="text"
-                id="first_name"
+                type="number"
+                name="DataRecorder"
+                id="recder_phone"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                }
+                value={formData.DataRecorder.phone}
                 required
               />
             </div>
@@ -718,7 +1053,7 @@ export const FristPage = () => {
                 htmlFor="date"
                 className="block text-sm font-medium text-gray-700"
               >
-                วันที่บันทึกข้อมูล
+                วันที่บันทึกข้อมูล ป-ด-ว (2567-11-20)
               </label>
               <DatePicker
                 locale="th"
@@ -727,9 +1062,9 @@ export const FristPage = () => {
                 placeholderText="เลือกวันที่"
               />
             </div>
-          </div> */}
+          </div>
 
-          {/* <div className="my-6 mx-10 ">
+          <div className="my-6 mx-10 ">
             <label
               for="first_name"
               class="block mb-2  font-medium text-gray-900 dark:text-white text-base"
@@ -737,32 +1072,44 @@ export const FristPage = () => {
               <b>หมายเหตุ</b>
             </label>
             <div className="text-sm">
-            <p>
-              1. ควรทำการสำรวจ ณ บ้านพักอาศัยของผู้ตอบ
-              เพื่อจะได้สังเกตสภาพแวดล้อมของที่อาศัยได้
-            </p>
-            <p>
-              2. ขอดูทะเบียนบ้าน เพื่อบันทึกเลขที่บ้าน ที่อยู่
-              ชื่อสมาชิกและหมายเลขบัตรประชาชนของทุกคนในครัวเรือนได้ถูกต้อง
-            </p>
-            <p>
-              3. หากพบผู้ไม่มีบัตร/ทะเบียนบ้าน
-              ทั้งที่อาศัยอยู่คนเดียว/ครอบครัวให้เก็บข้อมูลเพิ่มเติม
-              เพื่อนำเข้าสู่ระบบช่วยเหลือ
-              กรณีที่เป้าหมายไม่มีหลักฐานแสดงตัวตนและครอบครัวว่าเป็นไทย
-              แต่มีผู้รับรอง/ยืนยันว่าอาศัยอยู่ในพื้นที่ต่อเนื่องให้ทีมสำรวจ
-              บันทึกเป็นข้อสังเกตไว้
-            </p>
+              <p>
+                1. ควรทำการสำรวจ ณ บ้านพักอาศัยของผู้ตอบ
+                เพื่อจะได้สังเกตสภาพแวดล้อมของที่อาศัยได้
+              </p>
+              <p>
+                2. ขอดูทะเบียนบ้าน เพื่อบันทึกเลขที่บ้าน ที่อยู่
+                ชื่อสมาชิกและหมายเลขบัตรประชาชนของทุกคนในครัวเรือนได้ถูกต้อง
+              </p>
+              <p>
+                3. หากพบผู้ไม่มีบัตร/ทะเบียนบ้าน
+                ทั้งที่อาศัยอยู่คนเดียว/ครอบครัวให้เก็บข้อมูลเพิ่มเติม
+                เพื่อนำเข้าสู่ระบบช่วยเหลือ
+                กรณีที่เป้าหมายไม่มีหลักฐานแสดงตัวตนและครอบครัวว่าเป็นไทย
+                แต่มีผู้รับรอง/ยืนยันว่าอาศัยอยู่ในพื้นที่ต่อเนื่องให้ทีมสำรวจ
+                บันทึกเป็นข้อสังเกตไว้
+              </p>
             </div>
-            
-          </div> */}
+          </div>
 
+          <div className="flex justify-end mr-10">
+            <button
+              type="submit"
+              class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+              หน้าถัดไป
+              <Icon
+                icon="material-symbols:arrow-right-rounded"
+                width="25"
+                height="25"
+              />
+            </button>
+          </div>
+          {/* 
           <button
-            type="submit"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={e=>handleSubmit(e)}
           >
-            Submit
-          </button>
+            ส่งข้อมูลไป main
+          </button> */}
         </form>
       </div>
     </div>

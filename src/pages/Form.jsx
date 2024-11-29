@@ -2,61 +2,63 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FristPage } from "../components/Form/FristPage";
 import { HumanCapital } from "../components/Form/HumanCapital";
+import PhysicalCapital from "../components/Form/PhysicalCapital";
+import {Test1} from "../components/Form/Test1";
 import GroupSamForm from "../components/Form/GroupSamForm";
 import Financialcapital from "../components/Form/Financialcapital";
 import Socialcapital from "../components/Form/Socialcapital";
 import Naturalcapital from "../components/Form/Naturalcapital";
 import Southern from "../components/Form/southern";
 import Suggestions from "../components/Form/Suggestions";
-
-
 import Naturalcapital2 from "../components/Form/Naturalcapital2";
+
+
 export const Form = () => {
-  //ทดลองแสดงข้อมูลฟอร์ม
-  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); //เปลี่ยนหน้า
+  const totalPage = 3;
+
+  //เก็บData
+  const [mainFormData,setMainFormData] = useState({})
 
   useEffect(() => {
-    // loadData();
-  });
-
-  // const loadData = async () => {
-  //   await axios
-  //     .get("http://localhost:8080/api/house-hold/lists")
-  //     //(res)=> setData(res.data)
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // };
+    console.log('now main data is : ',mainFormData);
+    
+  }, [mainFormData]);
 
   return (
-    <div className="mx-5 my-5">
-      <div className="flex flex-col  justify-center font-bold text-2xl">
-        <div className="block text-center">
-          <h1>แบบสอบถาม</h1>
+    <>
+      <div className="mx-5 my-5">
+        <div className="flex flex-col  justify-center font-bold text-2xl">
+          <div className="block text-center">
+            <h1>แบบสอบถาม</h1>
+          </div>
+          <div className="block text-center">
+            <h1>
+              ระบบข้อมูลครัวเรือนยากจนระดับพื้นที่
+              หน่วยบริหารและจัดการทุนด้านการพัฒนาระดับพื้นที่(บพท.)
+              ข้อมูลพื้นฐานครัวเรือน
+            </h1>
+          </div>
         </div>
-        <div className="block text-center">
-          <h1>
-            ระบบข้อมูลครัวเรือนยากจนระดับพื้นที่
-            หน่วยบริหารและจัดการทุนด้านการพัฒนาระดับพื้นที่(บพท.)
-            ข้อมูลพื้นฐานครัวเรือน
-          </h1>
-        </div>
-      </div>
-      
-      {/* หน้าแรกผูกค่าเก็บลงตัวแปรได้แล้วเหลือยิง API */}
-      {/* <FristPage/> */}
 
-      {/* กำลังสร้างการ loop */}
-      {/* <HumanCapital/> */}
+        <div className="">
+          {currentPage === 1 && <FristPage setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
+          {currentPage === 2 && <HumanCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
+          {currentPage === 3 && <PhysicalCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {/* {currentPage === 4 && <Test1 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
+        </div>
+        
+      </div>
+
       <Financialcapital/>
-      {/*<HumanCapital/>*/}
-      {/* <Southern/> */}
-      {/* <Suggestions/> */}
-      {/* <Naturalcapital/> */}
 
       <Socialcapital/>  
       <Naturalcapital/> 
       <Naturalcapital2/>
 
-    </div>
+      <Southern/>
+      <Suggestions/>
+
+    </>
   );
 };
