@@ -10,7 +10,7 @@ import Southern from "../components/Form/southern";
 import Suggestions from "../components/Form/Suggestions";
 
 
-import Naturalcapital2 from "../components/Form/์Naturalcapital2";
+import Naturalcapital2 from "../components/Form/Naturalcapital2";
 export const Form = () => {
   //ทดลองแสดงข้อมูลฟอร์ม
   const [data, setData] = useState([]);
@@ -49,8 +49,8 @@ export const Form = () => {
       {/* <HumanCapital/> */}
       <Financialcapital/>
       {/*<HumanCapital/>*/}
-      <Southern/>
-      <Suggestions/>
+      {/* <Southern/> */}
+      {/* <Suggestions/> */}
       {/* <Naturalcapital/> */}
 
       <Socialcapital/>  
