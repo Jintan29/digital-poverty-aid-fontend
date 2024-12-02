@@ -1,166 +1,104 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export const Southern = () => {
-  //ใช้ useState เพื่อเก็บค่าที่ผู้ใช้กรอกในฟอร์ม
-  const [selectedOption, setSelectedOption] = useState({
-    urgent_to_do: false,
-  }); //เก็บค่าการเลือกของผู้ใช้ (radio buttons)
+export const Southern = ({setCurrentPage,setMainFormData,mainFormData}) => {
+
   const [formData, setFormData] = useState({
-    //เก็บข้อมูลจาก input
-    UnrestIn3Southern: [
-      {
+    UnrestIn3Southern:{
         effect: "",
         urgent_to_do: "",
         effect_in_life: [],
         effect_in_work: [],
-      },
-    ],
-    // effect: '',   // เก็บข้อความผลกระทบที่ผู้ใช้กรอก
-    // form_id: '',  // เป็นตัวแปรที่จะเก็บ id ของฟอร์ม
-    // urgent_to_do: '',  // เก็บข้อความสำหรับสิ่งที่ต้องดำเนินการโดยเร่งด่วน
-    // effect_in_life: [],  // เก็บผลกระทบที่เกิดขึ้นกับชีวิตในรูปแบบ array (checkbox)
-    // effect_in_work: []  // เก็บผลกระทบที่เกิดขึ้นกับการทำงานในรูปแบบ array (checkbox)
+      }
   });
 
-  // ฟังก์ชันการเปลี่ยนแปลงใน radio button
-  const handleOptionChange = (e) => {
-    setSelectedOption(e.target.value);
-  };
-
-  const handleInputChange = (field, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      UnrestIn3Southern: [
-        {
-          ...prevData.UnrestIn3Southern[0],
-          [field]: value,
-        },
-      ],
-    }));
-  };
-  const handleIncomeRadioChange = (e) => {
-    const { value, id } = e.target;
-
-    // เช็คว่าเป็น radio "อื่นๆ" หรือไม่
-    if (id === "urgent_to_do_8") {
-      setIsOtherChecked({ ...isOtherChecked, urgent_to_do_8: true });
-    } else {
-      setIsOtherChecked({ ...isOtherChecked, urgent_to_do_8: false });
+  //load data 
+  useEffect(()=>{
+    if(mainFormData.Southern){
+      setFormData(mainFormData.Southern)
     }
 
-    setFormData((prevData) => ({
+  },[mainFormData])
+
+  //NextPage
+  const handleSubmit =(e)=>{
+    // e.preventDefault()
+    setMainFormData((prevData)=>({
       ...prevData,
-      UnrestIn3Southern: prevData.UnrestIn3Southern.map((item, index) => {
-        if (index === 0) {
-          return { ...item, urgent_to_do: value }; // อัพเดตค่าเฉพาะใน index ที่ต้องการ
-        }
-        return item;
-      }),
+      Southern: formData
+    }))
+    setCurrentPage(6)
+  }
+
+  //prevPage
+  //ย้อนกลับ
+  const handlePrevPage = () => {
+    setMainFormData((prevData) => ({
+      ...prevData,
+      Southern: formData,
     }));
+    setCurrentPage(4);
   };
 
-  const handleIncomeOtherInputChange = (event) => {
-    const { value } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      UnrestIn3Southern: prev.UnrestIn3Southern.map((item, index) => {
-        if (index === 0) {
-          return { ...item, urgent_to_do: `อื่นๆ: ${value}` };
-        }
-        return item;
-      }),
-    }));
-  };
-  
-  //2.2-2.3
-  const [isOtherChecked, setIsOtherChecked] = useState({});
-  // ฟังก์ชันสำหรับจัดการการเลือก checkbox
-  const handleCheckboxChange = (category, field, value, checked) => {
-    setFormData((prevData) => {
-      const updatedFieldData = [...prevData[category][0][field]];
+  const handleInputChange = (field,value)=>{
+    const updateData = {...formData}
+    updateData.UnrestIn3Southern[field] = value
+    setFormData(updateData)
+  }
 
-      if (checked) {
-        if (!updatedFieldData.includes(value)) {
-          updatedFieldData.push(value);
-        }
-      } else {
-        const index = updatedFieldData.indexOf(value);
-        if (index > -1) {
-          updatedFieldData.splice(index, 1);
-        }
+  const handleCheckboxChange = (field,value,checked)=>{
+    const updateData = {...formData}
+
+    if(checked){
+      updateData.UnrestIn3Southern[field] = [...updateData.UnrestIn3Southern[field],value]
+    }else{
+      const index = updateData.UnrestIn3Southern[field].findIndex((e)=> //หาข index ที่ขึ้นต้นได้ value ที่ส่งมา
+      e.startsWith(value));
+
+      if(index > -1){
+        updateData.UnrestIn3Southern[field].splice(index,1)
       }
-
-      return {
-        ...prevData,
-        [category]: [
-          {
-            ...prevData[category][0],
-            [field]: updatedFieldData,
-          },
-        ],
-      };
-    });
-  };
-  // ฟังก์ชันสำหรับจัดการ checkbox "อื่น ๆ"
-  const handleOtherCheckboxChange = (e, category, field, valuePrefix) => {
-    const { id, checked } = e.target;
-    setIsOtherChecked((prevState) => ({
-      ...prevState,
-      [id]: checked,
-    }));
-
-    if (!checked) {
-      setFormData((prevData) => {
-        const filteredFieldData = prevData[category][0][field].filter(
-          (item) => !item.startsWith(valuePrefix)
-        );
-
-        return {
-          ...prevData,
-          [category]: [
-            {
-              ...prevData[category][0],
-              [field]: filteredFieldData,
-            },
-          ],
-        };
-      });
     }
-  };
-  // ฟังก์ชันสำหรับกรอกข้อมูลเพิ่มเติม
-  const handleInputOtherChange = (category, field, value) => {
-    setFormData((prevData) => {
-      const updatedFieldData = prevData[category][0][field];
+    setFormData(updateData)
+  }
 
-      // ตรวจสอบว่าเป็นอาเรย์แล้วเพิ่มข้อมูล
-      if (!updatedFieldData.includes(value)) {
-        return {
-          ...prevData,
-          [category]: [
-            {
-              ...prevData[category][0],
-              [field]: [...updatedFieldData, value],
-            },
-          ],
-        };
+  //อื่นๆ
+  const prefix = 'อื่นๆ '
+
+  const handleOtherInput = (prefixO,field,value)=>{
+    setFormData((prevData)=>{
+      const updateData = [...prevData.UnrestIn3Southern[field]]
+      const Index = updateData.findIndex((e)=>e.startsWith(prefixO))
+    
+      if(Index >=  0){
+        updateData[Index] = value;
+      }else {
+        updateData.push(value)
       }
-      return prevData;
-    });
-  };
+      return {...prevData,UnrestIn3Southern:{
+        ...prevData.UnrestIn3Southern,
+        [field]:updateData
+      }}
+    })
+    
+    
+  }
+
+
   
-  const handleSubmit = (e) => {
+  const handleShowData = (e) => {
     e.preventDefault();
     console.log(formData);
   };
 
   return (
     <>
-      <div className="Container">
+    <div className="px-7">
+      <div className="Container ">
         <h3 className="text-black text-lg font-bold px-5 py-5">
           ส่วนที่ 6 ความไม่สงบในพื้นที่ 3 ชายแดนภาคใต้
         </h3>
         {/* ฟอร์มสำหรับกรอกข้อมูล */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleShowData}>
           {/* ส่วนคำถามที่2.1.เกี่ยวกับผลกระทบ */}
           <h2>
             2. ผลกระทบจากสถานการณ์ความไม่สงบในพื้นที่ (เฉพาะจังหวัดนราธิวาส ยะลา
@@ -176,7 +114,9 @@ export const Southern = () => {
                 name="effect"
                 type="radio"
                 value="มากที่สุด"
-                // checked={selectedOption21 === "มากที่สุด"}
+                checked={formData.UnrestIn3Southern?.effect === 'มากที่สุด'?
+                  true:false
+                }
                 onChange={(e) => {
                   handleInputChange("effect", e.target.value);
                 }}
@@ -196,6 +136,9 @@ export const Southern = () => {
                 name="effect"
                 type="radio"
                 value="มาก"
+                checked={formData.UnrestIn3Southern?.effect === 'มาก'?
+                  true:false
+                }
                 onChange={(e) => {
                   handleInputChange("effect", e.target.value);
                 }}
@@ -213,6 +156,9 @@ export const Southern = () => {
                 name="effect"
                 type="radio"
                 value="ปานกลาง"
+                checked={formData.UnrestIn3Southern?.effect === 'ปานกลาง'?
+                  true:false
+                }
                 onChange={(e) => {
                   handleInputChange("effect", e.target.value);
                 }}
@@ -233,6 +179,9 @@ export const Southern = () => {
                 name="effect"
                 type="radio"
                 value="น้อย"
+                checked={formData.UnrestIn3Southern?.effect === 'น้อย'?
+                  true:false
+                }
                 onChange={(e) => {
                   handleInputChange("effect", e.target.value);
                 }}
@@ -250,6 +199,9 @@ export const Southern = () => {
                 name="effect"
                 type="radio"
                 value="น้อยที่สุด"
+                checked={formData.UnrestIn3Southern?.effect === 'น้อยที่สุด'?
+                  true:false
+                }
                 onChange={(e) => {
                   handleInputChange("effect", e.target.value);
                 }}
@@ -264,10 +216,6 @@ export const Southern = () => {
           </div>
         </form>
       </div>
-
-      {/* Checkbox สำหรับ "การใช้ชีวิตประจำวัน" */}
-      {/* คำถามส่วนที่2.2 */}
-      <form onSubmit={handleSubmit}>
         <h2>
           2.2. ปัญหาความไม่สงบในพื้นที่ มีผลกระทบต่อการดำรงชีวิตด้านใดมากที่สุด
           (ตอบได้มากกว่า 1 ข้อ)
@@ -278,9 +226,11 @@ export const Southern = () => {
             name="effect_in_life"
             type="checkbox"
             value="การใช้ชีวิตประจำวัน"
+            checked={formData.UnrestIn3Southern?.effect_in_life.includes('การใช้ชีวิตประจำวัน')?
+              true:false
+            }
             onChange={(e) =>
               handleCheckboxChange(
-                "UnrestIn3Southern",
                 "effect_in_life",
                 e.target.value,
                 e.target.checked
@@ -301,10 +251,12 @@ export const Southern = () => {
             id="effect_in_life 2"
             name="effect_in_life"
             type="checkbox"
-            value="การประกอบอาชีพ "
+            value="การประกอบอาชีพ"
+            checked={formData.UnrestIn3Southern?.effect_in_life.includes('การประกอบอาชีพ')?
+              true:false
+            }
             onChange={(e) =>
               handleCheckboxChange(
-                "UnrestIn3Southern",
                 "effect_in_life",
                 e.target.value,
                 e.target.checked
@@ -325,10 +277,12 @@ export const Southern = () => {
             id="effect_in_life 3"
             name="effect_in_life"
             type="checkbox"
-            value="การประกอบกิจกรรมทางศาสนา "
+            value="การประกอบกิจกรรมทางศาสนา"
+            checked={formData.UnrestIn3Southern?.effect_in_life.includes('การประกอบกิจกรรมทางศาสนา')?
+              true:false
+            }
             onChange={(e) =>
               handleCheckboxChange(
-                "UnrestIn3Southern",
                 "effect_in_life",
                 e.target.value,
                 e.target.checked
@@ -348,10 +302,12 @@ export const Southern = () => {
             id="effect_in_life 4"
             name="effect_in_life"
             type="checkbox"
-            value="การร่วมกิจกรรมกับชุมชน การพักผ่อนหย่อนใจ "
+            value="การร่วมกิจกรรมกับชุมชน การพักผ่อนหย่อนใจ"
+            checked={formData.UnrestIn3Southern?.effect_in_life.includes('การร่วมกิจกรรมกับชุมชน การพักผ่อนหย่อนใจ')?
+              true:false
+            }
             onChange={(e) =>
               handleCheckboxChange(
-                "UnrestIn3Southern",
                 "effect_in_life",
                 e.target.value,
                 e.target.checked
@@ -372,14 +328,17 @@ export const Southern = () => {
             type="checkbox"
             id="effect_in_life_5"
             name="effect_in_life"
+            checked={formData.UnrestIn3Southern?.effect_in_life.some((e)=>e.startsWith(prefix))  ?
+              true:false
+            }
             onChange={(e) =>
-              handleOtherCheckboxChange(
-                e,
-                "UnrestIn3Southern",
+              handleCheckboxChange(
                 "effect_in_life",
-                "อื่นๆ"
+                prefix,
+                e.target.checked
               )
-            } // เรียกฟังก์ชันเมื่อเลือก checkbox
+            }
+            // } // เรียกฟังก์ชันเมื่อเลือก checkbox
             className="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
           />
           <label className="ms-4 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -389,20 +348,17 @@ export const Southern = () => {
           </label>
 
           {/* แสดง input text เฉพาะเมื่อ checkbox ถูกเลือก */}
-          {isOtherChecked.effect_in_life_5 && (
+          {formData.UnrestIn3Southern?.effect_in_life.some((e)=>e.startsWith(prefix)) && (
             <input
               type="text"
-              onBlur={(e) => {
-                if (isOtherChecked.effect_in_life_5) {
-                  handleInputOtherChange(
-                    "UnrestIn3Southern",
-                    "effect_in_life",
-                    "อื่นๆ " + e.target.value
-                  );
-                }
-              }}
+              value={
+                formData.UnrestIn3Southern.effect_in_life
+                  .find((item) => item.startsWith(prefix))
+                  ?.substring(prefix.length) || ''
+              }
+              onChange={e=>handleOtherInput(prefix,'effect_in_life',prefix+e.target.value)}
               className="ml-2 bg-gray-20 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-48"
-              placeholder="ระบุ" // ข้อความที่แสดงใน input เมื่อต้องการให้กรอก
+              placeholder="ระบุ" 
             />
           )}
         </div>
@@ -419,9 +375,11 @@ export const Southern = () => {
             name="effect_in_work"
             type="checkbox"
             value="เกิดปัญหาด้านสุขภาพทั้งร่างกายและจิตใจ"
+            checked={formData.UnrestIn3Southern?.effect_in_work.includes('เกิดปัญหาด้านสุขภาพทั้งร่างกายและจิตใจ')?
+              true:false
+            }
             onChange={(e) =>
               handleCheckboxChange(
-                "UnrestIn3Southern",
                 "effect_in_work",
                 e.target.value,
                 e.target.checked
@@ -442,9 +400,11 @@ export const Southern = () => {
             name="effect_in_work"
             type="checkbox"
             value="ขาดแรงงานในการผลิต แปรรูป และจำหน่ายสินค้า"
+            checked={formData.UnrestIn3Southern?.effect_in_work.includes('ขาดแรงงานในการผลิต แปรรูป และจำหน่ายสินค้า')?
+              true:false
+            }
             onChange={(e) =>
               handleCheckboxChange(
-                "UnrestIn3Southern",
                 "effect_in_work",
                 e.target.value,
                 e.target.checked
@@ -465,9 +425,11 @@ export const Southern = () => {
             name="effect_in_work"
             type="checkbox"
             value="ขาดสถานที่ในการจำหน่ายสินค้า"
+            checked={formData.UnrestIn3Southern?.effect_in_work.includes('ขาดสถานที่ในการจำหน่ายสินค้า')?
+              true:false
+            }
             onChange={(e) =>
               handleCheckboxChange(
-                "UnrestIn3Southern",
                 "effect_in_work",
                 e.target.value,
                 e.target.checked
@@ -488,9 +450,11 @@ export const Southern = () => {
             name="effect_in_work"
             type="checkbox"
             value="ขาดความรู้ในการพัฒนา ปรับปรุงการผลิต และการจำหน่าย"
+            checked={formData.UnrestIn3Southern?.effect_in_work.includes('ขาดความรู้ในการพัฒนา ปรับปรุงการผลิต และการจำหน่าย')?
+              true:false
+            }
             onChange={(e) =>
               handleCheckboxChange(
-                "UnrestIn3Southern",
                 "effect_in_work",
                 e.target.value,
                 e.target.checked
@@ -510,9 +474,11 @@ export const Southern = () => {
               name="effect_in_work"
               type="checkbox"
               value="ขาดเงินทุนในการประกอบการ"
+              checked={formData.UnrestIn3Southern?.effect_in_work.includes('ขาดเงินทุนในการประกอบการ')?
+                true:false
+              }
               onChange={(e) =>
                 handleCheckboxChange(
-                  "UnrestIn3Southern",
                   "effect_in_work",
                   e.target.value,
                   e.target.checked
@@ -533,9 +499,11 @@ export const Southern = () => {
               name="effect_in_work"
               type="checkbox"
               value="ขาดที่ดินสำหรับทำการผลิต"
+              checked={formData.UnrestIn3Southern?.effect_in_work.includes('ขาดที่ดินสำหรับทำการผลิต')?
+                true:false
+              }
               onChange={(e) =>
                 handleCheckboxChange(
-                  "UnrestIn3Southern",
                   "effect_in_work",
                   e.target.value,
                   e.target.checked
@@ -556,9 +524,11 @@ export const Southern = () => {
               name="effect_in_work"
               type="checkbox"
               value="ขาดแหล่งน้ำในการผลิต"
+              checked={formData.UnrestIn3Southern?.effect_in_work.includes('ขาดแหล่งน้ำในการผลิต')?
+                true:false
+              }
               onChange={(e) =>
                 handleCheckboxChange(
-                  "UnrestIn3Southern",
                   "effect_in_work",
                   e.target.value,
                   e.target.checked
@@ -579,9 +549,11 @@ export const Southern = () => {
               name="effect_in_work"
               type="checkbox"
               value="ขาดระบบคมนาคมเพื่อนำผลิตออกจากพื้นที่"
+              checked={formData.UnrestIn3Southern?.effect_in_work.includes('ขาดระบบคมนาคมเพื่อนำผลิตออกจากพื้นที่')?
+                true:false
+              }
               onChange={(e) =>
                 handleCheckboxChange(
-                  "UnrestIn3Southern",
                   "effect_in_work",
                   e.target.value,
                   e.target.checked
@@ -602,9 +574,11 @@ export const Southern = () => {
               name="effect_in_work"
               type="checkbox"
               value="ขาดระบบเทคโนโลยีสารสนเทศสมัยใหม่"
+              checked={formData.UnrestIn3Southern?.effect_in_work.includes('ขาดระบบเทคโนโลยีสารสนเทศสมัยใหม่')?
+                true:false
+              }
               onChange={(e) =>
                 handleCheckboxChange(
-                  "UnrestIn3Southern",
                   "effect_in_work",
                   e.target.value,
                   e.target.checked
@@ -624,14 +598,10 @@ export const Southern = () => {
               id="effect_in_work_10"
               name="effect_in_work"
               type="checkbox"
-              onChange={(e) =>
-                handleOtherCheckboxChange(
-                  e,
-                  "UnrestIn3Southern",
-                  "effect_in_work",
-                  "อื่นๆ"
-                )
-              }
+              checked={formData.UnrestIn3Southern.effect_in_work.some((e)=>
+                e.startsWith(prefix)
+              )}
+              onChange={e=>handleCheckboxChange('effect_in_work',prefix,e.target.checked)}
               className="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label className="ms-4 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -640,18 +610,11 @@ export const Southern = () => {
               </span>
             </label>
 
-            {isOtherChecked.effect_in_work_10 && (
+            {formData.UnrestIn3Southern.effect_in_work.some((e)=>e.startsWith(prefix)) && (
               <input
                 type="text"
-                onBlur={(e) => {
-                  if (isOtherChecked.effect_in_work_10) {
-                    handleInputOtherChange(
-                      "UnrestIn3Southern",
-                      "effect_in_work",
-                      "อื่นๆ " + e.target.value
-                    );
-                  }
-                }}
+                value={formData.UnrestIn3Southern.effect_in_work.find((item)=>item.startsWith(prefix))?.substring(prefix.length) || ''}
+                onChange={e=>handleOtherInput(prefix,'effect_in_work',prefix+e.target.value)}
                 className="ml-2 bg-gray-20 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-48"
                 placeholder="ระบุ"
               />
@@ -671,9 +634,12 @@ export const Southern = () => {
                 name="urgent_to_do"
                 type="radio"
                 value="ปรับปรุงและพัฒนาระบบคมนาคมขนส่งในพื้นที่"
-                //checked={selectedOption24 === "ปรับปรุงและพัฒนาระบบคมนาคมขนส่งในพื้นที่"}
-                //onChange={handleOptionChange24}
-                onChange={handleIncomeRadioChange}
+                checked={formData.UnrestIn3Southern?.urgent_to_do === "ปรับปรุงและพัฒนาระบบคมนาคมขนส่งในพื้นที่" ?
+                  true:false
+                }
+                onChange={(e) => {
+                  handleInputChange("urgent_to_do", e.target.value);
+                }}
                 for="default-radio"
                 class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
@@ -690,9 +656,12 @@ export const Southern = () => {
                 name="urgent_to_do"
                 type="radio"
                 value="เพิ่มการเข้าถึงปัจจัยพื้นฐานในการผลิต"
-                //checked={selectedOption24 === "เพิ่มการเข้าถึงปัจจัยพื้นฐานในการผลิต"}
-                //onChange={handleOptionChange24}
-                onChange={handleIncomeRadioChange}
+                checked={formData.UnrestIn3Southern?.urgent_to_do === "เพิ่มการเข้าถึงปัจจัยพื้นฐานในการผลิต" ?
+                  true:false
+                }
+                onChange={(e) => {
+                  handleInputChange("urgent_to_do", e.target.value);
+                }}
                 for="default-radio"
                 class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
@@ -709,9 +678,12 @@ export const Southern = () => {
                 name="urgent_to_do"
                 type="radio"
                 value="ปรับปรุงและพัฒนาคุณภาพปัจจัยพื้นฐานในการผลิต"
-                //checked={selectedOption24 === "ปรับปรุงและพัฒนาคุณภาพปัจจัยพื้นฐานในการผลิต"}
-                //onChange={handleOptionChange24}
-                onChange={handleIncomeRadioChange}
+                checked={formData.UnrestIn3Southern?.urgent_to_do === "ปรับปรุงและพัฒนาคุณภาพปัจจัยพื้นฐานในการผลิต" ?
+                  true:false
+                }
+                onChange={(e) => {
+                  handleInputChange("urgent_to_do", e.target.value);
+                }}
                 for="default-radio"
                 class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
@@ -728,9 +700,12 @@ export const Southern = () => {
                 name="urgent_to_do"
                 type="radio"
                 value="พัฒนาโครงข่ายการสื่อสารรองรับเทคโนโลยีสมัยใหม่"
-                //checked={selectedOption24 === "พัฒนาโครงข่ายการสื่อสารรองรับเทคโนโลยีสมัยใหม่"}
-                //onChange={handleOptionChange24}
-                onChange={handleIncomeRadioChange}
+                checked={formData.UnrestIn3Southern?.urgent_to_do === "พัฒนาโครงข่ายการสื่อสารรองรับเทคโนโลยีสมัยใหม่" ?
+                  true:false
+                }
+                onChange={(e) => {
+                  handleInputChange("urgent_to_do", e.target.value);
+                }}
                 for="default-radio"
                 class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
@@ -747,9 +722,12 @@ export const Southern = () => {
                 name="urgent_to_do"
                 type="radio"
                 value="ส่งเสริมความรู้ในการประกอบอาชีพ และสร้างรายได้"
-                // checked={selectedOption24 === "ส่งเสริมความรู้ในการประกอบอาชีพ และสร้างรายได้"}
-                //onChange={handleOptionChange24}
-                onChange={handleIncomeRadioChange}
+                checked={formData.UnrestIn3Southern?.urgent_to_do === "ส่งเสริมความรู้ในการประกอบอาชีพ และสร้างรายได้" ?
+                  true:false
+                }
+                onChange={(e) => {
+                  handleInputChange("urgent_to_do", e.target.value);
+                }}
                 for="default-radio"
                 class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
@@ -766,9 +744,12 @@ export const Southern = () => {
                 name="urgent_to_do"
                 type="radio"
                 value="ส่งเสริมการแปรูป และการตลาดสำหรับผลิตภัณฑ์ในพื้นที่"
-                //checked={selectedOption24 === "ส่งเสริมการแปรูป และการตลาดสำหรับผลิตภัณฑ์ในพื้นที่"}
-                //onChange={handleOptionChange24}
-                onChange={handleIncomeRadioChange}
+                checked={formData.UnrestIn3Southern?.urgent_to_do === "ส่งเสริมการแปรูป และการตลาดสำหรับผลิตภัณฑ์ในพื้นที่" ?
+                  true:false
+                }
+                onChange={(e) => {
+                  handleInputChange("urgent_to_do", e.target.value);
+                }}
                 for="default-radio"
                 class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
@@ -785,7 +766,12 @@ export const Southern = () => {
                 name="urgent_to_do"
                 type="radio"
                 value="ส่งเสริมการมีส่วนร่วมในการแก้ไขปัญหา"
-                onChange={handleIncomeRadioChange}
+                checked={formData.UnrestIn3Southern?.urgent_to_do === "ส่งเสริมการมีส่วนร่วมในการแก้ไขปัญหา" ?
+                  true:false
+                }
+                onChange={(e) => {
+                  handleInputChange("urgent_to_do", e.target.value);
+                }}
                 for="default-radio"
                 class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
@@ -801,8 +787,11 @@ export const Southern = () => {
                 id="urgent_to_do_8"
                 name="urgent_to_do"
                 type="radio"
-                value="อื่นๆ"
-                onChange={handleIncomeRadioChange}
+                checked={formData.UnrestIn3Southern?.urgent_to_do.startsWith(prefix) ?
+                  true:false
+                }
+                value={prefix}
+                onChange={e=>handleInputChange('urgent_to_do',e.target.value)}
                 className="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
             focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
@@ -812,25 +801,47 @@ export const Southern = () => {
               </span>
             </label>
 
-            {/* ช่องกรอกข้อความสำหรับ "อื่นๆ" */}
-            {isOtherChecked.urgent_to_do_8 && (
+            {formData.UnrestIn3Southern?.urgent_to_do.startsWith(prefix) && (
               <input
                 type="text"
                 placeholder="ระบุ..."
+                value={formData.UnrestIn3Southern.urgent_to_do.startsWith(prefix)?
+                  formData.UnrestIn3Southern.urgent_to_do.slice(prefix.length)
+                  :''
+                }
                 className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                onChange={handleIncomeOtherInputChange}
+                onChange={e=>handleInputChange('urgent_to_do',prefix+e.target.value)}
               />
             )}
           </div>
 
           <button
-            type="submit"
+            type="button"
+            onClick={handleShowData}
             className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
           >
-            ส่งฟอร์ม
+            แสดงข้อมูล
+          </button>
+
+          <button
+            type="button"
+            onClick={e=>handleSubmit(e)}
+            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+          >
+            ส่งไปMain
+          </button>
+
+          <button
+            type="button"
+            onClick={e=>handlePrevPage()}
+            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+          >
+            ย้อนกลับ
           </button>
         </div>
-      </form>
+        
+      
+      </div>
     </>
   );
 };
