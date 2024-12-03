@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import jsPDF from "jspdf"; //ไลบรารีสำหรับสร้างและดาวน์โหลดไฟล์ PDF
 import html2canvas from "html2canvas"; //ไลบรารีสำหรับแปลง HTML เป็นภาพ (image) เพื่อใช้สร้าง PDF
+import { Icon } from "@iconify/react"; //ไลบราลี icon
+import { Dropdown } from "flowbite-react";
 
 const ByAgeRange = () => {
   const [selectedAgeRange, setSelectedAgeRange] = useState(""); // เก็บค่าช่วงอายุที่เลือก
@@ -154,18 +156,11 @@ const ByAgeRange = () => {
               className="absolute right-0 inline-flex items-center text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 mt-2"
             >
               {/* ไอคอน PDF */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
+              <Icon
+                icon="material-symbols:picture-as-pdf-rounded"
                 width="1.5em"
                 height="1.5em"
-                viewBox="0 0 24 24"
-                className="mr-2"
-              >
-                <path
-                  fill="currentColor"
-                  d="M10 10.5h1q.425 0 .713-.288T12 9.5v-1q0-.425-.288-.712T11 7.5H9.5q-.2 0-.35.15T9 8v4q0 .2.15.35t.35.15t.35-.15T10 12zm0-1v-1h1v1zm5 3q.425 0 .713-.288T16 11.5v-3q0-.425-.288-.712T15 7.5h-1.5q-.2 0-.35.15T13 8v4q0 .2.15.35t.35.15zm-1-1v-3h1v3zm4-1h.5q.2 0 .35-.15T19 10t-.15-.35t-.35-.15H18v-1h.5q.2 0 .35-.15T19 8t-.15-.35t-.35-.15h-1q-.2 0-.35.15T17 8v4q0 .2.15.35t.35.15t.35-.15T18 12zM8 18q-.825 0-1.412-.587T6 16V4q0-.825.588-1.412T8 2h12q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18zm-4 4q-.825 0-1.412-.587T2 20V7q0-.425.288-.712T3 6t.713.288T4 7v13h13q.425 0 .713.288T18 21t-.288.713T17 22z"
-                ></path>
-              </svg>
+              />
               Download
             </button>
           </div>
@@ -181,12 +176,16 @@ const ByAgeRange = () => {
                 () =>
                   document.getElementById("dropdown").classList.toggle("hidden") // เปิด/ปิด dropdown
               }
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 overflow-hidden text-ellipsis whitespace-nowrap"
+              style={{ width: "135px", height: "40px" }} // ขนาดปุ่มคงที่
               type="button"
             >
-              {selectedAgeRange || "เลือกช่วงอายุ"} {/* แสดงช่วงอายุที่เลือก */}
+              <span className="flex-1 text-center">
+                {selectedAgeRange || "เลือกช่วงอายุ"}
+              </span>
+              {/* แสดงช่วงอายุ */}
               <svg
-                className="w-2.5 h-2.5 ms-3"
+                className="w-3 h-3"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -205,7 +204,7 @@ const ByAgeRange = () => {
             {/* Dropdown menu */}
             <div
               id="dropdown"
-              className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 absolute"
+              className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-46 dark:bg-gray-700 absolute"
             >
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 {ageRanges.map((range) => (
@@ -217,7 +216,7 @@ const ByAgeRange = () => {
                           .getElementById("dropdown")
                           .classList.add("hidden"); // ปิด dropdown
                       }}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      className="block text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white overflow-hidden text-ellipsis whitespace-nowrap"
                     >
                       {range}
                     </button>
