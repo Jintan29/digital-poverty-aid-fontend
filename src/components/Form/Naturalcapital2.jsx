@@ -360,7 +360,7 @@ function Naturalcapital2() {
                                 className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                 id="is_in_disaster_1"
                                 name="is_in_disaster"
-                                checked={formData.Houseindisasterareas.is_in_disaster}
+                                checked={formData.Houseindisasterareas.is_in_disaster} 
                                 value={true}
                                 onChange={handleHouseTChange}
                             />
