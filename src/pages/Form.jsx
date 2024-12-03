@@ -1,8 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { FristPage } from "../components/Form/FristPage";
-import { HumanCapital } from "../components/Form/HumanCapital";
-import GroupSamForm from "../components/Form/GroupSamForm";
+//import { FristPage } from "../components/Form/FristPage";
+//import { HumanCapital } from "../components/Form/HumanCapital";
+//import Southern from "../components/Form/southern";
+//import GroupSamForm from "../components/Form/GroupSamForm";
+//import Suggestions from "../components/Form/Suggestions";
+//import Naturalcapital from "../components/Form/Naturalcapital";
+
 
 
 export const Form = () => {
@@ -10,16 +14,16 @@ export const Form = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // loadData();
+    loadData();
   });
 
-  // const loadData = async () => {
-  //   await axios
-  //     .get("http://localhost:8080/api/house-hold/lists")
-  //     //(res)=> setData(res.data)
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // };
+  const loadData = async () => {
+    await axios
+      .get("http://localhost:8080/api/house-hold/lists")
+      //(res)=> setData(res.data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="mx-5 my-5">
@@ -40,7 +44,11 @@ export const Form = () => {
       {/* <FristPage/> */}
 
       {/* กำลังสร้างการ loop */}
-      <HumanCapital/>
+      {/* <HumanCapital/> */}
+      {/* <Southern/>
+      <Suggestions/> */}
+      {/* <Naturalcapital/> */}
+    
 
       {/* <GroupSamForm/> */}
       

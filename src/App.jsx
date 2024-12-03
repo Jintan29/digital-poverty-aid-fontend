@@ -6,6 +6,7 @@ import { Home } from "./pages/Home";
 import NewNav from "./components/NewNav";
 import { About } from "./pages/About";
 import { Form } from "./pages/Form";
+import  Household  from "./pages/Houshold"
 
 
 // import { NewNav } from "./components/NewNav";
@@ -26,6 +27,7 @@ function App() {
           <Route path='/' element={<Home/>}/>
           <Route path='/about' element={<About/>}/>
           <Route path='/form' element={<Form/>}/>
+          <Route path='/household' element={<Household/>}/>
         </Routes>
 
       </div>
