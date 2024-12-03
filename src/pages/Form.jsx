@@ -42,9 +42,9 @@ export const Form = () => {
         </div>
 
         <div className="">
-          {currentPage === 1 && <FristPage setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
-          {currentPage === 2 && <HumanCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
-          {currentPage === 3 && <PhysicalCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {/* {currentPage === 1 && <FristPage setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />} */}
+          {/* {currentPage === 2 && <HumanCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />} */}
+          {/* {currentPage === 3 && <PhysicalCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
           {/* {currentPage === 4 && <Test1 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
         </div>
         
@@ -55,9 +55,10 @@ export const Form = () => {
       <Socialcapital/>  
       <Naturalcapital/> 
       <Naturalcapital2/>
+      {/* <GroupSamForm/> */}
 
-      <Southern/>
-      <Suggestions/>
+      {/* <Southern/>
+      <Suggestions/> */}
 
     </>
   );
