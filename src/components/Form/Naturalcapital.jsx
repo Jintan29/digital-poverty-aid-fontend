@@ -1,304 +1,252 @@
 import React, { useState } from "react";
+import { Icon } from "@iconify/react";
 
 function Naturalcapital() {
     const [formData, setFormData] = useState(
-        [
-            {
-                id: Date.now(),
-                PBresourceforlive: {
+        {
+            PBresourceforlive: [
+                {
                     is_use_PB_resoc: null,
                     rescource: "",
                     distance: 0.0,
                     description: "",
                 },
-                PBresourceforincome: {
-                    is_use_PB_resoc: null,
-                    rescource: "",
-                    distance: 0.0,
-                    description: "",
-                },
-            }]
+            ],
+            PBresourceforincome: [{
+                is_use_PB_resoc: null,
+                rescource: "",
+                distance: 0.0,
+                description: "",
+            },
+            ],
+        }
     );
-
-
-    const [formData2, setFormData2] = useState(
-        [
-            {
-                id: Date.now(),
-                PBresourceforlive: {
-                    is_use_PB_resoc: null,
-                    rescource: "",
-                    distance: 0.0,
-                    description: "",
-                },
-                PBresourceforincome: {
-                    is_use_PB_resoc: null,
-                    rescource: "",
-                    distance: 0.0,
-                    description: "",
-                },
-            }]
-    );
-
 
     const prefix = "อื่นๆ"
 
 
     //ส่วน1.1
-    const handlePBliveChange = (event, index) => {
-        const { id, value } = event.target;
-        setFormData((prev) =>
-            prev.map((item, idx) =>
-                idx === index
-                    ? {
-                        ...item,
-                        PBresourceforlive: {
-                            ...item.PBresourceforlive,
-                            is_use_PB_resoc: id === "is_use_PB_resoc_1",
-                            rescource:
-                                id === "is_use_PB_resoc_0"
-                                    ? "ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่เพื่อยังชีพ"
-                                    : `ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ${value}`,
-                        },
-                    }
-                    : item
-            )
-        );
+    const handlePBliveChange = (event) => {
+        const { value } = event.target;
+        const isUsePBResoc = value === "true"; // Convert string to boolean
+
+        setFormData((prev) => ({
+            ...prev,
+            PBresourceforlive: [
+                {
+                    ...prev.PBresourceforlive[0],
+                    is_use_PB_resoc: isUsePBResoc,
+                    rescource: isUsePBResoc
+                        ? "" // Clear the rescource value if true
+                        : "ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่", // Set default value if false
+                    distance: isUsePBResoc ? prev.PBresourceforlive[0].distance : 0.0, // Reset to default
+                    description: isUsePBResoc ? prev.PBresourceforlive[0].description : "", // Reset to default
+                },
+            ],
+        }));
     };
 
-    const handleResourceInputChange = (event, index) => {
+
+
+    const handleResourceChange = (event, index) => {
         const { value } = event.target;
-        setFormData((prev) =>
-            prev.map((item, idx) =>
-                idx === index
-                    ? {
-                        ...item,
-                        PBresourceforlive: {
-                            ...item.PBresourceforlive,
-                            rescource: `ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ${value}`,
-                        },
-                    }
-                    : item
-            )
-        );
+
+        setFormData((prev) => {
+            const updatedResources = [...prev.PBresourceforlive];
+            updatedResources[index] = {
+                ...updatedResources[index],
+                rescource: `ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ${value}`,
+            };
+            return { ...prev, PBresourceforlive: updatedResources };
+        });
     };
+
+
 
     const handleDistanceChange = (event, index) => {
         const { value } = event.target;
-        setFormData((prev) =>
-            prev.map((item, idx) =>
-                idx === index
-                    ? {
-                        ...item,
-                        PBresourceforlive: {
-                            ...item.PBresourceforlive,
-                            distance: parseFloat(value) || 0,
-                        },
-                    }
-                    : item
-            )
-        );
+
+        setFormData((prev) => {
+            const updatedResources = [...prev.PBresourceforlive];
+            updatedResources[index] = {
+                ...updatedResources[index],
+                distance: parseFloat(value),
+            };
+            return { ...prev, PBresourceforlive: updatedResources };
+        });
     };
 
-    const handleRadioChange = (event, index) => {
-        const { value, id } = event.target;
-        setFormData((prev) =>
-            prev.map((item, idx) =>
-                idx === index
-                    ? {
-                        ...item,
-                        PBresourceforlive: {
-                            ...item.PBresourceforlive,
-                            description: id === "description_2" ? prefix : value, // Check if id matches "description_2"
-                        },
-                    }
-                    : item
-            )
-        );
-    };
 
-   
-
-
-    const handleOtherInputChange = (event, index) => {
+    // ฟังก์ชันเก็บค่าจาก radio และ text input
+    const handleDescriptionChange = (event, index) => {
         const { value } = event.target;
-        setFormData((prev) =>
-            prev.map((item, i) =>
-                i === index
-                    ? {
-                        ...item,
-                        PBresourceforlive: {
-                            ...item.PBresourceforlive,
-                            description:`${prefix} ${value.trim()}`, // เก็บเฉพาะข้อความที่ผู้ใช้กรอก
-                        },
-                    }
-                    : item
-            )
-        );
-    };
-    
 
-    //2
-    const handlePBincomeChange = (event, index) => {
-        const { id, value } = event.target;
-        setFormData2((prev) =>
-            prev.map((item, idx) =>
-                idx === index
-                    ? {
-                        ...item,
-                        PBresourceforincome: {
-                            ...item.PBresourceforincome,
-                            is_use_PB_resoc: id === "is_use_PB_resoc_1",
-                            rescource:
-                                id === "is_use_PB_resoc_0"
-                                    ? "ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่เพื่อยังชีพ"
-                                    : `ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ${value}`,
-                        },
-                    }
-                    : item
-            )
-        );
+        setFormData((prev) => {
+            const updatedResources = [...prev.PBresourceforlive];
+            updatedResources[index] = {
+                ...updatedResources[index],
+                description: value,
+            };
+            return { ...prev, PBresourceforlive: updatedResources };
+        });
     };
 
-    const handlePBincomeInputChange = (event, index) => {
+
+    const handleOtherDescriptionChange = (event, index) => {
         const { value } = event.target;
-        setFormData2((prev) =>
-            prev.map((item, idx) =>
-                idx === index
-                    ? {
-                        ...item,
-                        PBresourceforincome: {
-                            ...item.PBresourceforincome,
-                            rescource: `ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ${value}`,
-                        },
-                    }
-                    : item
-            )
-        );
-    };
 
-    const handleIncomDistanceChange = (event, index) => {
-        const { value } = event.target;
-        setFormData2((prev) =>
-            prev.map((item, idx) =>
-                idx === index
-                    ? {
-                        ...item,
-                        PBresourceforincome: {
-                            ...item.PBresourceforincome,
-                            distance: parseFloat(value) || 0,
-                        },
-                    }
-                    : item
-            )
-        );
+        setFormData((prev) => {
+            const updatedResources = [...prev.PBresourceforlive];
+            updatedResources[index] = {
+                ...updatedResources[index],
+                description: `${prefix} ${value.trim()}`,
+            };
+            return { ...prev, PBresourceforlive: updatedResources };
+        });
     };
 
 
-    const handleIncomeRadioChange = (event, index) => {
-        const { value, id } = event.target;
-        setFormData2((prev) =>
-            prev.map((item, idx) =>
-                idx === index
-                    ? {
-                        ...item,
-                        PBresourceforincome: {
-                            ...item.PBresourceforincome,
-                            description: id === "description_2" ? prefix : value, // Check if id matches "description_2"
-                        },
-                    }
-                    : item
-            )
-        );
-    };
-
-    const handleIncomeOtherInputChange = (event, index) => {
-        const { value } = event.target;
-        setFormData2((prev) =>
-            prev.map((item, i) =>
-                i === index
-                    ? {
-                        ...item,
-                        PBresourceforincome: {
-                            ...item.PBresourceforincome,
-                            description: `${prefix} ${value.trim()}`, // เก็บค่าที่กรอกจาก input พร้อมคำว่า "อื่นๆ: "
-                        },
-                    }
-                    : item
-            )
-        );
-    };
-
-
-
-
-
-    //loop add
     const addDatalive = () => {
-        setFormData((prev) => [
+        setFormData((prev) => ({
             ...prev,
-            {
-                id: Date.now(),
-                PBresourceforlive: {
-                    is_use_PB_resoc: null,
+            PBresourceforlive: [
+                ...prev.PBresourceforlive,
+                {
+                    is_use_PB_resoc: true,
                     rescource: "",
                     distance: 0.0,
                     description: "",
                 },
-            },
-        ]);
+            ],
+        }));
     };
 
-    //ลบสมาชิคอ่างอิงจาก index
-    const delDatalive = (index) => {
-        const updatedData = formData.filter((_, i) => i !== index);
-        setFormData(updatedData);
+    const removeDataLive = (index) => {
+        setFormData((prev) => {
+            // ถ้ามีมากกว่าหนึ่งรายการ
+            if (prev.PBresourceforlive.length > 1) {
+                const updatedResources = prev.PBresourceforlive.filter((_, i) => i !== index);
+                return { ...prev, PBresourceforlive: updatedResources };
+            } else {
+                // ไม่ให้ลบจนเหลือ 0 รายการ
+                return prev;
+            }
+        });
     };
+
+
+
+
+    //2
+    const handlePBIncomeChange = (event) => {
+        const { value } = event.target;
+        const isUsePBResoc = value === "true"; // Convert string to boolean
+
+        setFormData((prev) => ({
+            ...prev,
+            PBresourceforincome: [
+                {
+                    ...prev.PBresourceforincome[0],
+                    is_use_PB_resoc: isUsePBResoc,
+                    rescource: isUsePBResoc
+                        ? "" // Clear the rescource value if true
+                        : "ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่", // Set default value if false
+                    distance: isUsePBResoc ? prev.PBresourceforincome[0].distance : 0.0, // Reset to default
+                    description: isUsePBResoc ? prev.PBresourceforincome[0].description : "", // Reset to default
+                },
+            ],
+        }));
+    };
+
+    const handleResourceIncomeChange = (event, index) => {
+        const { value } = event.target;
+
+        setFormData((prev) => {
+            const updatedResources = [...prev.PBresourceforincome];
+            updatedResources[index] = {
+                ...updatedResources[index],
+                rescource: `ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ${value}`,
+            };
+            return { ...prev, PBresourceforincome: updatedResources };
+        });
+    };
+
+
+    const handleDistanceIncomeChange = (event, index) => {
+        const { value } = event.target;
+
+        setFormData((prev) => {
+            const updatedResources = [...prev.PBresourceforincome];
+            updatedResources[index] = {
+                ...updatedResources[index],
+                distance: parseFloat(value),
+            };
+            return { ...prev, PBresourceforincome: updatedResources };
+        });
+    };
+
+
+    const handleDescriptionIncomeChange = (event, index) => {
+        const { value } = event.target;
+
+        setFormData((prev) => {
+            const updatedResources = [...prev.PBresourceforincome];
+            updatedResources[index] = {
+                ...updatedResources[index],
+                description: value,
+            };
+            return { ...prev, PBresourceforincome: updatedResources };
+        });
+    };
+
+
+    const handleOtherDescriptionIncomeChange = (event, index) => {
+        const { value } = event.target;
+
+        setFormData((prev) => {
+            const updatedResources = [...prev.PBresourceforincome];
+            updatedResources[index] = {
+                ...updatedResources[index],
+                description: `${prefix} ${value.trim()}`,
+            };
+            return { ...prev, PBresourceforincome: updatedResources };
+        });
+    };
+
 
 
     const addDataincome = () => {
-        setFormData2((prev) => [
+        setFormData((prev) => ({
             ...prev,
-            {
-                id: Date.now(),
-                PBresourceforincome: {
-                    is_use_PB_resoc: null,
+            PBresourceforincome: [
+                ...prev.PBresourceforincome,
+                {
+                    is_use_PB_resoc: true,
                     rescource: "",
                     distance: 0.0,
                     description: "",
                 },
-            },
-        ]);
+            ],
+        }));
     };
 
-    //ลบสมาชิคอ่างอิงจาก index
-    const delDataincome = (index) => {
-        const updatedData = formData2.filter((_, i) => i !== index);
-        setFormData2(updatedData);
+    const removeDataincome = (index) => {
+        setFormData((prev) => {
+            // ถ้ามีมากกว่าหนึ่งรายการ
+            if (prev.PBresourceforincome.length > 1) {
+                const updatedResources = prev.PBresourceforincome.filter((_, i) => i !== index);
+                return { ...prev, PBresourceforincome: updatedResources };
+            } else {
+                // ไม่ให้ลบจนเหลือ 0 รายการ
+                return prev;
+            }
+        });
     };
-
-
-
-
-
-
-
-
-    // // ช่องอื่นๆ
-    // const [isOtherChecked, setIsOtherChecked] = useState({});
-    // const handleOtherRadioChange = (event) => {
-    //     const { id, checked } = event.target;
-    //     setIsOtherChecked((prevState) => ({
-    //         ...prevState,
-    //         [id]: checked,
-    //     }));
-    // };
 
 
 
     const handleSubmit = () => {
         console.log("Form Data Submitted:", formData);
-        console.log("Form Data Submitted:", formData2);
     };
 
     return (
@@ -309,252 +257,273 @@ function Naturalcapital() {
                 </h1>
             </div>
             {/* 1 */}
-            {formData.map((data, index) => (
-                <div key={data.id} className="p-5 bg-blue-100 rounded-lg shadow-lg">
-                    <div className="Container">
-                        <div className="mb-6">
-                            <h2 className="text-xl font-bold text-gray-700 mb-5">
-                                1. ครัวเรือนของท่านได้ใช้ประโยชน์จากทรัพยากรธรรมชาติในพื้นที่ เช่น ที่สาธารณะ ทุ่งหญ้า ป่า แม่น้ำ
-                                ลำธาร ชายฝั่งทะเล หรืออื่นๆ <br />
-                                <span className="text-red-500">เพื่อการยังชีพ</span>
-                                หรือไม่ (กรณีมีหลายพื้นที่ให้ระบุชื่อแหล่งทรัพยากรและระยะทางระหว่างที่อยู่อาศัยกับแหล่ง ทรัพยากรธรรมชาติที่ได้ใช้ประโยชน์) {index + 1}
-                            </h2>
-                            {/* Radio Button Options with padding */}
-                            <div className="flex flex-col gap-2 pl-12">
-                                <label className="flex items-center text-gray-700">
-                                    <input
-                                        type="radio"
-                                        id="is_use_PB_resoc_0"
-                                        className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                        name={`is_use_PB_resoc_${index}`}
-                                        checked={formData[index]?.PBresourceforlive?.is_use_PB_resoc === false || false}
-                                        onChange={(e) => handlePBliveChange(e, index)}
-                                    />
-                                    <span className="ml-2">ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่เพื่อยังชีพ</span>
-                                </label>
-                                <label className="flex items-center text-gray-700">
-                                    <input
-                                        type="radio"
-                                        id="is_use_PB_resoc_1"
-                                        className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                        name={`is_use_PB_resoc_${index}`}
-                                        checked={formData[index]?.PBresourceforlive?.is_use_PB_resoc === true || false}
-                                        onChange={(e) => handlePBliveChange(e, index)}
-                                    />
-                                    <span className="ml-2">ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร</span>
-                                    {formData[index]?.PBresourceforlive?.is_use_PB_resoc && (
+            <div className="p-5 bg-blue-100 rounded-lg shadow-lg">
+                <div className="Container">
+                    <div className="mb-6">
+                        <h2 className="text-xl font-bold text-gray-700 mb-5">
+                            1. ครัวเรือนของท่านได้ใช้ประโยชน์จากทรัพยากรธรรมชาติในพื้นที่ เช่น ที่สาธารณะ ทุ่งหญ้า ป่า แม่น้ำ
+                            ลำธาร ชายฝั่งทะเล หรืออื่นๆ <br />
+                            <span className="text-red-500">เพื่อการยังชีพ</span>
+                            หรือไม่ (กรณีมีหลายพื้นที่ให้ระบุชื่อแหล่งทรัพยากรและระยะทางระหว่างที่อยู่อาศัยกับแหล่ง ทรัพยากรธรรมชาติที่ได้ใช้ประโยชน์)
+                        </h2>
+                        {/* Radio Button Options with padding */}
+                        <div className="flex flex-col gap-2 pl-12">
+                            <label className="flex items-center text-gray-700">
+                                <input
+                                    type="radio"
+                                    id="is_use_PB_resoc_0"
+                                    className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                    name="is_use_PB_resoc"
+                                    checked={formData.PBresourceforlive[0]?.is_use_PB_resoc === false}
+                                    value={false}
+                                    onChange={handlePBliveChange}
+                                />
+                                <span className="ml-2">ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่</span>
+                            </label>
+                            <label className="flex items-center text-gray-700">
+                                <input
+                                    type="radio"
+                                    id="is_use_PB_resoc_1"
+                                    className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                    name="is_use_PB_resoc"
+                                    checked={formData.PBresourceforlive[0]?.is_use_PB_resoc === true}
+                                    value={true}
+                                    onChange={handlePBliveChange}
+                                />
+                                <span className="ml-2">ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร</span>
+                            </label>
+                        </div>
+
+                        {formData.PBresourceforlive[0]?.is_use_PB_resoc && // ตรวจสอบว่า is_use_PB_resoc เป็น true
+                            formData.PBresourceforlive.map((liveData, index) => (
+                                <div key={index} className="mt-4 pl-12">
+                                    <label className="flex items-center text-gray-700 ml-6">
+                                        <span className="text-lg font-bold"> {/* เพิ่มขนาดและทำตัวหนา */}
+                                            ระบุแหล่งทรัพยากร <span className="text-blue-600 text-xl">{index + 1}</span> {/* เพิ่มสีและขนาดที่เด่นให้หมายเลข */}
+                                        </span>
                                         <input
                                             type="text"
                                             placeholder="ระบุ..."
+                                            value={liveData.rescource ? liveData.rescource.replace("ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ", "") : ""}
                                             className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                                            onChange={(e) => handleResourceInputChange(e, index)}
+                                            onChange={(e) => handleResourceChange(e, index)}
                                         />
-                                    )}
-                                </label>
-                            </div>
-                            <label className="flex items-center text-gray-700 mt-4 gap-2">
-                                <span>ระยะห่างจากที่อยู่อาศัย</span>
-                                <input
-                                    type="number"
-                                    placeholder="ระยะห่างจากที่อยู่อาศัย.."
-                                    checked={formData[index]?.PBresourceforlive.distance}
-                                    onChange={(e) => handleDistanceChange(e, index)} // เรียกฟังก์ชัน handleDistanceChange เมื่อมีการเปลี่ยนแปลงค่า
-                                    className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                                />
-                                <span>กม. (เลือกได้ 1 ข้อ)</span>
-                            </label>
-                            <label className="flex items-center text-gray-700 pl-12 mt-4">
-                                <input
-                                    type="radio"
-                                    className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                    // id="description_0"
-                                    name={`description_${index}`}
-                                    checked={formData[index]?.PBresourceforlive.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"}
-                                    value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"
-                                    onChange={(e) => handleRadioChange(e, index)}
-                                />
-                                <span className="ml-2">สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล</span>
-                            </label>
-                            <label className="flex items-center text-gray-700 pl-12 mt-4">
-                                <input
-                                    type="radio"
-                                    className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                    // id="description_1"
-                                    name={`description_${index}`}
-                                    checked={formData[index]?.PBresourceforlive.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"}
-                                    value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"
-                                    onChange={(e) => handleRadioChange(e, index)}
-                                />
-                                <span className="ml-2">สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา</span>
-                            </label>
-                            <label className="flex items-center text-gray-700 pl-12 mt-4">
-                                <input
-                                    type="radio"
-                                    className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                    id="description_2"
-                                    checked={formData[index]?.PBresourceforlive.description.startsWith(prefix)}
-                                    name={`description_${index}`} // Use a unique name for each row
-                                    value={prefix}
-                                    onChange={(e) => handleRadioChange(e, index)}
-                                />
-                                <span className="ml-2">อื่นๆ</span>
-                                {formData[index]?.PBresourceforlive?.description?.startsWith(prefix) && ( // Check if 'อื่นๆ' is selected for this specific index
-                                    <input
-                                        type="text"
-                                        placeholder="ระบุ..."
-                                        className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                                        onChange={(e) => handleOtherInputChange(e, index)}
-                                        value={formData[index]?.PBresourceforlive.description.slice(prefix.length).trim()}
-                                    />
-                                )}
-                            </label>
-                        </div>
-                        {/* Blue Button */}
-                        <div className="flex justify-end mt-4">
-                            <button className="bg-blue-400 text-white py-2 px-4 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200 mr-4"
-                                onClick={addDatalive}
-                            >
-                                เพิ่มแหล่งทรัพยากร
-                            </button>
-                            <button className="bg-blue-400 text-white py-2 px-4 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200"
-                                onClick={() => delDatalive(index)}
-                            >
-                                ลบแหล่งทรัพยากร
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-            ))}
-
-            {/* 2 */}
-            {formData2.map((data, index) => (
-                <div key={data.id} className="p-5 bg-blue-100 rounded-lg shadow-lg mt-4">
-                    <div className="Container">
-                        <div className="mb-6 mt-8">
-                            <h2 className="text-xl font-bold text-gray-700 mb-5">
-                                2. ครัวเรือนของท่านได้ใช้ประโยชน์จากทรัพยากรธรรมชาติในพื้นที่ เช่น ที่สาธารณะ ทุ่งหญ้า ป่า แม่น้ำ  ลำธาร ชายฝั่งทะเล หรืออื่นๆ <br />
-                                <span className="text-red-500">เพื่อสร้างรายได้</span> หรือไม่(กรณีมีหลายพื้นที่ให้ระบุชื่อแหล่งทรัพยากรและระยะทางระหว่างที่อยู่อาศัยกับแหล่ง <br />
-                                ทรัพยากรธรรมชาติที่ได้ใช้ประโยชน์) {index + 1}
-                            </h2>
-                            {/* Radio Button Options with padding */}
-                            <div className="flex flex-col gap-2 pl-12">
-                                <label className="flex items-center text-gray-700">
-                                    <input
-                                        type="radio"
-                                        className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                        id="is_use_PB_resoc_0"
-                                        name={`is_use_PB_resoc_${index}`}
-                                        checked={formData2[index]?.PBresourceforincome?.is_use_PB_resoc === false || false}
-                                        onChange={(e) => handlePBincomeChange(e, index)}
-
-                                    />
-                                    <span className="ml-2">ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่เพื่อสร้างรายได้</span>
-                                </label>
-                                <label className="flex items-center text-gray-700">
-                                    <input
-                                        type="radio"
-                                        id="is_use_PB_resoc_1"
-                                        name={`is_use_PB_resoc_${index}`}
-                                        checked={formData2[index]?.PBresourceforincome?.is_use_PB_resoc === true || false}
-                                        className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                        onChange={(e) => handlePBincomeChange(e, index)}
-                                    />
-                                    <span className="ml-2">ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร</span>
-                                    {
-                                        formData2[index]?.PBresourceforincome?.is_use_PB_resoc && (
+                                        <button
+                                            type="button"
+                                            onClick={() => removeDataLive(index)}
+                                            className="items-center py-3 px-6 ml-3 border border-transparent text-lg font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none"
+                                        >
+                                            <Icon
+                                                icon="material-symbols:delete-forever-outline-rounded"
+                                                className="w-3 h-3"
+                                            />
+                                        </button>
+                                    </label>
+                                    <label className="flex items-center text-gray-700 mt-4 gap-2">
+                                        <span>ระยะห่างจากที่อยู่อาศัย</span>
+                                        <input
+                                            type="number"
+                                            placeholder="ระยะห่างจากที่อยู่อาศัย.."
+                                            value={liveData.distance || ""}
+                                            className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                                            onChange={(e) => handleDistanceChange(e, index)}
+                                        />
+                                        <span>กม. (เลือกได้ 1 ข้อ)</span>
+                                    </label>
+                                    <label className="flex items-center text-gray-700 pl-12 mt-4">
+                                        <input
+                                            type="radio"
+                                            id={`description_${index}_0`}
+                                            className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                            name={`description_${index}`}
+                                            value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"
+                                            checked={liveData.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"}
+                                            onChange={(e) => handleDescriptionChange(e, index)}
+                                        />
+                                        <span className="ml-2">สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล</span>
+                                    </label>
+                                    <label className="flex items-center text-gray-700 pl-12 mt-4">
+                                        <input
+                                            type="radio"
+                                            id={`description_${index}_1`}
+                                            className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                            name={`description_${index}`}
+                                            value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"
+                                            checked={liveData.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"}
+                                            onChange={(e) => handleDescriptionChange(e, index)}
+                                        />
+                                        <span className="ml-2">สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา</span>
+                                    </label>
+                                    <label className="flex items-center text-gray-700 pl-12 mt-4">
+                                        <input
+                                            type="radio"
+                                            id={`description_${index}_2`}
+                                            className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                            name={`description_${index}`}
+                                            value={prefix}
+                                            checked={liveData.description.startsWith(prefix)}
+                                            onChange={(e) => handleDescriptionChange(e, index)}
+                                        />
+                                        <span className="ml-2">อื่นๆ</span>
+                                        {liveData.description.startsWith(prefix) && (
                                             <input
                                                 type="text"
                                                 placeholder="ระบุ..."
+                                                value={liveData.description.replace(prefix, "")}
                                                 className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                                                onChange={(e) => handlePBincomeInputChange(e, index)}
+                                                onChange={(e) => handleOtherDescriptionChange(e, index)}
                                             />
-                                        )
-                                    }
-                                </label>
-                            </div>
+                                        )}
 
-                            <label className="flex items-center text-gray-700 mt-4 gap-2">
-                                <span>ระยะห่างจากที่อยู่อาศัย</span>
-                                <input
-                                    type="number"
-                                    onChange={(e) => handleIncomDistanceChange(e, index)}
-                                    checked={formData2[index]?.PBresourceforincome.distance}
-                                    placeholder="ระยะห่างจากที่อยู่อาศัย.."
-                                    className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                                />
-                                <span>กม. (เลือกได้ 1 ข้อ)</span>
-                            </label>
-                            <label className="flex items-center text-gray-700 pl-12 mt-4">
-                                <input
-                                    type="radio"
-                                    id="description_0"
-                                    name={`description_${index}`}
-                                    checked={formData2[index]?.PBresourceforincome.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"}
-                                    className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                    value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"
-                                    onChange={(e) => handleIncomeRadioChange(e, index)}
-                                />
-                                <span className="ml-2">สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล</span>
-                            </label>
-                            <label className="flex items-center text-gray-700 pl-12 mt-4">
-                                <input
-                                    type="radio"
-                                    id="description_1"
-                                    name={`description_${index}`}
-                                    checked={formData2[index]?.PBresourceforincome.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"}
-                                    className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                    value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"
-                                    onChange={(e) => handleIncomeRadioChange(e, index)}
-                                />
-                                <span className="ml-2">สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา</span>
-                            </label>
-                            <label className="flex items-center text-gray-700 pl-12 mt-4">
+                                    </label>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    <div className="mt-4 ml-45">
+                        <button className="bg-blue-400 text-white py-2 px-4 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200 mr-4"
+                            onClick={addDatalive}
+                        >
+                            เพิ่มแหล่งทรัพยากร
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            {/* 2 */}
+            <div className="p-5 bg-blue-100 rounded-lg shadow-lg">
+                <div className="Container">
+                    <div className="mb-6">
+                        <h2 className="text-xl font-bold text-gray-700 mb-5">
+                            2. ครัวเรือนของท่านได้ใช้ประโยชน์จากทรัพยากรธรรมชาติในพื้นที่ เช่น ที่สาธารณะ ทุ่งหญ้า ป่า แม่น้ำ  ลำธาร ชายฝั่งทะเล หรืออื่นๆ <br />
+                            <span className="text-red-500">เพื่อสร้างรายได้</span> หรือไม่(กรณีมีหลายพื้นที่ให้ระบุชื่อแหล่งทรัพยากรและระยะทางระหว่างที่อยู่อาศัยกับแหล่ง <br />
+                            ทรัพยากรธรรมชาติที่ได้ใช้ประโยชน์)
+                        </h2>
+                        <div className="flex flex-col gap-2 pl-12">
+                            <label className="flex items-center text-gray-700">
                                 <input
                                     type="radio"
+                                    id="is_use_PB_resoc_0"
                                     className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                                    id="description_2"
-                                    name={`description_${index}`}
-                                    checked={formData2[index]?.PBresourceforincome.description.startsWith(prefix)}
-                                    value={prefix}
-                                    onChange={(e) => handleIncomeRadioChange(e, index)}
+                                    name="is_use_PB_resoc2"
+                                    checked={formData.PBresourceforincome[0]?.is_use_PB_resoc === false}
+                                    value={false}
+                                    onChange={handlePBIncomeChange}
                                 />
-                                <span className="ml-2">อื่นๆ</span>
-                                {
-                                    formData2[index]?.PBresourceforincome?.description?.startsWith(prefix) && (
+                                <span className="ml-2">ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่</span>
+                            </label>
+                            <label className="flex items-center text-gray-700">
+                                <input
+                                    type="radio"
+                                    id="is_use_PB_resoc_1"
+                                    className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                    name="is_use_PB_resoc2"
+                                    value={true}
+                                    checked={formData.PBresourceforincome[0]?.is_use_PB_resoc === true}
+                                    onChange={handlePBIncomeChange}
+                                />
+                                <span className="ml-2">ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร</span>
+                            </label>
+                        </div>
+                        {formData.PBresourceforincome[0]?.is_use_PB_resoc && // ตรวจสอบว่า is_use_PB_resoc เป็น true
+                            formData.PBresourceforincome.map((incomeData, index) => (
+                                <div key={index} className="mt-4 pl-12">
+                                    <label className="flex items-center text-gray-700 ml-6">
+                                        <span className="text-lg font-bold"> {/* เพิ่มขนาดและทำตัวหนา */}
+                                            ระบุแหล่งทรัพยากร <span className="text-blue-600 text-xl">{index + 1}</span> {/* เพิ่มสีและขนาดที่เด่นให้หมายเลข */}
+                                        </span>
+
                                         <input
                                             type="text"
                                             placeholder="ระบุ..."
+                                            value={incomeData.rescource ? incomeData.rescource.replace("ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ", "") : ""}
                                             className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                                            onChange={(e) => handleIncomeOtherInputChange(e, index)}
-                                            value={formData2[index]?.PBresourceforincome.description.slice(prefix.length).trim()}
+                                            onChange={(e) => handleResourceIncomeChange(e, index)}
                                         />
-                                    )
-                                }
-                            </label>
-                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => removeDataincome(index)}
+                                            className="items-center py-3 px-6 ml-3 border border-transparent text-lg font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none"
+                                        >
+                                            <Icon
+                                                icon="material-symbols:delete-forever-outline-rounded"
+                                                className="w-3 h-3"
+                                            />
+                                        </button>
+                                    </label>
+                                    <label className="flex items-center text-gray-700 mt-4 gap-2">
+                                        <span>ระยะห่างจากที่อยู่อาศัย</span>
+                                        <input
+                                            type="number"
+                                            placeholder="ระยะห่างจากที่อยู่อาศัย.."
+                                            value={incomeData.distance || ""}
+                                            className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                                            onChange={(e) => handleDistanceIncomeChange(e, index)}
+                                        />
+                                        <span>กม. (เลือกได้ 1 ข้อ)</span>
+                                    </label>
+                                    <label className="flex items-center text-gray-700 pl-12 mt-4">
+                                        <input
+                                            type="radio"
+                                            id={`description_${index}_0`}
+                                            className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                            name={`description2_${index}`}
+                                            value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"
+                                            checked={incomeData.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล"}
+                                            onChange={(e) => handleDescriptionIncomeChange(e, index)}
+                                        />
+                                        <span className="ml-2">สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล</span>
+                                    </label>
+                                    <label className="flex items-center text-gray-700 pl-12 mt-4">
+                                        <input
+                                            type="radio"
+                                            id={`description_${index}_1`}
+                                            className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                            name={`description2_${index}`}
+                                            value="สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"
+                                            checked={incomeData.description === "สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา"}
+                                            onChange={(e) => handleDescriptionIncomeChange(e, index)}
+                                        />
+                                        <span className="ml-2">สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา</span>
+                                    </label>
+                                    <label className="flex items-center text-gray-700 pl-12 mt-4">
+                                        <input
+                                            type="radio"
+                                            id={`description_${index}_2`}
+                                            className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                            name={`description2_${index}`}
+                                            value={prefix}
+                                            checked={incomeData.description.startsWith(prefix)}
+                                            onChange={(e) => handleDescriptionIncomeChange(e, index)}
+                                        />
+                                        <span className="ml-2">อื่นๆ</span>
+                                        {incomeData.description.startsWith(prefix) && (
+                                            <input
+                                                type="text"
+                                                placeholder="ระบุ..."
+                                                value={incomeData.description.replace(prefix, "")}
+                                                className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                                                onChange={(e) => handleOtherDescriptionIncomeChange(e, index)}
+                                            />
+                                        )}
 
-                        {/* Blue Button */}
-                        <div className="flex justify-end mt-4">
-                            <button className="bg-blue-400 text-white py-2 px-4 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200 mr-4"
-                                onClick={addDataincome}
-                            >
-                                เพิ่มแหล่งทรัพยากร
-                            </button>
-                            <button className="bg-blue-400 text-white py-2 px-4 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200"
-                                onClick={() => delDataincome(index)}
-                            >
-                                ลบแหล่งทรัพยากร
-                            </button>
-                        </div>
+                                    </label>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    <div className="mt-4 ml-45">
+                        <button className="bg-blue-400 text-white py-2 px-4 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200 mr-4"
+                            onClick={addDataincome}
+                        >
+                            เพิ่มแหล่งทรัพยากร
+                        </button>
                     </div>
                 </div>
-            ))}
-
-
-
-
-
+            </div>
 
             <button type="button" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded" onClick={handleSubmit}>
                 submit
