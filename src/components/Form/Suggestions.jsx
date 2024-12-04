@@ -1,116 +1,86 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Suggestions = () => {
-  // กำหนด state สำหรับเก็บข้อมูลของฟอร์ม
+const Suggestions = ({setCurrentPage,setMainFormData,mainFormData}) => {
+
   const [formData, setFormData] = useState({
-    Suggestions: [
+    Suggestions: 
       {
-        suggest_informer: "", // ช่องกรอกชื่อผู้ให้ข้อมูล
+        suggest_informer: "", 
         suggest_survey_team: "",
         resource: [],
       },
-    ],
-    //  suggest_informer: "", // ช่องกรอกชื่อผู้ให้ข้อมูล
-    //  suggest_survey_team: "",  // ช่องกรอกชื่อทีมสำรวจ
-    // resource: "", //แหล่งข้อมูล
+
   });
 
-  const [isOtherChecked, setIsOtherChecked] = useState({});
-  // ฟังก์ชันสำหรับจัดการการเลือก checkbox
-  const handleCheckboxChange = (category, field, value, checked) => {
-    setFormData((prevData) => {
-      const updatedFieldData = [...prevData[category][0][field]];
-
-      if (checked) {
-        if (!updatedFieldData.includes(value)) {
-          updatedFieldData.push(value);
-        }
-      } else {
-        const index = updatedFieldData.indexOf(value);
-        if (index > -1) {
-          updatedFieldData.splice(index, 1);
-        }
-      }
-
-      return {
-        ...prevData,
-        [category]: [
-          {
-            ...prevData[category][0],
-            [field]: updatedFieldData,
-          },
-        ],
-      };
-    });
-  };
-  // ฟังก์ชันสำหรับจัดการ checkbox "อื่น ๆ"
-  const handleOtherCheckboxChange = (e, category, field, valuePrefix) => {
-    const { id, checked } = e.target;
-    setIsOtherChecked((prevState) => ({
-      ...prevState,
-      [id]: checked,
-    }));
-
-    if (!checked) {
-      setFormData((prevData) => {
-        const filteredFieldData = prevData[category][0][field].filter(
-          (item) => !item.startsWith(valuePrefix)
-        );
-
-        return {
-          ...prevData,
-          [category]: [
-            {
-              ...prevData[category][0],
-              [field]: filteredFieldData,
-            },
-          ],
-        };
-      });
+  //load data
+  useEffect(()=>{
+    if(mainFormData.Suggestions){
+      setFormData(mainFormData.Suggestions)
     }
-  };
-  // ฟังก์ชันสำหรับกรอกข้อมูลเพิ่มเติม
-  const handleInputOtherChange = (category, field, value) => {
-    setFormData((prevData) => {
-      const updatedFieldData = prevData[category][0][field];
+  },[mainFormData])
 
-      // ตรวจสอบว่าเป็นอาเรย์แล้วเพิ่มข้อมูล
-      if (!updatedFieldData.includes(value)) {
-        return {
-          ...prevData,
-          [category]: [
-            {
-              ...prevData[category][0],
-              [field]: [...updatedFieldData, value],
-            },
-          ],
-        };
+  //Nextpage
+  const handleSubmit = (e)=>{
+    e.preventDefault()
+    setMainFormData((prevData)=>({
+      ...prevData,
+      Suggestions: formData
+    }))
+    setCurrentPage(7)
+  }
+
+  const handlePrevPage =()=>{
+    setMainFormData((prevData)=>({
+      ...prevData,
+      Suggestions: formData
+    }))
+
+    setCurrentPage(5)
+  }
+
+  const handleInputChange = (field,value)=>{
+    const updataData = {...formData}
+    updataData.Suggestions[field] = value
+    setFormData(updataData)
+  }
+
+  const handleCheckboxChange = (value,checked)=>{
+    const updataData = {...formData}
+
+    if(checked){
+      updataData.Suggestions.resource = [...updataData.Suggestions.resource,value]// clone และเอา value ไปต่อท้าย arr
+    }else{
+      const index = updataData.Suggestions.resource.findIndex((e)=>e.startsWith(value))
+
+      if(index > -1){
+        updataData.Suggestions.resource.splice(index,1)
       }
-      return prevData;
-    });
-  };
-  // ฟังก์ชันการเปลี่ยนแปลงใน checkbox
-  // const [selectedOptions, setSelectedOptions] = useState([]); // กำหนดให้เป็น array เริ่มต้น
+    }
+    setFormData(updataData)
+    
+  }
+  const prefix = 'อื่นๆ '
 
-  // const handleCheckboxChange = (e) => {
-  //   const { name, checked } = e.target;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     resource: checked
-  //       ? [...prev.resource, name] // เพิ่มชื่อ checkbox เมื่อถูกเลือก
-  //       : prev.resource.filter((option) => option !== name) // ลบชื่อ checkbox เมื่อยกเลิกการเลือก
-  //   }));
-  // };
+  const handleOtherInputChange = (prefixO,value)=>{
+    setFormData((prevData)=>{
+      const updateData = [...prevData.Suggestions.resource] //clone arr ใน field เดิม
+      const index = updateData.findIndex((e)=>e.startsWith(prefixO))
 
-  // // ฟังก์ชันจัดการเมื่อมีการกรอกข้อมูลในช่อง "อื่นๆ"
-  // const handleOtherChange = (e) => {
-  //   setFormData({
-  //     ...formData,
-  //     resource: e.target.value,
-  //   });
-  // };
+      if(index > -1){
+        updateData[index] = value
+      }else{
+        updateData.push(value)
+      }
 
-  const handleSubmit = (e) => {
+      return {...prevData,Suggestions:{
+        ...prevData.Suggestions,
+        resource:updateData
+      }}
+    })
+  }
+
+
+  const handleShowData = (e) => {
     e.preventDefault();
     console.log(formData);
     //console.log(selectedOptions);
@@ -118,12 +88,12 @@ const Suggestions = () => {
 
   return (
     <>
-      <div className="Container">
+      <div className="mx-8">
         <h3 className="text-black text-lg font-bold px-5 py-5">
           ส่วนที่ 7 ความคิดเห็นต่อและข้อเสนอแนะ
         </h3>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleShowData}>
           <div>
             <label htmlFor="suggest_informer">
               1. ข้อเสนอแนะจากผู้ให้ข้อมูล หรือเจ้าของบ้าน
@@ -132,22 +102,12 @@ const Suggestions = () => {
             <textarea
               id="suggest_informer"
               name="suggest_informer"
-              value={formData.Suggestions[0].suggest_informer}
-              onChange={(e) =>
-                setFormData((prevData) => ({
-                  ...prevData,
-                  Suggestions: [
-                    {
-                      ...prevData.Suggestions[0],
-                      suggest_informer: e.target.value,
-                    },
-                  ],
-                }))
-              }
+              value={formData.Suggestions.suggest_informer}
+              onChange={e=>handleInputChange('suggest_informer',e.target.value)}
               className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="ระบุ"
               rows="1"
-              style={{ resize: "none", width: "50%" }} // ตั้งความกว้างที่ 50%
+              style={{ resize: "none", width: "50%" }} 
             />
 
             <label htmlFor="suggest_survey_team">
@@ -157,18 +117,8 @@ const Suggestions = () => {
             <textarea
               id="suggest_survey_team"
               name="suggest_survey_team"
-              value={formData.Suggestions[0].suggest_survey_team}
-              onChange={(e) =>
-                setFormData((prevData) => ({
-                  ...prevData,
-                  Suggestions: [
-                    {
-                      ...prevData.Suggestions[0],
-                      suggest_survey_team: e.target.value,
-                    },
-                  ],
-                }))
-              } /*  */
+              value={formData.Suggestions.suggest_survey_team}
+              onChange={e=>handleInputChange('suggest_survey_team',e.target.value)}
               className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="ระบุ"
               rows="1"
@@ -178,20 +128,17 @@ const Suggestions = () => {
 
           {/* ส่วนของ checkbox */}
           <h3>แหล่งที่มาของครัวเรือนเข้ารับการสำรวจ (เลือกได้มากกว่า 1 ข้อ)</h3>
-          <label>
+
+
+          <div className="flex flex-col ">
+          <label className="mt-2">
             <input
               id="resource 1"
               type="checkbox"
               name="resource"
               value="จปฐ./กชช.2ค."
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              } // เรียกใช้งานฟังก์ชันเมื่อมีการเปลี่ยนแปลง
+              checked={formData.Suggestions.resource.includes('จปฐ./กชช.2ค.')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -201,20 +148,14 @@ const Suggestions = () => {
             จปฐ./กชช.2ค.
           </label>
 
-          <label>
+          <label className="mt-2">
             <input
               id="resource 2"
               type="checkbox"
               name="resource"
               value="TPMAP"
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              }
+              checked={formData.Suggestions.resource.includes('TPMAP')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -224,20 +165,14 @@ const Suggestions = () => {
             TPMAP
           </label>
 
-          <label>
+          <label className="mt-2">
             <input
               id="resource 3"
               type="checkbox"
               name="resource"
               value="พมจ."
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              }
+              checked={formData.Suggestions.resource.includes('พมจ.')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -247,20 +182,14 @@ const Suggestions = () => {
             พมจ.
           </label>
 
-          <label>
+          <label className="mt-2">
             <input
               id="resource 4"
               type="checkbox"
               name="resource"
               value="พอช."
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              }
+              checked={formData.Suggestions.resource.includes('พอช.')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -270,20 +199,14 @@ const Suggestions = () => {
             พอช.
           </label>
 
-          <label>
+          <label className="mt-2">
             <input
               id="resource 5"
               type="checkbox"
               name="resource"
               value="TPผู้นำชุมชน/อสม./อพมMAP"
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              }
+              checked={formData.Suggestions.resource.includes('TPผู้นำชุมชน/อสม./อพมMAP')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -293,20 +216,14 @@ const Suggestions = () => {
             ผู้นำชุมชน/อสม./อพม
           </label>
 
-          <label>
+          <label className="mt-2">
             <input
               id="resource 6"
               type="checkbox"
               name="resource"
               value="ผู้นำศาสนา"
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              }
+              checked={formData.Suggestions.resource.includes('ผู้นำศาสนา')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -316,20 +233,14 @@ const Suggestions = () => {
             ผู้นำศาสนา
           </label>
 
-          <label>
+          <label className="mt-2">
             <input
               id="resource 7"
               type="checkbox"
               name="resource"
               value="อบต./อปท."
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              }
+              checked={formData.Suggestions.resource.includes('อบต./อปท.')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -339,20 +250,14 @@ const Suggestions = () => {
             อบต./อปท.
           </label>
 
-          <label>
+          <label className="mt-2">
             <input
               id="resource 8"
               type="checkbox"
               name="resource"
               value="ชาวบ้าน"
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              }
+              checked={formData.Suggestions.resource.includes('ชาวบ้าน')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -362,20 +267,14 @@ const Suggestions = () => {
             ชาวบ้าน
           </label>
 
-          <label>
+          <label className="mt-2">
             <input
               id="resource 9"
               type="checkbox"
               name="resource"
               value="อาสาสมัครสำรวจข้อมูล"
-              onChange={(e) =>
-                handleCheckboxChange(
-                  "Suggestions",
-                  "resource",
-                  e.target.value,
-                  e.target.checked
-                )
-              }
+              checked={formData.Suggestions.resource.includes('อาสาสมัครสำรวจข้อมูล')? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -385,14 +284,14 @@ const Suggestions = () => {
             อาสาสมัครสำรวจข้อมูล
           </label>
 
-          <label>
+          <label className="mt-2"> 
             <input
               id="resource_10" // ตั้ง id เพื่อเชื่อมโยงกับ label
               type="checkbox"
               name="resource"
-              onChange={(e) =>
-                handleOtherCheckboxChange(e, "Suggestions", "resource", "อื่นๆ")
-              }
+              value={prefix}
+              checked={formData.Suggestions.resource.some((e)=>e.startsWith(prefix)) ? true:false}
+              onChange={e=>handleCheckboxChange(e.target.value,e.target.checked)}
               class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ms-8 text-sm font-medium"
             />
             <label
@@ -400,30 +299,37 @@ const Suggestions = () => {
               class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
             />
             อื่นๆ
-          </label>
 
-          {isOtherChecked.resource_10 && (
+            {formData.Suggestions.resource.some((e)=>e.startsWith(prefix)) && (
             <input
               type="text"
-              onBlur={(e) => {
-                if (isOtherChecked.resource_10) {
-                  handleInputOtherChange(
-                    "Suggestions",
-                    "resource",
-                    "อื่นๆ " + e.target.value
-                  );
-                }
-              }}
+              value={formData.Suggestions.resource?.find((e)=>e.startsWith(prefix))?.slice(prefix.length) ||''
+              }
+              onChange={e=>handleOtherInputChange(prefix,prefix+e.target.value)}
               className="ml-2 bg-gray-20 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-48"
               placeholder="ระบุ"
             />
           )}
+          </label>
+
+          
+          </div>
+          
+
           <div className="mt-5">
             <button
-              type="submit"
+              type="button"
+              onClick={e=>handleSubmit(e)}
               className="bg-blue-500 text-white p-2 rounded"
             >
               ส่งฟอร์ม
+            </button>
+            <button
+              type="button"
+              onClick={e=>handlePrevPage(e)}
+              className="bg-blue-500 text-white p-2 rounded"
+            >
+              ย้อนกลับ
             </button>
           </div>
         </form>

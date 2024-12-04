@@ -175,7 +175,6 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 }}
                 className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-m rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder=""
-                required
               />
             </div>
             <div>
@@ -194,7 +193,6 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 }}
                 className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-m rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder=""
-                required
               />
             </div>
           </div>

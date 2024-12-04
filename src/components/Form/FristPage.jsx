@@ -57,10 +57,6 @@ export const FristPage = ({
       },
     ],
     DataRecorder: {
-      // title: "นาย",
-      // fname: "",
-      // lname: "",
-      // phone: "",
       recder_title :"นาย",
       recder_fname:'',
       recder_lname:'',
@@ -983,7 +979,7 @@ export const FristPage = ({
                       e.target.value
                     )
                   }
-                  value={formData.DataRecorder.title}
+                  value={formData.DataRecorder.recder_title}
                   className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
                 >
                   <option>นาย</option>
@@ -1000,7 +996,7 @@ export const FristPage = ({
                 type="text"
                 required
                 placeholder=""
-                value={formData.DataRecorder.fname}
+                value={formData.DataRecorder.recder_fname}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -1023,7 +1019,7 @@ export const FristPage = ({
                 
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.DataRecorder.lname}
+                value={formData.DataRecorder.recder_lname}
               />
             </div>
 
@@ -1043,7 +1039,7 @@ export const FristPage = ({
                 onChange={(e) =>
                   handleInputChange(e.target.name, e.target.id, e.target.value)
                 }
-                value={formData.DataRecorder.phone}
+                value={formData.DataRecorder.recder_phone}
                 required
               />
             </div>

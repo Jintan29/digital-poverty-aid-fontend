@@ -42,23 +42,19 @@ export const Form = () => {
         </div>
 
         <div className="">
-          {/* {currentPage === 1 && <FristPage setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />} */}
-          {/* {currentPage === 2 && <HumanCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />} */}
-          {/* {currentPage === 3 && <PhysicalCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
-          {/* {currentPage === 4 && <Test1 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
+          {currentPage === 1 && <FristPage setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
+          {currentPage === 2 && <HumanCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
+          {currentPage === 3 && <PhysicalCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {/* กลับมาแก้เป็นเลข5ด้วย */}
+          {currentPage === 4 && <Socialcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/> }
+          {currentPage === 5 && <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {currentPage === 6 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {currentPage === 7 && <Test1 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
         </div>
         
       </div>
 
-      <Financialcapital/>
 
-      <Socialcapital/>  
-      <Naturalcapital/> 
-      <Naturalcapital2/>
-      {/* <GroupSamForm/> */}
-
-      {/* <Southern/>
-      <Suggestions/> */}
 
     </>
   );
