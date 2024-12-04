@@ -54,16 +54,7 @@ export const Form = () => {
         
       </div>
 
-      {/* <Financialcapital/> */}
 
-      {/* <Socialcapital/>   */}
-      {/* <PhysicalCapital/> */}
-      {/* <Naturalcapital/>  */}
-      {/* <Naturalcapital2/> */}
-      
-
-      {/* <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/> */}
-      {/* <Suggestions/> */}
 
     </>
   );
