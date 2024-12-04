@@ -8,9 +8,10 @@ import GroupSamForm from "../components/Form/GroupSamForm";
 import Financialcapital from "../components/Form/Financialcapital";
 import Socialcapital from "../components/Form/Socialcapital";
 import Naturalcapital from "../components/Form/Naturalcapital";
-import Southern from "../components/Form/southern";
+import Southern from "../components/Form/Southern";
 import Suggestions from "../components/Form/Suggestions";
 import Naturalcapital2 from "../components/Form/Naturalcapital2";
+
 
 
 export const Form = () => {
