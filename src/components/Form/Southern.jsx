@@ -26,7 +26,7 @@ export const Southern = ({setCurrentPage,setMainFormData,mainFormData}) => {
       ...prevData,
       Southern: formData
     }))
-    setCurrentPage(6)
+    setCurrentPage(7)
   }
 
   //prevPage
@@ -36,7 +36,7 @@ export const Southern = ({setCurrentPage,setMainFormData,mainFormData}) => {
       ...prevData,
       Southern: formData,
     }));
-    setCurrentPage(4);
+    setCurrentPage(5);
   };
 
   const handleInputChange = (field,value)=>{

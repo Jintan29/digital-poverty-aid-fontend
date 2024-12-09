@@ -297,7 +297,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
       Socialcapital: formData,
     }));
 
-    setCurrentPage(5);
+    setCurrentPage(6);
   };
 
   //ย้อนกลับ
@@ -306,7 +306,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
       ...prevData,
       Socialcapital: formData,
     }));
-    setCurrentPage(3);
+    setCurrentPage(4);
   };
 
   return (

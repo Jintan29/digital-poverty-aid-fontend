@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
-function Naturalcapital() {
+function Naturalcapital({setCurrentPage,setMainFormData,mainFormData}) {
     const [formData, setFormData] = useState(
         {
             PBresourceforlive: [
@@ -21,6 +21,33 @@ function Naturalcapital() {
             ],
         }
     );
+
+    //load data
+    useEffect(()=>{
+        if(mainFormData.Naturalcapital){
+            setFormData(mainFormData.Naturalcapital)
+        }
+    },[mainFormData])
+
+    //next page
+    const handleSubmit = (e)=>{
+        e.preventDefault()
+        setMainFormData((prevData)=>({
+            ...prevData,
+            Naturalcapital: formData
+        }))
+        setCurrentPage(5)
+    }
+
+    //prev page
+    const handlePrevPage = ()=>{
+        setMainFormData((prevData)=>({
+            ...prevData,
+            Naturalcapital: formData
+        }))
+
+        setCurrentPage(3)
+    }
 
     const prefix = "อื่นๆ"
 
@@ -245,7 +272,7 @@ function Naturalcapital() {
 
 
 
-    const handleSubmit = () => {
+    const handleShowData = () => {
         console.log("Form Data Submitted:", formData);
     };
 
@@ -525,8 +552,16 @@ function Naturalcapital() {
                 </div>
             </div>
 
-            <button type="button" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded" onClick={handleSubmit}>
-                submit
+            <button type="button" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded" onClick={handleShowData}>
+                แสดงข้อมูล
+            </button>
+
+            <button type="button" className="mt-4 bg-green-500 text-white py-2 px-4 rounded" onClick={e=>handleSubmit(e)}>
+                หน้าถัดไป
+            </button>
+
+            <button type="button" className="mt-4 bg-red-500 text-white py-2 px-4 rounded" onClick={e=>handlePrevPage()}>
+                ย้อนกลับ
             </button>
 
         </>

@@ -26,7 +26,7 @@ const Suggestions = ({setCurrentPage,setMainFormData,mainFormData}) => {
       ...prevData,
       Suggestions: formData
     }))
-    setCurrentPage(7)
+    setCurrentPage(8)
   }
 
   const handlePrevPage =()=>{
@@ -35,7 +35,7 @@ const Suggestions = ({setCurrentPage,setMainFormData,mainFormData}) => {
       Suggestions: formData
     }))
 
-    setCurrentPage(5)
+    setCurrentPage(6)
   }
 
   const handleInputChange = (field,value)=>{

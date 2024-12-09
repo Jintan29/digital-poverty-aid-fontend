@@ -15,13 +15,12 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     water_for_agriculture: "",
     house_access_road: "",
     workplace_access_road: "",
-    use_tech_get_benrfit_gov: null,
+    use_tech_get_benefit_gov: null,
     benefit_form_tech: null,
     news: [],
     agricultural_land: [],
     land_use_issuse: [],
-    formId: 1,
-
+    
     HouseHygiene: {
       item_storage: "",
       drainage_system: "",
@@ -58,7 +57,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     }));
   };
 
-  //load data form main
+  // load data form main
   useEffect(() => {
     if (mainFormData.PhysicalCapital) {
       setFormData(mainFormData.PhysicalCapital);
@@ -103,20 +102,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     rent: false,
     other: false,
   });
-
-  //12.1 , 12.2
-  const [isOtherAccessRoad, setIsOtherAccessRoad] = useState(false);
-  const [isOtherAccessRoad2, setIsOtherAccessRoad2] = useState(false);
-  // state ทำหน้าที่เหมือนสวิตคอยเปิดปิด
-  const [otherAccessRoadText, setOtherAccessRoadText] = useState("");
-
-  const handleOtherAccessRoadChange = (value) => {
-    setOtherAccessRoadText(value);
-    setFormData((prevData) => ({
-      ...prevData,
-      house_access_road: "มีการเดินทางรูปแบบอื่น " + value,
-    }));
-  };
+  
 
   //next page
   const handleSubmit = (e) => {
@@ -126,7 +112,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
       PhysicalCapital: formData,
     }));
 
-    setCurrentPage(4);
+    // setCurrentPage(4);
   };
 
   const handlePrevPage = () => {
@@ -136,6 +122,11 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     }));
     setCurrentPage(2);
   };
+
+  const handleLogdata = ()=>{
+    console.log(formData);
+    
+  }
 
   //11
   const prefix = "ไม่ใช้พื้นที่ชุมชนเมืองประกอบอาชีพ ";
@@ -2415,13 +2406,13 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
             <div className="flex flex-row ">
               <div className="">
                 <input
-                  name="use_tech_get_benrfit_gov"
+                  name="use_tech_get_benefit_gov"
                   type="radio"
                   required
                   value={false}
-                  checked={formData.use_tech_get_benrfit_gov === false}
+                  checked={formData.use_tech_get_benefit_gov === false}
                   onChange={(e) => {
-                    handleInputChange("use_tech_get_benrfit_gov", false);
+                    handleInputChange("use_tech_get_benefit_gov", false);
                   }}
                   className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                 />
@@ -2431,12 +2422,12 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
               </div>
               <div className="px-10">
                 <input
-                  name="use_tech_get_benrfit_gov"
+                  name="use_tech_get_benefit_gov"
                   type="radio"
                   value={true}
-                  checked={formData.use_tech_get_benrfit_gov === true}
+                  checked={formData.use_tech_get_benefit_gov === true}
                   onChange={(e) => {
-                    handleInputChange("use_tech_get_benrfit_gov", true);
+                    handleInputChange("use_tech_get_benefit_gov", true);
                   }}
                   className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                 />
@@ -2506,6 +2497,19 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
               >
                 หน้าถัดไป
+                <Icon
+                  icon="material-symbols:arrow-right-rounded"
+                  width="25"
+                  height="25"
+                />
+              </button>
+
+              <button
+                type="button"
+                onClick={e=>handleLogdata()}
+                className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
+              >
+                LogData
                 <Icon
                   icon="material-symbols:arrow-right-rounded"
                   width="25"

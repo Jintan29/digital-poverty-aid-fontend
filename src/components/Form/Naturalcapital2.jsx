@@ -1418,7 +1418,7 @@ function Naturalcapital2() {
                                 className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
                                 id="is_in_disaster_0"
                                 name="is_in_disaster"
-                                checked={formData.Farmlandindisasterareas?.is_in_disaster === false || false}
+                                checked={formData.Farmlandindisasterareas?.is_in_disaster === false}
                                 value={false}
                                 onChange={handleFarmlandFChange}
                             />
