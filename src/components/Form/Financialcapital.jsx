@@ -23,11 +23,11 @@ function Financialcapital() {
             // }
         ],
         Saving: [
-            // {
-            //     is_has_saving: null,
-            //     saving_type: " ",
-            //     amount: 0.0,
-            // }
+            {
+                is_has_saving: null,
+                saving_type: " ",
+                amount: 0.0,
+            }
         ],
         Occupationalproperty: [{
             property_type: [],
@@ -574,11 +574,7 @@ function Financialcapital() {
 
             // ถ้า value เป็น false เคลียร์ค่าใน form และ outstanding_amount
             if (value === false) {
-                updatedFormData.Creditsources = updatedFormData.Creditsources.map(source => ({
-                    ...source,
-                    form: " ", // เคลียร์ค่าใน form
-                    outstanding_amount: 0.0, // เคลียร์ค่าใน outstanding_amount
-                }));
+                updatedFormData.Creditsources = []; // เคลียร์ Creditsources ทั้งหมด
             }
 
             return {
@@ -1019,7 +1015,7 @@ function Financialcapital() {
                                     id="fishing_0"
                                     className="mr-2 rounded"
                                     value="ไม่ได้ทำประมงค์"
-                                    checked={formData.Agriculturalincome[0].plants.includes("ไม่ได้ทำประมงค์")}
+                                    checked={formData.Agriculturalincome[0].fishing.includes("ไม่ได้ทำประมงค์")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "fishing", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -1033,7 +1029,7 @@ function Financialcapital() {
                                     id="fishing_1"
                                     className="mr-2 rounded"
                                     value="ประมงน้ำเค็ม"
-                                    checked={formData.Agriculturalincome[0].plants.includes("ประมงน้ำเค็ม")}
+                                    checked={formData.Agriculturalincome[0].fishing.includes("ประมงน้ำเค็ม")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "fishing", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -1047,7 +1043,7 @@ function Financialcapital() {
                                     id="fishing_2"
                                     className="mr-2 rounded"
                                     value="ประมงน้ำจืด"
-                                    checked={formData.Agriculturalincome[0].plants.includes("ประมงน้ำจืด")}
+                                    checked={formData.Agriculturalincome[0].fishing.includes("ประมงน้ำจืด")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "fishing", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
