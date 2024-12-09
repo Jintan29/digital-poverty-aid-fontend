@@ -9,7 +9,6 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
   //สถานะเริ่มต้นฟอร์ม
   const [members, setMembers] = useState([
     {
-      id: Date.now(),
       title: "นาย",
       fname: "",
       lname: "",
@@ -43,8 +42,8 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
   //load data from main
   useEffect(()=>{
-    if(mainFormData.HumanCapital && mainFormData.HumanCapital.members){ //ดูว่าหน้หลักมีข้อมูลหรือยัง
-      setMembers(mainFormData.HumanCapital.members)
+    if(mainFormData.MemberHousehold ){ //ดูว่าหน้หลักมีข้อมูลหรือยัง
+      setMembers(mainFormData.MemberHousehold)
     }
   },[mainFormData])
 
@@ -93,7 +92,6 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
     setMembers([
       ...members,
       {
-        id: Date.now(),
         title: "นาย",
         fname: "",
         lname: "",
@@ -207,8 +205,6 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
   useEffect(() => {}, [selectedCareer, selectedCareerMadeIncome, members]); // ฟังทุกครั้งที่ selectedCareer เปลี่ยนแปลง
 
-  // เพิ่มสถานะสำหรับเก็บการกระทำของปุ่มที่ถูกกด
-  const [submitAction, setSubmitAction] = useState("");
 
   //func ส่งข้อมูลและเปลี่ยนหน้า
   const handleSubmit = (e)=>{
@@ -216,27 +212,18 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
     setMainFormData((prevData)=>({ //นำค่าใหม่ไปต่อท้าย
       ...prevData,
-      HumanCapital:{ //สร้างฟิลด์นี้แล้วเอาข้อมูลไปใส่
-        members:members
-      }
+      MemberHousehold:members
     }))
 
-    if(submitAction==='previous'){
-      setCurrentPage(1)
-    }else if(submitAction === "next"){
-      setCurrentPage(3)
-    }
+    setCurrentPage(3)
 
-    // setCurrentPage(3)
   }
 
   //ย้อนกลับแบบไม่ validate
   const handlePrevPage = ()=>{
     setMainFormData((prevData)=>({ 
       ...prevData,
-      HumanCapital:{ 
-        members:members
-      }
+      MemberHousehold:members
     }))
     setCurrentPage(1)
   }
@@ -1348,9 +1335,9 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
         <button 
         
         type="submit"
-        onClick={() => setSubmitAction("next")}
+        // onClick={() => setSubmitAction("next")}
         className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-10">
-          หน้าถัดไป
+          ส่งข้อมูลไปMain
           <Icon
             icon="material-symbols:arrow-right-rounded"
             width="25"
