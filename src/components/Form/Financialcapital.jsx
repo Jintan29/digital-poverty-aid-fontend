@@ -2,13 +2,13 @@ import React, { useState } from "react";
 
 function Financialcapital() {
     const [formData, setFormData] = useState({
-        Agriculturalincome: [
-            {
-                plants: [],
-                livestock: [],
-                fishing: [],
-            }
-        ],
+        Agriculturalincome:
+        {
+            plants: [],
+            livestock: [],
+            fishing: [],
+        }
+        ,
         NonAGIincome: [
             // {
             //     income_type: " ",
@@ -29,10 +29,12 @@ function Financialcapital() {
                 amount: 0.0,
             }
         ],
-        Occupationalproperty: [{
+        Occupationalproperty:
+        {
             property_type: [],
             is_has_property: null,
-        }],
+        }
+        ,
         Debt: [{
             is_has_debt: null,
             description: " ",
@@ -56,7 +58,7 @@ function Financialcapital() {
     // ฟังก์ชันสำหรับจัดการการเลือก checkbox
     const handleCheckboxChange = (category, field, value, checked) => {
         setFormData((prevData) => {
-            const updatedFieldData = [...prevData[category][0][field]];
+            const updatedFieldData = [...prevData[category][field]];
 
             if (checked) {
                 if (!updatedFieldData.includes(value)) {
@@ -71,42 +73,14 @@ function Financialcapital() {
 
             return {
                 ...prevData,
-                [category]: [
-                    {
-                        ...prevData[category][0],
-                        [field]: updatedFieldData,
-                    },
-                ],
+                [category]: {
+                    ...prevData[category],
+                    [field]: updatedFieldData,
+                },
             };
         });
     };
 
-    // ฟังก์ชันสำหรับจัดการ checkbox "อื่น ๆ"
-    const handleOtherCheckboxChange = (e, category, field, valuePrefix) => {
-        const { id, checked } = e.target;
-        setIsOtherChecked((prevState) => ({
-            ...prevState,
-            [id]: checked,
-        }));
-
-        if (!checked) {
-            setFormData((prevData) => {
-                const filteredFieldData = prevData[category][0][field].filter(
-                    (item) => !item.startsWith(valuePrefix)
-                );
-
-                return {
-                    ...prevData,
-                    [category]: [
-                        {
-                            ...prevData[category][0],
-                            [field]: filteredFieldData,
-                        },
-                    ],
-                };
-            });
-        }
-    };
 
     const handleOtherPlantChange = (prefix) => (e) => {
         const { checked } = e.target;
@@ -116,7 +90,7 @@ function Financialcapital() {
         }));
 
         setFormData((prevState) => {
-            const updatedPlants = [...prevState.Agriculturalincome[0].plants];
+            const updatedPlants = [...prevState.Agriculturalincome.plants];
 
             if (checked) {
                 // ถ้า checkbox ถูกเลือกและยังไม่มีใน array ให้เพิ่ม
@@ -133,19 +107,17 @@ function Financialcapital() {
 
             return {
                 ...prevState,
-                Agriculturalincome: [
-                    {
-                        ...prevState.Agriculturalincome[0],
-                        plants: updatedPlants,
-                    },
-                ],
+                Agriculturalincome: {
+                    ...prevState.Agriculturalincome,
+                    plants: updatedPlants,
+                },
             };
         });
     };
 
     const handlePlantInputChange = (prefix, value) => {
         setFormData((prevState) => {
-            const updatedPlants = [...prevState.Agriculturalincome[0].plants];
+            const updatedPlants = [...prevState.Agriculturalincome.plants];
 
             const index = updatedPlants.findIndex((plant) => plant.startsWith(prefix));
             if (index !== -1) {
@@ -154,15 +126,14 @@ function Financialcapital() {
             }
             return {
                 ...prevState,
-                Agriculturalincome: [
-                    {
-                        ...prevState.Agriculturalincome[0],
-                        plants: updatedPlants,
-                    },
-                ],
+                Agriculturalincome: {
+                    ...prevState.Agriculturalincome,
+                    plants: updatedPlants,
+                },
             };
         });
     };
+
 
     const handleOtherLivestock = (prefix) => (e) => {
         const { checked } = e.target;
@@ -170,36 +141,37 @@ function Financialcapital() {
             ...prevState,
             [prefix]: checked,
         }));
+
         setFormData((prevState) => {
-            const updatedLivestock = [...prevState.Agriculturalincome[0].livestock];
+            const updatedLivestock = [...prevState.Agriculturalincome.livestock];
 
             if (checked) {
-                // ตรวจสอบว่า prefix อยู่ใน array หรือยัง
+                // ถ้า checkbox ถูกเลือกและยังไม่มีใน array ให้เพิ่ม
                 if (!updatedLivestock.some((livestock) => livestock.startsWith(prefix))) {
-                    updatedLivestock.push(prefix); // เพิ่ม prefix หากยังไม่มี
+                    updatedLivestock.push(prefix);
                 }
             } else {
+                // ถ้า checkbox ถูกยกเลิกให้ลบค่าออก
                 const index = updatedLivestock.findIndex((livestock) => livestock.startsWith(prefix));
                 if (index !== -1) {
-                    updatedLivestock.splice(index, 1); // ลบ prefix หากยกเลิกการเลือก
+                    updatedLivestock.splice(index, 1);
                 }
             }
 
             return {
                 ...prevState,
-                Agriculturalincome: [
-                    {
-                        ...prevState.Agriculturalincome[0],
-                        livestock: updatedLivestock,
-                    },
-                ],
+                Agriculturalincome: {
+                    ...prevState.Agriculturalincome,
+                    livestock: updatedLivestock,
+                },
             };
         });
     };
 
+
     const handleLivestockInputChange = (prefix, value) => {
         setFormData((prevState) => {
-            const updatedLivestock = [...prevState.Agriculturalincome[0].livestock];
+            const updatedLivestock = [...prevState.Agriculturalincome.livestock];
 
             const index = updatedLivestock.findIndex((livestock) => livestock.startsWith(prefix));
             if (index !== -1) {
@@ -207,15 +179,14 @@ function Financialcapital() {
             }
             return {
                 ...prevState,
-                Agriculturalincome: [
-                    {
-                        ...prevState.Agriculturalincome[0],
-                        livestock: updatedLivestock,
-                    },
-                ],
+                Agriculturalincome: {
+                    ...prevState.Agriculturalincome,
+                    livestock: updatedLivestock,
+                },
             };
         });
     };
+
 
 
     //ข้อ 2
@@ -700,29 +671,26 @@ function Financialcapital() {
     //6
     const handleRadioChange = (e) => {
         const { name, value } = e.target;
-        const isChecked = value === "true"; // Convert string "true"/"false" to boolean
+        const isChecked = value === "true"; // แปลงค่าจาก string เป็น boolean
 
         setFormData((prevData) => ({
             ...prevData,
-            Occupationalproperty: prevData.Occupationalproperty.map((item) => ({
-                ...item,
+            Occupationalproperty: {
+                ...prevData.Occupationalproperty,
                 [name]: isChecked,
-                property_type: isChecked ? item.property_type : [], // Reset property_type if false
-            })),
+                property_type: isChecked ? prevData.Occupationalproperty.property_type : [], // รีเซ็ต property_type ถ้าเลือก "ไม่มี"
+            },
         }));
     };
 
+
     const handleOtherProperty = (prefix) => (e) => {
         const { checked } = e.target;
-        setIsOtherChecked((prevState) => ({
-            ...prevState,
-            [prefix]: checked,
-        }));
+
         setFormData((prevState) => {
-            const updatedProperty = [...prevState.Occupationalproperty[0].property_type];
+            const updatedProperty = [...prevState.Occupationalproperty.property_type];
 
             if (checked) {
-                // ตรวจสอบว่า prefix อยู่ใน array หรือยัง
                 if (!updatedProperty.some((property_type) => property_type.startsWith(prefix))) {
                     updatedProperty.push(prefix); // เพิ่ม prefix หากยังไม่มี
                 }
@@ -735,20 +703,19 @@ function Financialcapital() {
 
             return {
                 ...prevState,
-                Occupationalproperty: [
-                    {
-                        ...prevState.Occupationalproperty[0],
-                        property_type: updatedProperty,
-                    },
-                ],
+                Occupationalproperty: {
+                    ...prevState.Occupationalproperty,
+                    property_type: updatedProperty,
+                },
             };
         });
-    }
+    };
+
 
 
     const handlePropertyInputChange = (prefix, value) => {
         setFormData((prevState) => {
-            const updatedProperty = [...prevState.Occupationalproperty[0].property_type];
+            const updatedProperty = [...prevState.Occupationalproperty.property_type];
 
             const index = updatedProperty.findIndex((property_type) => property_type.startsWith(prefix));
             if (index !== -1) {
@@ -756,15 +723,14 @@ function Financialcapital() {
             }
             return {
                 ...prevState,
-                Occupationalproperty: [
-                    {
-                        ...prevState.Occupationalproperty[0],
-                        property_type: updatedProperty,
-                    },
-                ],
+                Occupationalproperty: {
+                    ...prevState.Occupationalproperty,
+                    property_type: updatedProperty,
+                },
             };
         });
     };
+
 
 
 
@@ -800,7 +766,7 @@ function Financialcapital() {
                                     name="plants"
                                     id="plants_0"
                                     value="ไม่ได้เพาะปลูกพืชเกษตร"
-                                    checked={formData.Agriculturalincome[0].plants.includes("ไม่ได้เพาะปลูกพืชเกษตร")}
+                                    checked={formData.Agriculturalincome.plants.includes("ไม่ได้เพาะปลูกพืชเกษตร")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "plants", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700"> 0) ไม่ได้เพาะปลูกพืชเกษตร</label>
@@ -812,7 +778,7 @@ function Financialcapital() {
                                     name="plants"
                                     id="plants_1"
                                     value="ทำนา"
-                                    checked={formData.Agriculturalincome[0].plants.includes("ทำนา")}
+                                    checked={formData.Agriculturalincome.plants.includes("ทำนา")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "plants", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">  1) ทำนา</label>
@@ -824,7 +790,7 @@ function Financialcapital() {
                                     className="mr-2 rounded"
                                     name="plants"
                                     id="plants_2"
-                                    checked={formData.Agriculturalincome[0].plants.some((plant) =>
+                                    checked={formData.Agriculturalincome.plants.some((plant) =>
                                         plant.startsWith(Prefixplant2)
                                     )}
                                     onChange={handleOtherPlantChange(Prefixplant2)}
@@ -832,7 +798,7 @@ function Financialcapital() {
                                 <label htmlFor="plants_2" className="font text-gray-700">
                                     2) ทำสวนผัก
                                 </label>
-                                {formData.Agriculturalincome[0].plants.some((plant) =>
+                                {formData.Agriculturalincome.plants.some((plant) =>
                                     plant.startsWith(Prefixplant2)
                                 ) && (
                                         <input
@@ -840,7 +806,7 @@ function Financialcapital() {
                                             placeholder="ระบุ..."
                                             className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                                             value={
-                                                formData.Agriculturalincome[0].plants
+                                                formData.Agriculturalincome.plants
                                                     .find((plant) => plant.startsWith(Prefixplant2))
                                                     ?.slice(Prefixplant2.length + 1) || "" // +1 เพื่อลบช่องว่างที่เพิ่มไว้
                                             }
@@ -855,7 +821,7 @@ function Financialcapital() {
                                     className="mr-2 rounded"
                                     name="plants"
                                     id="plants_3"
-                                    checked={formData.Agriculturalincome[0].plants.some((plant) =>
+                                    checked={formData.Agriculturalincome.plants.some((plant) =>
                                         plant.startsWith(Prefixplant)
                                     )}
                                     onChange={handleOtherPlantChange(Prefixplant)}
@@ -863,7 +829,7 @@ function Financialcapital() {
                                 <label htmlFor="plants_3" className="font text-gray-700">
                                     3) ทำสวนผลไม้
                                 </label>
-                                {formData.Agriculturalincome[0].plants.some((plant) =>
+                                {formData.Agriculturalincome.plants.some((plant) =>
                                     plant.startsWith(Prefixplant)
                                 ) && (
                                         <input
@@ -871,7 +837,7 @@ function Financialcapital() {
                                             placeholder="ระบุ..."
                                             className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                                             value={
-                                                formData.Agriculturalincome[0].plants
+                                                formData.Agriculturalincome.plants
                                                     .find((plant) => plant.startsWith(Prefixplant))
                                                     ?.slice(Prefixplant.length + 1) || ""
                                             }
@@ -886,7 +852,7 @@ function Financialcapital() {
                                     name="plants"
                                     id="plants_4"
                                     value="พืชอื่นๆ เช่น มันสำปะหลัง อ้อย ถั่วเหลือง ถั่วลิสง ฯลฯ"
-                                    checked={formData.Agriculturalincome[0].plants.includes("พืชอื่นๆ เช่น มันสำปะหลัง อ้อย ถั่วเหลือง ถั่วลิสง ฯลฯ")}
+                                    checked={formData.Agriculturalincome.plants.includes("พืชอื่นๆ เช่น มันสำปะหลัง อ้อย ถั่วเหลือง ถั่วลิสง ฯลฯ")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "plants", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700"> 4) พืชอื่นๆ เช่น มันสำปะหลัง อ้อย ถั่วเหลือง ถั่วลิสง ฯลฯ</label>
@@ -898,7 +864,7 @@ function Financialcapital() {
                                     name="plants"
                                     id="plants_5"
                                     value="อื่นๆ เช่น ชา กาแฟ ยางพารา ปาล์มน้ำมัน ฯลฯ"
-                                    checked={formData.Agriculturalincome[0].plants.includes("อื่นๆ เช่น ชา กาแฟ ยางพารา ปาล์มน้ำมัน ฯลฯ")}
+                                    checked={formData.Agriculturalincome.plants.includes("อื่นๆ เช่น ชา กาแฟ ยางพารา ปาล์มน้ำมัน ฯลฯ")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "plants", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700"> 5) อื่นๆ เช่น ชา กาแฟ ยางพารา ปาล์มน้ำมัน ฯลฯ</label>
@@ -918,7 +884,7 @@ function Financialcapital() {
                                     name="livestock"
                                     id="livestock_0"
                                     value="ไม่ได้ทำปศุสัตว์"
-                                    checked={formData.Agriculturalincome[0].livestock.includes("ไม่ได้ทำปศุสัตว์")}
+                                    checked={formData.Agriculturalincome.livestock.includes("ไม่ได้ทำปศุสัตว์")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "livestock", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -932,7 +898,7 @@ function Financialcapital() {
                                     name="livestock"
                                     id="livestock_1"
                                     value="เลี้ยงสัตว์บก (เช่น โค/กระบือ)"
-                                    checked={formData.Agriculturalincome[0].livestock.includes("เลี้ยงสัตว์บก (เช่น โค/กระบือ)")}
+                                    checked={formData.Agriculturalincome.livestock.includes("เลี้ยงสัตว์บก (เช่น โค/กระบือ)")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "livestock", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -946,7 +912,7 @@ function Financialcapital() {
                                     name="livestock"
                                     id="livestock_2"
                                     value="หมู/ไก่/เป็ด/อื่นๆ"
-                                    checked={formData.Agriculturalincome[0].livestock.includes("หมู/ไก่/เป็ด/อื่นๆ")}
+                                    checked={formData.Agriculturalincome.livestock.includes("หมู/ไก่/เป็ด/อื่นๆ")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "livestock", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -960,7 +926,7 @@ function Financialcapital() {
                                     name="livestock"
                                     id="livestock_3"
                                     value="ทำฟาร์มสัตว์น้ำ เช่น ปลา/กุ้ง"
-                                    checked={formData.Agriculturalincome[0].livestock.includes("ทำฟาร์มสัตว์น้ำ เช่น ปลา/กุ้ง")}
+                                    checked={formData.Agriculturalincome.livestock.includes("ทำฟาร์มสัตว์น้ำ เช่น ปลา/กุ้ง")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "livestock", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -973,7 +939,7 @@ function Financialcapital() {
                                     className="mr-2 rounded"
                                     name="livestock"
                                     id="livestock_4"
-                                    checked={formData.Agriculturalincome[0].livestock.some((livestock) =>
+                                    checked={formData.Agriculturalincome.livestock.some((livestock) =>
                                         livestock.startsWith(Prefixlivestock)
                                     )}
                                     onChange={handleOtherLivestock(Prefixlivestock)}
@@ -983,7 +949,7 @@ function Financialcapital() {
                                     4) อื่นๆ (กบ/ปู/ปลิง/ผึ้ง)
                                 </label>
                                 {
-                                    formData.Agriculturalincome[0].livestock.some((livestock) =>
+                                    formData.Agriculturalincome.livestock.some((livestock) =>
                                         livestock.startsWith(Prefixlivestock)
                                     ) && (
                                         <input
@@ -991,7 +957,7 @@ function Financialcapital() {
                                             placeholder="ระบุ..."
                                             className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                                             value={
-                                                formData.Agriculturalincome[0].livestock
+                                                formData.Agriculturalincome.livestock
                                                     .find((livestock) => livestock.startsWith(Prefixlivestock))
                                                     ?.slice(Prefixlivestock.length + 1) || "" // +1 เพื่อลบช่องว่างที่เพิ่มไว้
                                             }
@@ -1001,7 +967,6 @@ function Financialcapital() {
                                 }
                             </div>
                         </div>
-
                     </div>
 
                     {/* Section 1.3: ปศุสัตว์ */}
@@ -1015,7 +980,7 @@ function Financialcapital() {
                                     id="fishing_0"
                                     className="mr-2 rounded"
                                     value="ไม่ได้ทำประมงค์"
-                                    checked={formData.Agriculturalincome[0].fishing.includes("ไม่ได้ทำประมงค์")}
+                                    checked={formData.Agriculturalincome.fishing.includes("ไม่ได้ทำประมงค์")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "fishing", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -1029,7 +994,7 @@ function Financialcapital() {
                                     id="fishing_1"
                                     className="mr-2 rounded"
                                     value="ประมงน้ำเค็ม"
-                                    checked={formData.Agriculturalincome[0].fishing.includes("ประมงน้ำเค็ม")}
+                                    checked={formData.Agriculturalincome.fishing.includes("ประมงน้ำเค็ม")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "fishing", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -1043,7 +1008,7 @@ function Financialcapital() {
                                     id="fishing_2"
                                     className="mr-2 rounded"
                                     value="ประมงน้ำจืด"
-                                    checked={formData.Agriculturalincome[0].fishing.includes("ประมงน้ำจืด")}
+                                    checked={formData.Agriculturalincome.fishing.includes("ประมงน้ำจืด")}
                                     onChange={(e) => handleCheckboxChange("Agriculturalincome", "fishing", e.target.value, e.target.checked)}
                                 />
                                 <label htmlFor="" className="font text-gray-700">
@@ -2487,11 +2452,7 @@ function Financialcapital() {
                                         id="is_has_property_0"
                                         name="is_has_property"
                                         value={false}
-                                        checked={
-                                            formData.Occupationalproperty.every(
-                                                (item) => item.is_has_property === false
-                                            )
-                                        }
+                                        checked={formData.Occupationalproperty.is_has_property === false}
                                         onChange={handleRadioChange}
                                     />
                                     <span className="font text-gray-700 mr-2">1) ไม่มี</span>
@@ -2506,17 +2467,13 @@ function Financialcapital() {
                                         id="is_has_property_1"
                                         name="is_has_property"
                                         value={true}
-                                        checked={
-                                            formData.Occupationalproperty.some(
-                                                (item) => item.is_has_property === true
-                                            )
-                                        }
+                                        checked={formData.Occupationalproperty.is_has_property === true}
                                         onChange={handleRadioChange}
                                     />
                                     <span className="font text-gray-700 mr-2">2) มี และได้ใช้เพื่อประกอบอาชีพ (ตอบได้มากกว่า 1 ข้อ)</span>
                                 </label>
                                 {
-                                    formData.Occupationalproperty[0]?.is_has_property && (
+                                    formData.Occupationalproperty.is_has_property === true && (
                                         <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
                                             <ul className="space-y-3">
                                                 <li>
@@ -2527,7 +2484,7 @@ function Financialcapital() {
                                                             id="property_type_0"
                                                             name="property_type"
                                                             value="เครื่องจักรกล เช่น รถไถนาขนาดเล็ก เครื่องตัดหญ้า ฯลฯ"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("เครื่องจักรกล เช่น รถไถนาขนาดเล็ก เครื่องตัดหญ้า ฯลฯ")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("เครื่องจักรกล เช่น รถไถนาขนาดเล็ก เครื่องตัดหญ้า ฯลฯ")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2"> 1) เครื่องจักรกล เช่น รถไถนาขนาดเล็ก เครื่องตัดหญ้า ฯลฯ</span>
@@ -2541,7 +2498,7 @@ function Financialcapital() {
                                                             id="property_type_1"
                                                             name="property_type"
                                                             value="รถมอเตอร์ไซค์ (รับจ้าง/ส่งของ)"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("รถมอเตอร์ไซค์ (รับจ้าง/ส่งของ)")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("รถมอเตอร์ไซค์ (รับจ้าง/ส่งของ)")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2"> 2) รถมอเตอร์ไซค์ (รับจ้าง/ส่งของ)</span>
@@ -2555,7 +2512,7 @@ function Financialcapital() {
                                                             className="form-checkbox text-blue-600 mr-2 rounded"
                                                             name="property_type"
                                                             value="รถแท็กซี่"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("รถแท็กซี่")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("รถแท็กซี่")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2"> 3) รถแท็กซี่</span>
@@ -2569,7 +2526,7 @@ function Financialcapital() {
                                                             className="form-checkbox text-blue-600 mr-2 rounded"
                                                             name="property_type"
                                                             value="รถยนต์ (รับจ้าง/ค้าขาย)"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("รถยนต์ (รับจ้าง/ค้าขาย)")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("รถยนต์ (รับจ้าง/ค้าขาย)")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2"> 4) รถยนต์ (รับจ้าง/ค้าขาย)</span>
@@ -2583,7 +2540,7 @@ function Financialcapital() {
                                                             name="property_type"
                                                             id="property_type_4"
                                                             value="เรือประมง เรือติดเครื่องยนตร์"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("เรือประมง เรือติดเครื่องยนตร์")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("เรือประมง เรือติดเครื่องยนตร์")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2"> 5) เรือประมง เรือติดเครื่องยนตร์</span>
@@ -2597,7 +2554,7 @@ function Financialcapital() {
                                                             id="property_type_5"
                                                             name="property_type"
                                                             value="แผงขายของ"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("แผงขายของ")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("แผงขายของ")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2"> 6) แผงขายของ</span>
@@ -2611,7 +2568,7 @@ function Financialcapital() {
                                                             name="property_type"
                                                             id="property_type_6"
                                                             value="รถโชเล่ย์ (รถพ่วงข้าง)"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("รถโชเล่ย์ (รถพ่วงข้าง)")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("รถโชเล่ย์ (รถพ่วงข้าง)")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2"> 7) รถโชเล่ย์ (รถพ่วงข้าง)</span>
@@ -2625,7 +2582,7 @@ function Financialcapital() {
                                                             name="property_type"
                                                             id="property_type_7"
                                                             value="ยุ้งฉาง"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("ยุ้งฉาง")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("ยุ้งฉาง")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2"> 8) ยุ้งฉาง</span>
@@ -2639,7 +2596,7 @@ function Financialcapital() {
                                                             name="property_type"
                                                             id="property_type_8"
                                                             value="หุ้น/กองทุน"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("หุ้น/กองทุน")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("หุ้น/กองทุน")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2">9) หุ้น/กองทุน</span>
@@ -2653,7 +2610,7 @@ function Financialcapital() {
                                                             name="property_type"
                                                             id="property_type_9"
                                                             value="แชร์ (ที่ยังไม่ได้เปีย)"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("แชร์ (ที่ยังไม่ได้เปีย)")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("แชร์ (ที่ยังไม่ได้เปีย)")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2">10) แชร์ (ที่ยังไม่ได้เปีย)</span>
@@ -2667,7 +2624,7 @@ function Financialcapital() {
                                                             name="property_type"
                                                             id="property_type_10"
                                                             value="สัตว์เลี้ยง (ที่มีมูลค่า)"
-                                                            checked={formData.Occupationalproperty[0].property_type.includes("สัตว์เลี้ยง (ที่มีมูลค่า)")}
+                                                            checked={formData.Occupationalproperty.property_type.includes("สัตว์เลี้ยง (ที่มีมูลค่า)")}
                                                             onChange={(e) => handleCheckboxChange("Occupationalproperty", "property_type", e.target.value, e.target.checked)}
                                                         />
                                                         <span className="ml-2">11) สัตว์เลี้ยง (ที่มีมูลค่า)</span>
@@ -2681,17 +2638,16 @@ function Financialcapital() {
                                                             name="property_type"
                                                             id="property_type_7"
                                                             value={prefix}
-                                                            checked={formData.Occupationalproperty[0].property_type.some((property_type) =>
+                                                            checked={formData.Occupationalproperty.property_type.some((property_type) =>
                                                                 property_type.startsWith(prefix)
                                                             )}
                                                             onChange={handleOtherProperty(prefix)}
                                                         />
                                                         <span className="ml-2">อื่น ๆ</span>
                                                     </label>
-                                                    {
-                                                        formData.Occupationalproperty[0].property_type.some((property_type) =>
-                                                            property_type.startsWith(prefix)
-                                                        ) && (
+                                                    {formData.Occupationalproperty.property_type.some((property_type) =>
+                                                        property_type.startsWith(prefix)
+                                                    ) && (
                                                             <span className="ml-2 inline-flex items-center">
                                                                 <input
                                                                     type="text"
@@ -2700,7 +2656,7 @@ function Financialcapital() {
                                                                     className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                                                                     style={{ minWidth: "200px" }}
                                                                     value={
-                                                                        formData.Occupationalproperty[0].property_type
+                                                                        formData.Occupationalproperty.property_type
                                                                             .find((property_type) => property_type.startsWith(prefix))
                                                                             ?.slice(prefix.length + 1) || "" // +1 เพื่อลบช่องว่างที่เพิ่มไว้
                                                                     }
