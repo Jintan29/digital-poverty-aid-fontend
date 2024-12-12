@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 //จัดการวันที่
-import DatePicker, { registerLocale } from "react-datepicker";
+import DatePicker from 'react-datepicker';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import "react-datepicker/dist/react-datepicker.css";
-import th from "date-fns/locale/th"; // นำเข้า locale ภาษาไทย
+import Swal from "sweetalert2";
 import { Icon } from "@iconify/react";
-import ThaiDatePicker from "./ThaiDatePicker";
-import { Field } from "@headlessui/react";
+import axios from "axios";
 
-// ลงทะเบียน locale ภาษาไทย
-registerLocale("th", th);
+
+
+//ใช้งาน dayjs
+dayjs.extend(utc);
 
 export const FristPage = ({
   setCurrentPage,
@@ -17,6 +20,13 @@ export const FristPage = ({
 }) => {
   //เก็บข้อมูลจาก input
   const [formData, setFormData] = useState({
+
+    recder_title: '',
+    recder_fname: '',
+    recder_lname: '',
+    recder_phone: '',
+    time_rec: null,
+
     Household: {
       house_code: "",
       has_greenBook: false,
@@ -32,8 +42,8 @@ export const FristPage = ({
       host_title: "นาย", // ค่า default เป็น นาย
       host_fname: "",
       host_lname: "",
-      host_national_id: "",
-      total_house_member: 0, //ค่อยมาเปลี่ยนค่าทีหลัง
+      host_national_id: ""
+      // total_house_member: 0, //ค่อยมาเปลี่ยนค่าทีหลัง
     },
     //ตารางผู้ให้ข้อมูล
     Informant: {
@@ -55,14 +65,13 @@ export const FristPage = ({
         agency: "",
         phone: "",
       },
-    ],
-    DataRecorder: {
-      recder_title :"นาย",
-      recder_fname:'',
-      recder_lname:'',
-      recder_phone:''
-    },
+    ]
   });
+
+  const handleLog = ()=>{
+    console.log(formData);
+    
+  }
 
   //เก็บอำเภอและตำบล
   const districtSubdistrictMap = {
@@ -152,6 +161,23 @@ export const FristPage = ({
     setFormData(updateData);
   };
 
+  const handleRecderInput = (field,value)=>{
+    const updateData = {...formData}
+    updateData[field] = value
+    setFormData(updateData)
+  }
+
+  // ฟังก์ชันสำหรับจัดการการเปลี่ยนแปลงวันที่
+  const handleDateChange = (date) => {
+    //format เวลาให้เป็น utc
+    const formatDate =  dayjs(date).utc().format()
+
+    setFormData((prevData) => ({
+      ...prevData,
+      time_rec: formatDate, 
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setMainFormData((prevData) => ({
@@ -222,6 +248,17 @@ export const FristPage = ({
 
     }
   }, [formData.Household.district]);
+
+  //ยิงAPI
+  const handleSubmitForm = (e)=>{
+    e.preventDefault();
+    setMainFormData((prevData) => ({
+      ...prevData,
+      ...formData, //นำไปต่อท้ายค่าใน State เก่า
+    }));
+  }
+
+
 
   return (
     <div>
@@ -973,13 +1010,12 @@ export const FristPage = ({
                   id="recder_title"
                   name="DataRecorder"
                   onChange={(e) =>
-                    handleInputChange(
-                      e.target.name,
+                    handleRecderInput(
                       e.target.id,
                       e.target.value
                     )
                   }
-                  value={formData.DataRecorder.recder_title}
+                  value={formData.recder_title}
                   className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
                 >
                   <option>นาย</option>
@@ -990,13 +1026,13 @@ export const FristPage = ({
               <input
                 id="recder_fname"
                 onChange={(e) =>
-                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                  handleRecderInput( e.target.id, e.target.value)
                 }
                 name="DataRecorder"
                 type="text"
                 required
                 placeholder=""
-                value={formData.DataRecorder.recder_fname}
+                value={formData.recder_fname}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -1014,12 +1050,11 @@ export const FristPage = ({
                 id="recder_lname"
                 name="DataRecorder"
                 onChange={(e) =>
-                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                  handleRecderInput( e.target.id, e.target.value)
                 }
-                
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                value={formData.DataRecorder.recder_lname}
+                value={formData.recder_lname}
               />
             </div>
 
@@ -1037,9 +1072,9 @@ export const FristPage = ({
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 onChange={(e) =>
-                  handleInputChange(e.target.name, e.target.id, e.target.value)
+                  handleRecderInput( e.target.id, e.target.value)
                 }
-                value={formData.DataRecorder.recder_phone}
+                value={formData.recder_phone}
                 required
               />
             </div>
@@ -1054,6 +1089,8 @@ export const FristPage = ({
               <DatePicker
                 locale="th"
                 dateFormat="dd/MM/yyyy"
+                selected={formData.time_rec ? new Date(formData.time_rec) : null}
+                onChange={handleDateChange}
                 className="mt-1 block w-full p-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholderText="เลือกวันที่"
               />
@@ -1099,13 +1136,9 @@ export const FristPage = ({
                 height="25"
               />
             </button>
+
           </div>
-          {/* 
-          <button
-          onClick={e=>handleSubmit(e)}
-          >
-            ส่งข้อมูลไป main
-          </button> */}
+        
         </form>
       </div>
     </div>
