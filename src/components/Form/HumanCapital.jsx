@@ -40,6 +40,13 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
     },
   ]);
 
+  const prefix = 'อื่นๆ '
+
+  const handleLog = ()=>{
+    console.log(members);
+    
+  }
+
   //load data from main
   useEffect(()=>{
     if(mainFormData.MemberHousehold ){ //ดูว่าหน้หลักมีข้อมูลหรือยัง
@@ -159,36 +166,85 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedCareerMadeIncome, setSelectedCareerMadeIncome] = useState([]);
 
-  // ฟังก์ชันจัดการการเลือกอาชีพด้วย checkbox สำหรับกลุ่มอาชีพ (รับ index มาด้วยว่าแก้ใครของใครอยู่ !)
+ 
   const handleCareerChange = (index, value, checked) => {
-    const updatedMembers = [...members]; //colne ค่า
-
-    if (checked) {
-      updatedMembers[index].career = [...updatedMembers[index].career, value];
-    } else {
-      //ลูปกรองข้อมูลออก
+    const updatedMembers = [...members]; // Clone ค่าเดิม
+  
+    //กรอง prefix ก่อน
+    if (value === prefix && !checked) {
       updatedMembers[index].career = updatedMembers[index].career.filter(
-        (career) => career !== value
+        (career) => !career.startsWith(prefix)
       );
+    } else {
+      if (checked) {
+        
+        updatedMembers[index].career = [...updatedMembers[index].career, value];
+      } else {
+        
+        updatedMembers[index].career = updatedMembers[index].career.filter(
+          (career) => career !== value
+        );
+      }
     }
-    //update ค่า
+  
     setMembers(updatedMembers);
   };
+  
+
+  //รอแก้
+  const handleOtherChange = (index, field, value) => {
+    setMembers((prevMembers) => {
+      const updatedMembers = [...prevMembers];
+      const member = { ...updatedMembers[index] };
+      const fieldArray = [...member[field]];
+  
+      const otherIndex = fieldArray.findIndex((item) => item.startsWith(prefix));
+  
+      if (value.trim() === "") {
+        // หากผู้ใช้ลบค่าใน input ให้ลบรายการ "อื่นๆ " ออก
+        if (otherIndex !== -1) {
+          fieldArray.splice(otherIndex, 1);
+        }
+      } else {
+        if (otherIndex !== -1) {
+          // อัปเดตรายการ "อื่นๆ " ที่มีอยู่แล้ว
+          fieldArray[otherIndex] = prefix + value;
+        } else {
+          // เพิ่มรายการ "อื่นๆ " ใหม่
+          fieldArray.push(prefix + value);
+        }
+      }
+  
+      member[field] = fieldArray;
+      updatedMembers[index] = member;
+      return updatedMembers;
+    });
+  };
+  
 
   //อาชีพที่สร้างรายได้
   const handleCareerMadeIncomeChange = (index, value, checked) => {
     const updatedMembers = [...members];
-    if (checked) {
-      updatedMembers[index].work_can_made_income = [
-        ...updatedMembers[index].work_can_made_income,
-        value,
-      ];
-    } else {
-      updatedMembers[index].work_can_made_income = updatedMembers[
-        index
-      ].work_can_made_income.filter((incomeCareer) => incomeCareer !== value);
+
+    if(value === prefix && !checked){
+      updatedMembers[index].work_can_made_income = updatedMembers[index].work_can_made_income.filter(
+        (e)=> !e.startsWith(prefix)
+      )
+    }else{
+      if (checked) {
+        updatedMembers[index].work_can_made_income = [
+          ...updatedMembers[index].work_can_made_income,
+          value,
+        ];
+      } else {
+        updatedMembers[index].work_can_made_income = updatedMembers[
+          index
+        ].work_can_made_income.filter((incomeCareer) => incomeCareer !== value);
+      }
+      
     }
     setMembers(updatedMembers);
+    
   };
 
   // Social welfare
@@ -978,8 +1034,9 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               <input
                 id={`career-9-${index}`}
                 type="checkbox"
+                checked={member.career.some((e)=>e.startsWith(prefix))}
                 onChange={(e) =>
-                  handleCareerChange(index, "อื่นๆ", e.target.checked)
+                  handleCareerChange(index, prefix, e.target.checked)
                 }
                 value="อื่นๆ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -992,16 +1049,18 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            {/* ส่วน Input ปกติเดี๋ยวกลับมาทำ */}
 
-            {member.career.includes("อื่นๆ") && (
+            {member.career.some((e)=>e.startsWith(prefix)) && (
                 <div className="">
                   <input
                     type="text"
                     id={`career-other-${index}`}
-                    value={member.careerOther || ""}
+                    value={
+                      member.career.find((item) => item.startsWith(prefix))?.substring(prefix.length) ||
+                      ""
+                    }
                     onChange={(e) =>
-                      handleInputChange(index, "careerOther", e.target.value)
+                      handleOtherChange(index, "career", e.target.value)
                     }
                     className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="ระบุอาชีพอื่นๆ"
@@ -1244,9 +1303,9 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 id={`income-career-${index}`}
                 type="checkbox"
                 onChange={(e) =>
-                  handleCareerMadeIncomeChange(index, "อื่นๆ", e.target.checked)
+                  handleCareerMadeIncomeChange(index, prefix, e.target.checked)
                 }
-                checked={member.work_can_made_income.includes('อื่นๆ')}
+                checked={member.work_can_made_income.some((e)=>e.startsWith(prefix))}
                 value="อื่นๆ"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -1257,15 +1316,24 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 อื่นๆ
               </label>
             </div>
-
+            
+            {member.work_can_made_income.some((e)=>e.startsWith(prefix)) && 
             <div className="">
               <input
                 type="text"
                 id="first_name"
+                value={
+                  member.work_can_made_income.find((item) => item.startsWith(prefix))?.substring(prefix.length) ||
+                  ""
+                }
+                onChange={(e) =>
+                  handleOtherChange(index, "work_can_made_income", e.target.value)
+                }
                 class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุอาชีพ"
               />
             </div>
+            }
           </div>
 
           <div className="mx-6 py-2">
@@ -1329,21 +1397,20 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
             width="25"
             height="25"
           />
-          หน้าก่อนหน้า
+          ย้อนกลับ
         </button>
 
         <button 
-        
         type="submit"
-        // onClick={() => setSubmitAction("next")}
         className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-10">
-          ส่งข้อมูลไปMain
+          หน้าถัดไป
           <Icon
             icon="material-symbols:arrow-right-rounded"
             width="25"
             height="25"
           />
         </button>
+
       </div>
       </form>
     </div>

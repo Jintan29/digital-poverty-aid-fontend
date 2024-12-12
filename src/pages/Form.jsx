@@ -45,7 +45,7 @@ export const Form = () => {
                 title:'บันทึกข้อมูล',
                 text:'บันทึกข้อมูลสำเร็จ',
                 icon:'success',
-                timer:1500
+                showConfirmButton:true
               })
             }
           }).catch(err=>{
@@ -95,24 +95,27 @@ export const Form = () => {
           {currentPage === 1 && <FristPage setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
           {currentPage === 2 && <HumanCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
           {currentPage === 3 && <PhysicalCapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
-          {/* กลับมาแก้เป็นเลข5ด้วย */}
-          {/* {currentPage === 4 && <Naturalcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
-          {currentPage === 5 && <Socialcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/> }
+          {currentPage === 4 && <Financialcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {currentPage === 5 && <Naturalcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {currentPage === 6 && <Naturalcapital2 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {currentPage === 7 && <Socialcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {currentPage === 8 && <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {currentPage === 9 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+
+          {/* <HumanCapital/> */}
+
+          {/* {currentPage === 5 && <Socialcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/> }
+
           {currentPage === 6 && <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
           {currentPage === 7 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
           {currentPage === 8 && <Test1 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
         </div>
 
-        {/* เสร็จ */}
-        {/* <Naturalcapital/> */}
-        {/* <FristPage setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/> */}
+        {/* {currentPage === 1 && <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+        {currentPage === 2 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
         
 
-
-        {/* รอแก้ */}
-        {/* <Naturalcapital2/> */}
-        {/* <Financialcapital/> */}
-
+        
         
       </div>
 

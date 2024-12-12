@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "@iconify/react";
 
 function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
   const [formData, setFormData] = useState({
@@ -297,7 +298,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
       Socialcapital: formData,
     }));
 
-    setCurrentPage(6);
+    setCurrentPage(8);
   };
 
   //ย้อนกลับ
@@ -306,7 +307,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
       ...prevData,
       Socialcapital: formData,
     }));
-    setCurrentPage(4);
+    setCurrentPage(6);
   };
 
   return (
@@ -1195,30 +1196,38 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
           </table>
         </div>
 
-        <button
-          type="button"
-          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
-          onClick={handleShowData}
-        >
-          submit
-        </button>
+        
+      </div>
 
+      <div className="flex justify-end mt-4">
+      
         <button
           type="button"
-          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
-          onClick={(e) => handleSubmit(e)}
-        >
-          ส่งข้อมูลไป Main
-        </button>
-
-        <button
-          type="button"
-          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+          className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-3"
           onClick={(e) => handlePrevPage()}
         >
+          <Icon
+                  icon="material-symbols:arrow-left-rounded"
+                  width="25"
+                  height="25"
+                />
           ย้อนกลับ
         </button>
+
+        <button
+          type="button"
+          className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
+          onClick={(e) => handleSubmit(e)}
+        >
+          หน้าถัดไป
+          <Icon
+                  icon="material-symbols:arrow-right-rounded"
+                  width="25"
+                  height="25"
+                />
+        </button>
       </div>
+
     </div>
   );
 }

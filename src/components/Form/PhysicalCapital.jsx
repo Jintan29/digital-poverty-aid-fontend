@@ -112,7 +112,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
       PhysicalCapital: formData,
     }));
 
-    // setCurrentPage(4);
+    setCurrentPage(4);
   };
 
   const handlePrevPage = () => {
@@ -1939,7 +1939,6 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     }
                     onChange={(e) => {
                       handleInputChange("house_access_road", e.target.value);
-                      setIsOtherAccessRoad(false);
                     }}
                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                   />
@@ -1959,7 +1958,6 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     }
                     onChange={(e) => {
                       handleInputChange("house_access_road", e.target.value);
-                      setIsOtherAccessRoad(false);
                     }}
                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                   />
@@ -1978,7 +1976,6 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     }
                     onChange={(e) => {
                       handleInputChange("house_access_road", e.target.value);
-                      setIsOtherAccessRoad(false);
                     }}
                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                   />
@@ -1994,7 +1991,6 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     placeholder="มีการเดินทางรูปแบบอื่น (ระบุ)"
                     checked={formData.house_access_road.startsWith(prefix12)}
                     onChange={() => {
-                      setIsOtherAccessRoad(true);
                       handleInputChange("house_access_road", prefix12);
                     }}
                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
@@ -2097,8 +2093,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       prefix12
                     )}
                     onChange={(e) => {
-                      setIsOtherAccessRoad2(true);
-                      handleInputChange(e.target.name, e.target.value);
+                      handleInputChange(e.target.name, prefix12);
                     }}
                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                   />
@@ -2489,7 +2484,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   width="25"
                   height="25"
                 />
-                หน้าก่อนหน้า
+                ย้อนกลับ
               </button>
 
               <button
@@ -2497,19 +2492,6 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
               >
                 หน้าถัดไป
-                <Icon
-                  icon="material-symbols:arrow-right-rounded"
-                  width="25"
-                  height="25"
-                />
-              </button>
-
-              <button
-                type="button"
-                onClick={e=>handleLogdata()}
-                className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
-              >
-                LogData
                 <Icon
                   icon="material-symbols:arrow-right-rounded"
                   width="25"
