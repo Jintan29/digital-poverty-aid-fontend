@@ -21,7 +21,7 @@ export const FristPage = ({
   //เก็บข้อมูลจาก input
   const [formData, setFormData] = useState({
 
-    recder_title: '',
+    recder_title: 'นาย',
     recder_fname: '',
     recder_lname: '',
     recder_phone: '',
