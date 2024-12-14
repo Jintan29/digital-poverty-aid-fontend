@@ -28,35 +28,31 @@ export const Form = () => {
   }, [mainFormData]);
 
   //submit form
-  const handleSubmitMain = (data)=>{
+  const handleSubmitMain = async(data)=>{
     try{
-      Swal.fire({
-        title:'บันทึกข้อมูล',
-        text:'ทำการตรวสอบข้อมูลเสร็จเรียบร้อยแล้วใช่หรือไม่',
-        icon:'question',
-        showCancelButton:true,
-        showConfirmButton:true
-      }).then (async res=>{
-        if(res.isConfirmed){
-          await axios.post(import.meta.env.VITE_API_PATH+'/formInsertAll/create',data)
-          .then(res=>{
-            if(res.data.message==='success'){
-              Swal.fire({
-                title:'บันทึกข้อมูล',
-                text:'บันทึกข้อมูลสำเร็จ',
-                icon:'success',
-                showConfirmButton:true
-              })
-            }
-          }).catch(err=>{
-            throw err.response.data
-          })
+      const resConfirm = await Swal.fire({
+        title: 'บันทึกข้อมูล',
+        text: 'ทำการตรวสอบข้อมูลเสร็จเรียบร้อยแล้วใช่หรือไม่',
+        icon: 'question',
+        showCancelButton: true,
+        showConfirmButton: true
+      });
+  
+      if (resConfirm.isConfirmed) {
+        const res = await axios.post(import.meta.env.VITE_API_PATH + '/formInsertAll/create', data);
+        if (res.data.message === 'success') {
+          await Swal.fire({
+            title: 'บันทึกข้อมูล',
+            text: 'บันทึกข้อมูลสำเร็จ',
+            icon: 'success',
+            showConfirmButton: true
+          });
         }
-      })
+      }
     }catch(e){
       Swal.fire({
         title:'error',
-        text:e.message,
+        text:e.response && e.response.data ? e.response.data.message : e.message,
         icon:'error'
       })
     }
