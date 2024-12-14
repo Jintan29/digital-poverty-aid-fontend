@@ -28,7 +28,7 @@ export const Form = () => {
   }, [mainFormData]);
 
   //submit form
-  const handleSubmit = ()=>{
+  const handleSubmitMain = (data)=>{
     try{
       Swal.fire({
         title:'บันทึกข้อมูล',
@@ -38,7 +38,7 @@ export const Form = () => {
         showConfirmButton:true
       }).then (async res=>{
         if(res.isConfirmed){
-          await axios.post(import.meta.env.VITE_API_PATH+'/formInsertAll/create',mainFormData)
+          await axios.post(import.meta.env.VITE_API_PATH+'/formInsertAll/create',data)
           .then(res=>{
             if(res.data.message==='success'){
               Swal.fire({
@@ -78,18 +78,6 @@ export const Form = () => {
           </div>
           
         </div>
-        <button
-              type="button"
-              onClick={e=>handleSubmit()}
-              class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-              ทดสอบยิงAPI
-              <Icon
-                icon="material-symbols:order-approve-outline-rounded"
-                width="25"
-                height="25"
-              />
-            </button>
 
         <div className="">
           {currentPage === 1 && <FristPage setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} />}
@@ -100,7 +88,7 @@ export const Form = () => {
           {currentPage === 6 && <Naturalcapital2 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
           {currentPage === 7 && <Socialcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
           {currentPage === 8 && <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
-          {currentPage === 9 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
+          {currentPage === 9 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} handleSubmitMain={handleSubmitMain} />}
 
           {/* <HumanCapital/> */}
 
