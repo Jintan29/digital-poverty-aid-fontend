@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
-const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData }) => {
+const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData,handleSubmitMain }) => {
   const [formData, setFormData] = useState({
     suggest_informer: "",
     suggest_surway_team: "",
@@ -16,13 +16,18 @@ const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData }) => {
   }, [mainFormData]);
 
   //Nextpage
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    setMainFormData((prevData) => ({
-      ...prevData,
-      Suggestion: formData,
-    }));
-    // setCurrentPage(8);
+
+    //สร้างตัวแปรมาเก็บค่าเพื่อสร้างข้อมูลแยกไม่ต้องรอ mainData
+    const updateData = {
+      ...mainFormData,
+      Suggestion:formData
+    }
+
+    setMainFormData(updateData);
+    //send API
+    await handleSubmitMain(updateData)
   };
 
   const handlePrevPage = () => {
