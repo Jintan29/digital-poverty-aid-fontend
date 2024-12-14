@@ -2,6 +2,7 @@ import { Field } from "@headlessui/react";
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
@@ -56,43 +57,6 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const createMembers = async () => {
-    setIsProcessing(true);
-    try {
-      console.log("ข้อมูลทั้งหมดที่ส่ง:", members);
-
-      // ส่งคำขอสำหรับสมาชิกแต่ละคน
-      const requests = members.map((member) => {
-        // เพิ่ม form_id ในข้อมูลที่ส่ง
-        const memberData = {
-          ...member,
-          form_id: 1, // ปรับตามค่าที่เหมาะสม
-        };
-        return axios
-          .post(
-            "http://localhost:8080/api/member-household/create-capital",
-            memberData
-          )
-          .then((response) => {
-            console.log("Response from server:", response.data);
-            return response.data;
-          })
-          .catch((error) => {
-            throw error;
-          });
-      });
-
-      // รอให้คำขอทั้งหมดเสร็จสิ้น
-      await Promise.all(requests);
-
-      alert("ส่งข้อมูลสำเร็จ!");
-    } catch (error) {
-      console.error("เกิดข้อผิดพลาดในการสร้าง สมาชิกครัวเรือน:", error);
-      alert("เกิดข้อผิดพลาดในการสร้าง สมาชิกครัวเรือน");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   //ฟังก์ชันเพิ่มสมาชิกใหม่
   const addMember = () => {
@@ -262,9 +226,36 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
   useEffect(() => {}, [selectedCareer, selectedCareerMadeIncome, members]); // ฟังทุกครั้งที่ selectedCareer เปลี่ยนแปลง
 
 
-  //func ส่งข้อมูลและเปลี่ยนหน้า
+  const validateInput = () => {
+    const errors = [];
+    for (let index = 0; index < members.length; index++) {
+      const member = members[index];
+
+      // ตรวจสอบหมายเลขบัตรประชาชน
+      if (!member.national_id || member.national_id.length !== 13) {
+        errors.push(`กรุณากรอกเลขบัตรประชาชนของสมาชิคคนที่ ${index + 1} ให้ครบ 13 หลัก`);
+      }
+    }
+
+    if (errors.length > 0) {
+      Swal.fire({
+        title: 'มีข้อผิดพลาดในการกรอกข้อมูล',
+        html: errors.join('<br/>'),
+        icon: 'error',
+      });
+      return false;
+    }
+
+    return true;
+  }
+
+
   const handleSubmit = (e)=>{
     if (e) e.preventDefault();
+    //กรองก่อนเปลี่ยนหน้า
+    if(!validateInput()){
+      return;
+    }
 
     setMainFormData((prevData)=>({ //นำค่าใหม่ไปต่อท้าย
       ...prevData,

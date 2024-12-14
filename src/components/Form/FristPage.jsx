@@ -178,8 +178,70 @@ export const FristPage = ({
     }));
   };
 
+  const validateInput = ()=>{
+    //เลขบัตรประชาชนเจ้าบ้าน
+    if(formData.Household.host_national_id.length !== 13 ){
+      Swal.fire({
+        title:'หมายเลขบัตรประชาชนไม่ถูกต้อง',
+        text:'กรุณากรอกเลขบัตรของ "เจ้าบ้าน" ให้ครบ 13 หลัก',
+        icon:'error'
+      })
+      return false
+    }
+
+    if(formData.Informant.national_id.length !== 13 ){
+      Swal.fire({
+        title:'หมายเลขบัตรประชาชนไม่ถูกต้อง',
+        text:'กรุณากรอกเลขบัตรของ "ผู้ให้ข้อมูล" ให้ครบ 13 หลัก',
+        icon:'error',
+      })
+      return false
+    }
+
+    if(formData.Informant.phone.length !== 10 ){
+      Swal.fire({
+        title:'เบอร์โทรศัพท์ไม่ถูกต้อง',
+        text:'กรุณากรอกเบอร์โทรศัพท์ "ผู้ให้ข้อมูล" ให้ถูกต้อง',
+        icon:'error',
+      })
+      return false
+    }
+
+    //loop check team servey
+    for(let i=0 ; i< formData.TeamServey.length;i++){
+      const teamMember = formData.TeamServey[i]
+
+      if(teamMember.phone.length !== 10){
+        Swal.fire({
+          title:'เบอร์โทรศัพท์ไม่ถูกต้อง',
+          text:`กรุณากรอกเบอร์โทรศัพท์ของทีมสำรวจคนที่ ${i+1} ให้ถูกต้อง`,
+          icon:'error'
+        })
+        return false
+      }
+    }
+
+    if(formData.recder_phone.length !== 10){
+      Swal.fire({
+        title:'เบอร์โทรศัพท์ไม่ถูกต้อง',
+        text:'กรุณากรอกเบอร์โทรศัพท์ "ผู้บันทึกข้อมูล" ให้ถูกต้อง',
+        icon:'error',
+      })
+      return false
+    }
+
+
+    //หากผ่านหมดให้ return true
+    return true
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    //validate ไม่ผ่านไม่เปลี่ยนหน้า
+    if(!validateInput()){
+      return;
+    }
+
     setMainFormData((prevData) => ({
       ...prevData,
       ...formData, //นำไปต่อท้ายค่าใน State เก่า
