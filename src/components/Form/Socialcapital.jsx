@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
+import Swal from "sweetalert2";
 
 function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
   const [formData, setFormData] = useState({
@@ -239,11 +240,12 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     setFormData((prevState) => {
       const updatedActivitytype = [...prevState.Activitytype];
       const groupIndex = updatedActivitytype.findIndex(
-        (group) => group?.activity === groupValue // ใช้ optional chaining (?.) เพื่อหลีกเลี่ยง undefined error
+        (group) => group?.activity.startsWith(groupValue) // Match by prefix
       );
 
       if (checked) {
         if (groupIndex === -1) {
+          // Add new entry
           updatedActivitytype.push({
             activity: groupValue,
             frequncy: "",
@@ -252,6 +254,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
         }
       } else {
         if (groupIndex !== -1) {
+          // Remove matching entry
           updatedActivitytype.splice(groupIndex, 1);
         }
       }
@@ -259,6 +262,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
       return { ...prevState, Activitytype: updatedActivitytype };
     });
   };
+
 
   const handleFrequncyCgange = (groupValue, field, value) => {
     setFormData((prevState) => {
@@ -284,15 +288,130 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
   };
 
   //load data
-  useEffect(()=>{
-    if(mainFormData.Socialcapital){
+  useEffect(() => {
+    if (mainFormData.Socialcapital) {
       setFormData(mainFormData.Socialcapital);
     }
-  },[mainFormData])
+  }, [mainFormData])
+
+
+  const validateGrouptype = (formData) => {
+    const { Activitygrouptype } = formData;
+
+    // Check for incomplete entries
+    const incompleteGroups = Activitygrouptype.filter(
+      (group) =>
+        group.activity_group &&
+        (group.is_member === undefined || group.dependency === undefined || group.dependency === "")
+    );
+
+    if (incompleteGroups.length > 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาเลือกสถานะ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วนในแต่ละกลุ่มที่เลือก",
+        confirmButtonText: "ตกลง",
+      });
+      return false;
+    }
+
+    // Ensure the input text is filled for "กลุ่มอื่น ๆ" if selected
+    const otherGroup = Activitygrouptype.find((group) =>
+      group.activity_group.startsWith(prefixOtherGroup)
+    );
+
+    if (otherGroup && otherGroup.activity_group === prefixOtherGroup) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณากรอกข้อมูล",
+        text: "กรุณากรอกชื่อกลุ่มในช่อง 'กลุ่มอื่น ๆ'",
+        confirmButtonText: "ตกลง",
+      });
+      return false;
+    }
+
+    // Ensure at least one valid entry exists
+    const isValid = Activitygrouptype.some(
+      (group) =>
+        group.activity_group &&
+        group.is_member !== undefined &&
+        group.dependency !== undefined &&
+        group.dependency !== ""
+    );
+
+    if (!isValid) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาเลือกสถานะ",
+        text: "กรุณาเลือกข้อมูลให้ครบถ้วนในประเภทกลุ่มกิจกรรม อย่างน้อย 1 กลุ่ม",
+        confirmButtonText: "ตกลง",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+
+  const validateType = (formData) => {
+    const { Activitytype } = formData;
+  
+    // Check for incomplete entries
+    const incompleteActivities = Activitytype.filter((group) => {
+      const isOtherActivity = group.activity && group.activity.startsWith("อื่นๆ"); // เช็คว่าเป็นตัวเลือก "อื่นๆ"
+      const isOtherActivityEmpty = isOtherActivity && group.activity.trim() === "อื่นๆ"; // เช็คว่าไม่ได้กรอกข้อความเพิ่มเติม
+      return (
+        (!group.frequncy || !group.participation_level) || // Ensure all required fields are filled
+        isOtherActivityEmpty // Ensure "อื่นๆ" has additional text
+      );
+    });
+  
+    if (incompleteActivities.length > 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาเลือกสถานะ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วนในแต่ละกิจกรรมที่เลือก หรือเพิ่มรายละเอียด",
+        confirmButtonText: "ตกลง",
+      });
+      return false;
+    }
+  
+    // Ensure at least one valid entry exists
+    const isValid = Activitytype.some(
+      (group) =>
+        group.activity && 
+        group.frequncy && 
+        group.participation_level && 
+        (!group.activity.startsWith("อื่นๆ") || group.activity.trim() !== "อื่นๆ") // Ensure "อื่นๆ" has valid text
+    );
+  
+    if (!isValid) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาเลือกสถานะ",
+        text: "กรุณาเลือกข้อมูลให้ครบถ้วนในประเภทกิจกรรม อย่างน้อย 1 กิจกรรม",
+        confirmButtonText: "ตกลง",
+      });
+      return false;
+    }
+  
+    return true;
+  };
+  
+
 
   //next page
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!validateGrouptype(formData)) {
+      return; // Stop submission if validation fails
+    }
+
+    if (!validateType(formData)) {
+      return; // Stop submission if validation fails
+    }
+
     setMainFormData((prevData) => ({
       ...prevData,
       Socialcapital: formData,
@@ -612,7 +731,6 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       }
                     />
                     <span>
-                      {" "}
                       4) กลุ่มด้านสังคม (เช่น กลุ่มเยาวชน กลุ่มผู้สูงอายุ
                       กลุ่มสตรี/ แม่บ้าน กลุ่มศาสนา)
                     </span>
@@ -771,15 +889,15 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     {formData.Activitygrouptype.some((group) => //find in array
                       group.activity_group.startsWith(prefixOtherGroup)
                     ) && (
-                      <input
-                        type="text"
-                        placeholder="ระบุ..."
-                        className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                        value={formData.Activitygrouptype?.find((e)=>
-                          e.activity_group.startsWith(prefixOtherGroup)).activity_group.slice(prefixOtherGroup.length)}
-                        onChange={e=>handleActivityGroupOther(prefixOtherGroup,'activity_group',prefixOtherGroup+e.target.value)}
-                      />
-                    )}
+                        <input
+                          type="text"
+                          placeholder="ระบุ..."
+                          className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                          value={formData.Activitygrouptype?.find((e) =>
+                            e.activity_group.startsWith(prefixOtherGroup)).activity_group.slice(prefixOtherGroup.length)}
+                          onChange={e => handleActivityGroupOther(prefixOtherGroup, 'activity_group', prefixOtherGroup + e.target.value)}
+                        />
+                      )}
                   </label>
                 </td>
                 <td className="border px-4 py-3 text-center">
@@ -793,7 +911,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )?.is_member ?? ""
                     }
                     onChange={(e) =>
-                      handleActivityGroupOther(prefixOtherGroup,'is_member', e.target.value)
+                      handleActivityGroupOther(prefixOtherGroup, 'is_member', e.target.value)
                     }
                   >
                     <option value="" disabled>
@@ -814,7 +932,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )?.dependency ?? ""
                     }
                     onChange={(e) =>
-                      handleActivityGroupOther(prefixOtherGroup,'dependency',e.target.value)
+                      handleActivityGroupOther(prefixOtherGroup, 'dependency', e.target.value)
                     }
                   >
                     <option value="" disabled>
@@ -1106,7 +1224,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       className="form-checkbox text-blue-600 mr-2 rounded"
                       id="activity_group_0"
                       name="activity_group_Test"
-                      checked={formData.Activitytype.find((e) =>
+                      checked={!!formData.Activitytype.find((e) =>
                         e.activity.startsWith(prefix)
                       )}
                       value={prefix}
@@ -1196,21 +1314,21 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
           </table>
         </div>
 
-        
+
       </div>
 
       <div className="flex justify-end mt-4">
-      
+
         <button
           type="button"
           className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-3"
           onClick={(e) => handlePrevPage()}
         >
           <Icon
-                  icon="material-symbols:arrow-left-rounded"
-                  width="25"
-                  height="25"
-                />
+            icon="material-symbols:arrow-left-rounded"
+            width="25"
+            height="25"
+          />
           ย้อนกลับ
         </button>
 
@@ -1221,13 +1339,12 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
         >
           หน้าถัดไป
           <Icon
-                  icon="material-symbols:arrow-right-rounded"
-                  width="25"
-                  height="25"
-                />
+            icon="material-symbols:arrow-right-rounded"
+            width="25"
+            height="25"
+          />
         </button>
       </div>
-
     </div>
   );
 }

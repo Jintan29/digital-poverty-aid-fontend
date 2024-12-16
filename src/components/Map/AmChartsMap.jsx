@@ -12,12 +12,16 @@ const AmChartsMap = () => {
     chart.geodata = am4geodata_worldLow;
     chart.geodataNames = am4geodata_lang_ES;
     chart.projection = new am4maps.projections.Miller();
+
+    // Add polygon series
     let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-    polygonSeries.exclude = ["AQ"];
+    polygonSeries.include = ["TH"]; // Include only Thailand
     polygonSeries.useGeodata = true;
+
     let polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.tooltipText = "{name}";
     polygonTemplate.fill = am4core.color("#74B266");
+
     let hs = polygonTemplate.states.create("hover");
     hs.properties.fill = am4core.color("#367B25");
 
