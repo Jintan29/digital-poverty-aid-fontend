@@ -2386,11 +2386,6 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     />
                 </button>
             </div>
-
-            <div>
-                <button onClick={handleSubmit}>Submit</button>
-            </div>
-
         </>
     )
 
