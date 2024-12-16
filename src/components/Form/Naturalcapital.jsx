@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
+import Swal from "sweetalert2";
+
 
 function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
   const [formData, setFormData] = useState({
@@ -32,9 +34,156 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     }
   }, [mainFormData]);
 
+
+  const validatePbforlive = (formData) => {
+    const prefix = "อื่นๆ";
+
+    // ตรวจสอบว่า PBresourceforlive มีการเลือก is_use_PB_resoc หรือไม่
+    const isLiveSelected = formData.PBresourceforlive[0]?.is_use_PB_resoc !== null;
+    if (!isLiveSelected) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาเลือกสถานะการใช้ประโยชน์จากทรัพยากรธรรมชาติ",
+        text: "โปรดเลือกว่าครัวเรือนของท่านใช้ประโยชน์จากทรัพยากรธรรมชาติเพื่อการยังชีพหรือไม่",
+        confirmButtonText: "ตกลง",
+      });
+      return false;
+    }
+
+    // ตรวจสอบข้อมูลในแต่ละรายการ
+    if (formData.PBresourceforlive[0]?.is_use_PB_resoc) {
+      for (let i = 0; i < formData.PBresourceforlive.length; i++) {
+        const item = formData.PBresourceforlive[i];
+
+        // ตรวจสอบว่าแหล่งทรัพยากรถูกระบุหรือไม่
+        if (!item.rescource.trim()) {
+          Swal.fire({
+            icon: "warning",
+            title: `กรุณาระบุแหล่งทรัพยากร (รายการที่ ${i + 1})`,
+            text: "กรุณากรอกชื่อแหล่งทรัพยากรในพื้นที่ที่ใช้ประโยชน์",
+            confirmButtonText: "ตกลง",
+          });
+          return false;
+        }
+
+        // ตรวจสอบว่า ระยะทางถูกระบุ และมีค่ามากกว่า 0
+        if (!item.distanceKM || item.distanceKM <= 0) {
+          Swal.fire({
+            icon: "warning",
+            title: `กรุณาระบุระยะห่าง (รายการที่ ${i + 1})`,
+            text: "กรุณากรอกระยะห่างจากที่อยู่อาศัยเป็นตัวเลขที่มากกว่า 0",
+            confirmButtonText: "ตกลง",
+          });
+          return false;
+        }
+
+        // ตรวจสอบว่ามีคำอธิบายหรือไม่
+        if (!item.description.trim()) {
+          Swal.fire({
+            icon: "warning",
+            title: `กรุณาระบุลักษณะการใช้ประโยชน์ (รายการที่ ${i + 1})`,
+            text: "โปรดเลือกลักษณะการใช้ประโยชน์จากทรัพยากร",
+            confirmButtonText: "ตกลง",
+          });
+          return false;
+        }
+
+        // ตรวจสอบกรณี "อื่นๆ" ต้องกรอกข้อมูลเพิ่มเติม
+        if (item.description.startsWith(prefix) && !item.description.replace(prefix, "").trim()) {
+          Swal.fire({
+            icon: "warning",
+            title: `กรุณาระบุคำอธิบายเพิ่มเติม (รายการที่ ${i + 1})`,
+            text: "คุณได้เลือก 'อื่นๆ' โปรดกรอกคำอธิบายเพิ่มเติมในช่องข้อความ",
+            confirmButtonText: "ตกลง",
+          });
+          return false;
+        }
+      }
+    }
+
+    // หากข้อมูลครบถ้วน
+    return true;
+  };
+
+  const validatePbforincome = (formData) => {
+    const isIncomeSelected = formData.PBresourceforincome[0]?.is_use_PB_resoc !== null;
+
+    if (!isIncomeSelected) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาเลือกสถานะการใช้ประโยชน์จากทรัพยากรธรรมชาติ",
+        text: "โปรดเลือกว่าครัวเรือนของท่านใช้ประโยชน์จากทรัพยากรธรรมชาติเพื่อสร้างรายได้หรือไม่",
+        confirmButtonText: "ตกลง",
+      });
+      return false;
+    }
+
+    if (formData.PBresourceforincome[0]?.is_use_PB_resoc) {
+      for (let i = 0; i < formData.PBresourceforincome.length; i++) {
+        const item = formData.PBresourceforincome[i];
+
+        // ตรวจสอบว่าแหล่งทรัพยากรถูกระบุหรือไม่
+        if (!item.rescource.trim()) {
+          Swal.fire({
+            icon: "warning",
+            title: `กรุณาระบุแหล่งทรัพยากร (รายการที่ ${i + 1})`,
+            text: "กรุณากรอกชื่อแหล่งทรัพยากรในพื้นที่ที่ใช้ประโยชน์",
+            confirmButtonText: "ตกลง",
+          });
+          return false;
+        }
+
+        // ตรวจสอบว่า ระยะทางถูกระบุ และมีค่ามากกว่า 0
+        if (!item.distanceKM || item.distanceKM <= 0) {
+          Swal.fire({
+            icon: "warning",
+            title: `กรุณาระบุระยะห่าง (รายการที่ ${i + 1})`,
+            text: "กรุณากรอกระยะห่างจากที่อยู่อาศัยเป็นตัวเลขที่มากกว่า 0",
+            confirmButtonText: "ตกลง",
+          });
+          return false;
+        }
+
+        // ตรวจสอบว่ามีคำอธิบายหรือไม่
+        if (!item.description.trim()) {
+          Swal.fire({
+            icon: "warning",
+            title: `กรุณาระบุลักษณะการใช้ประโยชน์ (รายการที่ ${i + 1})`,
+            text: "โปรดเลือกลักษณะการใช้ประโยชน์จากทรัพยากร",
+            confirmButtonText: "ตกลง",
+          });
+          return false;
+        }
+
+        // ตรวจสอบกรณี "อื่นๆ" ต้องกรอกข้อมูลเพิ่มเติม
+        if (item.description.startsWith(prefix) && !item.description.replace(prefix, "").trim()) {
+          Swal.fire({
+            icon: "warning",
+            title: `กรุณาระบุคำอธิบายเพิ่มเติม (รายการที่ ${i + 1})`,
+            text: "คุณได้เลือก 'อื่นๆ' โปรดกรอกคำอธิบายเพิ่มเติมในช่องข้อความ",
+            confirmButtonText: "ตกลง",
+          });
+          return false;
+        }
+      }
+    }
+
+
+    return true;
+  };
+
   //next page
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!validatePbforlive(formData)) {
+      return; // หยุดการทำงานถ้าไม่ผ่านการตรวจสอบ
+    }
+
+    if (!validatePbforincome(formData)) {
+      return; // หยุดการทำงานถ้าไม่ผ่านการตรวจสอบ
+    }
+
     setMainFormData((prevData) => ({
       ...prevData,
       Naturalcapital: {
@@ -330,7 +479,7 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
               </label>
             </div>
 
-            {formData.PBresourceforlive[0]?.is_use_PB_resoc && // ตรวจสอบว่า is_use_PB_resoc เป็น true
+            {formData.PBresourceforlive[0]?.is_use_PB_resoc &&
               formData.PBresourceforlive.map((liveData, index) => (
                 <div key={index} className="mt-4 pl-12">
                   <label className="flex items-center text-gray-700 ml-6">
@@ -349,9 +498,9 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       value={
                         liveData.rescource
                           ? liveData.rescource.replace(
-                              "ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ",
-                              ""
-                            )
+                            "ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ",
+                            ""
+                          )
                           : ""
                       }
                       className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
@@ -442,7 +591,7 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
               className="flex bg-blue-400 text-white py-2 px-4 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200 mr-4"
               onClick={addDatalive}
             >
-                <Icon
+              <Icon
                 icon="material-symbols:add-circle-outline-rounded"
                 className="mr-2 mt-0.5"
                 width="20"
@@ -518,9 +667,9 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       value={
                         incomeData.rescource
                           ? incomeData.rescource.replace(
-                              "ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ",
-                              ""
-                            )
+                            "ใช้ประโยชน์จากทรัพยากรในพื้นที่ ระบุแหล่งทรัพยากร ",
+                            ""
+                          )
                           : ""
                       }
                       className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
