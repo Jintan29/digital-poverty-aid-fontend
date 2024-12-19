@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -13,6 +14,7 @@ import axios from "axios";
 import config from "./config";
 import { useDispatch } from "react-redux";
 import { login } from "./store/userSlice";
+import { Map } from "./pages/Map"; // ใช้ default import
 
 
 
@@ -26,6 +28,7 @@ function App() {
       handleCurrentUser(idToken)
     }
   },[idToken])
+
 
 
   const handleCurrentUser = async(idToken)=>{
@@ -63,8 +66,10 @@ function App() {
             <Route path="/form" element={<Form />} />
             <Route path="/register" element={<Register/>} />
             <Route path="/login" element={<Login/>} />
+            <Route path="/map" element={<Map />} />
           </Routes>
         </div>
+
       </BrowserRouter>
     </>
   );

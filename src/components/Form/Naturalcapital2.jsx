@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
+import Swal from "sweetalert2";
 
-function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
+function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
     const [formData, setFormData] = useState(
         {
             Farmlandindisasterareas: {//4
@@ -19,31 +20,31 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
         }
     );
 
-    useEffect(()=>{
-        if(mainFormData.Naturalcapital.Farmlandindisasterareas){
-            setFormData((prevData)=>({
-                ...prevData,
-                Farmlandindisasterareas: mainFormData.Naturalcapital.Farmlandindisasterareas,
-                HouseInDisasterAreas: mainFormData.Naturalcapital.HouseInDisasterAreas
-            }))
+    useEffect(() => {
+        if (mainFormData.Naturalcapital.Farmlandindisasterareas) {
+          setFormData((prevData) => ({
+            ...prevData,
+            Farmlandindisasterareas: mainFormData.Naturalcapital.Farmlandindisasterareas,
+            HouseInDisasterAreas: mainFormData.Naturalcapital.HouseInDisasterAreas
+          }))
         }
-    },[mainFormData])
+      }, [mainFormData])
+      
+    // const handleLogData =()=>{
+    //     console.log("now formData is ");
+    //     console.log(formData);
 
-    const handleLogData =()=>{
-        console.log("now formData is ");
-        console.log(formData);
-        
-        console.log('mainData is ');
-        console.log(mainFormData);
-        
-        
-    }
+    //     console.log('mainData is ');
+    //     console.log(mainFormData);
 
-    const handlePrevPage = ()=>{
-        setMainFormData((prevData)=>({
+
+    // }
+
+    const handlePrevPage = () => {
+        setMainFormData((prevData) => ({
             ...prevData,
             //เอาค่าเก่าใน Natural ไว้
-            Naturalcapital:{
+            Naturalcapital: {
                 ...prevData.Naturalcapital,
                 ...formData
             }
@@ -52,11 +53,121 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
         setCurrentPage(5)
     }
 
+    const validateHouseInDisaster = (formData) => {
+        // ตรวจสอบว่ามีการเลือกสถานะการอยู่ในพื้นที่ประสบภัยพิบัติหรือไม่
+        const hasSelection = formData.HouseInDisasterAreas?.[0]?.is_in_disaster !== null &&
+            formData.HouseInDisasterAreas.length > 0;
+
+        if (!hasSelection) {
+            Swal.fire({
+                icon: "warning",
+                title: "กรุณาเลือกสถานะการอยู่ในพื้นที่ประสบภัยพิบัติ",
+                text: "โปรดเลือกว่าบ้านของท่านอยู่ในพื้นที่ประสบภัยพิบัติหรือไม่",
+                confirmButtonText: "ตกลง",
+            });
+            return false; // ไม่ผ่านการตรวจสอบ
+        }
+
+        // ตรวจสอบข้อมูลเพิ่มเติมกรณี is_in_disaster === true
+        if (formData.HouseInDisasterAreas?.[0]?.is_in_disaster === true) {
+            const validHouseInDisasterAreas = formData.HouseInDisasterAreas.every((item) => {
+                // ตรวจสอบว่า disaster_type ถูกกรอกถ้าเลือก "อื่นๆ (ระบุ)"
+                const isOtherDisaster = item.disaster_type?.startsWith(prefixHouse) && item.disaster_type?.slice(prefixHouse.length).trim() === "";
+                const isValidDisaster = item.disaster_type?.trim() !== "" &&
+                    item.frequncy_disaster?.trim() !== "" &&
+                    item.disaster_response?.trim() !== "";
+
+                if (isOtherDisaster) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "กรุณาระบุประเภทภัยพิบัติ",
+                        text: "กรุณากรอกข้อมูลประเภทภัยพิบัติเมื่อเลือก 'อื่นๆ (ระบุ)'",
+                        confirmButtonText: "ตกลง",
+                    });
+                    return false;
+                }
+
+                return isValidDisaster;
+            });
+
+            if (!validHouseInDisasterAreas) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "กรุณากรอกข้อมูลในพื้นที่ประสบภัยพิบัติให้ครบ",
+                    text: "โปรดระบุข้อมูลที่เลือกให้ครบ",
+                    confirmButtonText: "ตกลง",
+                });
+                return false; // ไม่ผ่านการตรวจสอบ
+            }
+        }
+
+        // ผ่านการตรวจสอบ
+        return true;
+    };
+
+
+
+    const validateFarmlandInDisasterAreas = (formData) => {
+        const hasSelection = formData.Farmlandindisasterareas?.[0]?.is_in_disaster !== null &&
+            formData.Farmlandindisasterareas.length > 0;
+
+        if (!hasSelection) {
+            Swal.fire({
+                icon: "warning",
+                title: "กรุณาเลือกสถานะการอยู่ในพื้นที่ประสบภัยพิบัติ",
+                text: "โปรดเลือกว่าบ้านของท่านอยู่ในพื้นที่ประสบภัยพิบัติหรือไม่",
+                confirmButtonText: "ตกลง",
+            });
+            return false; // ไม่ผ่านการตรวจสอบ
+        }
+
+        if (formData.Farmlandindisasterareas?.[0]?.is_in_disaster === true) {
+            const validFarmlandindisasterareas = formData.Farmlandindisasterareas.every((item) => {
+                // ตรวจสอบว่า disaster_type ถูกกรอกถ้าเลือก "อื่นๆ (ระบุ)"
+                const isOtherDisaster = item.disaster_type?.startsWith(prefixHouse) && item.disaster_type?.slice(prefixHouse.length).trim() === "";
+                const isValidDisaster = item.disaster_type?.trim() !== "" &&
+                    item.frequncy_disaster?.trim() !== "" &&
+                    item.disaster_response?.trim() !== "";
+
+                if (isOtherDisaster) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "กรุณาระบุประเภทภัยพิบัติ",
+                        text: "กรุณากรอกข้อมูลประเภทภัยพิบัติเมื่อเลือก 'อื่นๆ (ระบุ)'",
+                        confirmButtonText: "ตกลง",
+                    });
+                    return false;
+                }
+                return isValidDisaster;
+            });
+
+            if (!validFarmlandindisasterareas) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "กรุณากรอกข้อมูลในพื้นที่ประสบภัยพิบัติให้ครบ",
+                    text: "โปรดระบุข้อมูลที่เลือกให้ครบ",
+                    confirmButtonText: "ตกลง",
+                });
+                return false; // ไม่ผ่านการตรวจสอบ
+            }
+        }
+        return true;
+    }
+
+
     //nextpage ยังไม่ได้ทำ
-    const handleNextPage = ()=>{
-        setMainFormData((prevData)=>({
+    const handleNextPage = () => {
+        if (!validateHouseInDisaster(formData)) {
+            return; // หยุดการทำงานถ้าไม่ผ่านการตรวจสอบ
+        }
+
+        if (!validateFarmlandInDisasterAreas(formData)) {
+            return; // หยุดการทำงานถ้าไม่ผ่านการตรวจสอบ
+        }
+
+        setMainFormData((prevData) => ({
             ...prevData,
-            Naturalcapital:{
+            Naturalcapital: {
                 ...prevData.Naturalcapital,
                 ...formData
             }
@@ -166,7 +277,7 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
         setFormData((prevState) => {
             const updatedHouse = [...prevState.HouseInDisasterAreas];
             const groupIndex = updatedHouse.findIndex(
-                (group) => group.disaster_type === prefix
+                (group) => group.disaster_type.startsWith(prefix)
             );
 
             if (checked) {
@@ -212,14 +323,14 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
         if (name === "is_in_disaster_farm" && value === "false") {
             setFormData((prevData) => ({
                 ...prevData,
-                Farmlandindisasterareas:[ {
+                Farmlandindisasterareas: [{
                     ...prevData.Farmlandindisasterareas,
                     is_in_disaster: false,
                     disaster_type: "",
                     frequncy_disaster: "",
                     disaster_response: "",
                 },
-            ],
+                ],
             }));
         }
     };
@@ -269,8 +380,6 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
         });
     };
 
-
-
     const handleResponseChange = (prefixHouse, value) => {
         setFormData((prevState) => {
             const updatedFarmland = [...prevState.Farmlandindisasterareas];
@@ -308,7 +417,7 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
         setFormData((prevState) => {
             const updateFarm = [...prevState.Farmlandindisasterareas];
             const groupIndex = updateFarm.findIndex(
-                (group) => group.disaster_type === prefix
+                (group) => group.disaster_type.startsWith(prefix)
             );
 
             if (checked) {
@@ -330,6 +439,7 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
         });
     };
 
+
     const handleFarmInputChange = (prefix, value) => {
         setFormData((prevState) => {
             const updateFarm = [...prevState.Farmlandindisasterareas];
@@ -344,8 +454,6 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
             return { ...prevState, Farmlandindisasterareas: updateFarm };
         });
     };
-
-
 
     const handleSubmit = () => {
         console.log("Form Data Submitted:", formData);
@@ -2255,29 +2363,29 @@ function Naturalcapital2({setCurrentPage,setMainFormData,mainFormData}) {
                 ส่งข้อมูลไปMain
             </button> */}
 
-             <div className="flex justify-end mt-4">
-             <button type="button"
-            onClick={e=>handlePrevPage()} 
-            className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-3" >
-                 <Icon
-                  icon="material-symbols:arrow-left-rounded"
-                  width="25"
-                  height="25"
-                />
-                ย้อนกลับ
-            </button>
+            <div className="flex justify-end mt-4">
+                <button type="button"
+                    onClick={e => handlePrevPage()}
+                    className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-3" >
+                    <Icon
+                        icon="material-symbols:arrow-left-rounded"
+                        width="25"
+                        height="25"
+                    />
+                    ย้อนกลับ
+                </button>
 
-            <button type="button"
-            onClick={e=>handleNextPage()} 
-            className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-2" >
-                หน้าถัดไป
-                <Icon
-                  icon="material-symbols:arrow-right-rounded"
-                  width="25"
-                  height="25"
-                />
-            </button>
-             </div>
+                <button type="button"
+                    onClick={e => handleNextPage()}
+                    className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-2" >
+                    หน้าถัดไป
+                    <Icon
+                        icon="material-symbols:arrow-right-rounded"
+                        width="25"
+                        height="25"
+                    />
+                </button>
+            </div>
         </>
     )
 
