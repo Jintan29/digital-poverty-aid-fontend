@@ -13,6 +13,7 @@ import Southern from "../components/Form/Southern";
 import Suggestions from "../components/Form/Suggestions";
 import Naturalcapital2 from "../components/Form/Naturalcapital2";
 import Swal from "sweetalert2";
+import config from "../config";
 
 
 
@@ -38,8 +39,9 @@ export const Form = () => {
         showConfirmButton: true
       });
   
+      
       if (resConfirm.isConfirmed) {
-        const res = await axios.post(import.meta.env.VITE_API_PATH + '/formInsertAll/create', data);
+        const res = await axios.post(config.api_path + '/formInsertAll/create', data);
         if (res.data.message === 'success') {
           await Swal.fire({
             title: 'บันทึกข้อมูล',
