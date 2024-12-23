@@ -2,7 +2,9 @@ import React from 'react'
 
 const JJ1 = () => {
   return (
-    <div>JJ1JJJJJJJJJJJJJ</div>
+    <div>JJ1JJJJJJJJJJJJJ
+      
+    </div>
   )
 }
 

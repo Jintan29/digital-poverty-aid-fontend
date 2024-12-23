@@ -2,6 +2,6 @@ import React from 'react'
 
 export const Home = () => {
   return (
-    <div>Home Page components</div>
+    <div className=''>Home Page components</div>
   )
 }
