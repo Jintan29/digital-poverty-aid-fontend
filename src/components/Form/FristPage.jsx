@@ -319,34 +319,12 @@ export const FristPage = ({
     }
   }, [formData.Household.district]);
 
-  // const handleFetch = async()=>{
-  //   try{
-  //     await axios.get('/sradss/api/01poor.php?API-TOKEN=MzBiZDdhY2EyODY1YWNiZmU0Nzc0OW&&province_id=65&&yearget=all&mode=1')
-  //     .then(res=>{
-  //       console.log(res);
-        
-  //     })
-  //   }catch(e){
-  //     alert(e)
-  //   }
-  // }
+
 
   return (
     <div>
       <div>
         <form onSubmit={handleSubmit}>
-        {/* <button
-              type="button"
-              onClick={e=>handleFetch()}
-              class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-              ทดสอบยิง API
-              <Icon
-                icon="material-symbols:arrow-right-rounded"
-                width="25"
-                height="25"
-              />
-            </button> */}
           <div class="mb-6 mx-10 mt-10">
             <label
               for="house_code"
@@ -438,7 +416,7 @@ export const FristPage = ({
             </div>
           </div>
 
-          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-1 sm:grid-cols-1  lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 mx-10">
             <div className="">
               <label
                 for="village"
