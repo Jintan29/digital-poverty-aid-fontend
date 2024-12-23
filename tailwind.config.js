@@ -14,10 +14,19 @@ export default {
       colors: {
         customGreen: "#56F27D",
         customBlue: "#0004FF",
-        customBlue2: "#3FA6EF", 
+        customBlue2: "#3FA6EF",
       },
       textShadow: {
         custom: "1px 1px 2px rgba(0, 0, 0, 0.5)", // เงาบางๆ ตามตัวอักษร
+      },
+      fontFamily: {
+        'thai': ['Noto Sans Thai', 'sans-serif'],
+      },
+      colors: {
+        'light-green': '#90ee90', // สีเขียวอ่อน
+      },
+      transitionProperty: {
+        fill: 'fill', // เปิดใช้งาน transition สำหรับ fill
       },
     },
   },
