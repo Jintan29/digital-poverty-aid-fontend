@@ -319,15 +319,6 @@ export const FristPage = ({
     }
   }, [formData.Household.district]);
 
-  //ยิงAPI
-  const handleSubmitForm = (e)=>{
-    e.preventDefault();
-    setMainFormData((prevData) => ({
-      ...prevData,
-      ...formData, //นำไปต่อท้ายค่าใน State เก่า
-    }));
-  }
-
 
 
   return (
@@ -425,7 +416,7 @@ export const FristPage = ({
             </div>
           </div>
 
-          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-1 sm:grid-cols-1  lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 mx-10">
             <div className="">
               <label
                 for="village"
