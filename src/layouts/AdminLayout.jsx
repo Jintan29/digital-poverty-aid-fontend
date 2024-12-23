@@ -31,7 +31,7 @@ const AdminLayout = () => {
       <AdminNav toggleSidebar={toggleSidebar} />
       <AdminSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       {/* <AdminLayoutJ/> */}
-      <div className="bg-gray-100 min-h-screen p-4">
+      <div className="bg-gray-100 min-h-screen p-4 pt-20 sm:ml-80">
         <Outlet />
       </div>
     </>

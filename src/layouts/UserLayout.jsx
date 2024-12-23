@@ -1,16 +1,18 @@
-import React from 'react'
-import UserNav from '../components/UserNav'
-import { Outlet } from 'react-router-dom'
+import React from "react";
+import UserNav from "../components/UserNav";
+import { Outlet } from "react-router-dom";
 
 const UserLayout = () => {
   return (
     <>
-        <UserNav/>
-        <div className="App">
-            <Outlet/>
-        </div>
+      <div className="min-h-screen">
+        <UserNav />
+        <main className="pt-20">
+          <Outlet />
+        </main>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default UserLayout
+export default UserLayout;
