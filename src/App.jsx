@@ -5,22 +5,9 @@ import { Home } from "./pages/Home";
 
 import { About } from "./pages/About";
 import { Form } from "./pages/Form";
-import Register from "./pages/Authentication/Register";
-import { Login } from "./pages/Authentication/Login";
-import Swal from "sweetalert2";
-import axios from "axios";
-import config from "./config";
-import { useDispatch } from "react-redux";
-import { login, logout } from "./store/userSlice";
-import { Map } from "./pages/Map"; // ใช้ default import
-import { PageNotFound } from "./pages/PageNotFound";
-import { TestAPI } from "./pages/TestAPI";
-import { AdminRoute } from "./route/AdminRoute";
-import HomepageAdmin from "./pages/Admin/HomepageAdmin";
-import UserLayout from "./layouts/UserLayout";
-import AdminLayout from "./layouts/AdminLayout";
-import JJ1 from "./pages/Admin/JJ1";
 
+
+// import { NewNav } from "./components/NewNav";
 
 
 function App() {
@@ -78,52 +65,17 @@ function App() {
 
   return (
     <>
-        <div className="App">
-          <Routes>
-            {/* Layout for user */}
-            <Route path="/" element={<UserLayout />}>
-              <Route index element={<Home />} />
-              <Route path="about" element={<About />} />
-              <Route path="form" element={<Form />} />
-              <Route path="register" element={<Register />} />
-              <Route path="login" element={<Login />} />
-              <Route path="map" element={<Map />} />
-              <Route path="test" element={<TestAPI />} />
-              {/* สำหรับหน้าที่ไม่มี */}
-              <Route path="*" element={<PageNotFound />} />
-            </Route>
+      {/* ส่วนนี้จะแสดงผลทุกหน้า */}
+      <NewNav />
 
-            {/*Layout for Admin */}
-            <Route path="/admin" element={<AdminLayout/>}>
-
-              <Route
-                path="index"
-                element={
-                  <AdminRoute>
-                    <HomepageAdmin />
-                  </AdminRoute>
-                }
-                
-              />
-              {/* JJ1 */}
-
-              <Route
-                path="jj"
-                element={
-                  <AdminRoute>
-                    <JJ1 />
-                  </AdminRoute>
-                }
-                
-              />
-              
-              <Route path="*" element={<PageNotFound />} />
-              {/* เพิ่มหน้าอื่น */}
-              </Route>
-
-            
-
-          </Routes>
+      <BrowserRouter>
+      <div className="App">
+        {/* ดึงหน้า Page มาใช้งาน */}
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+          <Route path='/about' element={<About/>}/>
+          <Route path='/form' element={<Form/>}/>
+        </Routes>
 
         </div>
 
