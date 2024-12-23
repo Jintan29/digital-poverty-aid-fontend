@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import Swal from "sweetalert2";
 function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
   const [formData, setFormData] = useState({
     pin_latitude: "",
     pin_longitude: "",
     is_has_house: "",
-    house_rent: 0,
+    house_rent: null,
     house_status_law: "",
     house_status: "",
     electricity_status: "",
@@ -40,9 +41,42 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     },
   });
 
+  const validateArr = ()=>{
+
+    if(formData.agricultural_land.length <=0){
+      Swal.fire({
+        title:'กรุณากรอกข้อมูลให้ครบ',
+        text:'หัวข้อ8 พื้นที่ทำกินทางการเกษตร',
+        icon:'warning'
+      })
+      return false
+    }
+
+    if(formData.news.length <= 0){
+      Swal.fire({
+        title:'กรุณากรอกข้อมูลให้ครบ',
+        text:'หัวข้อ13 การรับรู้ข้อมูลข่าวสารของหน่วยงานราชการ',
+        icon:'warning'
+      })
+      return false
+    }
+
+    return true
+  }
+
   const handleInputChange = (field, value) => {
     const update = { ...formData }; //clone
     update[field] = value; //assign
+
+    // clear house status in law
+    if(field === 'is_has_house' && value !== 'มีบ้านและที่ดินเป็นของตนเอง'){
+      update['house_status_law'] = ''
+    }
+
+    if(field === 'is_has_house' && value !== 'เช่าบ้าน/เช่าห้องอยู่'){
+      update['house_rent'] = null
+    }
+
     setFormData(update);
   };
 
@@ -107,6 +141,10 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
   //next page
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(!validateArr()){
+      return;
+    }
+
     setMainFormData((prevData) => ({
       ...prevData,
       PhysicalCapital: formData,
@@ -261,6 +299,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         parseInt(e.target.value)
                       );
                     }}
+                    required
                     className="bg-gray-50 border  border-gray-300 text-gray-900 text-m rounded-lg focus:ring-blue-500 focus:border-blue-500  w-1/7 p-2.5"
                   />
                   <label className="text-m font-medium mt-3 pl-3">
@@ -315,6 +354,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     <input
                       name="house_status_law"
                       type="radio"
+                      required
                       value="บ้านไม่ติดจำนองหรือค้ำประกัน"
                       checked={
                         formData.house_status_law ===
@@ -1891,6 +1931,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         name="has_prolem_in_area"
                         type="text"
                         placeholder="ระบุ"
+                        required
                         value={
                           formData.UrbanArea.has_prolem_in_area.startsWith(
                             prefix11_3
@@ -2007,6 +2048,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                           ? formData.house_access_road.slice(prefix12.length)
                           : formData.house_access_road
                       }
+                      required
                       onChange={(e) => {
                         handleInputChange(
                           "house_access_road",
@@ -2104,6 +2146,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     <input
                       type="text"
                       placeholder="ระบุ"
+                      required
                       name="workplace_access_road"
                       value={
                         formData.workplace_access_road.startsWith(prefix12)

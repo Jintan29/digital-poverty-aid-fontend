@@ -235,13 +235,21 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
       if (!member.national_id || member.national_id.length !== 13) {
         errors.push(`กรุณากรอกเลขบัตรประชาชนของสมาชิคคนที่ ${index + 1} ให้ครบ 13 หลัก`);
       }
+
+      if(member.career.length<=0){
+        errors.push(`กรุณากรอกข้อมูล "อาชีพ" ของสมาชิคคนที่ ${index+1} `)
+      }
+
+      if(member.work_can_made_income.length<=0){
+        errors.push(`กรุณากรอกข้อมูล "อาชีพที่สร้างรายได้" ของสมาชิคคนที่ ${index+1} `)
+      }
     }
 
     if (errors.length > 0) {
       Swal.fire({
         title: 'มีข้อผิดพลาดในการกรอกข้อมูล',
         html: errors.join('<br/>'),
-        icon: 'error',
+        icon: 'warning',
       });
       return false;
     }
@@ -288,7 +296,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
         <div className="mb-6 mx-10 mt-5 py-5 bg-blue-200 rounded-md">
           <div className="Container">
             <h3 className="text-black text-lg font-bold px-5 py-5">
-              ข้อมูลสมาชิคครัวเรือนคนที่ {index + 1}
+              ข้อมูลสมาชิกครัวเรือนคนที่ {index + 1}
             </h3>
           </div>
           {/* Input */}
@@ -943,6 +951,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                     e.target.checked
                   )
                 }
+                checked={member.career.includes('ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน')}
                 value="ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -1021,7 +1030,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               >
                 ธุรกิจส่วนตัว/งานบริการ (เช่น ร้านขายของชำร้านซ่อมมอเตอร์ไซค์
                 ค้าขาย/หาบแร่/แผงลอยร้านเสริมสวย รับจ้างซักรีด ขับสามล้อ
-                มอเตอร์ไซรับจ้างเป็นต้น)
+                มอเตอร์ไซค์รับจ้างเป็นต้น)
               </label>
             </div>
 
