@@ -97,7 +97,7 @@ function App() {
             <Route path="/admin" element={<AdminLayout/>}>
 
               <Route
-                path="index"
+                index
                 element={
                   <AdminRoute>
                     <HomepageAdmin />
