@@ -20,6 +20,7 @@ import HomepageAdmin from "./pages/Admin/HomepageAdmin";
 import UserLayout from "./layouts/UserLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import JJ1 from "./pages/Admin/JJ1";
+import  Household  from "./pages/Houshold"
 
 
 
@@ -88,6 +89,7 @@ function App() {
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
               <Route path="map" element={<Map />} />
+              <Route path="house-hold" element={<Household />} />
               <Route path="test" element={<TestAPI />} />
               {/* สำหรับหน้าที่ไม่มี */}
               <Route path="*" element={<PageNotFound />} />

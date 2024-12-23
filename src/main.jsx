@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx'
 import './index.css'
 import Swal from 'sweetalert2';
+import './Sarabun-Regular-normal.js';
 
 // กำหนด global configuration ก่อนที่แอพจะ render
 // const MySwal = Swal.mixin({
@@ -19,6 +20,7 @@ import Swal from 'sweetalert2';
 // });
 
 // window.Swal = MySwal;
+
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
