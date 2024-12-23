@@ -62,9 +62,9 @@ export const Form = () => {
 
   return (
     <>
-      <div className="mx-5 my-5">
+      <div className="mx-5 mt-20">
         <div className="flex flex-col  justify-center font-bold text-2xl">
-          <div className="block text-center">
+          <div className="block text-center mt-5">
             <h1>แบบสอบถาม</h1>
           </div>
           <div className="block text-center">
