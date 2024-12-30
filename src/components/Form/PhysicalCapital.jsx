@@ -74,7 +74,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     }
 
     if(field === 'is_has_house' && value !== 'เช่าบ้าน/เช่าห้องอยู่'){
-      update['house_rent'] = null
+      update['house_rent'] = 0
     }
 
     setFormData(update);
