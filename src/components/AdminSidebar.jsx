@@ -20,18 +20,28 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       name: "จัดการผู้ใช้งานระบบ",
       link: "#",
       logo: "material-symbols:person-rounded",
+      submenu:[
+        {name:'ข้อมูลผู้ใช้งาน',link:'/admin/manage-user'},
+        {name:'อนุมัติผู้ใช้ใหม่',link:'/admin/approve-user'}
+      ]
     },
     {
       name: "ค้นหาสมาชิคครัวเรือน",
-      link: "#",
+      link: "/admin/find-household",
       logo: "material-symbols:group-search",
-      submenu: [
-        { name: "ค้นหาจากช่วงอายุ", link: "" },
-        { name: "ค้นหาจากชื่อจริง", link: "" },
-        { name: "ค้นหาจากเลขบ้าน", link: "" },
-        
-      ],
     },
+    //ตัวอย่างสำหรับ submenu
+    // {
+    //   name: "ค้นหาสมาชิคครัวเรือน",
+    //   link: "#",
+    //   logo: "material-symbols:group-search",
+    //   submenu: [
+    //     { name: "ค้นหาจากช่วงอายุ", link: "" },
+    //     { name: "ค้นหาจากชื่อจริง", link: "" },
+    //     { name: "ค้นหาจากเลขบ้าน", link: "" },
+        
+    //   ],
+    // },
     {
       name: "กลับหน้าหลัก",
       link: "/",
@@ -46,14 +56,14 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       {isOpen && (
         <div
           onClick={toggleSidebar}
-          className="fixed inset-0 z-30 bg-gray-900 bg-opacity-50 sm:hidden"
+          className="fixed inset-0 z-30 bg-gray-900 bg-opacity-50 lg:hidden"
         ></div>
       )}
 
       <aside
         className={`fixed top-0 left-0 z-40 w-80 h-screen transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0`}
+        } lg:translate-x-0`}
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-softdark dark:bg-gray-800">
