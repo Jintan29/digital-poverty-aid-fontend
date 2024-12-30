@@ -22,6 +22,7 @@ export const Form = () => {
 
   //เก็บData
   const [mainFormData,setMainFormData] = useState({})
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     console.log('now main data is : ',mainFormData);
@@ -30,6 +31,7 @@ export const Form = () => {
 
   //submit form
   const handleSubmitMain = async(data)=>{
+    setIsProcessing(true);
     try{
       const resConfirm = await Swal.fire({
         title: 'บันทึกข้อมูล',
@@ -57,6 +59,8 @@ export const Form = () => {
         text:e.response && e.response.data ? e.response.data.message : e.message,
         icon:'error'
       })
+    }finally{
+      setIsProcessing(false)
     }
   }
 
@@ -86,23 +90,11 @@ export const Form = () => {
           {currentPage === 6 && <Naturalcapital2 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
           {currentPage === 7 && <Socialcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
           {currentPage === 8 && <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
-          {currentPage === 9 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} handleSubmitMain={handleSubmitMain} />}
+          {currentPage === 9 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData} handleSubmitMain={handleSubmitMain} isProcessing={isProcessing} />}
 
-          {/* <HumanCapital/> */}
 
-          {/* {currentPage === 5 && <Socialcapital setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/> }
-
-          {currentPage === 6 && <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
-          {currentPage === 7 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
-          {currentPage === 8 && <Test1 setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
         </div>
-
-        {/* {currentPage === 1 && <Southern setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>}
-        {currentPage === 2 && <Suggestions setCurrentPage={setCurrentPage} setMainFormData={setMainFormData} mainFormData={mainFormData}/>} */}
-        
-
-        
-        
+       
       </div>
 
 
