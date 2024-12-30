@@ -8,8 +8,6 @@ import Swal from "sweetalert2";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 
-
-
 //ใช้งาน dayjs
 dayjs.extend(utc);
 
@@ -68,10 +66,6 @@ export const FristPage = ({
     ]
   });
 
-  const handleLog = ()=>{
-    console.log(formData);
-    
-  }
 
   //เก็บอำเภอและตำบล
   const districtSubdistrictMap = {
@@ -416,7 +410,7 @@ export const FristPage = ({
             </div>
           </div>
 
-          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-1 sm:grid-cols-1  lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 mx-10">
+          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-4 mx-10">
             <div className="">
               <label
                 for="village"
@@ -918,7 +912,7 @@ export const FristPage = ({
 
           <div class="mx-10">
             {formData.TeamServey.map((teamData, index) => (
-              <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4" key={index}>
+              <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2" key={index}>
                 <div className="relative  rounded-md shadow-sm col-span-1">
                   <label
                     for="visitors"

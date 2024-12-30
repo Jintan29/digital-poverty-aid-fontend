@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
-const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData,handleSubmitMain }) => {
+const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData,handleSubmitMain,isProcessing  }) => {
   const [formData, setFormData] = useState({
     suggest_informer: "",
     suggest_surway_team: "",
@@ -37,10 +37,6 @@ const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData,handleSubmi
     }));
 
     setCurrentPage(8);
-  };
-
-  const handleLog = () => {
-    console.log(formData);
   };
 
   const handleInputChange = (field, value) => {
@@ -88,11 +84,6 @@ const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData,handleSubmi
     });
   };
 
-  const handleShowData = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    //console.log(selectedOptions);
-  };
 
   return (
     <>
@@ -101,7 +92,7 @@ const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData,handleSubmi
           ส่วนที่ 7 ความคิดเห็นต่อและข้อเสนอแนะ
         </h3>
 
-        <form onSubmit={handleShowData}>
+        <form onSubmit={e=>handleSubmit(e)}>
           <div>
             <label htmlFor="suggest_informer">
               1. ข้อเสนอแนะจากผู้ให้ข้อมูล หรือเจ้าของบ้าน
@@ -404,18 +395,43 @@ const Suggestions = ({ setCurrentPage, setMainFormData, mainFormData,handleSubmi
               ย้อนกลับ
             </button>
 
-        <button
-              type="button"
-              onClick={(e) => handleSubmit(e)}
-              className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
-            >
-              <Icon
-                  icon="material-symbols:save-outline-rounded"
-                  width="25"
-                  height="25"
-                />
-              บันทึกข้อมูล
-            </button>
+            <button
+          type="button"
+          onClick={e=>handleSubmit(e)}
+          className={`flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 
+            font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center 
+            dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 
+            ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}`}
+          disabled={isProcessing} // ปิดการใช้งานเมื่อกำลังประมวลผล
+        >
+          {isProcessing ? (
+            <>
+              <svg
+                className="animate-spin h-5 w-5 mr-3 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
+              </svg>
+              กำลังประมวลผล...
+            </>
+          ) : (
+            "บันทึกข้อมูล"
+          )}
+        </button>
             
         </div>
 
