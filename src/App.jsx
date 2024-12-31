@@ -100,7 +100,6 @@ function App() {
 
             <Route path="map" element={<Map />} />
             <Route path="test" element={<TestAPI />} />
-            {/* สำหรับหน้าที่ไม่มี */}
             <Route path="*" element={<PageNotFound />} />
           </Route>
 
