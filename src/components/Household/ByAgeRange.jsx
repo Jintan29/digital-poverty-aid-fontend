@@ -1,111 +1,37 @@
-import React, { useState } from "react";
-import jsPDF from "jspdf"; //ไลบรารีสำหรับสร้างและดาวน์โหลดไฟล์ PDF
-import html2canvas from "html2canvas"; //ไลบรารีสำหรับแปลง HTML เป็นภาพ (image) เพื่อใช้สร้าง PDF
-import { Icon } from "@iconify/react"; //ไลบราลี icon
-import { Dropdown } from "flowbite-react";
+import React, { useEffect, useState } from "react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { Icon } from "@iconify/react";
+import Swal from "sweetalert2";
+import axios from "axios";
+import config from "../../config";
 
 const ByAgeRange = () => {
   const [selectedAgeRange, setSelectedAgeRange] = useState(""); // เก็บค่าช่วงอายุที่เลือก
 
+  const [members, setMembers] = useState([]);
+  const [minAge, setMinAge] = useState(0);
+  const [maxAge, setMaxAge] = useState(0);
+  //Paginate
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 30; //จำนวน row/หน้า
+
   // รายการช่วงอายุ
-  const ageRanges = ["15-25 ปี", "26-36 ปี", "36-46 ปี", "46 ปีขึ้นไป"];
-  const members = [
-    // 15-25
-    {
-      number: 1,
-      name: "นายสุทธิภัทร ไกรกลิ่น",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "15-25 ปี",
-    },
-    {
-      number: 2,
-      name: "นายสุทธิภัทร ไกรกลิ่น",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "15-25 ปี",
-    },
-    {
-      number: 3,
-      name: "นางสาวสมจิตร ทองพรมราช",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "15-25 ปี",
-    },
-    //   26-36
-    {
-      number: 1,
-      name: "นายสุทธิภัทร ไกรกลิ่น",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "26-36 ปี",
-    },
-    {
-      number: 2,
-      name: "นายพรสวรรค์ เสือราบ",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "26-36 ปี",
-    },
-    {
-      number: 3,
-      name: "นางสาวสมจิตร ทองพรมราช",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "26-36 ปี",
-    },
-    //   36-46
-    {
-      number: 1,
-      name: "นายเจ ไกรกลิ่น",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "36-46 ปี",
-    },
-    {
-      number: 2,
-      name: "นายกาย พรสวรรค์",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "36-46 ปี",
-    },
-    //   46 ปีขึ้นไป
-    {
-      number: 1,
-      name: "นายเจ ไกรกลิ่น",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "46 ปีขึ้นไป",
-    },
-    {
-      number: 2,
-      name: "นายเจ ไกรกลิ่น",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "094-123-5674",
-      ageRange: "46 ปีขึ้นไป",
-    },
+  const ageRanges = [
+    "ต่ำกว่า 15 ปี",
+    "15-25 ปี",
+    "26-36 ปี",
+    "36-46 ปี",
+    "46 ปีขึ้นไป",
   ];
-  // กรองข้อมูลสมาชิกที่มีช่วงอายุตรงกับช่วงอายุที่ผู้ใช้เลือก
-  const filteredMembers = members.filter(
-    (member) => member.ageRange === selectedAgeRange
-  );
 
   //exportToPD
   const exportToPDF = () => {
     const content = document.getElementById("table-content"); // ดึงเฉพาะตาราง
     if (!content) return; // ตรวจสอบว่าได้ดึงข้อมูลมาแล้ว
 
-    const title = "สมาชิกครัวเรือนยากจน-ตามช่วงอายุ";
+    const title = `สมาชิกครัวเรือนยากจนตามช่วงอายุ ${selectedAgeRange}`;
 
     html2canvas(content, {
       scale: 2, // เพิ่มความคมชัด
@@ -115,7 +41,7 @@ const ByAgeRange = () => {
       const pdf = new jsPDF("p", "mm", "a4"); // สร้าง PDF ขนาด A4
       const imgWidth = 190; // ความกว้างของรูป
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let position = 15; // จุดเริ่มต้น
+      let position = 12; // จุดเริ่มต้น
 
       // เพิ่มหัวข้อก่อนตาราง
       pdf.setFont("Sarabun-Regular", "normal");
@@ -128,7 +54,7 @@ const ByAgeRange = () => {
         null,
         "center"
       ); // เพิ่มชื่อหัวข้อในเอกสาร PDF
-      position += 10; // เพิ่มระยะห่างระหว่างหัวข้อและตาราง
+      position += 5; // เพิ่มระยะห่างระหว่างหัวข้อและตาราง
 
       // เพิ่มรูปภาพของตาราง
       pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
@@ -136,172 +62,231 @@ const ByAgeRange = () => {
     });
   };
 
+  const handleAgeRange = (range) => {
+    switch (range) {
+      case "ต่ำกว่า 15 ปี":
+        setMinAge(0);
+        setMaxAge(14);
+        break;
+
+      case "15-25 ปี":
+        setMinAge(15);
+        setMaxAge(25);
+        break;
+      case "26-36 ปี":
+        setMinAge(26);
+        setMaxAge(36);
+        break;
+      case "36-46 ปี":
+        setMinAge(36);
+        setMaxAge(46);
+        break;
+      case "46 ปีขึ้นไป":
+        setMinAge(46);
+        setMaxAge(100);
+        break;
+      default:
+        setMinAge(0);
+        setMaxAge(0);
+    }
+    setCurrentPage(1);
+  };
+
+  const handleFetchMembers = async (minAge, maxAge, page) => {
+    try {
+      const response = await axios.get(
+        config.api_path + `/member-household/findByAge/${minAge}/${maxAge}`,
+        {
+          params: {
+            page,
+            limit,
+          },
+        }
+      );
+      setMembers(response.data.results);
+      setCurrentPage(response.data.currentPage); //Paginate
+      setTotalPages(response.data.totalPages);
+    } catch (err) {
+      Swal.fire({
+        title: "errors",
+        icon: "error",
+        text: err.response?.data?.message || err.message,
+      });
+    }
+  };
+
+  //call API when age change
+  useEffect(() => {
+    if (minAge >= 0 && maxAge > 0) {
+      handleFetchMembers(minAge, maxAge, currentPage);
+    }
+  }, [minAge, maxAge, currentPage]);
+
+  // ฟังก์ชันสำหรับเปลี่ยนหน้า
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // สร้างปุ่มเปลี่ยนหน้าตามจำนวน totalPages
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-1 border ${
+            i === currentPage
+              ? "bg-blue-500 text-white"
+              : "bg-white text-blue-500"
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return <div className="flex justify-center mt-4">{pages}</div>;
+  };
+
   return (
-    <div>
-      <div className="mx- my-5">
-        <div className="flex flex-col justify-center font-bold text-xl">
-          <div className="block text-center">
-            <h1>ค้นหาสมาชิกครัวเรือนยากจน ตามช่วงอายุ</h1>
-          </div>
-        </div>
+    <div className="p-4">
+      <div className="mb-5 text-center">
+        <h1 className="text-2xl font-bold">
+          ค้นหาสมาชิกครัวเรือนยากจน ตามช่วงอายุ
+        </h1>
+      </div>
 
-        {/* ปุ่ม PDF และ ตาราง */}
+      {/* Toolbar: Select & PDF Button */}
+      <div className="flex flex-col md:flex-row items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 w-full md:w-auto justify-center">
+          <select
+            value={selectedAgeRange}
+            onChange={(e) => {
+              setSelectedAgeRange(e.target.value);
+              handleAgeRange(e.target.value);
+            }}
+            className="w-48 appearance-none rounded-md py-2 px-3 text-base border-2 text-black font-medium placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+          >
+            <option value="">เลือกช่วงอายุ</option>
+            {ageRanges.map((range) => (
+              <option key={range} value={range} className="text-black">
+                {range}
+              </option>
+            ))}
+          </select>
 
-        <div className="flex flex-col items-center ">
-          <div className="relative w-full max-w-screen-lg mb-2">
-            {/* ปุ่ม PDF */}
-            <button
-              type="button"
-              onClick={exportToPDF} // เรียกฟังก์ชัน exportToPDF เมื่อคลิกที่ปุ่ม
-              className="absolute right-0 inline-flex items-center text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 mt-2"
-            >
-              {/* ไอคอน PDF */}
-              <Icon
-                icon="material-symbols:picture-as-pdf-rounded"
-                width="1.5em"
-                height="1.5em"
-              />
-              Download
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={exportToPDF}
+            className="inline-flex items-center text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-5 py-2.5"
+          >
+            <Icon
+              icon="material-symbols:picture-as-pdf-rounded"
+              width="1.5em"
+              height="1.5em"
+            />
+            <span className="ml-2">Download</span>
+          </button>
         </div>
-        {/* Dropdown และตารางข้อมูล */}
-        <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
-          <div className="relative w-full mb-4">
-            {/* Dropdown */}
-            <div className="flex justify-start"></div>
-            <button
-              id="dropdownDefaultButton"
-              onClick={
-                () =>
-                  document.getElementById("dropdown").classList.toggle("hidden") // เปิด/ปิด dropdown
-              }
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 overflow-hidden text-ellipsis whitespace-nowrap"
-              style={{ width: "135px", height: "40px" }} // ขนาดปุ่มคงที่
-              type="button"
-            >
-              <span className="flex-1 text-center">
-                {selectedAgeRange || "เลือกช่วงอายุ"}
-              </span>
-              {/* แสดงช่วงอายุ */}
-              <svg
-                className="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
+      </div>
+
+      <div className="max-w-[1200px] mx-auto">
+        {members.length > 0 ? (
+          <>
+            <div className="overflow-x-auto shadow-md sm:rounded-lg">
+              <table
+                id="table-content"
+                className="w-full text-l text-center text-gray-500 dark:text-gray-400 border-collapse"
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
-
-            {/* Dropdown menu */}
-            <div
-              id="dropdown"
-              className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-46 dark:bg-gray-700 absolute"
-            >
-              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                {ageRanges.map((range) => (
-                  <li key={range}>
-                    <button
-                      onClick={() => {
-                        setSelectedAgeRange(range); // เก็บค่าช่วงอายุที่เลือก
-                        document
-                          .getElementById("dropdown")
-                          .classList.add("hidden"); // ปิด dropdown
-                      }}
-                      className="block text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white overflow-hidden text-ellipsis whitespace-nowrap"
+                <thead className="text-l  bg-gray-200  text-gray-900 ">
+                  <tr className="border-b border-gray-700 ">
+                    <th
+                      scope="col"
+                      className="px-4 py-3 bg-gray-50  width: 20%"
                     >
-                      {range}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
+                      ลำดับที่
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 bg-gray-100  width: 30%"
+                    >
+                      ชื่อ-นามสกุล
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 bg-gray-50  width: 20%"
+                    >
+                      ที่อยู่
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 bg-gray-100  width: 20%"
+                    >
+                      อายุ
+                    </th>
 
-        {/* ตารางข้อมูล */}
-        <div className="flex justify-center items-center ">
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table
-              id="table-content"
-              className="table-auto text-l text-center rtl:text-right text-gray-500 dark:text-gray-400 border-collapse"
-            >
-              <thead className="text-l uppercase bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200">
-                <tr className="border-b border-gray-700 dark:border-gray-900">
-                  <th
-                    scope="col"
-                    className="px-4 py-3 bg-gray-50 dark:bg-gray-800 width: 10%"
-                  >
-                    ลำดับที่
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 bg-gray-100 dark:bg-gray-700 width: 30%"
-                  >
-                    ข้อมูลสมาชิกในครัวเรือน
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 bg-gray-50 dark:bg-gray-800 width: 20%"
-                  >
-                    ที่อยู่
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 bg-gray-100 dark:bg-gray-700 width: 20%"
-                  >
-                    เลขที่บ้าน
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 bg-gray-50 dark:bg-gray-800 width: 20%"
-                  >
-                    เบอร์โทรศัพท์
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredMembers.map((member, index) => (
-                  // แถวของตาราง
-                  <tr
-                    key={index}
-                    className="border-b border-gray-500 dark:border-gray-900"
-                  >
-                    {/* ลำดับที่ */}
-                    <td className="px-6 py-3 text-black bg-gray-50">
-                      {member.number}
-                    </td>
-                    {/* ข้อมูลสมาชิก */}
-                    <td className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap bg-gray-100 dark:text-white dark:bg-gray-900">
-                      {member.name}
-                    </td>
-                    {/* ที่อยู่ */}
-                    <td className="px-6 py-3 text-black bg-gray-50">
-                      {member.address}
-                    </td>
-                    {/* เลขที่บ้าน */}
-                    <td className="px-6 py-3 bg-gray-100 dark:bg-gray-900 text-black">
-                      {member.houseNumber}
-                    </td>
-                    {/* เบอร์โทรศัพท์ */}
-                    <td className="px-6 py-3 text-black bg-gray-50">
-                      {member.phone}
-                    </td>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 bg-gray-50  width: 20%"
+                    >
+                      เบอร์โทรศัพท์
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 bg-gray-100  width: 20%"
+                    >
+                      รหัสบ้าน
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {members.map((member, index) => (
+                    // แถวของตาราง
+                    <tr
+                      key={index}
+                      className="border-b border-gray-500 dark:border-gray-900"
+                    >
+                      <td className="px-6 py-3 text-black bg-gray-50">
+                        {(currentPage - 1) * limit + index + 1}
+                      </td>
+                      <td className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap bg-gray-100 dark:text-white dark:bg-gray-900">
+                        {member.title + " " + member.fname + " " + member.lname}
+                      </td>
+                      <td className="px-6 py-3 text-black bg-gray-50">
+                        {member.Household.house_number +
+                          "ต." +
+                          member.Household.subdistrict +
+                          " " +
+                          "อ. " +
+                          member.Household.district +
+                          " " +
+                          "จ. " +
+                          member.Household.province +
+                          " " +
+                          member.Household.postcode}
+                      </td>
+
+                      <td className="px-6 py-3 bg-gray-100 dark:bg-gray-900 text-black">
+                        {member.age} ปี
+                      </td>
+                      <td className="px-6 py-3 text-black bg-gray-50">
+                        {member.phone}
+                      </td>
+                      <td className="px-6 py-3 text-black bg-gray-50">
+                        {member.Household.house_code}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="">{renderPagination()}</div>
+          </>
+        ) : (
+          <div className="text-center py-4">
+            <div className="h2">ไม่พบข้อมูลสมาชิคตามช่วงอายุดังกล่าว</div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
