@@ -19,8 +19,7 @@ import { AdminRoute } from "./route/AdminRoute";
 import HomepageAdmin from "./pages/Admin/HomepageAdmin";
 import UserLayout from "./layouts/UserLayout";
 import AdminLayout from "./layouts/AdminLayout";
-import JJ1 from "./pages/Admin/JJ1";
-import Household from "./pages/Houshold";
+import MemberHousehold from "./pages/Admin/Findmember/MemberHousehold";
 import ManageUser from "./pages/Admin/ManageUser/ManageUser";
 import ApproveUser from "./pages/Admin/ManageUser/ApproveUser";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
@@ -114,10 +113,10 @@ function App() {
               }
             />
             <Route
-              path="find-household"
+              path="find-members"
               element={
                 <AdminRoute>
-                  <Household />
+                  <MemberHousehold />
                 </AdminRoute>
               }
             />
@@ -136,15 +135,6 @@ function App() {
               element={
                 <AdminRoute>
                   <ApproveUser />
-                </AdminRoute>
-              }
-            />
-
-            <Route
-              path="jj"
-              element={
-                <AdminRoute>
-                  <JJ1 />
                 </AdminRoute>
               }
             />

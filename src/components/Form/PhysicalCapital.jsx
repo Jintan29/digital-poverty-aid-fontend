@@ -2532,6 +2532,7 @@ useEffect(() => {
                 <input
                   name="benefit_form_tech"
                   type="radio"
+                  required
                   checked={formData.benefit_form_tech === false}
                   value={false}
                   onChange={(e) => {
