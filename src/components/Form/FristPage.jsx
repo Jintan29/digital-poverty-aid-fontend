@@ -8,8 +8,6 @@ import Swal from "sweetalert2";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 
-
-
 //ใช้งาน dayjs
 dayjs.extend(utc);
 
@@ -68,10 +66,6 @@ export const FristPage = ({
     ]
   });
 
-  const handleLog = ()=>{
-    console.log(formData);
-    
-  }
 
   //เก็บอำเภอและตำบล
   const districtSubdistrictMap = {
@@ -197,14 +191,6 @@ export const FristPage = ({
       return false
     }
 
-    if(formData.Informant.national_id.length !== 13 ){
-      Swal.fire({
-        title:'หมายเลขบัตรประชาชนไม่ถูกต้อง',
-        text:'กรุณากรอกเลขบัตรของ "ผู้ให้ข้อมูล" ให้ครบ 13 หลัก',
-        icon:'error',
-      })
-      return false
-    }
 
     if(formData.Informant.phone.length !== 10 ){
       Swal.fire({
@@ -319,34 +305,12 @@ export const FristPage = ({
     }
   }, [formData.Household.district]);
 
-  // const handleFetch = async()=>{
-  //   try{
-  //     await axios.get('/sradss/api/01poor.php?API-TOKEN=MzBiZDdhY2EyODY1YWNiZmU0Nzc0OW&&province_id=65&&yearget=all&mode=1')
-  //     .then(res=>{
-  //       console.log(res);
-        
-  //     })
-  //   }catch(e){
-  //     alert(e)
-  //   }
-  // }
+
 
   return (
     <div>
       <div>
         <form onSubmit={handleSubmit}>
-        {/* <button
-              type="button"
-              onClick={e=>handleFetch()}
-              class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-              ทดสอบยิง API
-              <Icon
-                icon="material-symbols:arrow-right-rounded"
-                width="25"
-                height="25"
-              />
-            </button> */}
           <div class="mb-6 mx-10 mt-10">
             <label
               for="house_code"
@@ -438,7 +402,7 @@ export const FristPage = ({
             </div>
           </div>
 
-          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-4 mx-10">
             <div className="">
               <label
                 for="village"
@@ -784,7 +748,6 @@ export const FristPage = ({
               <input
                 type="number"
                 name="Informant"
-                required
                 id="national_id"
                 value={formData.Informant.national_id}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -940,7 +903,7 @@ export const FristPage = ({
 
           <div class="mx-10">
             {formData.TeamServey.map((teamData, index) => (
-              <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4" key={index}>
+              <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2" key={index}>
                 <div className="relative  rounded-md shadow-sm col-span-1">
                   <label
                     for="visitors"

@@ -21,7 +21,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     news: [],
     agricultural_land: [],
     land_use_issuse: [],
-    
+
     HouseHygiene: {
       item_storage: "",
       drainage_system: "",
@@ -41,40 +41,42 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     },
   });
 
-  const validateArr = ()=>{
+  // ตัวแปร state สำหรับแสดงเลขค่าเช่าเฉพาะใน input (ไม่ต้องส่งไป API)
+  const [rentNumberForDisplay, setRentNumberForDisplay] = useState("");
 
-    if(formData.agricultural_land.length <=0){
+  const validateArr = () => {
+    if (formData.agricultural_land.length <= 0) {
       Swal.fire({
-        title:'กรุณากรอกข้อมูลให้ครบ',
-        text:'หัวข้อ8 พื้นที่ทำกินทางการเกษตร',
-        icon:'warning'
-      })
-      return false
+        title: "กรุณากรอกข้อมูลให้ครบ",
+        text: "หัวข้อ8 พื้นที่ทำกินทางการเกษตร",
+        icon: "warning",
+      });
+      return false;
     }
 
-    if(formData.news.length <= 0){
+    if (formData.news.length <= 0) {
       Swal.fire({
-        title:'กรุณากรอกข้อมูลให้ครบ',
-        text:'หัวข้อ13 การรับรู้ข้อมูลข่าวสารของหน่วยงานราชการ',
-        icon:'warning'
-      })
-      return false
+        title: "กรุณากรอกข้อมูลให้ครบ",
+        text: "หัวข้อ13 การรับรู้ข้อมูลข่าวสารของหน่วยงานราชการ",
+        icon: "warning",
+      });
+      return false;
     }
 
-    return true
-  }
+    return true;
+  };
 
   const handleInputChange = (field, value) => {
     const update = { ...formData }; //clone
     update[field] = value; //assign
 
     // clear house status in law
-    if(field === 'is_has_house' && value !== 'มีบ้านและที่ดินเป็นของตนเอง'){
-      update['house_status_law'] = ''
+    if (field === "is_has_house" && value !== "มีบ้านและที่ดินเป็นของตนเอง") {
+      update["house_status_law"] = "";
     }
 
-    if(field === 'is_has_house' && value !== 'เช่าบ้าน/เช่าห้องอยู่'){
-      update['house_rent'] = null
+    if (field === "is_has_house" && value !== "เช่าบ้าน/เช่าห้องอยู่") {
+      update["house_rent"] = 0;
     }
 
     setFormData(update);
@@ -93,16 +95,55 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
   // load data form main
   useEffect(() => {
+    // ถ้ามี PhysicalCapital ใน mainFormData แปลว่าเราเคยกรอกมาแล้ว
     if (mainFormData.PhysicalCapital) {
-      setFormData(mainFormData.PhysicalCapital);
-      if (formData.water_for_agriculture.startsWith("อื่น ๆ")) {
+      const updatedFormData = mainFormData.PhysicalCapital;
+      setFormData(updatedFormData);
+
+      // ตรวจสอบว่า UrbanArea.is_use_area_to_work มีค่าอะไรเพื่อเซต no11 ให้ตรง
+      const choice = updatedFormData.UrbanArea?.is_use_area_to_work || "";
+      if (choice.startsWith(prefix)) {
+        // ไม่ใช้ ระบุกิจกรรม/อาชีพ
+        setNo11({ career: true, rent: false, other: false });
+      } else if (choice.includes("ค่าเช่า")) {
+        // มีคำว่า "ค่าเช่า" แสดงว่าเป็นการเช่า
+        setNo11({ career: false, rent: true, other: false });
+      } else {
+        // กรณีอื่น ๆ
+        // เช่น "ใช้บ้าน/อาคารของตนเองประกอบกิจกรรม/อาชีพ"
+        // หรือกรณีอื่นที่อาจจะต้องการตรวจสอบเพิ่มเติม
+        setNo11({ career: false, rent: false, other: false });
+      }
+
+      // ตัวอย่างเช็คเงื่อนไขอื่น ๆ
+      if (updatedFormData.water_for_agriculture?.startsWith("อื่น ๆ")) {
         setIsOther(true);
       }
-      if (formData.land_use_issuse.length >= 2) {
+      if (updatedFormData.land_use_issuse?.length >= 2) {
         setHasProblem10(true);
       }
     }
   }, [mainFormData]);
+
+  // โหลดค่าเดิมเมื่อ component ถูก mount หรือเมื่อ formData เปลี่ยน
+useEffect(() => {
+  // สมมติค่าเดิม เช่น "ใช้พื้นที่/แผง/อาคาร โดยการเช่าผู้อื่น ค่าเช่า500บาท/เดือน"
+  const rentString = formData.UrbanArea.is_use_area_to_work || "";
+
+  // เช็คว่ามี "ค่าเช่า" กับ "บาท/เดือน" หรือเปล่า
+  if (rentString.includes("ค่าเช่า") && rentString.includes("บาท/เดือน")) {
+    // หา index ของข้อความ
+    const start = rentString.indexOf("ค่าเช่า") + "ค่าเช่า".length; // +6
+    const end = rentString.indexOf("บาท/เดือน");
+    // ตัด substring มาเก็บ
+    const numericValue = rentString.slice(start, end).trim(); // "500"
+    
+    setRentNumberForDisplay(numericValue);
+  } else {
+    // ถ้าไม่ match ก็เคลียร์เป็นช่องว่าง
+    setRentNumberForDisplay("");
+  }
+}, [formData.UrbanArea.is_use_area_to_work]);
 
   const handleCheckboxChange = (field, value, checked) => {
     const updateData = { ...formData };
@@ -136,12 +177,11 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     rent: false,
     other: false,
   });
-  
 
   //next page
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(!validateArr()){
+    if (!validateArr()) {
       return;
     }
 
@@ -161,10 +201,9 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     setCurrentPage(2);
   };
 
-  const handleLogdata = ()=>{
+  const handleLogdata = () => {
     console.log(formData);
-    
-  }
+  };
 
   //11
   const prefix = "ไม่ใช้พื้นที่ชุมชนเมืองประกอบอาชีพ ";
@@ -1794,16 +1833,21 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         id="is_use_area_to_work_rent"
                         name="UrbanArea_problem"
                         type="number"
+                        required
+                        value={rentNumberForDisplay}
                         placeholder="ระบุ"
                         onChange={(e) => {
-                          handleInputSubjChange(
-                            "UrbanArea",
-                            "is_use_area_to_work",
+                          const numericValue = e.target.value; // ตัวเลขที่ user กรอก
+                          setRentNumberForDisplay(numericValue); // set ลง state ที่โชว์เฉยๆ
+                  
+                          // ประกอบ string แล้วอัปเดตลง formData เหมือนเดิม
+                          const newString =
                             "ใช้พื้นที่/แผง/อาคาร โดยการเช่าผู้อื่น" +
-                              " ค่าเช่า" +
-                              e.target.value +
-                              "บาท/เดือน"
-                          );
+                            " ค่าเช่า" +
+                            numericValue +
+                            "บาท/เดือน";
+                  
+                          handleInputSubjChange("UrbanArea", "is_use_area_to_work", newString);
                         }}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-m rounded-lg focus:ring-blue-500 focus:border-blue-500 w-1/4 p-1.5"
                       />
@@ -1860,7 +1904,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         handleInputSubjChange(
                           "UrbanArea",
                           "is_use_area_to_work",
-                          prefix2+e.target.value
+                          prefix2 + e.target.value
                         );
                       }}
                       className="bg-gray-50 border  border-gray-300 text-gray-900 text-m rounded-lg focus:ring-blue-500 focus:border-blue-500  w-1/7 p-1.5"
@@ -2488,6 +2532,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 <input
                   name="benefit_form_tech"
                   type="radio"
+                  required
                   checked={formData.benefit_form_tech === false}
                   value={false}
                   onChange={(e) => {

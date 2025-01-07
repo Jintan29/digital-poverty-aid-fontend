@@ -7,11 +7,11 @@ import Swal from "sweetalert2";
 
 //เก็บข้อมูลลง store
 import { useDispatch, useSelector } from "react-redux";
-import {login as loginRedux} from '../../store/userSlice'
+import { login as loginRedux } from "../../store/userSlice";
 
 export const Login = () => {
-  const dispatch = useDispatch()
-  const {user} = useSelector((state)=>({...state.user}))
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => ({ ...state.user }));
 
   const [formData, setFormData] = useState({
     username: "",
@@ -27,21 +27,28 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios
-      .post(config.api_path + "/user/login", formData)
-      .then(res=>{
-        console.log(res);
-        alert("ลงชื่อสำเร็จ");
-        dispatch(loginRedux({
-          name:res.data.data.user.username,
-          role:res.data.data.user.role,
-          status:res.data.data.user.status,
-          token:res.data.Token
-        }))
-
+      const res = await axios.post(config.api_path + "/user/login", formData);
+      if (res.data.data.user.role == "" || res.data.data.user.role == null) {
+        Swal.fire({
+          title: "รอ การอนุมัติจากผู้ดูแลระบบ",
+          icon: "warning",
+        });
+      } else if (
+        res.data.data.user.role === "admin" ||
+        res.data.data.user.role === "superAdmin"
+      ) {
+        alert("ลงชื่อเข้าใช้สำเร็จ");
+        dispatch(
+          loginRedux({
+            name: res.data.data.user.username,
+            role: res.data.data.user.role,
+            status: res.data.data.user.status,
+            token: res.data.Token,
+          })
+        );
         localStorage.setItem('token',res.data.Token)
-      })
-      
+      }
+
     } catch (err) {
       Swal.fire({
         title: "error",
@@ -138,8 +145,13 @@ export const Login = () => {
 
                   <div className="mt-3">
                     ยังไม่มีบัญชีผู้ใช้ ?
-                    <Link to={"/register"} className="ml-3 text-sky-700">
-                      ลงทะเบียน
+                    <Link to={"/register"} className="mx-3 text-sky-700">
+                      ลงทะเบียน 
+                    </Link>
+                    <br />
+                     หรือ 
+                     <Link to={"/forgot-pass"} className="ml-3 text-sky-700">
+                      ลืมรหัสผ่าน
                     </Link>
                   </div>
                 </div>
