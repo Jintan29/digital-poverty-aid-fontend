@@ -300,7 +300,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
             </h3>
           </div>
           {/* Input */}
-          <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+          <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1  mx-10">
             <div className="relative  rounded-md shadow-sm">
               <label
                 for="visitors"
@@ -526,10 +526,10 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
           {/* Socialwelfare */}
 
-          {/* แสดงรายการสวัสดิการ */}
+          {/* แสดงรายการสวัสดิการ */} 
           {member.SocialWelfare.map((welfare, welfareIndex) => (
             <div
-              className="grid gap-6 mb-6 mt-0 md:grid-cols-3 mx-10"
+              className="grid gap-6 mb-6 mt-0 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10"
               key={welfareIndex}
             >
               <div className="">
@@ -648,8 +648,8 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
             </button>
           </div>
 
-          {/* Part3 */}
-          <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+          {/* Part3 */}   {/* พูดภษาไทยได้ */}
+          <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10">
             <div className="">
               <label
                 for="can_speak_TH"
@@ -840,10 +840,11 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
             </h3>
           </div>
 
-          <div className="grid gap-2 mb-6 mt-6 md:grid-cols-6  mx-10 ">
+          {/* ประกอบอาชีพ */}
+          <div className="grid gap-4 mb-6 mt-6 mx-10 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
             {/* CheckBox */}
 
-            <div class="">
+            <div>
               <input
                 id={`career-1-${index}`}
                 type="checkbox"
@@ -860,7 +861,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 พืชเกษตร
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`career-2-${index}`}
                 type="checkbox"
@@ -877,7 +878,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 ประมง
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`career-3-${index}`}
                 type="checkbox"
@@ -895,7 +896,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 ปศุสัตว์
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`career-4-${index}`}
                 type="checkbox"
@@ -914,11 +915,11 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 for="default-checkbox"
                 class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                รับจ้างภาคการเกษตร
+                  รับจ้างภาคการเกษตร
               </label>
             </div>
 
-            <div class="">
+            <div>
               <input
                 id={`career-5-${index}`}
                 type="checkbox"
@@ -940,7 +941,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`career-6-${index}`}
                 type="checkbox"
@@ -963,7 +964,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="">
+            <div>
               <input
                 id={`career-6-${index}`}
                 type="checkbox"
@@ -986,7 +987,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="">
+            <div>
               <input
                 id={`career-7-${index}`}
                 type="checkbox"
@@ -1009,7 +1010,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="col-span-4">
+            <div>
               <input
                 id={`career-8-${index}`}
                 type="checkbox"
@@ -1034,7 +1035,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="">
+            <div>
               <input
                 id={`career-9-${index}`}
                 type="checkbox"
@@ -1055,7 +1056,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
 
             {member.career.some((e)=>e.startsWith(prefix)) && (
-                <div className="">
+                <div>
                   <input
                     type="text"
                     id={`career-other-${index}`}
@@ -1079,10 +1080,11 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
             </h3>
           </div>
 
-          <div className="grid gap-2 mb-6 mt-6 md:grid-cols-6  mx-10 ">
+          {/* ทักษะอาชีพ */}
+          <div className="grid gap-4 mb-6 mt-6 mx-10 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4  md:grid-cols-1 sm:grid-cols-1 ">
             {/* CheckBox */}
 
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1101,7 +1103,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1123,7 +1125,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 พืชเกษตร
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1141,7 +1143,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 ประมง
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1163,7 +1165,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 ปศุสัตว์
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1186,7 +1188,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1208,7 +1210,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1231,7 +1233,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน
               </label>
             </div>
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1254,7 +1256,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1277,7 +1279,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="col-span-3">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1302,7 +1304,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div class="">
+            <div>
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1322,7 +1324,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
             </div>
             
             {member.work_can_made_income.some((e)=>e.startsWith(prefix)) && 
-            <div className="">
+            <div>
               <input
                 type="text"
                 id="first_name"

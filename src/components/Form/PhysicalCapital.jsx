@@ -74,7 +74,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
     }
 
     if(field === 'is_has_house' && value !== 'เช่าบ้าน/เช่าห้องอยู่'){
-      update['house_rent'] = null
+      update['house_rent'] = 0
     }
 
     setFormData(update);
@@ -186,8 +186,8 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
           <h3 className="text-black text-base font-bold py-2">
             1. ให้ระบบ pin location ของบ้านด้วย GIS (ทศนิยม 6-8 ตำแหน่ง)
           </h3>
-
-          <div className="grid grid-cols-2 gap-8 mt-4">
+{/* pin */}
+          <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 mt-4">
             <div>
               <label
                 htmlFor="latitude"
@@ -229,7 +229,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
           <h3 className="text-black text-base font-bold py-2">
             2. ท่านและสมาชิกครัวเรือนมีบ้านเป็นของตนเองหรือไม่ (เลือกได้ 1 ข้อ)
           </h3>
-
+{/* 2 */}
           <div className="mt-2 space-y-6">
             <div className="flex items-center gap-x-3">
               <input
@@ -411,11 +411,11 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
               )}
             </div>
           </div>
-          {/* ข้อ 3  */}
+          
           <h3 className="text-black text-base font-bold py-2 mt-2">
             3. สภาพบ้านที่อยู่อาศัยในปัจจุบันเป็นอย่างไร (เลือกได้ 1 ข้อ)
           </h3>
-
+ {/* ข้อ 3  */}
           <div className="mt-2 space-y-6">
             <div className="flex items-center gap-x-3">
               <input
@@ -476,7 +476,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
               </label>
             </div>
           </div>
-
+{/* 4 */}
           <h3 className="text-black text-base font-bold py-2 mt-2">
             4. ความเป็นระเบียบเรียบร้อย และถูกลักษณะของบ้านพักอาศัย
           </h3>
@@ -702,8 +702,8 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 5.1 ครัวเรือนของท่านมีไฟฟ้าหรือไม่
               </h3>
 
-              <div className="flex flex-row ml-3 ">
-                <div className="">
+              <div className="flex flex-col xl:flex-row xl:gap-6 ml-3">
+                <div className="flex items-center mb-4 xl:mb-0">
                   <input
                     name="electricity_status"
                     type="radio"
@@ -721,7 +721,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 xl:mb-0">
                   <input
                     name="electricity_status"
                     type="radio"
@@ -740,7 +740,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 xl:mb-0">
                   <input
                     name="electricity_status"
                     type="radio"
@@ -1059,8 +1059,8 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 7.2 โทรศัพท์มือถือ
               </h3>
 
-              <div className="flex flex-row ml-3 ">
-                <div className="">
+              <div className="flex flex-col lg:flex-row lg:gap-6 ml-3 ">
+                <div className="flex items-center mb-4 lg:mb-0">
                   <input
                     name="phone"
                     type="radio"
@@ -1077,7 +1077,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 lg:mb-0">
                   <input
                     name="phone"
                     type="radio"
@@ -1095,7 +1095,7 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 lg:mb-0">
                   <input
                     name="phone"
                     type="radio"

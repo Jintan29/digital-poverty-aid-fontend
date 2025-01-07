@@ -1193,7 +1193,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
   return (
     <>
-      <div className="p-5 bg-gray-100 rounded-lg shadow-lg">
+      <div className="p-5 ">
         <div className="Container">
           <h1 className="text-xl font-bold text-gray-700 mb-5">
             ส่วนที่ 3 สภาพพื้นฐานทางเศรษฐกิจ (ทุนการเงิน)
@@ -1607,7 +1607,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
               </h3>
               <div className="pl-10">
                 {/* 1 */}
-                <div className="flex items-center mb-4">
+                <div className="flex flex-wrap items-center mb-4">
                   <input
                     type="checkbox"
                     id="income_type_0"
@@ -1630,11 +1630,11 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   {formData.NonAGIincome.some(
                     (item) => item.income_type === prefixIncomeType
                   ) && ( // ตรวจสอบว่ามี income_type ตรงกับ prefixIncomeType
-                      <div className="flex items-center">
+                      <div className="flex flex-wrap items-center sm:w-auto md:w-2/2 lg:w-auto xl:w-auto ">
                         <input
                           type="number"
                           placeholder="....บาท/ปี"
-                          className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200"
+                          className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200  sm:w-48 md:w-48 lg:w-60 xl:w-60"
                           value={
                             formData.NonAGIincome.find(
                               (item) => item.income_type === prefixIncomeType
@@ -1654,7 +1654,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         <input
                           type="number"
                           placeholder="....บาท/ปี"
-                          className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200"
+                          className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200  sm:w-48 md:w-48 lg:w-60 xl:w-60 "
                           value={
                             formData.NonAGIincome.find(
                               (item) => item.income_type === prefixIncomeType
@@ -2214,7 +2214,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   {(formData.Saving?.length === 0 ||
                     formData.Saving[0]?.is_has_saving === true) && (
                       <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
-                        <table className="table-auto w-full border-collapse">
+                        <table className="table-auto w-2/2 border-collapse">
                           <thead>
                             <tr>
                               <th className="border px-4 py-2 bg-gray-200 text-gray-700">
@@ -2254,7 +2254,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                   placeholder="จำนวนเงินบาทรวม"
                                   id="amount_0"
                                   name="amount"
-                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-1/2"
+                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                                   value={
                                     formData.Saving.find(
                                       (item) =>
@@ -2320,7 +2320,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                         "เงินฝากกับสถาบันการเงิน (ธนาคาร หน่วยประกันชีวิต)"
                                     )
                                   }
-                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-1/2"
+                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                                   onChange={(e) =>
                                     handleAmountChange(
                                       e,
@@ -2358,7 +2358,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                   placeholder="จำนวนเงินบาทรวม"
                                   id="amount_2"
                                   name="amount"
-                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-1/2"
+                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                                   value={
                                     formData.Saving.find(
                                       (item) =>
@@ -2423,7 +2423,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                         "พันธบัตร/สลากออมทรัพย์ (ออมสิน ธกส. ฯลฯ)"
                                     )
                                   }
-                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-1/2"
+                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                                   onChange={(e) =>
                                     handleAmountChange(
                                       e,
@@ -2458,7 +2458,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                   placeholder="จำนวนเงินบาทรวม"
                                   id="amount_4"
                                   name="amount"
-                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-1/2"
+                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                                   value={
                                     formData.Saving.find(
                                       (item) =>
@@ -2520,7 +2520,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                   placeholder="จำนวนเงินบาทรวม"
                                   id="amount_5"
                                   name="amount"
-                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-1/2"
+                                  className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                                   value={
                                     formData.Saving.find((item) =>
                                       item.saving_type.startsWith(prefixSaving)
@@ -2671,21 +2671,21 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 {formData.Debt[0].is_has_debt === true && (
                   <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
                     <table
-                      className="table-auto w-full border-collapse"
-                      style={{ tableLayout: "fixed" }}
+                      className="table-auto w-2/2 border-collapse"
+                      // style={{ tableLayout: "fixed" }}
                     >
                       <thead>
                         <tr>
                           <th
                             className="border px-4 py-2 bg-gray-200 text-gray-700"
-                            style={{ width: "70%" }}
+                            // style={{ width: "80%" }}
                           >
                             แหล่งสินเชื่อ <br />
                             (สถาบันการเงิน/ กองทุน/ เงินบุคคล)
                           </th>
                           <th
                             className="border px-4 py-2 bg-gray-200 text-gray-700"
-                            style={{ width: "30%" }}
+                            // style={{ width: "40%" }}
                           >
                             จำนวนเงินกู้ที่คงค้าง (บาท)
                           </th>
@@ -2726,7 +2726,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                     "ญาติ/เพื่อน/เพื่อนบ้าน (ไม่มีค่าตอบแทนอื่นใด)"
                                 )?.outstanding_amount || ""
                               }
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               onChange={(e) =>
                                 handleOutstandingAmountChange(
                                   e.target.value,
@@ -2764,7 +2764,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                               id="outstanding_amount_1"
                               name="outstanding_amount"
                               placeholder="จำนวนเงินกู้ที่คงค้าง"
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               value={
                                 formData.Creditsources.find(
                                   (item) =>
@@ -2809,7 +2809,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                               placeholder="จำนวนเงินกู้ที่คงค้าง"
                               id="outstanding_amount_2"
                               name="outstanding_amount"
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               value={
                                 formData.Creditsources.find(
                                   (item) =>
@@ -2868,7 +2868,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                               id="outstanding_amount_3"
                               name="outstanding_amount"
                               placeholder="จำนวนเงินกู้ที่คงค้าง"
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               value={
                                 formData.Creditsources.find((source) =>
                                   source.form.startsWith(prefixCredit2)
@@ -2907,7 +2907,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                               id="outstanding_amount_4"
                               name="outstanding_amount"
                               placeholder="จำนวนเงินกู้ที่คงค้าง"
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               value={
                                 formData.Creditsources.find(
                                   (item) =>
@@ -2951,7 +2951,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                   (item) => item.form === "ธนาคารออมสิน"
                                 )?.outstanding_amount || ""
                               }
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               onChange={(e) =>
                                 handleOutstandingAmountChange(
                                   e.target.value,
@@ -2989,7 +2989,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                               id="outstanding_amount_6"
                               name="outstanding_amount"
                               placeholder="จำนวนเงินกู้ที่คงค้าง"
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               onChange={(e) =>
                                 handleOutstandingAmountChange(
                                   e.target.value,
@@ -3034,7 +3034,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                               id="outstanding_amount_7"
                               name="outstanding_amount"
                               placeholder="จำนวนเงินกู้ที่คงค้าง"
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               value={
                                 formData.Creditsources.find(
                                   (item) =>
@@ -3086,7 +3086,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                     "ร้านค้าอุปโภค บริโภค และปัจจัยการผลิต (ปุ๋ย ยา เครื่องใช้ไฟฟ้า เฟอร์นิเจอร์ฯลฯ)"
                                 )?.outstanding_amount || ""
                               }
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               onChange={(e) =>
                                 handleOutstandingAmountChange(
                                   e.target.value,
@@ -3131,7 +3131,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                     "เงินกู้นอกระบบ (อัตราดอกเบี้ยเกินกว่าร้อยละ 15 ต่อปี)"
                                 )?.outstanding_amount || ""
                               }
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               onChange={(e) =>
                                 handleOutstandingAmountChange(
                                   e.target.value,
@@ -3177,7 +3177,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                                     "กองทุนเงินให้กู้ยืมเพื่อการศึกษา (กยศ.) กองทุนเงินกู้ยืมเพื่อการศึกษาที่ผูกกับรายได้ในอนาคต (กอร.)"
                                 )?.outstanding_amount || ""
                               }
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               onChange={(e) =>
                                 handleOutstandingAmountChange(
                                   e.target.value,
@@ -3229,7 +3229,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                               id="outstanding_amount_11"
                               name="outstanding_amount"
                               placeholder="จำนวนเงินกู้ที่คงค้าง"
-                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-full"
+                              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md transition duration-200 w-2/2"
                               value={
                                 formData.Creditsources.find((source) =>
                                   source.form.startsWith(prefixCredit)
