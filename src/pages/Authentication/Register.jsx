@@ -18,7 +18,6 @@ const Register = () => {
     title:'นาย',
     fname:'',
     lname:'',
-    role: "",
     phone: "",
     status: "",
   });
@@ -31,7 +30,8 @@ const Register = () => {
     setFormData(updateData);
   };
 
-  const checkPassword = () => {
+ 
+  const validation = () => {
     if (formData.password !== formData.confimePassword) {
       Swal.fire({
         icon: "warning",
@@ -40,12 +40,31 @@ const Register = () => {
       });
       return false;
     }
+    if(formData.phone.length <10){
+      Swal.fire({
+        title:'เบอร์โทรไม่ถูกต้อง',
+        text:'กรุนากรอกรให้ครบ 10 หลัก',
+        icon:'warning'
+      })
+
+      return false
+    }
+
+    if(formData.status ===''){
+      Swal.fire({
+        title:'กรอกข้อมูลไม่ครบ',
+        text:'กรุณาเลือกบทบาท',
+        icon:'warning'
+      })
+
+      return false
+    }
     return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!checkPassword()) {
+    if (!validation()) {
       return;
     }
 
@@ -128,6 +147,7 @@ const Register = () => {
                   <div className="relative">
                     <input
                       type="email"
+                      pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
                       onInvalid={(e) =>
                         e.target.setCustomValidity("กรุณากรอกข้อมูลให้ครบ")
                       }
@@ -239,7 +259,6 @@ const Register = () => {
 
                 <div className="relative rounded-md shadow-sm mb-6">
                   <label
-                    htmlFor="host_title"
                     className="mb-2.5 block font-medium text-black dark:text-white"
                   >
                     ชื่อจริง
@@ -270,7 +289,7 @@ const Register = () => {
                     }
                     onInput={(e) => e.target.setCustomValidity("")}
                     type="text"
-                    placeholder=""
+                    placeholder="กรอกชื่อจริง"
                     className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-24 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
 
@@ -298,7 +317,7 @@ const Register = () => {
                         e.target.setCustomValidity("กรุณากรอกข้อมูลให้ครบ")
                       }
                       onInput={(e) => e.target.setCustomValidity("")}
-                      placeholder="กรอกเบอร์โทรศัพท์"
+                      placeholder="กรอกนามสกุล"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 

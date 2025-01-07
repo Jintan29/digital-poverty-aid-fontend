@@ -18,6 +18,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
       sex: "ชาย",
       birthdate: "",
       national_id: "",
+      phone:"",
       status_in_house: "มีชื่อและอาศัยอยู่",
       health: "ปกติ",
       SocialWelfare: [
@@ -465,6 +466,26 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 value={member.national_id}
                 onChange={(e) =>
                   handleInputChange(index, "national_id", e.target.value)
+                }
+                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder=""
+                required
+              />
+            </div>
+
+            <div className="">
+              <label
+                for=""
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                เบอร์โทรศัพท์ (หากไม่มีให้กรอก "-")
+              </label>
+              <input
+                type="text"
+                id="phone"
+                value={member.phone}
+                onChange={(e) =>
+                  handleInputChange(index, "phone", e.target.value)
                 }
                 class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
