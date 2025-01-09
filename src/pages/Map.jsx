@@ -6,7 +6,7 @@ export const Map = () => {
         <>
             <div>
                 {/* จังหวัด */}
-                <h1 className="mt-24 ml-6 text-[24px]">
+                <h1 className="mt-18 ml-6 text-[24px]">
                     <span className="font-bold text-shadow-custom">
                         จังหวัด:
                     </span>
