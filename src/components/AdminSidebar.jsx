@@ -27,7 +27,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     },
     {
       name: "ค้นหาสมาชิคครัวเรือน",
-      link: "/admin/find-household",
+      link: "/admin/find-members",
       logo: "material-symbols:group-search",
     },
     {

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import HouseCode from "../components/Household/HouseCode";
-import ByAgeRange from "../components/Household/ByAgeRange";
-import RealName from "../components/Household/RealName";
+import HouseCode from "../../../components/Household/HouseCode";
+import ByAgeRange from "../../../components/Household/ByAgeRange";
+import RealName from "../../../components/Household/RealName";
 import { Icon } from "@iconify/react";
 
-const Household = () => {
+const MemberHousehold = () => {
   // สร้าง state สำหรับเก็บหน้าที่ต้องการแสดง
   const [activeComponent, setActiveComponent] = useState("");
 
@@ -74,4 +74,4 @@ const Household = () => {
   );
 };
 
-export default Household;
+export default MemberHousehold;
