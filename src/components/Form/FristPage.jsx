@@ -191,14 +191,6 @@ export const FristPage = ({
       return false
     }
 
-    if(formData.Informant.national_id.length !== 13 ){
-      Swal.fire({
-        title:'หมายเลขบัตรประชาชนไม่ถูกต้อง',
-        text:'กรุณากรอกเลขบัตรของ "ผู้ให้ข้อมูล" ให้ครบ 13 หลัก',
-        icon:'error',
-      })
-      return false
-    }
 
     if(formData.Informant.phone.length !== 10 ){
       Swal.fire({
@@ -756,7 +748,6 @@ export const FristPage = ({
               <input
                 type="number"
                 name="Informant"
-                required
                 id="national_id"
                 value={formData.Informant.national_id}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
