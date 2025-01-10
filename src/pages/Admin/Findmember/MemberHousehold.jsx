@@ -63,6 +63,7 @@ const MemberHousehold = () => {
 
       {/* แสดงผลเนื้อหาตามค่าของ activeComponent */}
       <div>
+        {activeComponent === '' ?(<h2 className="flex justify-center text-2xl font-semibol">กรุณาเลือกหมวดหมู่การค้นหา</h2>):''}
         {activeComponent === "HouseCode" && <HouseCode />}{" "}
         {/*แสดงคอมโพเนนต์ HouseCode เมื่อ activeComponent เป็น "HouseCode" */}
         {activeComponent === "ByAgeRange" && <ByAgeRange />}{" "}

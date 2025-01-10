@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -5,9 +6,11 @@ import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../../config";
+import { Link } from "react-router-dom";
 
 const ByAgeRange = () => {
   const [selectedAgeRange, setSelectedAgeRange] = useState(""); // เก็บค่าช่วงอายุที่เลือก
+  const [openMenuIndex, setOpenMenuIndex] = useState(null); //menu icon
 
   const [members, setMembers] = useState([]);
   const [minAge, setMinAge] = useState(0);
@@ -15,9 +18,8 @@ const ByAgeRange = () => {
   //Paginate
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 30; //จำนวน row/หน้า
+  const limit = 30;
 
-  // รายการช่วงอายุ
   const ageRanges = [
     "ต่ำกว่า 15 ปี",
     "15-25 ปี",
@@ -26,7 +28,7 @@ const ByAgeRange = () => {
     "46 ปีขึ้นไป",
   ];
 
-  //exportToPD
+  //PDF
   const exportToPDF = () => {
     const content = document.getElementById("table-content"); // ดึงเฉพาะตาราง
     if (!content) return; // ตรวจสอบว่าได้ดึงข้อมูลมาแล้ว
@@ -101,6 +103,7 @@ const ByAgeRange = () => {
             page,
             limit,
           },
+          ...config.headers(),
         }
       );
       setMembers(response.data.results);
@@ -115,6 +118,15 @@ const ByAgeRange = () => {
     }
   };
 
+  const handleMenuToggle = (index) => {
+    if (openMenuIndex === index) {
+      // ถ้ากดที่แถวเดิม ให้ปิด menu
+      setOpenMenuIndex(null);
+    } else {
+      setOpenMenuIndex(index);
+    }
+  };
+
   //call API when age change
   useEffect(() => {
     if (minAge >= 0 && maxAge > 0) {
@@ -122,7 +134,21 @@ const ByAgeRange = () => {
     }
   }, [minAge, maxAge, currentPage]);
 
-  // ฟังก์ชันสำหรับเปลี่ยนหน้า
+  // ติดตามการกดนอก menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".relative")) {
+        setOpenMenuIndex(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  //เปลี่ยนหน้า
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -233,10 +259,14 @@ const ByAgeRange = () => {
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 bg-gray-100  width: 20%"
+                      className="px-6 py-3 bg-gray-50  width: 20%"
                     >
                       รหัสบ้าน
                     </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 bg-gray-50  width: 20%"
+                    ></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -274,6 +304,38 @@ const ByAgeRange = () => {
                       </td>
                       <td className="px-6 py-3 text-black bg-gray-50">
                         {member.Household.house_code}
+                      </td>
+
+                      <td className="px-6 py-3 text-black relative bg-gray-50">
+                        <div className="relative inline-block">
+                          <button
+                            onClick={() => handleMenuToggle(index)}
+                            className="text-slate-700 hover:text-slate-900 focus:outline-none"
+                          >
+                            <Icon
+                              icon="material-symbols:search-rounded"
+                              width="1em"
+                              height="1em"
+                            />
+                          </button>
+
+                          {openMenuIndex === index && (
+                            <div className="absolute right-0 mt-2 py-2 w-40 bg-white rounded-md shadow-xl z-20">
+                              <Link
+                                to={`/admin/track-member/${member.id}`}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                ดูข้อมูลรายบุคคล
+                              </Link>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                ดูข้อมูลครัวเรือน
+                              </a>
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

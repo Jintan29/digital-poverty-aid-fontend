@@ -17,6 +17,20 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarItem = [
     { name: "Dashbord", link: "#", logo: "mdi:chart-pie" },
     {
+      name: "ค้นหาสมาชิกครัวเรือน",
+      link: "/admin/find-members",
+      logo: "material-symbols:group-search",
+    },
+    {
+      name: "ระบบติดตามข้อมูล",
+      link: "/admin/find-members",
+      logo: "material-symbols:rubric-rounded",
+      submenu:[
+        {name:'ติดตามรายบุคคล',link:'/admin/track-member/'},
+        {name:'ติดตามครัวเรือน',link:'/admin/track-household'},
+      ]
+    },
+    {
       name: "จัดการผู้ใช้งานระบบ",
       link: "#",
       logo: "material-symbols:person-rounded",
@@ -25,23 +39,6 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {name:'อนุมัติผู้ใช้ใหม่',link:'/admin/approve-user'}
       ]
     },
-    {
-      name: "ค้นหาสมาชิคครัวเรือน",
-      link: "/admin/find-members",
-      logo: "material-symbols:group-search",
-    },
-    //ตัวอย่างสำหรับ submenu
-    // {
-    //   name: "ค้นหาสมาชิคครัวเรือน",
-    //   link: "#",
-    //   logo: "material-symbols:group-search",
-    //   submenu: [
-    //     { name: "ค้นหาจากช่วงอายุ", link: "" },
-    //     { name: "ค้นหาจากชื่อจริง", link: "" },
-    //     { name: "ค้นหาจากเลขบ้าน", link: "" },
-        
-    //   ],
-    // },
     {
       name: "กลับหน้าหลัก",
       link: "/",
@@ -80,7 +77,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                   {/* ถ้ามี sub ให้แสดง btn เอาไว้เปิด/ปิด */}
                   <button
                   type="button"
-                  className="flex items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
+                  className="flex hover:bg-graydark items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
                   onClick={()=>toggleDropdown(index)}
                   >
                     <span className="text-gray-500">
@@ -112,7 +109,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                         <li key={subIndex}>
                           <Link
                             to={subItem.link}
-                            className="flex items-center p-2 text-bodydark1 transition duration-75 rounded-lg group hover:bg-graydark dark:text-white dark:hover:bg-gray-700"
+                            className="flex items-center p-2 text-bodydark1 transition duration-75 rounded-lg group hover:bg-graydark"
                           >
                             {subItem.name}
                           </Link>
