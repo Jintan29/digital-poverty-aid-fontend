@@ -139,15 +139,6 @@ function App() {
                 </AdminRoute>
               }
             />
-
-            <Route
-              path="jj"
-              element={
-                <AdminRoute>
-                  <JJ1 />
-                </AdminRoute>
-              }
-            />
             <Route
               path="household"
               element={
