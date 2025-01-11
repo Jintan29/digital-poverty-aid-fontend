@@ -15,6 +15,7 @@ export default {
         customGreen: "#56F27D",
         customBlue: "#0004FF",
         customBlue2: "#3FA6EF",
+        customYellow:"#FFC104",
         bodydark1: '#DEE4EE',
         graydark: '#333A48',
         softdark: '#1c2434',
