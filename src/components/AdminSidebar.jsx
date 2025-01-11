@@ -17,6 +17,20 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarItem = [
     { name: "Dashbord", link: "#", logo: "mdi:chart-pie" },
     {
+      name: "ค้นหาสมาชิกครัวเรือน",
+      link: "/admin/find-members",
+      logo: "material-symbols:group-search",
+    },
+    {
+      name: "ระบบติดตามข้อมูล",
+      link: "/admin/find-members",
+      logo: "material-symbols:rubric-rounded",
+      submenu:[
+        {name:'ติดตามรายบุคคล',link:'/admin/track-member/'},
+        {name:'ติดตามครัวเรือน',link:'/admin/track-household'},
+      ]
+    },
+    {
       name: "จัดการผู้ใช้งานระบบ",
       link: "#",
       logo: "material-symbols:person-rounded",
@@ -81,6 +95,17 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                 {/* เช็คว่า Item ที่ loop มามี sub ?  */}
                 {item.submenu ? (
                   <>
+                  {/* ถ้ามี sub ให้แสดง btn เอาไว้เปิด/ปิด */}
+                  <button
+                  type="button"
+                  className="flex hover:bg-graydark items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
+                  onClick={()=>toggleDropdown(index)}
+                  >
+                    <span className="text-gray-500">
+                      <Icon icon={item.logo} width='25' height='25' />
+                    </span>
+                    <span className="flex-1 ms-3 text-left">{item.name}</span>
+                    <svg
                     {/* ถ้ามี sub ให้แสดง btn เอาไว้เปิด/ปิด */}
                     <button
                       type="button"
@@ -115,7 +140,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                         <li key={subIndex}>
                           <Link
                             to={subItem.link}
-                            className="flex items-center p-2 text-bodydark1 transition duration-75 rounded-lg group hover:bg-graydark dark:text-white dark:hover:bg-gray-700"
+                            className="flex items-center p-2 text-bodydark1 transition duration-75 rounded-lg group hover:bg-graydark"
                           >
                             {subItem.name}
                           </Link>
