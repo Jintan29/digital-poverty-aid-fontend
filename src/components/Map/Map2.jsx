@@ -98,7 +98,7 @@ const Map2 = () => {
   return (
     <>
       <div className="flex justify-center items-start">
-        <div className="mt-[-40px]">
+        <div className="mt-[-40px] ml-[-200px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="800"
@@ -266,70 +266,97 @@ const Map2 = () => {
               </filter>
             </defs>
             <text
-              className="font-thai font-bold"
+              className="font-thai font-bold pointer-events-none"
               fontSize="10"
               transform="translate(350.47 386.535)"
+              data-district="บางกระทุ่ม"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               บางกระทุ่ม
             </text>
             <text
-              className="font-thai font-bold"
+              className="font-thai font-bold pointer-events-none"
               fontSize="12"
               // transform="translate(290 355)"
               transform="rotate(42.65 -287.775 544.622)"
+              data-district="บางระกำ"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               บางระกํา
             </text>
             <text
-              className="font-thai font-bold "
+              className="font-thai font-bold pointer-events-none"
               fontSize="13"
               transform="rotate(-58.453 389.877 -284.017)"
-            // transform="translate(394 185)"
+              data-district="ชาติตระการ"
+              // transform="translate(394 185)"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               ชาติตระการ
             </text>
             <text
-              className="font-thai font-bold "
+              className="font-thai font-bold pointer-events-none"
               fontSize="12"
               transform="rotate(-40.782 626.069 -294.549)"
-            // transform="translate(330 315)"
+              // transform="translate(330 315)"
+              data-district="เมืองพิษณุโลก"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               เมืองพิษณุโลก
             </text>
             <text
-              className="font-thai font-bold"
+              className="font-thai font-bold pointer-events-none"
               fontSize="13"
               transform="translate(448.209 251.336)"
+              data-district="นครไทย"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               นครไทย
             </text>
             <text
-              className="font-thai font-bold"
+              className="font-thai font-bold pointer-events-none"
               fontSize="13"
               transform="rotate(-64.47 549.356 -139.568)"
-            // transform="rotate(415 380)"
+              // transform="rotate(415 380)"
+              data-district="เนินมะปราง"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               เนินมะปราง
             </text>
             <text
-              className="font-thai font-bold"
+              className="font-thai font-bold  pointer-events-none"
               fontSize="12"
               transform="rotate(49.217 -101.15 453.489)"
-            // transform="translate(305 259)"
+              data-district="พรหมพิราม"
+              // transform="translate(305 259)"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               พรหมพิราม
             </text>
             <text
-              className="font-thai font-bold"
+              className="font-thai font-bold pointer-events-none"
               fontSize="15"
               transform="translate(405 322.244)"
+              data-district="วังทอง"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               วังทอง
             </text>
             <text
-              className="font-thai font-bold"
+              className="font-thai font-bold pointer-events-none"
               fontSize="13"
               transform="rotate(31.548 -208.98 737.085)"
+              data-district="วัดโบสถ์"
+              onMouseEnter={(e) => handleHover(e, e.target.dataset.district)}
+              onMouseLeave={handleMouseLeave}
             >
               วัดโบสถ์
             </text>

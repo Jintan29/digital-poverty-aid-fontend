@@ -28,7 +28,7 @@ import TrackMember from "./pages/Admin/Tracking/TrackMember";
 import TrackHousehold from "./pages/Admin/Tracking/TrackHousehold";
 import TrackingMemberId from "./pages/Admin/Tracking/TrackingMemberId";
 import MixedChart from "./pages/MixedChart";
-
+import Householdtracking from "./pages/Householdtracking";
 
 
 function App() {
@@ -95,7 +95,7 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="form" element={<Form />} />
             <Route path="testt" element={<MixedChart />} />
-            
+          
 
             {/* Auth */}
             <Route path="register" element={<Register />} />
@@ -105,6 +105,8 @@ function App() {
               path="reset-password/:id/:token"
               element={<ResetPassword />}
             />
+
+            <Route path="reset-password/:id/:token" element={<ResetPassword />} />
 
             <Route path="map" element={<Map />} />
             <Route path="test" element={<TestAPI />} />
@@ -164,6 +166,11 @@ function App() {
               element={
                 <AdminRoute>
                   <TrackingMemberId />
+
+              path="jj"
+              element={
+                <AdminRoute>
+                  <JJ1 />
                 </AdminRoute>
               }
             />
@@ -176,6 +183,14 @@ function App() {
               }
             />
 
+
+              path="household"
+              element={
+                <AdminRoute>
+                  <Householdtracking />
+                </AdminRoute>
+              }
+            />
             <Route path="*" element={<PageNotFound />} />
             {/* เพิ่มหน้าอื่น */}
           </Route>
