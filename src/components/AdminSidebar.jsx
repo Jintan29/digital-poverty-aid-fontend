@@ -25,9 +25,9 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       name: "ระบบติดตามข้อมูล",
       link: "/admin/find-members",
       logo: "material-symbols:rubric-rounded",
-      submenu:[
-        {name:'ติดตามรายบุคคล',link:'/admin/track-member/'},
-        {name:'ติดตามครัวเรือน',link:'/admin/track-household'},
+      submenu: [
+        { name: 'ติดตามรายบุคคล', link: '/admin/track-member/' },
+        { name: 'ติดตามครัวเรือน', link: '/admin/track-household' },
       ]
     },
     {
@@ -38,6 +38,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {name:'ข้อมูลผู้ใช้งาน',link:'/admin/manage-user'},
         {name:'อนุมัติผู้ใช้ใหม่',link:'/admin/approve-user'}
       ]
+    },
+    {
+      name: "ติดตามครัวเรือน",
+      link: "/admin/household",
+      logo: "material-symbols:search",
     },
     {
       name: "กลับหน้าหลัก",

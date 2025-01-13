@@ -95,7 +95,7 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="form" element={<Form />} />
             <Route path="testt" element={<MixedChart />} />
-          
+
 
             {/* Auth */}
             <Route path="register" element={<Register />} />
@@ -160,14 +160,15 @@ function App() {
             />
             {/* TrackingMemberId */}
 
-              
+
             <Route
               path="track-member/:id"
               element={
                 <AdminRoute>
                   <TrackingMemberId />
-                  </AdminRoute>
-                }
+                </AdminRoute>
+              }
+
             />
             <Route
               path="track-household"
