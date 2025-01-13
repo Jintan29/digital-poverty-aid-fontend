@@ -524,8 +524,8 @@ useEffect(() => {
             1. บ้านพักอาศัยมีการจัดเก็บสิ่งของเป็นระเบียบไม่รกรุงรัง
           </div>
 
-          <div className="flex flex-row ">
-            <div className="">
+          <div className="flex flex-col sm:flex-row sm:gap-2 ml-3">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="item_storage_yes"
                 name="HouseHygiene_item_storage"
@@ -546,7 +546,7 @@ useEffect(() => {
                 ใช่ (ไม่รก)
               </label>
             </div>
-            <div className="px-10">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="item_storage_no"
                 name="HouseHygiene_item_storage"
@@ -572,8 +572,8 @@ useEffect(() => {
             2.บ้านพักอาศัยมีการจัดการระบบระบายน้ำในบ้าน
           </div>
 
-          <div className="flex flex-row ">
-            <div className="">
+          <div className="flex flex-col sm:flex-row sm:gap-2 ml-3">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="drainage_system_yes"
                 name="HouseHygiene_dra"
@@ -597,7 +597,7 @@ useEffect(() => {
                 ใช่ (มีระบบระบายน้ำ)
               </label>
             </div>
-            <div className="px-10">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="drainage_system_no"
                 name="HouseHygiene_dra"
@@ -626,7 +626,7 @@ useEffect(() => {
             3. บ้านพักอาศัยมีห้องส้วมที่สะอาด แข็งแรง ระบายน้ำดีไม่มีกลิ่น
           </div>
 
-          <div className="flex flex-row ">
+          <div className="flex flex-row ml-3">
             <div className="">
               <input
                 id="toilet_y"
@@ -680,8 +680,8 @@ useEffect(() => {
             4. บ้านพักอาศัยมีการคัดแยกขยะและกำหนดจุดทิ้งขยะที่ชัดเจน
           </div>
 
-          <div className="flex flex-row ">
-            <div className="">
+          <div className="flex flex-col sm:flex-row sm:gap-2 ml-3">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="garbage_y"
                 name="HouseHygiene_gb"
@@ -705,7 +705,7 @@ useEffect(() => {
                 ใช่ (มี)
               </label>
             </div>
-            <div className="px-10">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="garbage_n"
                 name="HouseHygiene_gb"
@@ -916,8 +916,8 @@ useEffect(() => {
                 น้ำฝน)
               </h3>
 
-              <div className="flex flex-row ml-3 ">
-                <div className="">
+              <div className="flex flex-col md:flex-row md:gap-4 ml-3 ">
+                <div className="flex items-center mb-4 md:mb-0">
                   <input
                     id="other_y"
                     name="UtilityWater_other"
@@ -942,7 +942,7 @@ useEffect(() => {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 md:mb-0">
                   <input
                     id="other_n"
                     name="UtilityWater_other"
@@ -966,7 +966,7 @@ useEffect(() => {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 md:mb-0">
                   <input
                     id="other_n_rs"
                     name="UtilityWater_other"

@@ -468,7 +468,9 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
   return (
     <>
       {/* 3 */}
-      <div className="p-5 bg-gray-100 rounded-lg shadow-lg mt-4">
+      <div className="mb-6 mx-10 m-5 p-5 bg-gray-100 rounded-lg" 
+        // style={{maxWidth: '1200px', width: '100%', }}
+      >
         <div className="Container">
           <h1 className="text-lg font-bold text-gray-700 mb-5">
             3. ในระยะเวลา 5 ปีที่ผ่านมา (พ.ศ.2560-2564)
@@ -509,28 +511,28 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
 
           {(formData.HouseInDisasterAreas.length === 0 ||
             formData.HouseInDisasterAreas[0]?.is_in_disaster === true) && (
-            <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
+            <div className="mt-5 bg-white p-4  rounded-md max-w-4xl overflow-x-auto">
               <table
-                className="table-auto w-full border-collapse"
-                style={{ tableLayout: "fixed" }}
+                className="table-auto border-collapse table-fixed items-center"
+                style={{  width: '800px'  }}
               >
                 <thead>
                   <tr>
                     <th
                       className="border px-4 py-2 bg-gray-200 text-gray-700"
-                      // style={{ width: "60%" }}
+                      style={{ width: "40%" }}
                     >
                       ประเภทกลุ่มกิจกรรม
                     </th>
                     <th
                       className="border px-4 py-2 bg-gray-200 text-gray-700"
-                      // style={{ width: "25%" }}
+                      style={{ width: "30%" }}
                     >
                       ความถี่ประสบภัยพิบัติ
                     </th>
                     <th
                       className="border px-4 py-2 bg-gray-200 text-gray-700"
-                      // style={{ width: "30%" }}
+                      style={{ width: "30%" }}
                     >
                       การรับมือกับภัยพิบัติ
                     </th>
@@ -1648,7 +1650,9 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
       </div>
 
       {/* 4 */}
-      <div className="p-5 bg-gray-100 rounded-lg shadow-lg mt-4">
+      <div className="mb-6 mx-10 m-5 p-5 bg-gray-100 rounded-lg"
+        // style={{maxWidth: '1200px', width: '100%', }}
+      > 
         <div className="Container">
           <h1 className="text-lg font-bold text-gray-700 mb-5">
             4. ในระยะเวลา 5 ปีที่ผ่านมา (พ.ศ.2560-2564)
@@ -1689,28 +1693,28 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
 
           {(formData.Farmlandindisasterareas.length === 0 ||
             formData.Farmlandindisasterareas[0]?.is_in_disaster === true) && (
-            <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
+            <div className="mt-5 bg-white p-4 rounded-md max-w-4xl overflow-x-auto">
               <table
-                className="table-auto w-full border-collapse"
-                style={{ tableLayout: "fixed" }}
+                className="table-auto border-collapse table-fixed"
+                style={{ width: '800px' }}
               >
                 <thead>
                   <tr>
                     <th
                       className="border px-4 py-2 bg-gray-200 text-gray-700"
-                      // style={{ width: "70%" }}
+                      style={{ width: "40%" }}
                     >
                       ประเภทกลุ่มกิจกรรม
                     </th>
                     <th
                       className="border px-4 py-2 bg-gray-200 text-gray-700"
-                      // style={{ width: "25%" }}
+                      style={{ width: "30%" }}
                     >
                       ความถี่ภัยพิบัติ
                     </th>
                     <th
                       className="border px-4 py-2 bg-gray-200 text-gray-700"
-                      // style={{ width: "30%" }}
+                      style={{ width: "30%" }}
                     >
                       การรับมือกับภัยพิบัติ
                     </th>

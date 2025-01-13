@@ -1195,16 +1195,16 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     <>
       <div className="p-5 ">
         <div className="Container">
-          <h1 className="text-xl font-bold text-gray-700 mb-5">
+          <h1 className="text-xl font-bold text-black mb-5">
             ส่วนที่ 3 สภาพพื้นฐานทางเศรษฐกิจ (ทุนการเงิน)
           </h1>
           <form>
             {/* Section 1.1: รายได้จากการเกษตร */}
             <div className="mb-6">
-              <h2 className="text-lg font-bold text-gray-700 mb-5 ">
+              <h2 className="text-lg font-bold text-black mb-5 ">
                 1. รายได้จากการเกษตรของครัวเรือนมาจากอะไร (ตอบได้มากกว่า 1 ข้อ)
               </h2>
-              <h3 className="text-lg font-bold text-gray-700 mb-5 pl-5">
+              <h3 className="text-lg font-bold text-black mb-5 pl-5">
                 1.1) พืชเกษตร
               </h3>
               <div className="pl-10">
@@ -1228,7 +1228,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     0) ไม่ได้เพาะปลูกพืชเกษตร
                   </label>
                 </div>
@@ -1252,7 +1252,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     1) ทำนา
                   </label>
                 </div>
@@ -1268,7 +1268,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleOtherPlantChange(Prefixplant2)}
                   />
-                  <label htmlFor="plants_2" className="font text-gray-700">
+                  <label htmlFor="plants_2" className="font text-black">
                     2) ทำสวนผัก
                   </label>
                   {formData.Agriculturalincome[0].plants.some((plant) =>
@@ -1301,7 +1301,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleOtherPlantChange(Prefixplant)}
                   />
-                  <label htmlFor="plants_3" className="font text-gray-700">
+                  <label htmlFor="plants_3" className="font text-black">
                     3) ทำสวนผลไม้
                   </label>
                   {formData.Agriculturalincome[0].plants.some((plant) =>
@@ -1342,7 +1342,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     {" "}
                     4) พืชอื่นๆ เช่น มันสำปะหลัง อ้อย ถั่วเหลือง ถั่วลิสง ฯลฯ
                   </label>
@@ -1367,7 +1367,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     {" "}
                     5) อื่นๆ เช่น ชา กาแฟ ยางพารา ปาล์มน้ำมัน ฯลฯ
                   </label>
@@ -1377,7 +1377,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
             {/* Section 1.2: ปศุสัตว์ */}
             <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-700 mb-5 pl-5">
+              <h3 className="text-lg font-bold text-black mb-5 pl-5">
                 1.2) ปศุสัตว์
               </h3>
               <div className="pl-10">
@@ -1401,7 +1401,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     0) ไม่ได้ทำปศุสัตว์
                   </label>
                 </div>
@@ -1425,7 +1425,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     1) เลี้ยงสัตว์บก (เช่น โค/กระบือ)
                   </label>
                 </div>
@@ -1449,7 +1449,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     2) หมู/ไก่/เป็ด/อื่นๆ
                   </label>
                 </div>
@@ -1473,7 +1473,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     3) ทำฟาร์มสัตว์น้ำ เช่น ปลา/กุ้ง
                   </label>
                 </div>
@@ -1490,7 +1490,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     onChange={handleOtherLivestock(Prefixlivestock)}
                   //handleOtherLivestock ,handleLivestockInputChange
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     4) อื่นๆ (กบ/ปู/ปลิง/ผึ้ง)
                   </label>
                   {formData.Agriculturalincome[0].livestock.some((livestock) =>
@@ -1521,7 +1521,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
             {/* Section 1.3: ประมงค์ */}
             <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-700 mb-5 pl-5">
+              <h3 className="text-lg font-bold text-black mb-5 pl-5">
                 1.3) ประมงค์
               </h3>
               <div className="pl-10">
@@ -1545,7 +1545,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     0) ไม่ได้ทำประมงค์
                   </label>
                 </div>
@@ -1569,7 +1569,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     1) ประมงน้ำเค็ม
                   </label>
                 </div>
@@ -1593,7 +1593,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )
                     }
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     2) ประมงน้ำจืด
                   </label>
                 </div>
@@ -1602,7 +1602,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
             {/* Section 2 รายได้ที่นอกภาคการเกษตร (เฉลี่ย/ปี)*/}
             <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-700 mb-5 ">
+              <h3 className="text-lg font-bold text-black mb-5 ">
                 2. รายได้ที่นอกภาคการเกษตร (เฉลี่ย/ปี)
               </h3>
               <div className="pl-10">
@@ -1622,7 +1622,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   />
                   <label
                     htmlFor="income_type_0"
-                    className="font text-gray-700 mr-2"
+                    className="font text-black mr-2"
                   >
                     รายได้จากการประกอบอาชีพนอกภาคการเกษตรในพื้นที่
                   </label>
@@ -1648,7 +1648,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                             )
                           }
                         />
-                        <label htmlFor=" " className="font text-gray-700 mr-2 ml-4">
+                        <label htmlFor=" " className="font text-black mr-2 ml-4">
                           ต้นทุน
                         </label>
                         <input
@@ -1687,7 +1687,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   />
                   <label
                     htmlFor="income_type_1"
-                    className="font text-gray-700 mr-2"
+                    className="font text-black mr-2"
                   >
                     รายได้จากลูกหลานส่งกลับมาจากการทำงานนอกพื้นที่
                   </label>
@@ -1718,7 +1718,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
             {/* Section 3: รายจ่ายครัวเรือน */}
             <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-700 mb-5 ">
+              <h3 className="text-lg font-bold text-black mb-5 ">
                 3. รายจ่ายครัวเรือน (นอกเหนือจากการลงทุนเพื่อการผลิต)
                 (ตอบได้มากกว่า 1 ข้อ)
               </h3>
@@ -1738,7 +1738,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   />
                   <label
                     htmlFor="expenses_type_0"
-                    className="font text-gray-700 mr-2"
+                    className="font text-black mr-2"
                   >
                     1) ค่าใช้จ่ายเฉลี่ยเพื่อการบริโภค (อาหาร เครื่องดื่ม) รวม
                   </label>
@@ -1777,7 +1777,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     2) ค่าใช้จ่ายเฉลี่ยเพื่อการอุปโภค (ของใช้ในครัวเรือน เดินทาง
                     พลังงาน) รวม
                   </label>
@@ -1816,7 +1816,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     3) ค่าใช้จ่ายเฉลี่ย น้ำ ไฟ โทรศัพท์ อินเตอร์เน็ตบ้าน รวม
                   </label>
                   {formData.Householdexpenses.some(
@@ -1854,7 +1854,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     4) ค่าใช้จ่ายเฉลี่ยเพื่อการศึกษา (ค่าเทอม
                     ค่าเครื่องแบบนักเรียน สมุด หนังสือ อินเตอร์เน็ต และอื่น ๆ) รวม
                   </label>
@@ -1893,7 +1893,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     5) ค่าใช้จ่ายเฉลี่ยเพื่อการรักษาพยาบาล รวม
                   </label>
                   {formData.Householdexpenses.some(
@@ -1931,7 +1931,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     6) ค่าใช้จ่ายเฉลี่ยเพื่อการประกันภัยต่าง ๆ
                     (ประกันชีวิต/ประกันรถยนต์/ประกัน อุบัติเหตุ/ประกันอัคคีภัย)
                     รวม
@@ -1971,7 +1971,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     7) ค่าใช้จ่ายเฉลี่ยด้านสังคม (งานบวช งานแต่ง งานศพ) ศาสนา
                     บริจาค รวม
                   </label>
@@ -2010,7 +2010,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     8) ค่าใช้จ่ายเพื่อความบันเทิง ท่องเที่ยว รวม
                   </label>
                   {formData.Householdexpenses.some(
@@ -2048,7 +2048,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     9) ค่าใช้จ่ายในการเสี่ยงโชค เช่น ล๊อตเตอรี่ หวย รวม
                   </label>
                   {formData.Householdexpenses.some(
@@ -2086,7 +2086,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     )}
                     onChange={handleHouseholdChange}
                   />
-                  <label htmlFor="" className="font text-gray-700 mr-2">
+                  <label htmlFor="" className="font text-black mr-2">
                     10) ค่าใช้จ่ายในการซื้อเครื่องดื่มแอลกอฮอล์ เครื่องดื่มชูกำลัง
                     บุหรี่ ยาสูบ รวม
                   </label>
@@ -2127,7 +2127,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   />
                   <label
                     htmlFor="expenses_type_10"
-                    className="font text-gray-700 mr-2"
+                    className="font text-black mr-2"
                   >
                     11) ค่าใช้จ่ายอื่น ๆ (ระบุ)
                   </label>
@@ -2169,7 +2169,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
             {/* Section 4: Does the household have savings? */}
             <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-700 mb-5">
+              <h3 className="text-lg font-bold text-black mb-5">
                 4. ครัวเรือนของท่านมีการออมหรือไม่
               </h3>
               <div className="pl-10">
@@ -2188,7 +2188,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         formData.Saving[0]?.is_has_saving === false
                       }
                     />
-                    <span className="font text-gray-700 mr-2">0) ไม่มี</span>
+                    <span className="font text-black mr-2">0) ไม่มี</span>
                   </label>
                 </div>
 
@@ -2207,20 +2207,20 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       }
                       onChange={handleRadio1Change}
                     />
-                    <span className="font text-gray-700 mr-2">
+                    <span className="font text-black mr-2">
                       1) มี (ระบุประเภทการออม)
                     </span>
                   </label>
                   {(formData.Saving?.length === 0 ||
                     formData.Saving[0]?.is_has_saving === true) && (
-                      <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
-                        <table className="table-auto w-2/2 border-collapse">
+                      <div className="mt-5 bg-white p-4 rounded-lg  max-w-4xl overflow-x-auto">
+                        <table className="table-auto border-collapse table-fixed " style={{ width: '800px'}} >
                           <thead>
                             <tr>
-                              <th className="border px-4 py-2 bg-gray-200 text-gray-700">
+                              <th className="border px-4 py-2 bg-gray-200 text-black " style={{ width: "50%"}}>
                                 ประเภทการออม
                               </th>
-                              <th className="border px-4 py-2 bg-gray-200 text-gray-700">
+                              <th className="border px-4 py-2 bg-gray-200 text-black "style={{ width: "50%"}}>
                                 จำนวนเงินรวม (บาท)
                               </th>
                             </tr>
@@ -2547,7 +2547,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
             {/* Section 5 */}
             <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-700 mb-5">
+              <h3 className="text-lg font-bold text-black mb-5">
                 5. ครัวเรือนของท่านมีหนี้สินหรือไม่
               </h3>
               <div className="pl-10">
@@ -2562,7 +2562,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     value={false}
                     onChange={handleDebtChange}
                   />
-                  <label htmlFor="" className="font text-gray-700">
+                  <label htmlFor="" className="font text-black">
                     1) ไม่มี เนื่องจาก <strong>(เลือกได้ 1 ข้อ)</strong>
                   </label>
                 </div>
@@ -2581,7 +2581,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         }
                         onChange={handleDescriptionChange}
                       />
-                      <label htmlFor="description_0" className="text-gray-700">
+                      <label htmlFor="description_0" className="text-black">
                         ไม่มีหลักทรัพย์/ไม่มีบุคคลค้ำประกัน
                       </label>
                     </div>
@@ -2599,7 +2599,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         }
                         onChange={handleDescriptionChange}
                       />
-                      <label htmlFor="" className="text-gray-700">
+                      <label htmlFor="" className="text-black">
                         ไม่มีความสามารถในการชำระคืน
                       </label>
                     </div>
@@ -2616,7 +2616,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         }
                         onChange={handleDescriptionChange}
                       />
-                      <label htmlFor="" className="text-gray-700">
+                      <label htmlFor="" className="text-black">
                         ไม่ต้องการเป็นหนี้
                       </label>
                     </div>
@@ -2630,7 +2630,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         checked={formData.Debt[0].description.startsWith(prefix)}
                         onChange={handleDescriptionChange}
                       />
-                      <label htmlFor="description_3" className="text-gray-700">
+                      <label htmlFor="description_3" className="text-black">
                         อื่น ๆ (ระบุ)
                       </label>
                       {formData.Debt[0].description.startsWith(prefix) && (
@@ -2664,28 +2664,28 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     checked={formData.Debt[0].is_has_debt === true}
                     onChange={handleDebtChange}
                   />
-                  <label htmlFor="has-debt" className="font text-gray-700">
+                  <label htmlFor="has-debt" className="font text-black">
                     2) มี <strong>(ตอบได้มากกว่า 1 ข้อ)</strong>
                   </label>
                 </div>
                 {formData.Debt[0].is_has_debt === true && (
-                  <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
+                  <div className="mt-5 bg-white p-4 rounded-lg  max-w-4xl overflow-x-auto">
                     <table
-                      className="table-auto w-2/2 border-collapse"
-                      // style={{ tableLayout: "fixed" }}
+                      className="table-auto border-collapse table-fixed"
+                      style={{ width: '800px'  }} 
                     >
                       <thead>
                         <tr>
                           <th
-                            className="border px-4 py-2 bg-gray-200 text-gray-700"
-                            // style={{ width: "80%" }}
+                            className="border px-4 py-2 bg-gray-200 text-black"
+                            style={{ width: "60%" }}
                           >
                             แหล่งสินเชื่อ <br />
                             (สถาบันการเงิน/ กองทุน/ เงินบุคคล)
                           </th>
                           <th
-                            className="border px-4 py-2 bg-gray-200 text-gray-700"
-                            // style={{ width: "40%" }}
+                            className="border px-4 py-2 bg-gray-200 text-black"
+                            style={{ width: "40%" }}
                           >
                             จำนวนเงินกู้ที่คงค้าง (บาท)
                           </th>
@@ -2736,7 +2736,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                             />
                           </td>
                         </tr>
-                        <tr>
+                        <tr>      
                           <td className="border px-4 py-3">
                             <label className="flex items-center space-x-2">
                               <input
@@ -3253,7 +3253,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
             {/* Section 6: Does the household have assets for occupation? */}
             <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-700 mb-5">
+              <h3 className="text-lg font-bold text-black mb-5">
                 6. ครัวเรือนของท่านมีทรัพย์สินเพื่อการประกอบอาชีพหรือไม่
               </h3>
               <div className="pl-10">
@@ -3270,7 +3270,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )}
                       onChange={handleRadioChange}
                     />
-                    <span className="font text-gray-700 mr-2">1) ไม่มี</span>
+                    <span className="font text-black mr-2">1) ไม่มี</span>
                   </label>
                 </div>
 
@@ -3287,7 +3287,7 @@ function Financialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       )}
                       onChange={handleRadioChange}
                     />
-                    <span className="font text-gray-700 mr-2">
+                    <span className="font text-black mr-2">
                       2) มี และได้ใช้เพื่อประกอบอาชีพ (ตอบได้มากกว่า 1 ข้อ)
                     </span>
                   </label>

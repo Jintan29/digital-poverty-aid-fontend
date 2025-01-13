@@ -51,7 +51,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
   //load data from main
   useEffect(()=>{
-    if(mainFormData.MemberHousehold ){ //ดูว่าหน้หลักมีข้อมูลหรือยัง
+    if(mainFormData.MemberHousehold ){ //ดูว่าหน้าหลักมีข้อมูลหรือยัง
       setMembers(mainFormData.MemberHousehold)
     }
   },[mainFormData])
@@ -1056,7 +1056,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div>
+            <div className="flex items-center space-x-2">
               <input
                 id={`career-9-${index}`}
                 type="checkbox"
@@ -1069,15 +1069,14 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               />
               <label
                 for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                class="text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 อื่นๆ
               </label>
-            </div>
-
+            
 
             {member.career.some((e)=>e.startsWith(prefix)) && (
-                <div>
+               
                   <input
                     type="text"
                     id={`career-other-${index}`}
@@ -1088,11 +1087,12 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                     onChange={(e) =>
                       handleOtherChange(index, "career", e.target.value)
                     }
-                    className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="ระบุอาชีพอื่นๆ"
                   />
-                </div>
+               
               )}
+              </div>
           </div>
 
           <div className="Container ml-5 ">
@@ -1325,7 +1325,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </label>
             </div>
 
-            <div>
+            < div className="flex items-center space-x-2">
               <input
                 id={`income-career-${index}`}
                 type="checkbox"
@@ -1338,14 +1338,14 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               />
               <label
                 for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                class="text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 อื่นๆ
               </label>
-            </div>
+            
             
             {member.work_can_made_income.some((e)=>e.startsWith(prefix)) && 
-            <div>
+            
               <input
                 type="text"
                 id="first_name"
@@ -1356,11 +1356,11 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
                 onChange={(e) =>
                   handleOtherChange(index, "work_can_made_income", e.target.value)
                 }
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="ระบุอาชีพ"
               />
-            </div>
             }
+            </div>
           </div>
 
           <div className="mx-6 py-2">

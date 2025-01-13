@@ -429,17 +429,17 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     setCurrentPage(6);
   };
 
-  return (
-    <div className="p-5 bg-gray-100 rounded-lg shadow-lg">
+  return ( 
+    <div className="mb-6 mx-10 m-5 p-5 rounded-lg" >
       <div className="Container">
         <h1 className="text-xl font-bold text-gray-700 mb-5">
           ส่วนที่ 5 การเกื้อกูลและระบบรองรับทางสังคม (ทุนทางสังคม)
         </h1>
         {/* ตาราง */}
-        <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
+        <div className="mt-5 bg-white p-4 rounded-lg  max-w-4xl overflow-x-auto">
           <table
-            className="table-auto w-full border-collapse"
-            style={{ tableLayout: "fixed" }}
+            className="table-auto border-collapse"
+            style={{ width: '800px' }}
           >
             <thead>
               <tr>
@@ -949,10 +949,10 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
         </div>
 
         {/* กิจกรรม */}
-        <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
+        <div className="mt-5 bg-white p-4 rounded-lg max-w-4xl overflow-x-auto">
           <table
-            className="table-auto w-full border-collapse"
-            style={{ tableLayout: "fixed" }}
+            className="table-auto border-collapse"
+            style={{ width: '800px' }}
           >
             <thead>
               <tr>
