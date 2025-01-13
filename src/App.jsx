@@ -166,24 +166,19 @@ function App() {
               element={
                 <AdminRoute>
                   <TrackingMemberId />
-
-              path="jj"
-              element={
-                <AdminRoute>
-                  <JJ1 />
-                </AdminRoute>
-              }
+                  </AdminRoute>
+                }
             />
             <Route
               path="track-household"
               element={
                 <AdminRoute>
                   <TrackHousehold />
-                </AdminRoute>
+                  </AdminRoute>
               }
             />
 
-
+            <Route
               path="household"
               element={
                 <AdminRoute>

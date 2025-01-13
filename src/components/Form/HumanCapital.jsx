@@ -1,5 +1,7 @@
+import { Field } from "@headlessui/react";
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 export const HumanCapital = ({
@@ -126,26 +128,27 @@ export const HumanCapital = ({
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedCareerMadeIncome, setSelectedCareerMadeIncome] = useState([]);
 
-
   // insert {} into Career:[]
-  const handleCarrerChange = (index,value,check)=>{
-    const updateData = [...members]
+  const handleCarrerChange = (index, value, check) => {
+    const updateData = [...members];
 
-    if(check){
-      
-      const isChecked = updateData[index].Career.some(e=>e.career_type === value)
+    if (check) {
+      const isChecked = updateData[index].Career.some(
+        (e) => e.career_type === value
+      );
 
-      if(!isChecked){
-        updateData[index].Career.push({career_type:value})
+      if (!isChecked) {
+        updateData[index].Career.push({ career_type: value });
       }
-    }
-    else{
+    } else {
       //del
-      updateData[index].Career = updateData[index].Career.filter(e=>e.career_type !== value)
+      updateData[index].Career = updateData[index].Career.filter(
+        (e) => e.career_type !== value
+      );
     }
-  
-    setMembers(updateData)
-  }
+
+    setMembers(updateData);
+  };
 
   //รอแก้
   const handleOtherChange = (index, field, value) => {
@@ -284,27 +287,23 @@ export const HumanCapital = ({
         </h2>
       </div>
       {/* ทำการloop */}
-      <form onSubmit={e=>handleSubmit(e)} >
-      {members.map((member, index) => (
-        <div className="mb-6 mx-10 mt-5 py-5 bg-blue-200 rounded-md">
-          <div className="Container">
-            <h3 className="text-black text-lg font-bold px-5 py-5">
-              ข้อมูลสมาชิกครัวเรือนคนที่ {index + 1}
-            </h3>
-          </div>
-          {/* Input */}
-          <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1  mx-10">
-            <div className="relative  rounded-md shadow-sm">
-              <label
-                for="visitors"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                ชื่อ
-              </label>
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <label htmlFor="currency" className="sr-only">
-                  Currency
-
+      <form onSubmit={(e) => handleSubmit(e)}>
+        {members.map((member, index) => (
+          <div className="mb-6 mx-10 mt-5 py-5 bg-blue-200 rounded-md">
+            <div className="Container">
+              <h3 className="text-black text-lg font-bold px-5 py-5">
+                ข้อมูลสมาชิกครัวเรือนคนที่ {index + 1}
+              </h3>
+            </div>
+            {/* Input */}
+            <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1  mx-10">
+              <div className="relative  rounded-md shadow-sm">
+                <label
+                  for="visitors"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  ชื่อ
+                </label>
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
                   <label htmlFor="currency" className="sr-only">
                     Currency
@@ -358,13 +357,6 @@ export const HumanCapital = ({
                   required
                 />
               </div>
-
-          {/* แสดงรายการสวัสดิการ */} 
-          {member.SocialWelfare.map((welfare, welfareIndex) => (
-            <div
-              className="grid gap-6 mb-6 mt-0 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10"
-              key={welfareIndex}
-            >
 
               <div className="">
                 <label
@@ -547,19 +539,15 @@ export const HumanCapital = ({
                 </select>
               </div>
             </div>
-
             <div className="Container ml-5">
               <h3 className="text-black text-sm font-bold px-5 pb-5">
                 สวัสดิการที่ได้รับในปัจจุบัน
               </h3>
             </div>
-
-            {/* Socialwelfare */}
-
             {/* แสดงรายการสวัสดิการ */}
             {member.SocialWelfare.map((welfare, welfareIndex) => (
               <div
-                className="grid gap-6 mb-6 mt-0 md:grid-cols-3 mx-10"
+                className="grid gap-6 mb-6 mt-0 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10"
                 key={welfareIndex}
               >
                 <div className="">
@@ -599,76 +587,31 @@ export const HumanCapital = ({
                     </option>
                   </select>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => delSocialWelfare(index)}
-                  className="flex items-center justify-end py-2 px-4 mb-6 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-900 focus:outline-none"
-                >
-                  <Icon icon="material-symbols:delete-rounded" className="" />
-                </button>
-              </div>
-            </div>
-          ))}
 
-          {/* ปุ่มเพิ่มสวัสดิการ อยู่ภายนอก loop ของ SocialWelfare */}
-          <div className="mx-10 mb-6">
-            <button
-              type="button"
-              onClick={() => addSocialWelfare(index)}
-              className="flex items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-400 hover:bg-emerald-600 focus:outline-none"
-            >
-              <Icon
-                icon="material-symbols:add-circle-outline-rounded"
-                className="mr-2"
-              />
-              เพิ่มสวัสดิการที่ได้รับ
-            </button>
-          </div>
-
-          {/* Part3 */}   {/* พูดภษาไทยได้ */}
-          <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10">
-            <div className="">
-              <label
-                for="can_speak_TH"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                พูดภาษาไทย
-              </label>
-              <select
-                id="can_speak_TH"
-                name="can_speak_TH"
-                value={member.can_speak_TH}
-                onChange={(e) =>
-                  handleInputChange(index, "can_speak_TH", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ได้</option>
-                <option>ไม่ได้</option>
-              </select>
-            </div>
-
-            <div className="">
-              <label
-                for="can_read_TH "
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                อ่านภาษาไทย
-              </label>
-              <select
-                id="can_read_TH "
-                name="can_read_TH "
-                value={member.can_read_TH}
-                onChange={(e) =>
-                  handleInputChange(index, "can_read_TH", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ได้</option>
-                <option>ไม่ได้</option>
-              </select>
-            </div>
-
+                <div className="">
+                  <label
+                    htmlFor={`amount_${index}_${welfareIndex}`}
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    จำนวน (บาท)
+                  </label>
+                  <input
+                    type="number"
+                    id={`amount_${index}_${welfareIndex}`}
+                    value={welfare.amount}
+                    onChange={(e) =>
+                      handleWelfareInputChange(
+                        index,
+                        welfareIndex,
+                        "amount",
+                        e.target.value
+                      )
+                    }
+                    className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder=""
+                    required
+                  />
+                </div>
 
                 <div className="flex items-end justify-between">
                   <div className="w-10/12">
@@ -707,7 +650,6 @@ export const HumanCapital = ({
                 </div>
               </div>
             ))}
-
             {/* ปุ่มเพิ่มสวัสดิการ อยู่ภายนอก loop ของ SocialWelfare */}
             <div className="mx-10 mb-6">
               <button
@@ -722,9 +664,8 @@ export const HumanCapital = ({
                 เพิ่มสวัสดิการที่ได้รับ
               </button>
             </div>
-
-            {/* Part3 */}
-            <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+            {/* Part3 */} {/* พูดภษาไทยได้ */}
+            <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10">
               <div className="">
                 <label
                   for="can_speak_TH"
@@ -741,8 +682,8 @@ export const HumanCapital = ({
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>พูดไทยได้</option>
-                  <option>พูดไทยไม่ได้</option>
+                  <option>ได้</option>
+                  <option>ไม่ได้</option>
                 </select>
               </div>
 
@@ -762,8 +703,8 @@ export const HumanCapital = ({
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>อ่านไทยได้</option>
-                  <option>อ่านไทยไม่ได้</option>
+                  <option>ได้</option>
+                  <option>ไม่ได้</option>
                 </select>
               </div>
 
@@ -783,8 +724,8 @@ export const HumanCapital = ({
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>เขียนไทยได้</option>
-                  <option>เขียนไทยไม่ได้</option>
+                  <option>ได้</option>
+                  <option>ไม่ได้</option>
                 </select>
               </div>
 
@@ -870,223 +811,519 @@ export const HumanCapital = ({
                   <option>เรียนสายศาสนา</option>
                 </select>
               </div>
-          {/* ประกอบอาชีพ */}
-          <div className="grid gap-4 mb-6 mt-6 mx-10 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
-            {/* CheckBox */}
 
-            <div>
-              <input
-                id={`career-1-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(index, "พืชเกษตร", e.target.checked)
-                }
-                checked={member.career.includes('พืชเกษตร')}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                พืชเกษตร
-              </label>
+              <div className="">
+                <label
+                  for="edu_description"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  สาเหตุ(กรณีหยุดเรียน/ออกกลางคัน)
+                </label>
+                <input
+                  type="text"
+                  id="edu_description"
+                  value={member.edu_description}
+                  onChange={(e) =>
+                    handleInputChange(index, "edu_description", e.target.value)
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                />
+              </div>
+
+              <div className="">
+                <label
+                  for="work_status "
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  สถานะการทำงาน
+                </label>
+                <select
+                  id="work_status "
+                  name="work_status "
+                  value={member.work_status}
+                  onChange={(e) =>
+                    handleInputChange(index, "work_status", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>ไม่ทำงาน</option>
+                  <option>ว่างงาน</option>
+                  <option>ทำงาน</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <input
-                id={`career-2-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(index, "ประมง", e.target.checked)
-                }
-                checked={member.career.includes('ประมง')}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ประมง
-              </label>
+            <div className="Container ml-5">
+              <h3 className="text-black text-sm font-bold px-5 ">
+                ประกอบอาชีพ(ตอบได้มากกว่า 1 )
+              </h3>
             </div>
-            <div>
-              <input
-                id={`career-3-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(index, "ปศุสัตว์", e.target.checked)
-                }
-                value="ปศุสัตว์"
-                checked={member.career.includes('ปศุสัตว์')}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ปศุสัตว์
-              </label>
-            </div>
-            <div>
-              <input
-                id={`career-4-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(
-                    index,
-                    "รับจ้างภาคการเกษตร",
-                    e.target.checked
-                  )
-                }
-                checked={member.career.includes('รับจ้างภาคการเกษตร')}
-                value="รับจ้างภาคการเกษตร"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
+            {/* ประกอบอาชีพ */}
+            <div className="grid gap-4 mb-6 mt-6 mx-10 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
+              {/* CheckBox */}
+
+              <div>
+                <input
+                  id={`career-1-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "พืชเกษตร", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'พืชเกษตร')}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  พืชเกษตร
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`career-2-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "ประมง", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'ประมง')}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ประมง
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`career-3-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "ปศุสัตว์", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'ปศุสัตว์')}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ปศุสัตว์
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`career-4-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "รับจ้างภาคการเกษตร", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'รับจ้างภาคการเกษตร')}
+                  value="รับจ้างภาคการเกษตร"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
                   รับจ้างภาคการเกษตร
-              </label>
+                </label>
+              </div>
+
+              <div>
+                <input
+                  id={`career-5-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)')}
+                  value="รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`career-6-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน')}
+                  value="ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน
+                </label>
+              </div>
+
+              <div>
+                <input
+                  id={`career-6-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
+                  value="ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ
+                </label>
+              </div>
+
+              <div>
+                <input
+                  id={`career-7-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
+                  value="รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ
+                </label>
+              </div>
+
+              <div>
+                <input
+                  id={`career-8-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "ธุรกิจส่วนตัว/งานบริการ", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'ธุรกิจส่วนตัว/งานบริการ')}
+                  value="ธุรกิจส่วนตัว/งานบริการ"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 "
+                >
+                  ธุรกิจส่วนตัว/งานบริการ (เช่น ร้านขายของชำร้านซ่อมมอเตอร์ไซค์
+                  ค้าขาย/หาบแร่/แผงลอยร้านเสริมสวย รับจ้างซักรีด ขับสามล้อ
+                  มอเตอร์ไซค์รับจ้างเป็นต้น)
+                </label>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <input
+                  id={`career-9-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCarrerChange(index, "อื่นๆ", e.target.checked)
+                  }
+                  checked={member.Career.some(e => e.career_type === 'อื่นๆ')}
+                  value="อื่นๆ"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  อื่นๆ
+                </label>
+
+                
+              </div>
             </div>
-
-            <div>
-              <input
-                id={`career-5-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(
-                    index,
-                    "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)",
-                    e.target.checked
-                  )
-                }
-                checked={member.career.includes('รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)')}
-                value="รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)
-              </label>
+            <div className="Container ml-5 ">
+              <h3 className="text-black text-sm font-bold px-5 ">
+                ทักษะอาชีพที่สามารถสร้างรายได้(ตอบได้มากกว่า1)
+              </h3>
             </div>
-            <div>
-              <input
-                id={`career-6-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(
-                    index,
-                    "ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน",
-                    e.target.checked
-                  )
-                }
-                checked={member.career.includes('ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน')}
-                value="ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน
-              </label>
-            </div>
+            {/* ทักษะอาชีพ */}
+            <div className="grid gap-4 mb-6 mt-6 mx-10 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4  md:grid-cols-1 sm:grid-cols-1 ">
+              {/* CheckBox */}
 
-            <div>
-              <input
-                id={`career-6-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(
-                    index,
-                    "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
-                    e.target.checked
-                  )
-                }
-                checked={member.career.includes('ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
-                value="ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ
-              </label>
-            </div>
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "ไม่มี",
+                      e.target.checked
+                    )
+                  }
+                  value="ไม่มี"
+                  checked={member.work_can_made_income.includes("ไม่มี")}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ไม่มี
+                </label>
+              </div>
 
-            <div>
-              <input
-                id={`career-7-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(
-                    index,
-                    "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
-                    e.target.checked
-                  )
-                }
-                checked={member.career.includes('รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
-                value="รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ
-              </label>
-            </div>
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "พืชเกษตร",
+                      e.target.checked
+                    )
+                  }
+                  checked={member.work_can_made_income.includes("พืชเกษตร")}
+                  value="พืชเกษตร"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  พืชเกษตร
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "ประมง",
+                      e.target.checked
+                    )
+                  }
+                  value="ประมง"
+                  checked={member.work_can_made_income.includes("ประมง")}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ประมง
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "ปศุสัตว์",
+                      e.target.checked
+                    )
+                  }
+                  checked={member.work_can_made_income.includes("ปศุสัตว์")}
+                  value="ปศุสัตว์"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ปศุสัตว์
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "รับจ้างภาคการเกษตร",
+                      e.target.checked
+                    )
+                  }
+                  value="รับจ้างภาคการเกษตร"
+                  checked={member.work_can_made_income.includes(
+                    "รับจ้างภาคการเกษตร"
+                  )}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  รับจ้างภาคการเกษตร
+                </label>
+              </div>
 
-            <div>
-              <input
-                id={`career-8-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerChange(
-                    index,
-                    "ธุรกิจส่วนตัว/งานบริการ",
-                    e.target.checked
-                  )
-                }
-                checked={member.career.includes('ธุรกิจส่วนตัว/งานบริการ')}
-                value="ธุรกิจส่วนตัว/งานบริการ"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 "
-              >
-                ธุรกิจส่วนตัว/งานบริการ (เช่น ร้านขายของชำร้านซ่อมมอเตอร์ไซค์
-                ค้าขาย/หาบแร่/แผงลอยร้านเสริมสวย รับจ้างซักรีด ขับสามล้อ
-                มอเตอร์ไซค์รับจ้างเป็นต้น)
-              </label>
-            </div>
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)",
+                      e.target.checked
+                    )
+                  }
+                  value="รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
+                  checked={member.work_can_made_income.includes(
+                    "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
+                  )}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน",
+                      e.target.checked
+                    )
+                  }
+                  value="ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
+                  checked={member.work_can_made_income.includes(
+                    "ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
+                  )}
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน
+                </label>
+              </div>
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
+                      e.target.checked
+                    )
+                  }
+                  checked={member.work_can_made_income.includes(
+                    "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
+                  )}
+                  value="ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ
+                </label>
+              </div>
 
-            <div className="flex items-center space-x-2">
-              <input
-                id={`career-9-${index}`}
-                type="checkbox"
-                checked={member.career.some((e)=>e.startsWith(prefix))}
-                onChange={(e) =>
-                  handleCareerChange(index, prefix, e.target.checked)
-                }
-                value="อื่นๆ"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                อื่นๆ
-              </label>
-            
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
+                      e.target.checked
+                    )
+                  }
+                  checked={member.work_can_made_income.includes(
+                    "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
+                  )}
+                  value="รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ
+                </label>
+              </div>
 
-            {member.career.some((e)=>e.startsWith(prefix)) && (
-               
+              <div>
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      "ธุรกิจส่วนตัว/งานบริการ",
+                      e.target.checked
+                    )
+                  }
+                  checked={member.work_can_made_income.includes(
+                    "ธุรกิจส่วนตัว/งานบริการ"
+                  )}
+                  value="ธุรกิจส่วนตัว/งานบริการ"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 "
+                >
+                  ธุรกิจส่วนตัว/งานบริการ (เช่น ร้านขายของชำร้านซ่อมมอเตอร์ไซค์
+                  ค้าขาย/หาบแร่/แผงลอยร้านเสริมสวย รับจ้างซักรีด ขับสามล้อ
+                  มอเตอร์ไซรับจ้างเป็นต้น)
+                </label>
+              </div>
 
+              <div className="flex items-center space-x-2">
+                <input
+                  id={`income-career-${index}`}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCareerMadeIncomeChange(
+                      index,
+                      prefix,
+                      e.target.checked
+                    )
+                  }
+                  checked={member.work_can_made_income.some((e) =>
+                    e.startsWith(prefix)
+                  )}
+                  value="อื่นๆ"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  อื่นๆ
+                </label>
+
+                {member.work_can_made_income.some((e) =>
+                  e.startsWith(prefix)
+                ) && (
                   <input
                     type="text"
                     id="first_name"
@@ -1102,290 +1339,19 @@ export const HumanCapital = ({
                         e.target.value
                       )
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="ระบุอาชีพอื่นๆ"
-
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="ระบุอาชีพ"
                   />
-               
-              )}
+                )}
               </div>
-          </div>
-
-          <div className="Container ml-5 ">
-            <h3 className="text-black text-sm font-bold px-5 ">
-              ทักษะอาชีพที่สามารถสร้างรายได้(ตอบได้มากกว่า1)
-            </h3>
-          </div>
-
-          {/* ทักษะอาชีพ */}
-          <div className="grid gap-4 mb-6 mt-6 mx-10 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4  md:grid-cols-1 sm:grid-cols-1 ">
-            {/* CheckBox */}
-
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(index, "ไม่มี", e.target.checked)
-                }
-                value="ไม่มี"
-                checked={member.work_can_made_income.includes('ไม่มี')}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ไม่มี
-              </label>
             </div>
-
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(
-                    index,
-                    "พืชเกษตร",
-                    e.target.checked
-                  )
-                }
-                checked={member.work_can_made_income.includes('พืชเกษตร')}
-                value="พืชเกษตร"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                พืชเกษตร
-              </label>
-            </div>
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(index, "ประมง", e.target.checked)
-                }
-                value="ประมง"
-                checked={member.work_can_made_income.includes('ประมง')}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ประมง
-              </label>
-            </div>
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(
-                    index,
-                    "ปศุสัตว์",
-                    e.target.checked
-                  )
-                }
-                checked={member.work_can_made_income.includes('ปศุสัตว์')}
-                value="ปศุสัตว์"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ปศุสัตว์
-              </label>
-            </div>
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(
-                    index,
-                    "รับจ้างภาคการเกษตร",
-                    e.target.checked
-                  )
-                }
-                value="รับจ้างภาคการเกษตร"
-                checked={member.work_can_made_income.includes('รับจ้างภาคการเกษตร')}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                รับจ้างภาคการเกษตร
-              </label>
-            </div>
-
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(
-                    index,
-                    "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)",
-                    e.target.checked
-                  )
-                }
-                value="รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
-                checked={member.work_can_made_income.includes('รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)')}
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)
-              </label>
-            </div>
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(
-                    index,
-                    "ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน",
-                    e.target.checked
-                  )
-                }
-                value="ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
-                checked={member.work_can_made_income.includes('ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน')}
-
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน
-              </label>
-            </div>
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(
-                    index,
-                    "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
-                    e.target.checked
-                  )
-                }
-                checked={member.work_can_made_income.includes('ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
-                value="ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ
-              </label>
-            </div>
-
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(
-                    index,
-                    "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
-                    e.target.checked
-                  )
-                }
-                checked={member.work_can_made_income.includes('รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
-                value="รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ
-              </label>
-            </div>
-
-            <div>
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(
-                    index,
-                    "ธุรกิจส่วนตัว/งานบริการ",
-                    e.target.checked
-                  )
-                }
-                checked={member.work_can_made_income.includes('ธุรกิจส่วนตัว/งานบริการ')}
-                value="ธุรกิจส่วนตัว/งานบริการ"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 "
-              >
-                ธุรกิจส่วนตัว/งานบริการ (เช่น ร้านขายของชำร้านซ่อมมอเตอร์ไซค์
-                ค้าขาย/หาบแร่/แผงลอยร้านเสริมสวย รับจ้างซักรีด ขับสามล้อ
-                มอเตอร์ไซรับจ้างเป็นต้น)
-              </label>
-            </div>
-
-            < div className="flex items-center space-x-2">
-              <input
-                id={`income-career-${index}`}
-                type="checkbox"
-                onChange={(e) =>
-                  handleCareerMadeIncomeChange(index, prefix, e.target.checked)
-                }
-                checked={member.work_can_made_income.some((e)=>e.startsWith(prefix))}
-                value="อื่นๆ"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                for="default-checkbox"
-                class="text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                อื่นๆ
-              </label>
-            
-            
-            {member.work_can_made_income.some((e)=>e.startsWith(prefix)) && 
-            
-              <input
-                type="text"
-                id="first_name"
-                value={
-                  member.work_can_made_income.find((item) => item.startsWith(prefix))?.substring(prefix.length) ||
-                  ""
-                }
-                onChange={(e) =>
-                  handleOtherChange(index, "work_can_made_income", e.target.value)
-                }
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="ระบุอาชีพ"
-              />
-            }
-            </div>
-            </div>
-
             <div className="mx-6 py-2 grid grid-cols-4 gap-6 ">
               <div className="">
                 <label
                   for="agv_income"
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  รายได้เฉลี่ย (บาท/เดือน)
+                  รายได้เฉลี่ย (บาท/เดือน) save
                 </label>
                 <input
                   type="number"
@@ -1430,7 +1396,6 @@ export const HumanCapital = ({
               />
               ลบสมาชิคคนที่ {index + 1}
             </button>
-
           </div>
         ))}
 
