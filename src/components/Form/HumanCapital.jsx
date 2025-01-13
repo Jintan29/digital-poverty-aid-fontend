@@ -1,5 +1,7 @@
+import { Field } from "@headlessui/react";
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 export const HumanCapital = ({
@@ -126,26 +128,27 @@ export const HumanCapital = ({
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedCareerMadeIncome, setSelectedCareerMadeIncome] = useState([]);
 
-
   // insert {} into Career:[]
-  const handleCarrerChange = (index,value,check)=>{
-    const updateData = [...members]
+  const handleCarrerChange = (index, value, check) => {
+    const updateData = [...members];
 
-    if(check){
-      
-      const isChecked = updateData[index].Career.some(e=>e.career_type === value)
+    if (check) {
+      const isChecked = updateData[index].Career.some(
+        (e) => e.career_type === value
+      );
 
-      if(!isChecked){
-        updateData[index].Career.push({career_type:value})
+      if (!isChecked) {
+        updateData[index].Career.push({ career_type: value });
       }
-    }
-    else{
+    } else {
       //del
-      updateData[index].Career = updateData[index].Career.filter(e=>e.career_type !== value)
+      updateData[index].Career = updateData[index].Career.filter(
+        (e) => e.career_type !== value
+      );
     }
-  
-    setMembers(updateData)
-  }
+
+    setMembers(updateData);
+  };
 
   //รอแก้
   const handleOtherChange = (index, field, value) => {
@@ -293,7 +296,7 @@ export const HumanCapital = ({
               </h3>
             </div>
             {/* Input */}
-            <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+            <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1  mx-10">
               <div className="relative  rounded-md shadow-sm">
                 <label
                   for="visitors"
@@ -536,19 +539,15 @@ export const HumanCapital = ({
                 </select>
               </div>
             </div>
-
             <div className="Container ml-5">
               <h3 className="text-black text-sm font-bold px-5 pb-5">
                 สวัสดิการที่ได้รับในปัจจุบัน
               </h3>
             </div>
-
-            {/* Socialwelfare */}
-
             {/* แสดงรายการสวัสดิการ */}
             {member.SocialWelfare.map((welfare, welfareIndex) => (
               <div
-                className="grid gap-6 mb-6 mt-0 md:grid-cols-3 mx-10"
+                className="grid gap-6 mb-6 mt-0 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10"
                 key={welfareIndex}
               >
                 <div className="">
@@ -651,7 +650,6 @@ export const HumanCapital = ({
                 </div>
               </div>
             ))}
-
             {/* ปุ่มเพิ่มสวัสดิการ อยู่ภายนอก loop ของ SocialWelfare */}
             <div className="mx-10 mb-6">
               <button
@@ -666,9 +664,8 @@ export const HumanCapital = ({
                 เพิ่มสวัสดิการที่ได้รับ
               </button>
             </div>
-
-            {/* Part3 */}
-            <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+            {/* Part3 */} {/* พูดภษาไทยได้ */}
+            <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10">
               <div className="">
                 <label
                   for="can_speak_TH"
@@ -685,8 +682,8 @@ export const HumanCapital = ({
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>พูดไทยได้</option>
-                  <option>พูดไทยไม่ได้</option>
+                  <option>ได้</option>
+                  <option>ไม่ได้</option>
                 </select>
               </div>
 
@@ -706,8 +703,8 @@ export const HumanCapital = ({
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>อ่านไทยได้</option>
-                  <option>อ่านไทยไม่ได้</option>
+                  <option>ได้</option>
+                  <option>ไม่ได้</option>
                 </select>
               </div>
 
@@ -727,8 +724,8 @@ export const HumanCapital = ({
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>เขียนไทยได้</option>
-                  <option>เขียนไทยไม่ได้</option>
+                  <option>ได้</option>
+                  <option>ไม่ได้</option>
                 </select>
               </div>
 
@@ -856,17 +853,16 @@ export const HumanCapital = ({
                 </select>
               </div>
             </div>
-
             <div className="Container ml-5">
               <h3 className="text-black text-sm font-bold px-5 ">
                 ประกอบอาชีพ(ตอบได้มากกว่า 1 )
               </h3>
             </div>
-
-            <div className="grid gap-2 mb-6 mt-6 md:grid-cols-6  mx-10 ">
+            {/* ประกอบอาชีพ */}
+            <div className="grid gap-4 mb-6 mt-6 mx-10 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
               {/* CheckBox */}
 
-              <div class="">
+              <div>
                 <input
                   id={`career-1-${index}`}
                   type="checkbox"
@@ -883,14 +879,14 @@ export const HumanCapital = ({
                   พืชเกษตร
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`career-2-${index}`}
                   type="checkbox"
                   onChange={(e) =>
                     handleCarrerChange(index, "ประมง", e.target.checked)
                   }
-                  checked={member.Career.some(e=>e.career_type === 'ประมง')}
+                  checked={member.Career.some(e => e.career_type === 'ประมง')}
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -900,15 +896,14 @@ export const HumanCapital = ({
                   ประมง
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`career-3-${index}`}
                   type="checkbox"
                   onChange={(e) =>
                     handleCarrerChange(index, "ปศุสัตว์", e.target.checked)
                   }
-                  value="ปศุสัตว์"
-                  checked={member.Career.some(e=>e.career_type==='ปศุสัตว์')}
+                  checked={member.Career.some(e => e.career_type === 'ปศุสัตว์')}
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -918,18 +913,14 @@ export const HumanCapital = ({
                   ปศุสัตว์
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`career-4-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(
-                      index,
-                      "รับจ้างภาคการเกษตร",
-                      e.target.checked
-                    )
+                    handleCarrerChange(index, "รับจ้างภาคการเกษตร", e.target.checked)
                   }
-                  checked={member.Career.some(e=>e.career_type==='รับจ้างภาคการเกษตร')}
+                  checked={member.Career.some(e => e.career_type === 'รับจ้างภาคการเกษตร')}
                   value="รับจ้างภาคการเกษตร"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -941,18 +932,14 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="">
+              <div>
                 <input
                   id={`career-5-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(
-                      index,
-                      "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)",
-                      e.target.checked
-                    )
+                    handleCarrerChange(index, "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)", e.target.checked)
                   }
-                  checked={member.Career.some(e=>e.career_type==='รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)')}
+                  checked={member.Career.some(e => e.career_type === 'รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)')}
                   value="รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -963,18 +950,14 @@ export const HumanCapital = ({
                   รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`career-6-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(
-                      index,
-                      "ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน",
-                      e.target.checked
-                    )
+                    handleCarrerChange(index, "ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน", e.target.checked)
                   }
-                  checked={member.Career.some(e=>e.career_type==='ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน')}
+                  checked={member.Career.some(e => e.career_type === 'ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน')}
                   value="ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -986,18 +969,14 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="">
+              <div>
                 <input
                   id={`career-6-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(
-                      index,
-                      "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
-                      e.target.checked
-                    )
+                    handleCarrerChange(index, "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ", e.target.checked)
                   }
-                  checked={member.Career.some(e=>e.career_type==='ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
+                  checked={member.Career.some(e => e.career_type === 'ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
                   value="ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -1009,18 +988,14 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="">
+              <div>
                 <input
                   id={`career-7-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(
-                      index,
-                      "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
-                      e.target.checked
-                    )
+                    handleCarrerChange(index, "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ", e.target.checked)
                   }
-                  checked={member.Career.some(e=>e.career_type==='รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
+                  checked={member.Career.some(e => e.career_type === 'รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
                   value="รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -1032,18 +1007,14 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="col-span-4">
+              <div>
                 <input
                   id={`career-8-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(
-                      index,
-                      "ธุรกิจส่วนตัว/งานบริการ",
-                      e.target.checked
-                    )
+                    handleCarrerChange(index, "ธุรกิจส่วนตัว/งานบริการ", e.target.checked)
                   }
-                  checked={member.Career.some(e=>e.career_type==='ธุรกิจส่วนตัว/งานบริการ')}
+                  checked={member.Career.some(e => e.career_type === 'ธุรกิจส่วนตัว/งานบริการ')}
                   value="ธุรกิจส่วนตัว/งานบริการ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -1057,38 +1028,37 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="">
+              <div className="flex items-center space-x-2">
                 <input
                   id={`career-9-${index}`}
                   type="checkbox"
-                  //checked={member.career.some((e) => e.startsWith(prefix))}
                   onChange={(e) =>
-                    handleCarrerChange(index, prefix, e.target.checked)
+                    handleCarrerChange(index, "อื่นๆ", e.target.checked)
                   }
+                  checked={member.Career.some(e => e.career_type === 'อื่นๆ')}
                   value="อื่นๆ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
                   for="default-checkbox"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  class="text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   อื่นๆ
                 </label>
+
+                
               </div>
-
-              
             </div>
-
             <div className="Container ml-5 ">
               <h3 className="text-black text-sm font-bold px-5 ">
                 ทักษะอาชีพที่สามารถสร้างรายได้(ตอบได้มากกว่า1)
               </h3>
             </div>
-
-            <div className="grid gap-2 mb-6 mt-6 md:grid-cols-6  mx-10 ">
+            {/* ทักษะอาชีพ */}
+            <div className="grid gap-4 mb-6 mt-6 mx-10 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4  md:grid-cols-1 sm:grid-cols-1 ">
               {/* CheckBox */}
 
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1111,7 +1081,7 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1133,7 +1103,7 @@ export const HumanCapital = ({
                   พืชเกษตร
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1155,7 +1125,7 @@ export const HumanCapital = ({
                   ประมง
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1177,7 +1147,7 @@ export const HumanCapital = ({
                   ปศุสัตว์
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1202,7 +1172,7 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1226,7 +1196,7 @@ export const HumanCapital = ({
                   รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1250,7 +1220,7 @@ export const HumanCapital = ({
                   ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน
                 </label>
               </div>
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1275,7 +1245,7 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1300,7 +1270,7 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="col-span-3">
+              <div>
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1327,7 +1297,7 @@ export const HumanCapital = ({
                 </label>
               </div>
 
-              <div class="">
+              <div className="flex items-center space-x-2">
                 <input
                   id={`income-career-${index}`}
                   type="checkbox"
@@ -1346,16 +1316,14 @@ export const HumanCapital = ({
                 />
                 <label
                   for="default-checkbox"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  class="text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   อื่นๆ
                 </label>
-              </div>
 
-              {member.work_can_made_income.some((e) =>
-                e.startsWith(prefix)
-              ) && (
-                <div className="">
+                {member.work_can_made_income.some((e) =>
+                  e.startsWith(prefix)
+                ) && (
                   <input
                     type="text"
                     id="first_name"
@@ -1371,20 +1339,19 @@ export const HumanCapital = ({
                         e.target.value
                       )
                     }
-                    class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="ระบุอาชีพ"
                   />
-                </div>
-              )}
+                )}
+              </div>
             </div>
-
             <div className="mx-6 py-2 grid grid-cols-4 gap-6 ">
               <div className="">
                 <label
                   for="agv_income"
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  รายได้เฉลี่ย (บาท/เดือน)
+                  รายได้เฉลี่ย (บาท/เดือน) save
                 </label>
                 <input
                   type="number"

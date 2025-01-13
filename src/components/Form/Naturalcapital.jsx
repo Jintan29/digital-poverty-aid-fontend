@@ -428,13 +428,13 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
   return (
     <>
-      <div>
+      <div  className=" mx-10 ">
         <h1 className="text-xl font-bold text-gray-700 mb-5 mt-4">
           ส่วนที่ 4 ทรัพยากรธรรมชาติ และภัยพิบัติต่างๆ (ทุนทรัพยากรธรรมชาติ)
         </h1>
       </div>
       {/* 1 */}
-      <div className="p-5 bg-blue-100 rounded-lg shadow-lg">
+      <div className="mb-8 mx-10 m-5 p-5 bg-blue-100 rounded-lg shadow-lg">
         <div className="Container">
           <div className="mb-6">
             <h2 className="text-xl font-bold text-gray-700 mb-5">
@@ -446,8 +446,8 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
               ทรัพยากรธรรมชาติที่ได้ใช้ประโยชน์)
             </h2>
             {/* Radio Button Options with padding */}
-            <div className="flex flex-col gap-2 pl-12">
-              <label className="flex items-center text-gray-700">
+            <div className="flex flex-col gap-2 pl-6 ">
+              <label className="flex items-center text-gray-700 ">
                 <input
                   type="radio"
                   id="is_use_PB_resoc_0"
@@ -461,7 +461,7 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 />
                 <span className="ml-2">ไม่ใช้ประโยชน์จากทรัพยากรในพื้นที่</span>
               </label>
-              <label className="flex items-center text-gray-700">
+              <label className="flex items-center text-gray-700 ">
                 <input
                   type="radio"
                   id="is_use_PB_resoc_1"
@@ -481,8 +481,8 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
 
             {formData.PBresourceforlive[0]?.is_use_PB_resoc &&
               formData.PBresourceforlive.map((liveData, index) => (
-                <div key={index} className="mt-4 pl-12">
-                  <label className="flex items-center text-gray-700 ml-6">
+                <div key={index} className="mt-4 pl-6 ">
+                  <label className="flex flex-col sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 gap-2 pl-4">
                     <span className="text-lg font-bold">
                       {" "}
                       {/* เพิ่มขนาดและทำตัวหนา */}
@@ -503,32 +503,22 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                           )
                           : ""
                       }
-                      className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                      className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 w-44"
                       onChange={(e) => handleResourceChange(e, index)}
                     />
-                    <button
-                      type="button"
-                      onClick={() => removeDataLive(index)}
-                      className="items-center py-3 px-6 ml-3 border border-transparent text-lg font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none"
-                    >
-                      <Icon
-                        icon="material-symbols:delete-forever-outline-rounded"
-                        className="w-3 h-3"
-                      />
-                    </button>
                   </label>
-                  <label className="flex items-center text-gray-700 mt-4 gap-2">
+                  <label className="flex flex-col sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 mt-4 pl-4 gap-2">
                     <span>ระยะห่างจากที่อยู่อาศัย</span>
                     <input
                       type="number"
                       placeholder="ระยะห่างจากที่อยู่อาศัย.."
                       value={liveData.distanceKM || ""}
-                      className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                      className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 w-44"
                       onChange={(e) => handledistanceKMChange(e, index)}
                     />
                     <span>กม. (เลือกได้ 1 ข้อ)</span>
                   </label>
-                  <label className="flex items-center text-gray-700 pl-12 mt-4">
+                  <label className="flex sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 pl-4 mt-4">
                     <input
                       type="radio"
                       id={`description_${index}_0`}
@@ -541,11 +531,11 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       }
                       onChange={(e) => handleDescriptionChange(e, index)}
                     />
-                    <span className="ml-2">
+                    <span className="ml-1">
                       สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล
                     </span>
                   </label>
-                  <label className="flex items-center text-gray-700 pl-12 mt-4">
+                  <label className="flex sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 pl-4 mt-4">
                     <input
                       type="radio"
                       id={`description_${index}_1`}
@@ -558,11 +548,11 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       }
                       onChange={(e) => handleDescriptionChange(e, index)}
                     />
-                    <span className="ml-2">
+                    <span className="ml-1">
                       สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา
                     </span>
                   </label>
-                  <label className="flex items-center text-gray-700 pl-12 mt-4">
+                  <label className="flex sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 pl-4 mt-4">
                     <input
                       type="radio"
                       id={`description_${index}_2`}
@@ -572,17 +562,35 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       checked={liveData.description.startsWith(prefix)}
                       onChange={(e) => handleDescriptionChange(e, index)}
                     />
-                    <span className="ml-2">อื่นๆ</span>
+                    <span className="ml-1">อื่นๆ</span>
                     {liveData.description.startsWith(prefix) && (
                       <input
                         type="text"
                         placeholder="ระบุ..."
                         value={liveData.description.replace(prefix, "")}
-                        className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                        className= "ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 w-44"
                         onChange={(e) => handleOtherDescriptionChange(e, index)}
                       />
                     )}
                   </label>
+                  <div className="mt-4 ml-50">
+                  <button
+                      className="flex py-2 px-5 rounded-full border border-transparent text-white bg-red-500 hover:bg-red-700 focus:outline-none mr-4"
+                      type="button"
+                      onClick={() => removeDataLive(index)}
+                    >
+                      <Icon
+                        icon="material-symbols:delete-forever-outline-rounded"
+                        className="mr-2 mt-0.5 "
+                        width="20"
+                        height="20"
+                      />
+                      ลบแหล่งทรัพยากร
+                      <span className="px-2 text-white">
+                      ({index + 1})
+                      </span>
+                    </button>
+                    </div>
                 </div>
               ))}
           </div>
@@ -604,7 +612,7 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
       </div>
 
       {/* 2 */}
-      <div className="p-5 bg-blue-100 rounded-lg shadow-lg mt-4">
+      <div className="mb-8 mx-10 m-5 p-5 bg-blue-100 rounded-lg shadow-lg mt-4">
         <div className="Container">
           <div className="mb-6">
             <h2 className="text-xl font-bold text-gray-700 mb-5">
@@ -615,7 +623,7 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
               <br />
               ทรัพยากรธรรมชาติที่ได้ใช้ประโยชน์)
             </h2>
-            <div className="flex flex-col gap-2 pl-12">
+            <div className="flex flex-col gap-2 pl-6">
               <label className="flex items-center text-gray-700">
                 <input
                   type="radio"
@@ -649,8 +657,8 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
             </div>
             {formData.PBresourceforincome[0]?.is_use_PB_resoc && // ตรวจสอบว่า is_use_PB_resoc เป็น true
               formData.PBresourceforincome.map((incomeData, index) => (
-                <div key={index} className="mt-4 pl-12">
-                  <label className="flex items-center text-gray-700 ml-6">
+                <div key={index} className="mt-4 pl-6">
+                  <label className="flex flex-col sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 gap-2 pl-4">
                     <span className="text-lg font-bold">
                       {" "}
                       {/* เพิ่มขนาดและทำตัวหนา */}
@@ -672,32 +680,23 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                           )
                           : ""
                       }
-                      className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                      className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 w-44"
                       onChange={(e) => handleResourceIncomeChange(e, index)}
                     />
-                    <button
-                      type="button"
-                      onClick={() => removeDataincome(index)}
-                      className="items-center py-3 px-6 ml-3 border border-transparent text-lg font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none"
-                    >
-                      <Icon
-                        icon="material-symbols:delete-forever-outline-rounded"
-                        className="w-3 h-3"
-                      />
-                    </button>
+
                   </label>
-                  <label className="flex items-center text-gray-700 mt-4 gap-2">
+                  <label className="flex flex-col sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 mt-4 pl-4 gap-2">
                     <span>ระยะห่างจากที่อยู่อาศัย</span>
                     <input
                       type="number"
                       placeholder="ระยะห่างจากที่อยู่อาศัย.."
                       value={incomeData.distanceKM || ""}
-                      className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                      className="px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 w-44"
                       onChange={(e) => handledistanceKMIncomeChange(e, index)}
                     />
                     <span>กม. (เลือกได้ 1 ข้อ)</span>
                   </label>
-                  <label className="flex items-center text-gray-700 pl-12 mt-4">
+                  <label className="flex sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 pl-4 mt-4">
                     <input
                       type="radio"
                       id={`description_${index}_0`}
@@ -714,7 +713,7 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้บางฤดูกาล
                     </span>
                   </label>
-                  <label className="flex items-center text-gray-700 pl-12 mt-4">
+                  <label className="flex sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 pl-4 mt-4">
                     <input
                       type="radio"
                       id={`description_${index}_1`}
@@ -731,7 +730,7 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       สามารถเข้าใช้ประโยชน์เพื่อสร้างรายได้ตลอดเวลา
                     </span>
                   </label>
-                  <label className="flex items-center text-gray-700 pl-12 mt-4">
+                  <label className="flex sm:flex-col-1 md:flex-row lg:flex-row xl:flex-row text-gray-700 pl-4 mt-4">
                     <input
                       type="radio"
                       id={`description_${index}_2`}
@@ -747,13 +746,31 @@ function Naturalcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                         type="text"
                         placeholder="ระบุ..."
                         value={incomeData.description.replace(prefix, "")}
-                        className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                        className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 w-44"
                         onChange={(e) =>
                           handleOtherDescriptionIncomeChange(e, index)
                         }
                       />
                     )}
                   </label>
+                  <div className="mt-4 ml-50">
+                  <button
+                      className="flex py-2 px-5 rounded-full border border-transparent text-white bg-red-500 hover:bg-red-700 focus:outline-none mr-4"
+                      type="button"
+                      onClick={() => removeDataincome(index)}
+                    >
+                      <Icon
+                        icon="material-symbols:delete-forever-outline-rounded"
+                        className="mr-2 mt-0.5 "
+                        width="20"
+                        height="20"
+                      />
+                      ลบแหล่งทรัพยากร
+                      <span className="px-2 text-white">
+                      ({index + 1})
+                      </span>
+                    </button>
+                    </div>
                 </div>
               ))}
           </div>

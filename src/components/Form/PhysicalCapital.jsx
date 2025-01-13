@@ -225,8 +225,8 @@ useEffect(() => {
           <h3 className="text-black text-base font-bold py-2">
             1. ให้ระบบ pin location ของบ้านด้วย GIS (ทศนิยม 6-8 ตำแหน่ง)
           </h3>
-
-          <div className="grid grid-cols-2 gap-8 mt-4">
+{/* pin */}
+          <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 mt-4">
             <div>
               <label
                 htmlFor="latitude"
@@ -268,7 +268,7 @@ useEffect(() => {
           <h3 className="text-black text-base font-bold py-2">
             2. ท่านและสมาชิกครัวเรือนมีบ้านเป็นของตนเองหรือไม่ (เลือกได้ 1 ข้อ)
           </h3>
-
+{/* 2 */}
           <div className="mt-2 space-y-6">
             <div className="flex items-center gap-x-3">
               <input
@@ -450,11 +450,11 @@ useEffect(() => {
               )}
             </div>
           </div>
-          {/* ข้อ 3  */}
+          
           <h3 className="text-black text-base font-bold py-2 mt-2">
             3. สภาพบ้านที่อยู่อาศัยในปัจจุบันเป็นอย่างไร (เลือกได้ 1 ข้อ)
           </h3>
-
+ {/* ข้อ 3  */}
           <div className="mt-2 space-y-6">
             <div className="flex items-center gap-x-3">
               <input
@@ -515,7 +515,7 @@ useEffect(() => {
               </label>
             </div>
           </div>
-
+{/* 4 */}
           <h3 className="text-black text-base font-bold py-2 mt-2">
             4. ความเป็นระเบียบเรียบร้อย และถูกลักษณะของบ้านพักอาศัย
           </h3>
@@ -524,8 +524,8 @@ useEffect(() => {
             1. บ้านพักอาศัยมีการจัดเก็บสิ่งของเป็นระเบียบไม่รกรุงรัง
           </div>
 
-          <div className="flex flex-row ">
-            <div className="">
+          <div className="flex flex-col sm:flex-row sm:gap-2 ml-3">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="item_storage_yes"
                 name="HouseHygiene_item_storage"
@@ -546,7 +546,7 @@ useEffect(() => {
                 ใช่ (ไม่รก)
               </label>
             </div>
-            <div className="px-10">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="item_storage_no"
                 name="HouseHygiene_item_storage"
@@ -572,8 +572,8 @@ useEffect(() => {
             2.บ้านพักอาศัยมีการจัดการระบบระบายน้ำในบ้าน
           </div>
 
-          <div className="flex flex-row ">
-            <div className="">
+          <div className="flex flex-col sm:flex-row sm:gap-2 ml-3">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="drainage_system_yes"
                 name="HouseHygiene_dra"
@@ -597,7 +597,7 @@ useEffect(() => {
                 ใช่ (มีระบบระบายน้ำ)
               </label>
             </div>
-            <div className="px-10">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="drainage_system_no"
                 name="HouseHygiene_dra"
@@ -626,7 +626,7 @@ useEffect(() => {
             3. บ้านพักอาศัยมีห้องส้วมที่สะอาด แข็งแรง ระบายน้ำดีไม่มีกลิ่น
           </div>
 
-          <div className="flex flex-row ">
+          <div className="flex flex-row ml-3">
             <div className="">
               <input
                 id="toilet_y"
@@ -680,8 +680,8 @@ useEffect(() => {
             4. บ้านพักอาศัยมีการคัดแยกขยะและกำหนดจุดทิ้งขยะที่ชัดเจน
           </div>
 
-          <div className="flex flex-row ">
-            <div className="">
+          <div className="flex flex-col sm:flex-row sm:gap-2 ml-3">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="garbage_y"
                 name="HouseHygiene_gb"
@@ -705,7 +705,7 @@ useEffect(() => {
                 ใช่ (มี)
               </label>
             </div>
-            <div className="px-10">
+            <div className="flex items-center mb-4 sm:mb-0">
               <input
                 id="garbage_n"
                 name="HouseHygiene_gb"
@@ -741,8 +741,8 @@ useEffect(() => {
                 5.1 ครัวเรือนของท่านมีไฟฟ้าหรือไม่
               </h3>
 
-              <div className="flex flex-row ml-3 ">
-                <div className="">
+              <div className="flex flex-col xl:flex-row xl:gap-6 ml-3">
+                <div className="flex items-center mb-4 xl:mb-0">
                   <input
                     name="electricity_status"
                     type="radio"
@@ -760,7 +760,7 @@ useEffect(() => {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 xl:mb-0">
                   <input
                     name="electricity_status"
                     type="radio"
@@ -779,7 +779,7 @@ useEffect(() => {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 xl:mb-0">
                   <input
                     name="electricity_status"
                     type="radio"
@@ -916,8 +916,8 @@ useEffect(() => {
                 น้ำฝน)
               </h3>
 
-              <div className="flex flex-row ml-3 ">
-                <div className="">
+              <div className="flex flex-col md:flex-row md:gap-4 ml-3 ">
+                <div className="flex items-center mb-4 md:mb-0">
                   <input
                     id="other_y"
                     name="UtilityWater_other"
@@ -942,7 +942,7 @@ useEffect(() => {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 md:mb-0">
                   <input
                     id="other_n"
                     name="UtilityWater_other"
@@ -966,7 +966,7 @@ useEffect(() => {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 md:mb-0">
                   <input
                     id="other_n_rs"
                     name="UtilityWater_other"
@@ -1098,8 +1098,8 @@ useEffect(() => {
                 7.2 โทรศัพท์มือถือ
               </h3>
 
-              <div className="flex flex-row ml-3 ">
-                <div className="">
+              <div className="flex flex-col lg:flex-row lg:gap-6 ml-3 ">
+                <div className="flex items-center mb-4 lg:mb-0">
                   <input
                     name="phone"
                     type="radio"
@@ -1116,7 +1116,7 @@ useEffect(() => {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 lg:mb-0">
                   <input
                     name="phone"
                     type="radio"
@@ -1134,7 +1134,7 @@ useEffect(() => {
                   </label>
                 </div>
 
-                <div className="px-10">
+                <div className="flex items-center mb-4 lg:mb-0">
                   <input
                     name="phone"
                     type="radio"

@@ -429,23 +429,23 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     setCurrentPage(6);
   };
 
-  return (
-    <div className="p-5 bg-gray-100 rounded-lg shadow-lg">
+  return ( 
+    <div className="mb-6 mx-10 m-5 p-5 rounded-lg" >
       <div className="Container">
         <h1 className="text-xl font-bold text-gray-700 mb-5">
           ส่วนที่ 5 การเกื้อกูลและระบบรองรับทางสังคม (ทุนทางสังคม)
         </h1>
         {/* ตาราง */}
-        <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
+        <div className="mt-5 bg-white p-4 rounded-lg  max-w-4xl overflow-x-auto">
           <table
-            className="table-auto w-full border-collapse"
-            style={{ tableLayout: "fixed" }}
+            className="table-auto border-collapse"
+            style={{ width: '800px' }}
           >
             <thead>
               <tr>
                 <th
                   className="border px-4 py-2 bg-gray-200 text-gray-700"
-                  style={{ width: "70%" }}
+                  style={{ width: "50%" }}
                 >
                   ประเภทกลุ่มกิจกรรม
                 </th>
@@ -457,7 +457,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </th>
                 <th
                   className="border px-4 py-2 bg-gray-200 text-gray-700"
-                  style={{ width: "30%" }}
+                  style={{ width: "25%" }}
                 >
                   การพึ่งพาในกรณีที่ได้รับความเดือดร้อน
                 </th>
@@ -494,7 +494,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center">
                   <select
-                    className="border  px-2 py-1 rounded-lg shadow-md"
+                    className="border  px-2 py-1 rounded-lg shadow-md "
                     id="is_member_0"
                     name="is_member"
                     value={
@@ -520,7 +520,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center ">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="dependency_0"
                     name="dependency"
                     value={
@@ -575,7 +575,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="is_member_1"
                     name="is_member"
                     value={
@@ -601,7 +601,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center ">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="dependency_1"
                     name="dependency"
                     value={
@@ -657,7 +657,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="is_member_2"
                     name="is_member"
                     value={
@@ -683,7 +683,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center ">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="dependency_2"
                     name="dependency"
                     value={
@@ -738,7 +738,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="is_member_3"
                     name="is_member"
                     value={
@@ -764,7 +764,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center ">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="dependency_3"
                     name="dependency"
                     value={
@@ -820,7 +820,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="is_member_4"
                     name="is_member"
                     value={
@@ -846,7 +846,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center ">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="dependency_4"
                     name="dependency"
                     value={
@@ -902,7 +902,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="is_member_5"
                     name="is_member"
                     value={
@@ -923,7 +923,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                 </td>
                 <td className="border px-4 py-3 text-center ">
                   <select
-                    className="border rounded px-2 py-1 rounded-lg shadow-md"
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
                     id="dependency_5"
                     name="dependency"
                     value={
@@ -949,16 +949,16 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
         </div>
 
         {/* กิจกรรม */}
-        <div className="mt-5 bg-white p-4 rounded-lg shadow-md">
+        <div className="mt-5 bg-white p-4 rounded-lg max-w-4xl overflow-x-auto">
           <table
-            className="table-auto w-full border-collapse"
-            style={{ tableLayout: "fixed" }}
+            className="table-auto border-collapse"
+            style={{ width: '800px' }}
           >
             <thead>
               <tr>
                 <th
                   className="border px-4 py-2 bg-gray-200 text-gray-700"
-                  style={{ width: "60%" }}
+                  style={{ width: "50%" }}
                 >
                   ประเภทกิจกรรม
                 </th>

@@ -166,16 +166,16 @@ function App() {
               element={
                 <AdminRoute>
                   <TrackingMemberId />
-
                 </AdminRoute>
               }
+
             />
             <Route
               path="track-household"
               element={
                 <AdminRoute>
                   <TrackHousehold />
-                </AdminRoute>
+                  </AdminRoute>
               }
             />
 
