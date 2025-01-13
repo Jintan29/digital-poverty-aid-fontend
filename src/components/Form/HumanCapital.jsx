@@ -1,12 +1,12 @@
-import { Field } from "@headlessui/react";
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import axios from "axios";
 import Swal from "sweetalert2";
 
-export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
-
-
+export const HumanCapital = ({
+  setCurrentPage,
+  setMainFormData,
+  mainFormData,
+}) => {
   //สถานะเริ่มต้นฟอร์ม
   const [members, setMembers] = useState([
     {
@@ -18,7 +18,7 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
       sex: "ชาย",
       birthdate: "",
       national_id: "",
-      phone:"",
+      phone: "",
       status_in_house: "มีชื่อและอาศัยอยู่",
       health: "ปกติ",
       SocialWelfare: [
@@ -28,36 +28,30 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
           frequency: "ครั้งเดียว",
         },
       ],
-      can_speak_TH: "ได้",
-      can_read_TH: "ได้",
-      can_write_TH: "ได้",
+      can_speak_TH: "พูดไทยได้",
+      can_read_TH: "อ่านไทยได้",
+      can_write_TH: "เขียนไทยได้",
       max_education: "ไม่ได้เรียน",
       edu_status: "ไปเรียนสม่ำเสมอ",
       current_edu_level: "ต่ำกว่าประถม",
       edu_description: "",
       work_status: "ไม่ทำงาน",
-      career: [],
+      Career: [],
       work_can_made_income: [],
       agv_income: 0,
+      inflation: 0,
     },
   ]);
 
-  const prefix = 'อื่นๆ '
-
-  const handleLog = ()=>{
-    console.log(members);
-    
-  }
+  const prefix = "อื่นๆ ";
 
   //load data from main
-  useEffect(()=>{
-    if(mainFormData.MemberHousehold ){ //ดูว่าหน้าหลักมีข้อมูลหรือยัง
-      setMembers(mainFormData.MemberHousehold)
+  useEffect(() => {
+    if (mainFormData.MemberHousehold) {
+      //ดูว่าหน้หลักมีข้อมูลหรือยัง
+      setMembers(mainFormData.MemberHousehold);
     }
-  },[mainFormData])
-
-  const [isProcessing, setIsProcessing] = useState(false);
-
+  }, [mainFormData]);
 
   //ฟังก์ชันเพิ่มสมาชิกใหม่
   const addMember = () => {
@@ -81,17 +75,18 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
             frequency: "ครั้งเดียว",
           },
         ],
-        can_speak_TH: "ได้",
-        can_read_TH: "ได้",
-        can_write_TH: "ได้",
+        can_speak_TH: "พูดไทยได้",
+        can_read_TH: "อ่านไทยได้",
+        can_write_TH: "เขียนไทยได้",
         max_education: "ไม่ได้เรียน",
         edu_status: "ไปเรียนสม่ำเสมอ",
         current_edu_level: "ต่ำกว่าประถม",
         edu_description: "",
         work_status: "ไม่ทำงาน",
-        career: [],
+        Career: [],
         work_can_made_income: [],
         agv_income: 0,
+        inflation: 0,
       },
     ]);
   };
@@ -131,30 +126,26 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedCareerMadeIncome, setSelectedCareerMadeIncome] = useState([]);
 
- 
-  const handleCareerChange = (index, value, checked) => {
-    const updatedMembers = [...members]; // Clone ค่าเดิม
-  
-    //กรอง prefix ก่อน
-    if (value === prefix && !checked) {
-      updatedMembers[index].career = updatedMembers[index].career.filter(
-        (career) => !career.startsWith(prefix)
-      );
-    } else {
-      if (checked) {
-        
-        updatedMembers[index].career = [...updatedMembers[index].career, value];
-      } else {
-        
-        updatedMembers[index].career = updatedMembers[index].career.filter(
-          (career) => career !== value
-        );
+
+  // insert {} into Career:[]
+  const handleCarrerChange = (index,value,check)=>{
+    const updateData = [...members]
+
+    if(check){
+      
+      const isChecked = updateData[index].Career.some(e=>e.career_type === value)
+
+      if(!isChecked){
+        updateData[index].Career.push({career_type:value})
       }
     }
+    else{
+      //del
+      updateData[index].Career = updateData[index].Career.filter(e=>e.career_type !== value)
+    }
   
-    setMembers(updatedMembers);
-  };
-  
+    setMembers(updateData)
+  }
 
   //รอแก้
   const handleOtherChange = (index, field, value) => {
@@ -162,9 +153,11 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
       const updatedMembers = [...prevMembers];
       const member = { ...updatedMembers[index] };
       const fieldArray = [...member[field]];
-  
-      const otherIndex = fieldArray.findIndex((item) => item.startsWith(prefix));
-  
+
+      const otherIndex = fieldArray.findIndex((item) =>
+        item.startsWith(prefix)
+      );
+
       if (value.trim() === "") {
         // หากผู้ใช้ลบค่าใน input ให้ลบรายการ "อื่นๆ " ออก
         if (otherIndex !== -1) {
@@ -179,23 +172,22 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
           fieldArray.push(prefix + value);
         }
       }
-  
+
       member[field] = fieldArray;
       updatedMembers[index] = member;
       return updatedMembers;
     });
   };
-  
 
   //อาชีพที่สร้างรายได้
   const handleCareerMadeIncomeChange = (index, value, checked) => {
     const updatedMembers = [...members];
 
-    if(value === prefix && !checked){
-      updatedMembers[index].work_can_made_income = updatedMembers[index].work_can_made_income.filter(
-        (e)=> !e.startsWith(prefix)
-      )
-    }else{
+    if (value === prefix && !checked) {
+      updatedMembers[index].work_can_made_income = updatedMembers[
+        index
+      ].work_can_made_income.filter((e) => !e.startsWith(prefix));
+    } else {
       if (checked) {
         updatedMembers[index].work_can_made_income = [
           ...updatedMembers[index].work_can_made_income,
@@ -206,10 +198,8 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
           index
         ].work_can_made_income.filter((incomeCareer) => incomeCareer !== value);
       }
-      
     }
     setMembers(updatedMembers);
-    
   };
 
   // Social welfare
@@ -226,7 +216,6 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
   useEffect(() => {}, [selectedCareer, selectedCareerMadeIncome, members]); // ฟังทุกครั้งที่ selectedCareer เปลี่ยนแปลง
 
-
   const validateInput = () => {
     const errors = [];
     for (let index = 0; index < members.length; index++) {
@@ -234,55 +223,58 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
       // ตรวจสอบหมายเลขบัตรประชาชน
       if (!member.national_id || member.national_id.length !== 13) {
-        errors.push(`กรุณากรอกเลขบัตรประชาชนของสมาชิคคนที่ ${index + 1} ให้ครบ 13 หลัก`);
+        errors.push(
+          `กรุณากรอกเลขบัตรประชาชนของสมาชิคคนที่ ${index + 1} ให้ครบ 13 หลัก`
+        );
       }
 
-      if(member.career.length<=0){
-        errors.push(`กรุณากรอกข้อมูล "อาชีพ" ของสมาชิคคนที่ ${index+1} `)
+      if (member.Career.length <= 0) {
+        errors.push(`กรุณากรอกข้อมูล "อาชีพ" ของสมาชิคคนที่ ${index + 1} `);
       }
 
-      if(member.work_can_made_income.length<=0){
-        errors.push(`กรุณากรอกข้อมูล "อาชีพที่สร้างรายได้" ของสมาชิคคนที่ ${index+1} `)
+      if (member.work_can_made_income.length <= 0) {
+        errors.push(
+          `กรุณากรอกข้อมูล "อาชีพที่สร้างรายได้" ของสมาชิคคนที่ ${index + 1} `
+        );
       }
     }
 
     if (errors.length > 0) {
       Swal.fire({
-        title: 'มีข้อผิดพลาดในการกรอกข้อมูล',
-        html: errors.join('<br/>'),
-        icon: 'warning',
+        title: "มีข้อผิดพลาดในการกรอกข้อมูล",
+        html: errors.join("<br/>"),
+        icon: "warning",
       });
       return false;
     }
 
     return true;
-  }
+  };
 
-
-  const handleSubmit = (e)=>{
+  const handleSubmit = (e) => {
     if (e) e.preventDefault();
     //กรองก่อนเปลี่ยนหน้า
-    if(!validateInput()){
+    if (!validateInput()) {
       return;
     }
 
-    setMainFormData((prevData)=>({ //นำค่าใหม่ไปต่อท้าย
+    setMainFormData((prevData) => ({
+      //นำค่าใหม่ไปต่อท้าย
       ...prevData,
-      MemberHousehold:members
-    }))
+      MemberHousehold: members,
+    }));
 
-    setCurrentPage(3)
-
-  }
+    setCurrentPage(3);
+  };
 
   //ย้อนกลับแบบไม่ validate
-  const handlePrevPage = ()=>{
-    setMainFormData((prevData)=>({ 
+  const handlePrevPage = () => {
+    setMainFormData((prevData) => ({
       ...prevData,
-      MemberHousehold:members
-    }))
-    setCurrentPage(1)
-  }
+      MemberHousehold: members,
+    }));
+    setCurrentPage(1);
+  };
 
   return (
     <div>
@@ -312,240 +304,60 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
                 <label htmlFor="currency" className="sr-only">
                   Currency
-                </label>
-                <select
-                  id="title"
-                  name="title"
-                  value={member.title}
+
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
+                  <label htmlFor="currency" className="sr-only">
+                    Currency
+                  </label>
+                  <select
+                    id="title"
+                    name="title"
+                    value={member.title}
+                    onChange={(e) =>
+                      handleInputChange(index, "title", e.target.value)
+                    }
+                    className="border border-transparent mb-5 bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
+                  >
+                    <option>นาย</option>
+                    <option>นาง</option>
+                    <option>นางสาว</option>
+                    <option>เด็กชาย</option>
+                    <option>เด็กหญิง</option>
+                  </select>
+                </div>
+                <input
+                  id="fname"
+                  name="fname"
+                  type="text"
+                  value={member.fname}
                   onChange={(e) =>
-                    handleInputChange(index, "title", e.target.value)
+                    handleInputChange(index, "fname", e.target.value)
                   }
-                  
-                  className="border border-transparent mb-5 bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
-                >
-                  <option>นาย</option>
-                  <option>นาง</option>
-                  <option>นางสาว</option>
-                  <option>เด็กชาย</option>
-                  <option>เด็กหญิง</option>
-                </select>
+                  required
+                  placeholder=""
+                  className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
               </div>
-              <input
-                id="fname"
-                name="fname"
-                type="text"
-                value={member.fname}
-                onChange={(e) =>
-                  handleInputChange(index, "fname", e.target.value)
-                }
-                required
-                placeholder=""
-                className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-            </div>
 
-            <div className="">
-              <label
-                for="lname"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                นามสกุล
-              </label>
-              <input
-                type="text"
-                id="lname"
-                value={member.lname}
-                onChange={(e) =>
-                  handleInputChange(index, "lname", e.target.value)
-                }
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                for="age_yaer"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                อายุ(ปี)
-              </label>
-              <input
-                type="number"
-                id="age_yaer"
-                value={member.age_yaer}
-                onChange={(e) =>
-                  handleInputChange(index, "age_yaer", parseInt(e.target.value))
-                }
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                for="age_month"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                อายุ(เดือน)
-              </label>
-              <input
-                type="number"
-                id="age_month"
-                value={member.age_month}
-                onChange={(e) =>
-                  handleInputChange(
-                    index,
-                    "age_month",
-                    parseInt(e.target.value)
-                  )
-                }
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                for="sex"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                เพศ
-              </label>
-              <select
-                id="sex"
-                name="sex"
-                value={member.sex}
-                onChange={(e) =>
-                  handleInputChange(index, "sex", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ชาย</option>
-                <option>หญิง</option>
-              </select>
-            </div>
-
-            <div className="">
-              <label
-                for="birthdate"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                วันเกิด ตัวอย่าง (2546-04-13)
-              </label>
-              <input
-                type="text"
-                id="birthdate"
-                pattern="\d{4}-\d{2}-\d{2}"
-                placeholder="พ.ศ.-เดือน-วัน"
-                value={member.birthdate}
-                onInvalid={(e) => e.target.setCustomValidity('กรุณากรอกวันเกิดในรูปแบบ (ปี-เดือน-วัน) เช่น 2546-04-13')}
-                onInput={(e) => e.target.setCustomValidity('')} // เคลียร์ข้อความเมื่อผู้ใช้แก้ข้อมูล
-                onChange={(e) =>
-                  handleInputChange(index, "birthdate", e.target.value)
-                }
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                for="national_id"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                หมายเลขบัตรประจำตัวประชาชน
-              </label>
-              <input
-                type="text"
-                id="national_id"
-                value={member.national_id}
-                onChange={(e) =>
-                  handleInputChange(index, "national_id", e.target.value)
-                }
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                for=""
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                เบอร์โทรศัพท์ (หากไม่มีให้กรอก "-")
-              </label>
-              <input
-                type="text"
-                id="phone"
-                value={member.phone}
-                onChange={(e) =>
-                  handleInputChange(index, "phone", e.target.value)
-                }
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                for="status_in_house"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                สถานะตามทะเบียนบ้าน
-              </label>
-              <select
-                id="status_in_house"
-                name="status_in_house"
-                value={member.status_in_house}
-                onChange={(e) =>
-                  handleInputChange(index, "status_in_house", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>มีชื่อและอาศัยอยู่</option>
-                <option>มีชื่อแต่ไม่อาศัย</option>
-                <option>ไม่มีชื่อแต่อาศัยอยู่</option>
-              </select>
-            </div>
-
-            <div className="">
-              <label
-                for="health"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                สุขภาพ
-              </label>
-              <select
-                id="health"
-                name="health"
-                value={member.health}
-                onChange={(e) =>
-                  handleInputChange(index, "health", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ปกติ</option>
-                <option>ป่วยเรื้อรังไม่ติดเตียง(เช่น หัวใจ เบาหวาน)</option>
-                <option>พึ่งพาตนเองได้</option>
-                <option>ผู้ป่วยติดเตียง/พิการพึ่งพาตัวเองไม่ได้</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="Container ml-5">
-            <h3 className="text-black text-sm font-bold px-5 pb-5">
-              สวัสดิการที่ได้รับในปัจจุบัน
-            </h3>
-          </div>
-
-          {/* Socialwelfare */}
+              <div className="">
+                <label
+                  for="lname"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  นามสกุล
+                </label>
+                <input
+                  type="text"
+                  id="lname"
+                  value={member.lname}
+                  onChange={(e) =>
+                    handleInputChange(index, "lname", e.target.value)
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                />
+              </div>
 
           {/* แสดงรายการสวัสดิการ */} 
           {member.SocialWelfare.map((welfare, welfareIndex) => (
@@ -553,96 +365,240 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               className="grid gap-6 mb-6 mt-0 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10"
               key={welfareIndex}
             >
-              <div className="">
-                <label
-                  htmlFor={`welfare_${index}_${welfareIndex}`}
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  ระบุสวัสดิการ ({welfareIndex + 1})
-                </label>
-                <select
-                  id={`welfare_${index}_${welfareIndex}`}
-                  name={`welfare_${index}_${welfareIndex}`}
-                  value={welfare.welfare}
-                  onChange={(e) =>
-                    handleWelfareInputChange(
-                      index,
-                      welfareIndex,
-                      "welfare",
-                      e.target.value
-                    )
-                  }
-                  className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none focus:border-gray-500 focus:rounded-md"
-                >
-                  {/* ... รายการตัวเลือก ... */}
-                  <option>ไม่ได้รับ</option>
-                  <option>เด็กแรกเกิด</option>
-                  <option>เบี้ยสูงอายุ/คนชรา</option>
-                  <option>เบี้ยคนพิการ</option>
-                  <option>ประกันสังคม(นายจ้าง/ม.33)</option>
-                  <option>ประกันตนเอง(ม.40)</option>
-                  <option>บัตรสวัสดิการแห่งรัฐ</option>
-                  <option>การเยียวยาโควิดจากรัฐ</option>
-                  <option>ไม่ทราบ</option>
-                  <option>
-                    อื่นๆ เช่น ทุนการศึกษา เบี้ยซ่อมแซมบ้าน
-                    อุปกรณ์ช่วยเหลือคนพิการ
-                  </option>
-                </select>
-              </div>
 
               <div className="">
                 <label
-                  htmlFor={`amount_${index}_${welfareIndex}`}
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  for="age_yaer"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  จำนวน (บาท)
+                  อายุ(ปี)
                 </label>
                 <input
                   type="number"
-                  id={`amount_${index}_${welfareIndex}`}
-                  value={welfare.amount}
+                  id="age_yaer"
+                  value={member.age_yaer}
                   onChange={(e) =>
-                    handleWelfareInputChange(
+                    handleInputChange(
                       index,
-                      welfareIndex,
-                      "amount",
-                      e.target.value
+                      "age_yaer",
+                      parseInt(e.target.value)
                     )
                   }
-                  className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder=""
                   required
                 />
               </div>
 
-              <div className="flex items-end justify-between">
-                <div className="w-10/12">
+              <div className="">
+                <label
+                  for="age_month"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  อายุ(เดือน)
+                </label>
+                <input
+                  type="number"
+                  id="age_month"
+                  value={member.age_month}
+                  onChange={(e) =>
+                    handleInputChange(
+                      index,
+                      "age_month",
+                      parseInt(e.target.value)
+                    )
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                />
+              </div>
+
+              <div className="">
+                <label
+                  for="sex"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  เพศ
+                </label>
+                <select
+                  id="sex"
+                  name="sex"
+                  value={member.sex}
+                  onChange={(e) =>
+                    handleInputChange(index, "sex", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>ชาย</option>
+                  <option>หญิง</option>
+                </select>
+              </div>
+
+              <div className="">
+                <label
+                  for="birthdate"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  วันเกิด ตัวอย่าง (2546-04-13)
+                </label>
+                <input
+                  type="text"
+                  id="birthdate"
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  placeholder="พ.ศ.-เดือน-วัน"
+                  value={member.birthdate}
+                  onInvalid={(e) =>
+                    e.target.setCustomValidity(
+                      "กรุณากรอกวันเกิดในรูปแบบ (ปี-เดือน-วัน) เช่น 2546-04-13"
+                    )
+                  }
+                  onInput={(e) => e.target.setCustomValidity("")} // เคลียร์ข้อความเมื่อผู้ใช้แก้ข้อมูล
+                  onChange={(e) =>
+                    handleInputChange(index, "birthdate", e.target.value)
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                />
+              </div>
+
+              <div className="">
+                <label
+                  for="national_id"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  หมายเลขบัตรประจำตัวประชาชน
+                </label>
+                <input
+                  type="text"
+                  id="national_id"
+                  value={member.national_id}
+                  onChange={(e) =>
+                    handleInputChange(index, "national_id", e.target.value)
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                />
+              </div>
+
+              <div className="">
+                <label
+                  for=""
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  เบอร์โทรศัพท์ (หากไม่มีให้กรอก "-")
+                </label>
+                <input
+                  type="text"
+                  id="phone"
+                  value={member.phone}
+                  onChange={(e) =>
+                    handleInputChange(index, "phone", e.target.value)
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                />
+              </div>
+
+              <div className="">
+                <label
+                  for="status_in_house"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  สถานะตามทะเบียนบ้าน
+                </label>
+                <select
+                  id="status_in_house"
+                  name="status_in_house"
+                  value={member.status_in_house}
+                  onChange={(e) =>
+                    handleInputChange(index, "status_in_house", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>มีชื่อและอาศัยอยู่</option>
+                  <option>มีชื่อแต่ไม่อาศัย</option>
+                  <option>ไม่มีชื่อแต่อาศัยอยู่</option>
+                </select>
+              </div>
+
+              <div className="">
+                <label
+                  for="health"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  สุขภาพ
+                </label>
+                <select
+                  id="health"
+                  name="health"
+                  value={member.health}
+                  onChange={(e) =>
+                    handleInputChange(index, "health", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>ปกติ</option>
+                  <option>ป่วยเรื้อรังไม่ติดเตียง(เช่น หัวใจ เบาหวาน)</option>
+                  <option>พึ่งพาตนเองได้</option>
+                  <option>ผู้ป่วยติดเตียง/พิการพึ่งพาตัวเองไม่ได้</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="Container ml-5">
+              <h3 className="text-black text-sm font-bold px-5 pb-5">
+                สวัสดิการที่ได้รับในปัจจุบัน
+              </h3>
+            </div>
+
+            {/* Socialwelfare */}
+
+            {/* แสดงรายการสวัสดิการ */}
+            {member.SocialWelfare.map((welfare, welfareIndex) => (
+              <div
+                className="grid gap-6 mb-6 mt-0 md:grid-cols-3 mx-10"
+                key={welfareIndex}
+              >
+                <div className="">
                   <label
-                    htmlFor={`frequency_${index}_${welfareIndex}`}
+                    htmlFor={`welfare_${index}_${welfareIndex}`}
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    ความถี่
+                    ระบุสวัสดิการ ({welfareIndex + 1})
                   </label>
                   <select
-                    id={`frequency_${index}_${welfareIndex}`}
-                    name={`frequency_${index}_${welfareIndex}`}
-                    value={welfare.frequency}
+                    id={`welfare_${index}_${welfareIndex}`}
+                    name={`welfare_${index}_${welfareIndex}`}
+                    value={welfare.welfare}
                     onChange={(e) =>
                       handleWelfareInputChange(
                         index,
                         welfareIndex,
-                        "frequency",
+                        "welfare",
                         e.target.value
                       )
                     }
                     className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none focus:border-gray-500 focus:rounded-md"
                   >
-                    <option value="ทุกเดือน">ทุกเดือน</option>
-                    <option value="ครั้งเดียว">ครั้งเดียว</option>
+                    {/* ... รายการตัวเลือก ... */}
+                    <option>ไม่ได้รับ</option>
+                    <option>เด็กแรกเกิด</option>
+                    <option>เบี้ยสูงอายุ/คนชรา</option>
+                    <option>เบี้ยคนพิการ</option>
+                    <option>ประกันสังคม(นายจ้าง/ม.33)</option>
+                    <option>ประกันตนเอง(ม.40)</option>
+                    <option>บัตรสวัสดิการแห่งรัฐ</option>
+                    <option>การเยียวยาโควิดจากรัฐ</option>
+                    <option>ไม่ทราบ</option>
+                    <option>
+                      อื่นๆ เช่น ทุนการศึกษา เบี้ยซ่อมแซมบ้าน
+                      อุปกรณ์ช่วยเหลือคนพิการ
+                    </option>
                   </select>
                 </div>
-
                 <button
                   type="button"
                   onClick={() => delSocialWelfare(index)}
@@ -713,154 +669,207 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               </select>
             </div>
 
-            <div className="">
-              <label
-                for="can_write_TH"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+
+                <div className="flex items-end justify-between">
+                  <div className="w-10/12">
+                    <label
+                      htmlFor={`frequency_${index}_${welfareIndex}`}
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      ความถี่
+                    </label>
+                    <select
+                      id={`frequency_${index}_${welfareIndex}`}
+                      name={`frequency_${index}_${welfareIndex}`}
+                      value={welfare.frequency}
+                      onChange={(e) =>
+                        handleWelfareInputChange(
+                          index,
+                          welfareIndex,
+                          "frequency",
+                          e.target.value
+                        )
+                      }
+                      className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none focus:border-gray-500 focus:rounded-md"
+                    >
+                      <option value="ทุกเดือน">ทุกเดือน</option>
+                      <option value="ครั้งเดียว">ครั้งเดียว</option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => delSocialWelfare(index)}
+                    className="flex items-center justify-end py-2 px-4 mb-6 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-900 focus:outline-none"
+                  >
+                    <Icon icon="material-symbols:delete-rounded" className="" />
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {/* ปุ่มเพิ่มสวัสดิการ อยู่ภายนอก loop ของ SocialWelfare */}
+            <div className="mx-10 mb-6">
+              <button
+                type="button"
+                onClick={() => addSocialWelfare(index)}
+                className="flex items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-400 hover:bg-emerald-600 focus:outline-none"
               >
-                เขียนภาษาไทย
-              </label>
-              <select
-                id="can_write_TH"
-                name="can_write_TH"
-                value={member.can_write_TH}
-                onChange={(e) =>
-                  handleInputChange(index, "can_write_TH", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ได้</option>
-                <option>ไม่ได้</option>
-              </select>
+                <Icon
+                  icon="material-symbols:add-circle-outline-rounded"
+                  className="mr-2"
+                />
+                เพิ่มสวัสดิการที่ได้รับ
+              </button>
             </div>
 
-            <div className="">
-              <label
-                for="max_education "
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                การศึกษาสูงสุด
-              </label>
-              <select
-                id="max_education "
-                name="max_education "
-                value={member.max_education}
-                onChange={(e) =>
-                  handleInputChange(index, "max_education", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ไม่ได้เรียน</option>
-                <option>ต่ำกว่าประถม</option>
-                <option>ประถมศึกษา</option>
-                <option>ม.ต้น หรือเทียบเท่า</option>
-                <option>ม.ปลาย หรือเทียบเท่า</option>
-                <option>ปวช./ประกาศนียบัตร</option>
-                <option>ปวส./อนุปริญญา</option>
-                <option>ป.ตรี หรือเทียบเท่า</option>
-                <option>สูงกว่าปริญญาตรี</option>
-                <option>เรียนสายศาสนา</option>
-              </select>
-            </div>
+            {/* Part3 */}
+            <div className="grid gap-6 mb-6 mt-6 md:grid-cols-4  mx-10">
+              <div className="">
+                <label
+                  for="can_speak_TH"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  พูดภาษาไทย
+                </label>
+                <select
+                  id="can_speak_TH"
+                  name="can_speak_TH"
+                  value={member.can_speak_TH}
+                  onChange={(e) =>
+                    handleInputChange(index, "can_speak_TH", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>พูดไทยได้</option>
+                  <option>พูดไทยไม่ได้</option>
+                </select>
+              </div>
 
-            <div className="">
-              <label
-                for="edu_status"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                สถานภาพการศึกษา
-              </label>
-              <select
-                id="edu_status"
-                name="edu_status"
-                value={member.edu_status}
-                onChange={(e) =>
-                  handleInputChange(index, "edu_status", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ไปเรียนสม่ำเสมอ</option>
-                <option>หยุดเรียนเป็นระยะ</option>
-                <option>ออกกลางคัน(Dropout)</option>
-              </select>
-            </div>
+              <div className="">
+                <label
+                  for="can_read_TH "
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  อ่านภาษาไทย
+                </label>
+                <select
+                  id="can_read_TH "
+                  name="can_read_TH "
+                  value={member.can_read_TH}
+                  onChange={(e) =>
+                    handleInputChange(index, "can_read_TH", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>อ่านไทยได้</option>
+                  <option>อ่านไทยไม่ได้</option>
+                </select>
+              </div>
 
-            <div className="">
-              <label
-                for="current_edu_level"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                กำลังศึกษาระดับ
-              </label>
-              <select
-                id="current_edu_level"
-                name="current_edu_level"
-                value={member.current_edu_level}
-                onChange={(e) =>
-                  handleInputChange(index, "current_edu_level", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ต่ำกว่าประถม</option>
-                <option>ประถมศึกษา</option>
-                <option>ม.ต้น หรือเทียบเท่า</option>
-                <option>ม.ปลาย หรือเทียบเท่า</option>
-                <option>ปวช./ประกาศนียบัตร</option>
-                <option>ปวส./อนุปริญญา</option>
-                <option>ป.ตรี หรือเทียบเท่า</option>
-                <option>สูงกว่าปริญญาตรี</option>
-                <option>เรียนสายศาสนา</option>
-              </select>
-            </div>
+              <div className="">
+                <label
+                  for="can_write_TH"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  เขียนภาษาไทย
+                </label>
+                <select
+                  id="can_write_TH"
+                  name="can_write_TH"
+                  value={member.can_write_TH}
+                  onChange={(e) =>
+                    handleInputChange(index, "can_write_TH", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>เขียนไทยได้</option>
+                  <option>เขียนไทยไม่ได้</option>
+                </select>
+              </div>
 
-            <div className="">
-              <label
-                for="edu_description"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                สาเหตุ(กรณีหยุดเรียน/ออกกลางคัน)
-              </label>
-              <input
-                type="text"
-                id="edu_description"
-                value={member.edu_description}
-                onChange={(e) =>
-                  handleInputChange(index, "edu_description", e.target.value)
-                }
-                class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-              />
-            </div>
+              <div className="">
+                <label
+                  for="max_education "
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  การศึกษาสูงสุด
+                </label>
+                <select
+                  id="max_education "
+                  name="max_education "
+                  value={member.max_education}
+                  onChange={(e) =>
+                    handleInputChange(index, "max_education", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>ไม่ได้เรียน</option>
+                  <option>ต่ำกว่าประถม</option>
+                  <option>ประถมศึกษา</option>
+                  <option>ม.ต้น หรือเทียบเท่า</option>
+                  <option>ม.ปลาย หรือเทียบเท่า</option>
+                  <option>ปวช./ประกาศนียบัตร</option>
+                  <option>ปวส./อนุปริญญา</option>
+                  <option>ป.ตรี หรือเทียบเท่า</option>
+                  <option>สูงกว่าปริญญาตรี</option>
+                  <option>เรียนสายศาสนา</option>
+                </select>
+              </div>
 
-            <div className="">
-              <label
-                for="work_status "
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                สถานะการทำงาน
-              </label>
-              <select
-                id="work_status "
-                name="work_status "
-                value={member.work_status}
-                onChange={(e) =>
-                  handleInputChange(index, "work_status", e.target.value)
-                }
-                className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
-              >
-                <option>ไม่ทำงาน</option>
-                <option>ว่างงาน</option>
-                <option>ทำงาน</option>
-              </select>
-            </div>
-          </div>
+              <div className="">
+                <label
+                  for="edu_status"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  สถานภาพการศึกษา
+                </label>
+                <select
+                  id="edu_status"
+                  name="edu_status"
+                  value={member.edu_status}
+                  onChange={(e) =>
+                    handleInputChange(index, "edu_status", e.target.value)
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>ไปเรียนสม่ำเสมอ</option>
+                  <option>หยุดเรียนเป็นระยะ</option>
+                  <option>ออกกลางคัน(Dropout)</option>
+                </select>
+              </div>
 
-          <div className="Container ml-5">
-            <h3 className="text-black text-sm font-bold px-5 ">
-              ประกอบอาชีพ(ตอบได้มากกว่า 1 )
-            </h3>
-          </div>
-
+              <div className="">
+                <label
+                  for="current_edu_level"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  กำลังศึกษาระดับ
+                </label>
+                <select
+                  id="current_edu_level"
+                  name="current_edu_level"
+                  value={member.current_edu_level}
+                  onChange={(e) =>
+                    handleInputChange(
+                      index,
+                      "current_edu_level",
+                      e.target.value
+                    )
+                  }
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                >
+                  <option>ต่ำกว่าประถม</option>
+                  <option>ประถมศึกษา</option>
+                  <option>ม.ต้น หรือเทียบเท่า</option>
+                  <option>ม.ปลาย หรือเทียบเท่า</option>
+                  <option>ปวช./ประกาศนียบัตร</option>
+                  <option>ปวส./อนุปริญญา</option>
+                  <option>ป.ตรี หรือเทียบเท่า</option>
+                  <option>สูงกว่าปริญญาตรี</option>
+                  <option>เรียนสายศาสนา</option>
+                </select>
+              </div>
           {/* ประกอบอาชีพ */}
           <div className="grid gap-4 mb-6 mt-6 mx-10 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
             {/* CheckBox */}
@@ -1077,18 +1086,25 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
 
             {member.career.some((e)=>e.startsWith(prefix)) && (
                
+
                   <input
                     type="text"
-                    id={`career-other-${index}`}
+                    id="first_name"
                     value={
-                      member.career.find((item) => item.startsWith(prefix))?.substring(prefix.length) ||
-                      ""
+                      member.work_can_made_income
+                        .find((item) => item.startsWith(prefix))
+                        ?.substring(prefix.length) || ""
                     }
                     onChange={(e) =>
-                      handleOtherChange(index, "career", e.target.value)
+                      handleOtherChange(
+                        index,
+                        "work_can_made_income",
+                        e.target.value
+                      )
                     }
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="ระบุอาชีพอื่นๆ"
+
                   />
                
               )}
@@ -1361,84 +1377,103 @@ export const HumanCapital = ({setCurrentPage,setMainFormData,mainFormData}) => {
               />
             }
             </div>
-          </div>
+            </div>
 
-          <div className="mx-6 py-2">
-            <label
-              for="agv_income"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            <div className="mx-6 py-2 grid grid-cols-4 gap-6 ">
+              <div className="">
+                <label
+                  for="agv_income"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  รายได้เฉลี่ย (บาท/เดือน)
+                </label>
+                <input
+                  type="number"
+                  id="agv_income"
+                  value={member.agv_income}
+                  onChange={(e) =>
+                    handleInputChange(index, "agv_income", e.target.value)
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                />
+              </div>
+
+              <div className="">
+                <label
+                  for="lname"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  อัตราเงินเฟ้อปีที่บันทึก (ตัวอย่าง 2568 = 1.1)
+                </label>
+                <input
+                  type="number"
+                  value={member.inflation}
+                  onChange={(e) =>
+                    handleInputChange(index, "inflation", e.target.value)
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                />
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => delMember(index)}
+              class="flex justify-center focus:outline-none mb-3 px-8 mx-6 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm  py-2.5 me-2  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
             >
-              รายได้เฉลี่ย (บาท/เดือน)
-            </label>
-            <input
-              type="number"
-              id="agv_income"
-              value={member.agv_income}
-              onChange={(e) =>
-                handleInputChange(index, "agv_income", e.target.value)
-              }
-              class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder=""
-              required
-            />
+              <Icon
+                icon="material-symbols:account-circle-off-rounded"
+                className="mr-2 mt-0.5 text-lg"
+              />
+              ลบสมาชิคคนที่ {index + 1}
+            </button>
+
           </div>
+        ))}
+
+        <div className="flex  gap-4 mt-4 ml-12">
           <button
             type="button"
-            onClick={() => delMember(index)}
-            class="flex justify-center focus:outline-none mb-3 px-8 mx-6 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm  py-2.5 me-2  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+            onClick={addMember}
+            className="flex justify-center bg-emerald-500 text-white px-4 py-2 rounded-lg "
           >
             <Icon
-              icon="material-symbols:account-circle-off-rounded"
+              icon="material-symbols:person-add-rounded"
               className="mr-2 mt-0.5 text-lg"
             />
-            ลบสมาชิคคนที่ {index + 1}
+            เพิ่มสมาชิคคนถัดไป
           </button>
         </div>
-      ))}
-      
-      
 
-      <div className="flex  gap-4 mt-4 ml-12">
-        <button
-          type="button"
-          onClick={addMember}
-          className="flex justify-center bg-emerald-500 text-white px-4 py-2 rounded-lg "
-        >
-          <Icon
-            icon="material-symbols:person-add-rounded"
-            className="mr-2 mt-0.5 text-lg"
-          />
-          เพิ่มสมาชิคคนถัดไป
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => handlePrevPage()}
+            className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-3"
+          >
+            <Icon
+              icon="material-symbols:arrow-left-rounded"
+              width="25"
+              height="25"
+            />
+            ย้อนกลับ
+          </button>
 
-
-      </div>
-
-      <div className="flex justify-end">
-        <button 
-        type="button"
-        onClick={() => handlePrevPage()}
-        className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-3">
-        <Icon
-            icon="material-symbols:arrow-left-rounded"
-            width="25"
-            height="25"
-          />
-          ย้อนกลับ
-        </button>
-
-        <button 
-        type="submit"
-        className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-10">
-          หน้าถัดไป
-          <Icon
-            icon="material-symbols:arrow-right-rounded"
-            width="25"
-            height="25"
-          />
-        </button>
-
-      </div>
+          <button
+            type="submit"
+            className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-10"
+          >
+            หน้าถัดไป
+            <Icon
+              icon="material-symbols:arrow-right-rounded"
+              width="25"
+              height="25"
+            />
+          </button>
+        </div>
       </form>
     </div>
   );

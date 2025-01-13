@@ -6,7 +6,6 @@ import utc from 'dayjs/plugin/utc';
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import { Icon } from "@iconify/react";
-import axios from "axios";
 
 //ใช้งาน dayjs
 dayjs.extend(utc);
@@ -41,7 +40,6 @@ export const FristPage = ({
       host_fname: "",
       host_lname: "",
       host_national_id: ""
-      // total_house_member: 0, //ค่อยมาเปลี่ยนค่าทีหลัง
     },
     //ตารางผู้ให้ข้อมูล
     Informant: {
@@ -271,6 +269,18 @@ export const FristPage = ({
       ],
     }));
   };
+
+  //clear Infomant national id and disable input
+  const handleInfomantNationalId = (value,checked)=>{
+    const updateData = {...formData}
+
+    if(checked){
+      updateData.Informant.national_id = value
+    }else{
+      updateData.Informant.national_id = ''
+    }
+     setFormData(updateData)
+  }
 
   //Delteam
   const handleDeleteTeamServey = (index) => {
@@ -749,6 +759,7 @@ export const FristPage = ({
                 type="number"
                 name="Informant"
                 id="national_id"
+                disabled = {formData.Informant.national_id === 'ไม่มีบัตร'}
                 value={formData.Informant.national_id}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 onChange={(e) =>
@@ -768,9 +779,10 @@ export const FristPage = ({
                 id="national_id"
                 name="Informant"
                 type="checkbox"
-                value={formData.Informant.national_id}
+                checked = {formData.Informant.national_id === 'ไม่มีบัตร'}
                 onChange={(e) =>
-                  handleInputChange(e.target.name, e.target.id, "ไม่มีบัตร")
+                  {handleInfomantNationalId("ไม่มีบัตร",e.target.checked) , console.log(formData.Informant.national_id);
+                  }
                 }
                 class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
                 //required

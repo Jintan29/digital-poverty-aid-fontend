@@ -24,6 +24,11 @@ import ManageUser from "./pages/Admin/ManageUser/ManageUser";
 import ApproveUser from "./pages/Admin/ManageUser/ApproveUser";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ResetPassword from "./pages/Authentication/ResetPassword";
+import TrackMember from "./pages/Admin/Tracking/TrackMember";
+import TrackHousehold from "./pages/Admin/Tracking/TrackHousehold";
+import TrackingMemberId from "./pages/Admin/Tracking/TrackingMemberId";
+import MixedChart from "./pages/MixedChart";
+import Householdtracking from "./pages/Householdtracking";
 
 
 function App() {
@@ -89,13 +94,19 @@ function App() {
             <Route index element={<Map />} />
             <Route path="about" element={<About />} />
             <Route path="form" element={<Form />} />
-            
+            <Route path="testt" element={<MixedChart />} />
+          
+
             {/* Auth */}
             <Route path="register" element={<Register />} />
             <Route path="login" element={<Login />} />
             <Route path="forgot-pass" element={<ForgotPassword />} />
+            <Route
+              path="reset-password/:id/:token"
+              element={<ResetPassword />}
+            />
+
             <Route path="reset-password/:id/:token" element={<ResetPassword />} />
-            
 
             <Route path="map" element={<Map />} />
             <Route path="test" element={<TestAPI />} />
@@ -135,6 +146,48 @@ function App() {
               element={
                 <AdminRoute>
                   <ApproveUser />
+                </AdminRoute>
+              }
+            />
+
+            <Route
+              path="track-member"
+              element={
+                <AdminRoute>
+                  <TrackMember />
+                </AdminRoute>
+              }
+            />
+            {/* TrackingMemberId */}
+
+              
+            <Route
+              path="track-member/:id"
+              element={
+                <AdminRoute>
+                  <TrackingMemberId />
+
+              path="jj"
+              element={
+                <AdminRoute>
+                  <JJ1 />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="track-household"
+              element={
+                <AdminRoute>
+                  <TrackHousehold />
+                </AdminRoute>
+              }
+            />
+
+
+              path="household"
+              element={
+                <AdminRoute>
+                  <Householdtracking />
                 </AdminRoute>
               }
             />

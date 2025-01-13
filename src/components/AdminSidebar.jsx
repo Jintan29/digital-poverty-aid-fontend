@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import "flowbite";
 
-const AdminSidebar = ({ isOpen, toggleSidebar }) => {  
+const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState({}); //ex. { 2: false, 1: true }
 
   //เปิดปิด sub menu ตาม index ที่รับเข้ามา { index : (T/F) }
-  const toggleDropdown = (index)=>{
-    setDropdownOpen((prev)=>({
+  const toggleDropdown = (index) => {
+    setDropdownOpen((prev) => ({
       ...prev,
       [index]: !prev[index],
     }))
@@ -17,18 +17,37 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarItem = [
     { name: "Dashbord", link: "#", logo: "mdi:chart-pie" },
     {
+      name: "ค้นหาสมาชิกครัวเรือน",
+      link: "/admin/find-members",
+      logo: "material-symbols:group-search",
+    },
+    {
+      name: "ระบบติดตามข้อมูล",
+      link: "/admin/find-members",
+      logo: "material-symbols:rubric-rounded",
+      submenu:[
+        {name:'ติดตามรายบุคคล',link:'/admin/track-member/'},
+        {name:'ติดตามครัวเรือน',link:'/admin/track-household'},
+      ]
+    },
+    {
       name: "จัดการผู้ใช้งานระบบ",
       link: "#",
       logo: "material-symbols:person-rounded",
-      submenu:[
-        {name:'ข้อมูลผู้ใช้งาน',link:'/admin/manage-user'},
-        {name:'อนุมัติผู้ใช้ใหม่',link:'/admin/approve-user'}
+      submenu: [
+        { name: 'ข้อมูลผู้ใช้งาน', link: '/admin/manage-user' },
+        { name: 'อนุมัติผู้ใช้ใหม่', link: '/admin/approve-user' }
       ]
     },
     {
       name: "ค้นหาสมาชิคครัวเรือน",
       link: "/admin/find-members",
       logo: "material-symbols:group-search",
+    },
+    {
+      name: "ติดตามครัวเรือน",
+      link: "/admin/household",
+      logo: "material-symbols:search",
     },
     //ตัวอย่างสำหรับ submenu
     // {
@@ -39,7 +58,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     //     { name: "ค้นหาจากช่วงอายุ", link: "" },
     //     { name: "ค้นหาจากชื่อจริง", link: "" },
     //     { name: "ค้นหาจากเลขบ้าน", link: "" },
-        
+
     //   ],
     // },
     {
@@ -61,9 +80,8 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-40 w-80 h-screen transition-transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0`}
+        className={`fixed top-0 left-0 z-40 w-80 h-screen transition-transform ${isOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0`}
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-softdark dark:bg-gray-800">
@@ -80,7 +98,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                   {/* ถ้ามี sub ให้แสดง btn เอาไว้เปิด/ปิด */}
                   <button
                   type="button"
-                  className="flex items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
+                  className="flex hover:bg-graydark items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
                   onClick={()=>toggleDropdown(index)}
                   >
                     <span className="text-gray-500">
@@ -88,6 +106,17 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                     </span>
                     <span className="flex-1 ms-3 text-left">{item.name}</span>
                     <svg
+                    {/* ถ้ามี sub ให้แสดง btn เอาไว้เปิด/ปิด */}
+                    <button
+                      type="button"
+                      className="flex items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
+                      onClick={() => toggleDropdown(index)}
+                    >
+                      <span className="text-gray-500">
+                        <Icon icon={item.logo} width='25' height='25' />
+                      </span>
+                      <span className="flex-1 ms-3 text-left">{item.name}</span>
+                      <svg
                         className="w-3 h-3"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
@@ -102,25 +131,24 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                           d="m1 1 4 4 4-4"
                         />
                       </svg>
-                  </button>
-                  {/* หัวข้อย่อยหากมี sub */}
-                  <ul
-                  className={`${
-                    dropdownOpen[index] ? "block" : "hidden"
-                  } py-2 space-y-2 pl-8`}>
-                    {item.submenu.map((subItem, subIndex) => (
+                    </button>
+                    {/* หัวข้อย่อยหากมี sub */}
+                    <ul
+                      className={`${dropdownOpen[index] ? "block" : "hidden"
+                        } py-2 space-y-2 pl-8`}>
+                      {item.submenu.map((subItem, subIndex) => (
                         <li key={subIndex}>
                           <Link
                             to={subItem.link}
-                            className="flex items-center p-2 text-bodydark1 transition duration-75 rounded-lg group hover:bg-graydark dark:text-white dark:hover:bg-gray-700"
+                            className="flex items-center p-2 text-bodydark1 transition duration-75 rounded-lg group hover:bg-graydark"
                           >
                             {subItem.name}
                           </Link>
                         </li>
                       ))}
-                  </ul>
+                    </ul>
                   </>
-                ):(
+                ) : (
                   <Link
                     to={item.link}
                     className="flex items-center p-2 text-bodydark1 rounded-lg dark:text-white hover:bg-graydark dark:hover:bg-gray-700 group"
