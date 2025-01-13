@@ -411,8 +411,8 @@ export const FristPage = ({
               </div>
             </div>
           </div>
-
-          <div class="grid gap-6 mb-6 mt-6 md:grid-cols-4 mx-10">
+{/*หมู่บ้าน-ปณ.*/}
+          <div class="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1  mx-10">
             <div className="">
               <label
                 for="village"
@@ -593,8 +593,8 @@ export const FristPage = ({
               <b>ข้อมูล เจ้าบ้าน</b>
             </h3>
           </div>
-
-          <div className="mb-6 mx-10 grid gap-6  md:grid-cols-3">
+{/* ชื่อเจ้าบ้าน-หมายเลข ปชช เจ้าบ้าน */}
+          <div className="mb-6 mx-10 grid gap-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 ">
             <div className="relative  rounded-md shadow-sm">
               <label
                 for="host_title"
@@ -685,8 +685,8 @@ export const FristPage = ({
               หรือ ได้รับความยินยอมจากบุคคลในครัวเรือน ให้เป็นผู้ให้ข้อมูล)
             </h3>
           </div>
-
-          <div className="mb-6 mx-10 grid gap-6  md:grid-cols-4 mt-5">
+{/* ผู้ให้ข้อมูล */}
+          <div className="mb-6 mx-10 grid gap-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-5">
             <div className="relative  rounded-md shadow-sm">
               <label
                 for="fname"
@@ -912,10 +912,10 @@ export const FristPage = ({
               <b>สำหรับทีมสำรวจข้อมูล</b>
             </h3>
           </div>
-
-          <div class="mx-10">
+{/* สำรวจ */}
+          <div class="mx-10 ">
             {formData.TeamServey.map((teamData, index) => (
-              <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2" key={index}>
+              <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1" key={index}>
                 <div className="relative  rounded-md shadow-sm col-span-1">
                   <label
                     for="visitors"
@@ -1054,8 +1054,8 @@ export const FristPage = ({
               <b>สำหรับ ผู้บันทึกข้อมูล</b>
             </h3>
           </div>
-
-          <div class="grid gap-6 mb-6 mt-3 md:grid-cols-4  mx-10">
+{/* ผู้บันทึก */}
+          <div class="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10">
             <div className="relative  rounded-md shadow-sm">
               <label
                 for="visitors"
@@ -1153,7 +1153,7 @@ export const FristPage = ({
                 placeholderText="เลือกวันที่"
               />
             </div>
-          </div>
+            </div>
 
           <div className="my-6 mx-10 ">
             <label
