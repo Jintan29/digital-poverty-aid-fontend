@@ -1,20 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Icon } from "@iconify/react";
-import { Pie } from "react-chartjs-2";
-import { Line } from "react-chartjs-2";
-// import {
-//     Chart as ChartJS,
-//     ArcElement,
-//     Legend,
-//     Tooltip,
-// } from "chart.js";
-// // ลงทะเบียนองค์ประกอบที่จำเป็น
-// ChartJS.register(ArcElement, Tooltip, Legend);
-
+import { Pie, Line, Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     ArcElement,
     LineElement,
+    BarElement,
     CategoryScale,
     LinearScale,
     PointElement,
@@ -28,19 +20,55 @@ ChartJS.register(
     LineElement,
     CategoryScale,
     LinearScale,
+    BarElement,
     PointElement,
     Tooltip,
     Legend
 );
 
 const Householdtracking = () => {
+    const [financialData, setFinancialData] = useState(null);
+    const [loading, setLoading] = useState(true); // เพิ่ม loading state
+    const [error, setError] = useState(null);
+
+    const fetchFinancialData = async (householdId) => {
+        setLoading(true); // เริ่มสถานะการโหลด
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/api/financialCapital/getAllSum/${householdId}` // Replace with your API URL
+            );
+            setFinancialData(response.data.data);
+            setError(null); // ล้างข้อผิดพลาดหากมีข้อมูล
+        } catch (err) {
+            setError(err.message || "Failed to fetch data");
+            setFinancialData(null); // ตั้งค่าข้อมูลเป็น null หากเกิดข้อผิดพลาด
+        } finally {
+            setLoading(false); // สิ้นสุดการโหลด
+        }
+    };
+
+    useEffect(() => {
+        fetchFinancialData(1);
+    }, []);
+
+    if (loading) {
+        return <p>Loading financial data...</p>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     // ข้อมูลสำหรับ Pie Chart (แสดงจำนวนเงิน)
     const data = {
         labels: ["รายรับ", "รายจ่าย", "ต้นทุน"],
         datasets: [
             {
-                data: [50000, 30000, 2000], // จำนวนเงิน (รายรับ, รายจ่าย, ต้นทุน)
+                data: [
+                    financialData.financialSummary.totalAmountPerYear, // รายรับ
+                    financialData.financialSummary.totalExpenses, // รายจ่าย
+                    financialData.financialSummary.totalCostPerYear, // ต้นทุน
+                ],
                 backgroundColor: ["#2196F3", "#FF0000", "#FF9602"], // สีสำหรับแต่ละส่วน (เขียว, แดง, ฟ้า)
                 hoverBackgroundColor: ["#1976D2", "#FF8484", "#FEB043"], // สีเมื่อโฮเวอร์ (เขียวเข้ม, แดงเข้ม, ฟ้าเข้ม)
             },
@@ -61,8 +89,6 @@ const Householdtracking = () => {
             },
         },
     };
-
-
 
     // ข้อมูลสำหรับ Line Chart
     const data2 = {
@@ -88,7 +114,7 @@ const Householdtracking = () => {
                 label: "ต้นทุน",
                 data: [300, 400, 450, 500, 480, 550, 520, 600, 650, 700, 750, 800], // ข้อมูลรายจ่าย
                 borderColor: "#FF9602",
-                backgroundColor: "rgba(255, 170, 0, 0.2)",
+                backgroundColor: "rgba(255, 238, 0, 0.2)",
                 fill: true,
                 tension: 0.4,
             },
@@ -131,28 +157,72 @@ const Householdtracking = () => {
         },
     };
 
+    const maxLabelLength = 20;
+    const data3 = {
+        labels: financialData.Form.Financialcapital.Householdexpenses.map((expense) =>
+            expense.expenses_type.length > maxLabelLength
+                ? expense.expenses_type.slice(0, maxLabelLength) + "..." // ตัดคำและเพิ่ม ...
+                : expense.expenses_type
+        ),
+        // labels: [new Date(financialData.createdAt).getFullYear()],
+        datasets: [
+            {
+                label: "ออม",
+                data: financialData.Form.Financialcapital.Householdexpenses.map(expense => expense.amount_per_month),
+                // data: [financialData.financialSummary.totalSaving],
+                // data: [500, 700, 400, 600, 800, 900, 1100, 1200],
+                backgroundColor: "rgba(54, 162, 235, 0.7)", // สีฟ้า
+                borderColor: "rgba(54, 162, 235, 1)",
+                borderWidth: 1,
+                barThickness: 45
+            },
+            {
+                label: "หนี้สิน",
+                // data: [financialData.financialSummary.totalDebt],
+                // data: [1000, 900, 800, 750, 700, 650, 600, 550],
+                backgroundColor: "rgba(255, 99, 132, 0.7)", // สีแดง
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1,
+                barThickness: 45
+            },
+        ],
+    };
+
+    const options3 = {
+        responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    title: function (tooltipItems) {
+                        const index = tooltipItems[0].dataIndex;
+                        return financialData.Form.Financialcapital.Householdexpenses[index].expenses_type; // แสดงข้อความเต็ม
+                    },
+                },
+            },
+            legend: {
+                position: "top",
+            },
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: "จำนวนเงิน",
+                },
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: "ประเภท",
+                },
+            },
+        },
+    };
+
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
             <h1 className="text-2xl font-bold mb-6">ครัวเรือนของฉัน  </h1>
-
-            {/* ช่องค้นหาด้านขวา */}
-            <div className="flex justify-end mb-6">
-                <div className="flex items-center rounded-lg p-2 w-96"> {/* เพิ่ม w-96 สำหรับความกว้างที่มากขึ้น */}
-                    <input
-                        type="search"
-                        id="search"
-                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
-                        placeholder="ค้นหา"
-                    />
-                    <button
-                        type="submit"
-                        className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
-                    >
-                        ค้นหา
-                    </button>
-                </div>
-            </div>
-
 
             {/* Grid ด้านบน */}
             <div className="grid grid-cols-3 gap-4 mb-6">
@@ -163,7 +233,7 @@ const Householdtracking = () => {
                     </div>
                     <div>
                         <h2 className="text-sm font-medium text-gray-500">หัวหน้าครอบครัว</h2>
-                        <p className="text-2xl font-bold">นายเจ สมนัท</p>
+                        <p className="text-xl font-bold">{financialData.host_title} {financialData.host_fname} {financialData.host_lname}</p>
                     </div>
                 </div>
 
@@ -174,7 +244,7 @@ const Householdtracking = () => {
                     </div>
                     <div>
                         <h2 className="text-sm font-medium text-gray-500">จำนวนสมาชิก</h2>
-                        <p className="text-2xl font-bold">20</p>
+                        <p className="text-2xl font-bold">{financialData.memberCount}</p>
                     </div>
                 </div>
 
@@ -184,27 +254,27 @@ const Householdtracking = () => {
                         <Icon icon="mdi:email" />
                     </div>
                     <div>
-                        <h2 className="text-sm font-medium text-gray-500">รหัสไปรษณีย์</h2>
-                        <p className="text-2xl font-bold">60130</p>
+                        <h2 className="text-sm font-medium text-gray-500">รหัสบ้าน</h2>
+                        <p className="text-2xl font-bold">{financialData.house_code}</p>
                     </div>
                 </div>
 
             </div>
 
             {/* Grid ข้อมูลครัวเรือนและ Pie Chart */}
-            <div className="grid grid-cols-2 gap-6 mb-12">
+            <div className="grid grid-cols-2 gap-6 mb-6">
 
                 {/* ข้อมูลครัวเรือน */}
                 <div className="bg-white p-6 shadow rounded">
                     <h2 className="text-xl font-semibold mb-4">ข้อมูลครัวเรือน</h2>
                     <div className="space-y-4">
-                        <p><strong>ตำบล:</strong> ตัวอย่างตำบล</p>
-                        <p><strong>อำเภอ:</strong> ตัวอย่างอำเภอ</p>
-                        <p><strong>จังหวัด:</strong> ตัวอย่างจังหวัด</p>
-                        <p><strong>ชื่อหมู่บ้าน:</strong> หมู่บ้านตัวอย่าง</p>
-                        <p><strong>บ้านเลขที่:</strong> 123/45</p>
-                        <p><strong>ถนน:</strong> ถนนตัวอย่าง</p>
-                        <p><strong>ซอย:</strong> ซอยตัวอย่าง</p>
+                        <p><strong>ตำบล:</strong> {financialData.subdistrict}</p>
+                        <p><strong>อำเภอ:</strong> {financialData.district}</p>
+                        <p><strong>จังหวัด:</strong> {financialData.province}</p>
+                        <p><strong>ชื่อหมู่บ้าน:</strong> {financialData.village}</p>
+                        <p><strong>บ้านเลขที่:</strong> {financialData.house_number}</p>
+                        <p><strong>ถนน:</strong> {financialData.road}</p>
+                        <p><strong>ซอย:</strong> {financialData.alley}</p>
                     </div>
                 </div>
 
@@ -217,7 +287,15 @@ const Householdtracking = () => {
                 </div>
             </div>
 
-            {/* กราฟ Line Chart */}
+            {/* กราฟ Bar Chart */}
+            <div className="bg-white p-6 shadow rounded mt-6">
+                <h2 className="text-lg font-semibold mb-4">
+                    การเปรียบเทียบการออมและหนี้สิน
+                </h2>
+                <Bar data={data3} options={options3} />
+            </div>
+
+            {/* กราฟ bar Chart */}
             <div className="bg-white p-6 shadow rounded mt-6">
                 <h2 className="text-xl font-semibold mb-4">รายรับ-รายจ่าย-ต้นทุน และจุดหลุดความจน</h2>
                 <div className="w-full">
@@ -225,7 +303,10 @@ const Householdtracking = () => {
                 </div>
             </div>
 
+
+
+
         </div>
-    )
-}
+    );
+};
 export default Householdtracking;

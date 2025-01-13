@@ -25,9 +25,9 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       name: "ระบบติดตามข้อมูล",
       link: "/admin/find-members",
       logo: "material-symbols:rubric-rounded",
-      submenu:[
-        {name:'ติดตามรายบุคคล',link:'/admin/track-member/'},
-        {name:'ติดตามครัวเรือน',link:'/admin/track-household'},
+      submenu: [
+        { name: 'ติดตามรายบุคคล', link: '/admin/track-member/' },
+        { name: 'ติดตามครัวเรือน', link: '/admin/track-household' },
       ]
     },
     {
@@ -40,27 +40,10 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       ]
     },
     {
-      name: "ค้นหาสมาชิคครัวเรือน",
-      link: "/admin/find-members",
-      logo: "material-symbols:group-search",
-    },
-    {
       name: "ติดตามครัวเรือน",
       link: "/admin/household",
       logo: "material-symbols:search",
     },
-    //ตัวอย่างสำหรับ submenu
-    // {
-    //   name: "ค้นหาสมาชิคครัวเรือน",
-    //   link: "#",
-    //   logo: "material-symbols:group-search",
-    //   submenu: [
-    //     { name: "ค้นหาจากช่วงอายุ", link: "" },
-    //     { name: "ค้นหาจากชื่อจริง", link: "" },
-    //     { name: "ค้นหาจากเลขบ้าน", link: "" },
-
-    //   ],
-    // },
     {
       name: "กลับหน้าหลัก",
       link: "/",
@@ -95,21 +78,10 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                 {/* เช็คว่า Item ที่ loop มามี sub ?  */}
                 {item.submenu ? (
                   <>
-                  {/* ถ้ามี sub ให้แสดง btn เอาไว้เปิด/ปิด */}
-                  <button
-                  type="button"
-                  className="flex hover:bg-graydark items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
-                  onClick={()=>toggleDropdown(index)}
-                  >
-                    <span className="text-gray-500">
-                      <Icon icon={item.logo} width='25' height='25' />
-                    </span>
-                    <span className="flex-1 ms-3 text-left">{item.name}</span>
-                    <svg
                     {/* ถ้ามี sub ให้แสดง btn เอาไว้เปิด/ปิด */}
                     <button
                       type="button"
-                      className="flex items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
+                      className="flex hover:bg-graydark items-center w-full p-2 text-base text-bodydark1 transition duration-75 rounded-lg group"
                       onClick={() => toggleDropdown(index)}
                     >
                       <span className="text-gray-500">
