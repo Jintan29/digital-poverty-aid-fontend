@@ -1,57 +1,99 @@
-import React, { useState } from "react";
-import jsPDF from "jspdf"; //ไลบรารีสำหรับสร้างและดาวน์โหลดไฟล์ PDF
+import React, { useCallback, useState } from "react";
+import jsPDF from "jspdf";
 import html2canvas from "html2canvas"; //ไลบรารีสำหรับแปลง HTML เป็นภาพ (image) เพื่อใช้สร้าง PDF
-import { Icon } from "@iconify/react"; //ไลบราลี icon
+import { Icon } from "@iconify/react";
+import debounce from "lodash/debounce";
+import Swal from "sweetalert2";
+import axios from "axios";
+import config from "../../config";
+import { Link } from "react-router-dom";
+
 
 const RealName = () => {
-  const [search, setSearch] = useState(""); // State สำหรับช่องค้นหา
+  const [members, setMembers] = useState([]);
 
-  // ข้อมูลสมาชิกในครัวเรือน
-  const members = [
-    //1
-    {
-      number: 1,
-      name: "นายสุทธิภัทร ไกรกลิ่น",
-      address: "12 หมู่ 5 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "084-757-9994",
-    },
-    //2
-    {
-      number: 2,
-      name: "นายพรสวรรค์ เสือราบ",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "987654321",
-      phone: "094-123-5674",
-    },
-    //3
-    {
-      number: 3,
-      name: "นายสุทธิภัทร ไกรกลิ่น",
-      address: "12 หมู่ 5 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "123456789",
-      phone: "084-757-9994",
-    },
-    //4
-    {
-      number: 4,
-      name: "นางสาวสมจิตร ทองพรมราช",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "987654321",
-      phone: "094-123-5674",
-    },
-    {
-      number: 5,
-      name: "นางสาวสมจิตร ทองพรมราช",
-      address: "1 หมู่ 1 ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก",
-      houseNumber: "147852369",
-      phone: "094-123-5674",
-    },
-  ];
-  // ฟิลเตอร์สมาชิกที่ตรงกับคำค้นหา
-  const filteredMembers = members.filter((member) =>
-    member.name.includes(search)
+  const [openMenuIndex, setOpenMenuIndex] = useState(null); //menu icon
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [fname, setFname] = useState(""); //query str
+  const limit = 20;
+
+  const fetchData = async (page, searchTerm) => {
+    try {
+      const response = await axios.get(
+        config.api_path + `/member-household/search-by-name`,
+        {
+          params: {
+            page: page,
+            limit,
+            fname: searchTerm,
+          },
+          ...config.headers(),
+        }
+      );
+      setMembers(response.data.results);
+      setCurrentPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
+    } catch (err) {
+      Swal.fire({
+        title: "error",
+        icon: "error",
+        text: err.response?.data?.message || err.message,
+      });
+    }
+  };
+
+  //หน่วงเวลาหลังพิมพ์เสร็จ
+  const debouncedSearch = useCallback(
+    debounce(async (value) => {
+      setCurrentPage(1); // Reset page หากค้นใหม่
+      fetchData(1, value);
+    }, 500), //500 ms
+    []
   );
+
+  const handleInputChange = (value) => {
+    setFname(value);
+    debouncedSearch(value);
+  };
+
+  //เปลี่ยนหน้า
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchData(page, fname);
+  };
+
+  //ปุ่ม Paginate
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-1 border ${
+            i === currentPage
+              ? "bg-blue-500 text-white"
+              : "bg-white text-blue-500"
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return <div className="flex justify-center mt-4">{pages}</div>;
+  };
+
+  //Menu toggle
+  const handleMenuToggle = (index) => {
+    if (openMenuIndex === index) {
+      // ถ้ากดที่แถวเดิม ให้ปิด menu
+      setOpenMenuIndex(null);
+    } else {
+      setOpenMenuIndex(index);
+    }
+  };
+
   //exportToPD
   const exportToPDF = () => {
     const content = document.getElementById("table-content"); // ดึงเฉพาะตาราง
@@ -87,47 +129,22 @@ const RealName = () => {
       pdf.save(`${title}.pdf`); // ใช้ชื่อหัวข้อเป็นชื่อไฟล์ PDF
     });
   };
+
   return (
     <div>
       <div className="mx-5 my-5">
-        <div className="flex flex-col  justify-center font-bold text-xl">
-          <div className="block text-center">
-            <h1>ค้นหาสมาชิคครัวเรือจากชื่อจริง </h1>
-          </div>
-        </div>
 
-        {/* ปุ่ม PDF และ ตาราง */}
-        <div className="flex flex-col items-center mt-5 ">
-          <div className="relative w-full max-w-screen-lg">
-            {/* ปุ่ม PDF */}
-            <button
-              type="button"
-              onClick={exportToPDF} // เรียกฟังก์ชัน exportToPDF เมื่อคลิกที่ปุ่ม
-              className="absolute right-0 inline-flex items-center text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-            >
-              {/* ไอคอน PDF */}
-              <Icon
-                icon="material-symbols:picture-as-pdf-rounded"
-                width="1.5em"
-                height="1.5em"
-              />
-              Download
-            </button>
-          </div>
-        </div>
-
-        {/* input text */}
-        <div className="flex justify-center items-center mt-5">
-          <div className="flex flex-col">
-            {/* Input และปุ่ม */}
-            <div className="flex mb-4">
+        {/* ค้าหา/download */}
+        <div className="flex flex-col md:flex-row items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 w-full md:w-auto justify-center">
+            <div className="flex mb-4 w-80 md:w-96 mt-4">
               <input
                 type="search"
                 id="search"
-                className="flex-grow p-2 text-xs text-gray-900 border border-gray-300 rounded-l-sm bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-w-xs"
+                className="flex-grow py-3 px-3 text-xs text-gray-900 border border-gray-300 rounded-l-sm bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full"
                 placeholder="ค้นหาสมาชิก"
-                value={search} // ผูกค่ากับ State
-                onChange={(e) => setSearch(e.target.value)} // อัปเดต State
+                value={fname}
+                onChange={(e) => handleInputChange(e.target.value)}
               />
               <button
                 type="submit"
@@ -137,89 +154,154 @@ const RealName = () => {
               </button>
             </div>
 
-            {/* <!-- ตารางข้อมูล --> */}
-            <div className="flex justify-center items-center ">
-              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table
-                  id="table-content"
-                  className="table-auto text-l text-center rtl:text-right text-gray-500 dark:text-gray-400 border-collapse"
-                >
-                  <thead className="text-l uppercase bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200">
-                    <tr className="border-b border-gray-700 dark:border-gray-900">
-                      <th
-                        scope="col"
-                        className="px-4 py-3 bg-gray-50 dark:bg-gray-800"
-                      >
-                        ลำดับที่
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-4 py-3 bg-gray-100 dark:bg-gray-700"
-                      >
-                        ข้อมูลสมาชิกในครัวเรือน
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                      >
-                        ที่อยู่
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 bg-gray-100 dark:bg-gray-700"
-                      >
-                        เลขที่บ้าน
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                      >
-                        เบอร์โทรศัพท์
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {filteredMembers.map((member, index) => (
-                      // แถวของตาราง
-                      <tr
-                        key={index}
-                        className="border-b border-gray-500 dark:border-gray-900"
-                      >
-                        {/* ลำดับที่  */}
-                        <td className="px-6 py-4 text-black bg-gray-50">
-                          {member.number}
-                        </td>
-                        {/* ชื่อ  */}
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-100  dark:text-white dark:bg-gray-900"
-                        >
-                          {member.name}
-                        </th>
-                        {/* ที่อยู่ */}
-                        <td className="px-6 py-4 text-black bg-gray-50">
-                          {member.address}
-                        </td>
-                        {/* เลขที่บ้าน */}
-                        <td className="px-6 py-4 bg-gray-100 dark:bg-gray-900 text-black">
-                          {member.houseNumber}
-                        </td>
-                        {/* เบอร์โทรศัพท์ */}
-                        <td className="px-6 py-4 text-black bg-gray-50">
-                          {member.phone}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {filteredMembers.length === 0 && (
-                  <p className="text-center text-red-500 mt-3">ไม่พบข้อมูล</p>
-                )}
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={exportToPDF}
+              className="inline-flex items-center text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-5 py-2.5"
+            >
+              <Icon
+                icon="material-symbols:picture-as-pdf-rounded"
+                width="1.5em"
+                height="1.5em"
+              />
+              <span className="ml-2">Download</span>
+            </button>
           </div>
         </div>
+
+        {/* <!-- ตารางข้อมูล --> */}
+
+        <div className="overflow-x-auto shadow-md sm:rounded-lg">
+          <table
+            id="table-content"
+            className=" w-full text-l text-center text-gray-500 dark:text-gray-400 border-collapse"
+          >
+            <thead className="text-l uppercase bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200">
+              <tr className="border-b border-gray-700 dark:border-gray-900">
+                <th
+                  scope="col"
+                  className="px-4 py-3 bg-gray-50 dark:bg-gray-800 width: 5%"
+                >
+                  ลำดับที่
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 bg-gray-100 dark:bg-gray-700 width: 30%"
+                >
+                  ข้อมูลสมาชิกครัวเรือน
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 bg-gray-50 dark:bg-gray-800 width: 40%"
+                >
+                  ที่อยู่
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 bg-gray-100 dark:bg-gray-700 width: 20% "
+                >
+                  รหัสบ้าน
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 bg-gray-50 dark:bg-gray-800 width: 20% "
+                >
+                  เบอร์โทรศัพท์
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 bg-gray-50  width: 20%"
+                ></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {members && members.length > 0 ? (
+                members.map((member, index) => (
+                  // แถวของตาราง
+                  <tr
+                    key={index}
+                    className="border-b border-gray-500 dark:border-gray-900"
+                  >
+                    {/* ลำดับที่  */}
+                    <td className="px-6 py-4 text-black bg-gray-50">
+                    {(currentPage - 1) * limit + index + 1}
+                    </td>
+                    {/* ชื่อ  */}
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-100  dark:text-white dark:bg-gray-900"
+                    >
+                      {member.title + " " + member.fname + " " + member.lname}
+                    </th>
+                    {/* ที่อยู่ */}
+                    <td className="px-6 py-4 text-black bg-gray-50">
+                      {member.Household.house_number +
+                        "ต." +
+                        member.Household.subdistrict +
+                        " " +
+                        "อ. " +
+                        member.Household.district +
+                        " " +
+                        "จ. " +
+                        member.Household.province +
+                        " " +
+                        member.Household.postcode}
+                    </td>
+                    {/* เลขที่บ้าน */}
+                    <td className="px-6 py-4 bg-gray-100 dark:bg-gray-900 text-black">
+                      {member.Household.house_code}
+                    </td>
+                    {/* เบอร์โทรศัพท์ */}
+                    <td className="px-6 py-4 text-black bg-gray-50">
+                      {member.phone}
+                    </td>
+
+                    <td className="px-6 py-3 text-black relative bg-gray-50">
+                      <div className="relative inline-block">
+                        <button
+                          onClick={() => handleMenuToggle(index)}
+                          className="text-slate-700 hover:text-slate-900 focus:outline-none"
+                        >
+                          <Icon
+                            icon="material-symbols:search-rounded"
+                            width="1em"
+                            height="1em"
+                          />
+                        </button>
+
+                        {openMenuIndex === index && (
+                          <div className="absolute right-0 mt-2 py-2 w-40 bg-white rounded-md shadow-xl z-20">
+                            <Link
+                              to={`/admin/track-member/${member.id}`}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                              ดูข้อมูลรายบุคคล
+                            </Link>
+                            <a
+                              href="#"
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                              ดูข้อมูลครัวเรือน
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="py-4 text-red-500 text-center">
+                    ไม่พบข้อมูลสมาชิก กรุณากรอกชื่อให้ถูกต้อง
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {members.length > 0 ? <div className="">{renderPagination()}</div> : ""}
       </div>
     </div>
   );

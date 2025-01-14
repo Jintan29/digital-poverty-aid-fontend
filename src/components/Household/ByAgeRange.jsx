@@ -177,7 +177,7 @@ const ByAgeRange = () => {
   return (
     <div className="p-4">
       <div className="mb-5 text-center">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           ค้นหาสมาชิกครัวเรือนยากจน ตามช่วงอายุ
         </h1>
       </div>
@@ -217,60 +217,42 @@ const ByAgeRange = () => {
       </div>
 
       <div className="max-w-[1200px] mx-auto">
-        {members.length > 0 ? (
-          <>
-            <div className="overflow-x-auto shadow-md sm:rounded-lg">
-              <table
-                id="table-content"
-                className="w-full text-l text-center text-gray-500 dark:text-gray-400 border-collapse"
-              >
-                <thead className="text-l  bg-gray-200  text-gray-900 ">
-                  <tr className="border-b border-gray-700 ">
-                    <th
-                      scope="col"
-                      className="px-4 py-3 bg-gray-50  width: 20%"
-                    >
-                      ลำดับที่
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 bg-gray-100  width: 30%"
-                    >
-                      ชื่อ-นามสกุล
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 bg-gray-50  width: 20%"
-                    >
-                      ที่อยู่
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 bg-gray-100  width: 20%"
-                    >
-                      อายุ
-                    </th>
+        <>
+          <div className="overflow-x-auto shadow-md sm:rounded-lg">
+            <table
+              id="table-content"
+              className="w-full text-l text-center text-gray-500 dark:text-gray-400 border-collapse"
+            >
+              <thead className="text-l  bg-gray-200  text-gray-900 ">
+                <tr className="border-b border-gray-700 ">
+                  <th scope="col" className="px-4 py-3 bg-gray-50  width: 20%">
+                    ลำดับที่
+                  </th>
+                  <th scope="col" className="px-6 py-3 bg-gray-100  width: 30%">
+                    ชื่อ-นามสกุล
+                  </th>
+                  <th scope="col" className="px-6 py-3 bg-gray-50  width: 20%">
+                    ที่อยู่
+                  </th>
+                  <th scope="col" className="px-6 py-3 bg-gray-100  width: 20%">
+                    อายุ
+                  </th>
 
-                    <th
-                      scope="col"
-                      className="px-6 py-3 bg-gray-50  width: 20%"
-                    >
-                      เบอร์โทรศัพท์
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 bg-gray-50  width: 20%"
-                    >
-                      รหัสบ้าน
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 bg-gray-50  width: 20%"
-                    ></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {members.map((member, index) => (
+                  <th scope="col" className="px-6 py-3 bg-gray-50  width: 20%">
+                    เบอร์โทรศัพท์
+                  </th>
+                  <th scope="col" className="px-6 py-3 bg-gray-50  width: 20%">
+                    รหัสบ้าน
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 bg-gray-50  width: 20%"
+                  ></th>
+                </tr>
+              </thead>
+              <tbody>
+                {members && members.length > 0 ? (
+                  members.map((member, index) => (
                     // แถวของตาราง
                     <tr
                       key={index}
@@ -338,17 +320,19 @@ const ByAgeRange = () => {
                         </div>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="">{renderPagination()}</div>
-          </>
-        ) : (
-          <div className="text-center py-4">
-            <div className="h2">ไม่พบข้อมูลสมาชิคตามช่วงอายุดังกล่าว</div>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="py-4 text-red-500 text-center">
+                      ไม่พบข้อมูล
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
-        )}
+          {members.length > 0 ? <div className="">{renderPagination()}</div> : ""}
+        </>
       </div>
     </div>
   );

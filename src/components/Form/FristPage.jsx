@@ -199,6 +199,15 @@ export const FristPage = ({
       return false
     }
 
+    if(formData.Informant.national_id === '' ){
+      Swal.fire({
+        title:'กรอกข้อมูลไม่ครบ',
+        text:'กรุณากรอกหมายเลขบัตรประชาชนของ "ผู้ให้ข้อมูล" ให้ถูกต้อง',
+        icon:'error',
+      })
+      return false
+    }
+
     //loop check team servey
     for(let i=0 ; i< formData.TeamServey.length;i++){
       const teamMember = formData.TeamServey[i]
