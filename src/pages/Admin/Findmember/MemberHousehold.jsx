@@ -57,19 +57,32 @@ const MemberHousehold = () => {
             className="mr-2"
           />
           {/* ข้อความ */}
-          ค้นหาสมาชิก-จากเลขที่บ้าน
+          ค้นหาสมาชิก-จากรหัสบ้าน
         </button>
       </div>
 
       {/* แสดงผลเนื้อหาตามค่าของ activeComponent */}
       <div>
-        {activeComponent === '' ?(<h2 className="flex justify-center text-2xl font-semibol">กรุณาเลือกหมวดหมู่การค้นหา</h2>):''}
+        {activeComponent === "" ? (
+          <h2 className="flex justify-center text-2xl font-semibol">
+            กรุณาเลือกหมวดหมู่การค้นหา
+          </h2>
+        ) : (
+          ""
+        )}
         {activeComponent === "HouseCode" && <HouseCode />}{" "}
-        {/*แสดงคอมโพเนนต์ HouseCode เมื่อ activeComponent เป็น "HouseCode" */}
         {activeComponent === "ByAgeRange" && <ByAgeRange />}{" "}
-        {/* แสดงคอมโพเนนต์ ByAgeRange เมื่อ activeComponent เป็น "ByAgeRange" */}
-        {activeComponent === "RealName" && <RealName />}{" "}
-        {/* แสดงคอมโพเนนต์ RealName เมื่อ activeComponent เป็น "RealName" */}
+        {activeComponent === "RealName" && (
+          <>
+              {/* Header*/}
+            <div className="flex flex-col  justify-center font-bold text-xl">
+              <div className="my-3 block text-center">
+                <h1>ค้นหาสมาชิกครัวเรือจากชื่อจริง </h1>
+              </div>
+            </div>
+            <RealName />
+          </>
+        )}{" "}
       </div>
     </div>
   );
