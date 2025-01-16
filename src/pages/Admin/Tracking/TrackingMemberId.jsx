@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import config from "../../../config";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
 //แปลง พศ (day js)
 import dayjs from "dayjs";
@@ -33,6 +33,7 @@ const TrackingMemberId = () => {
   const { id } = useParams();
 
   const [socialWelfare, setSocialWelfare] = useState([]);
+  const [ hasWelfare,setHasWelfare ] = useState(true) //เงื่อนไขเก็บไว้แสดงข้อมูลหากไม่มีสวัสดิการ
   const [donughtData, setDonughtData] = useState({});
 
   const [carrer, setCarrer] = useState([]);
@@ -68,10 +69,20 @@ const TrackingMemberId = () => {
 
   //Donut + social welfare
   useEffect(() => {
-    //แยก label , value เป็น {} เตรียมแสดงผล
+    //หากไม่มีสวัสดิการ
+    if(socialWelfare.length<2 &&
+      (socialWelfare.length === 0 || socialWelfare.some((e)=>e.welfare === "ไม่ได้รับ"))
+    ){
+      setHasWelfare(false)
+      return;
+    }
+
+    //หากมี แยก label , value เป็น {} เตรียมแสดงผล
     if (socialWelfare.length > 0) {
-      const labels = socialWelfare.map((data) => data.welfare);
-      const dataValue = socialWelfare.map((data) => data.amount);
+      const filteredWelfare = socialWelfare.filter(item => item.welfare !== "ไม่ได้รับ"); //กรองออก
+
+      const labels = filteredWelfare.map((data) => data.welfare);
+      const dataValue = filteredWelfare.map((data) => data.amount);
 
       const backgroundColors = [
         "#FF6384",
@@ -96,6 +107,7 @@ const TrackingMemberId = () => {
           },
         ],
       });
+      setHasWelfare(true);
     }
   }, [socialWelfare]);
 
@@ -184,7 +196,7 @@ const TrackingMemberId = () => {
               <div className="text-lg font-medium">เพศ : {member.sex}</div>
 
               <div className="text-lg font-medium">
-                อายุ : {member.age_yaer}
+                อายุ : {member.age}
               </div>
 
               <div className="text-lg font-medium">
@@ -251,7 +263,12 @@ const TrackingMemberId = () => {
               </div>
 
               <div className="text-lg font-medium">
-                {member.Household?.house_number} ต.
+               หมู่บ้าน : {member.Household?.village} 
+              
+              </div>
+
+              <div className="text-lg font-medium"> 
+               บ้านเลขที่ : {member.Household?.house_number} ต.
                 {member.Household?.subdistrict}
               </div>
 
@@ -263,9 +280,6 @@ const TrackingMemberId = () => {
                 รหัสปณ : {member.Household?.postcode}
               </div>
 
-              <div className="text-lg font-medium">
-                จำนวนสมาชิกในครัวเรือน : 10
-              </div>
 
               <div className="text-lg font-medium">
                 หัวหน้าครัวเรือน: {member.Household?.host_title}{" "}
@@ -273,13 +287,14 @@ const TrackingMemberId = () => {
               </div>
             </section>
 
-            <div className="flex justify-center mt-3">
-              <button
+            <div className="flex justify-center mt-6">
+              <Link
+              to={`/admin/track-household/${member.Household?.id}`}
                 type="button"
                 class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
                 รายละเอียด
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -336,44 +351,53 @@ const TrackingMemberId = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <div className=" w-full p-3 mt-7 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            {donughtData && donughtData.labels && (
-              <div className="my-8">
-                <h2 className="text-xl font-semibold mb-4 flex justify-center">
-                  สวัสดิการสังคม
-                </h2>
-                <Doughnut
-                  data={donughtData}
-                  width={400}
-                  height={400}
-                  options={{
-                    responsive: true,
-                    plugins: {
-                      legend: {
-                        position: "bottom",
-                      },
-                      tooltip: {
-                        callbacks: {
-                          //ดึงค่าจากข้อมูลที่ hover ออกมาแสดง
-                          label: function (context) {
-                            const label = context.label || "";
-                            const value = context.parsed || 0; //parsed คือข้อมูลที่ map label/data มาแล้ว
-                            //freq
-                            const welfare = socialWelfare.find(
-                              (data) => data.welfare === label
-                            );
-                            const freq = welfare ? welfare.frequency : "";
-                            return `${label}: ${value.toLocaleString()} บาท (${freq})`;
+            {/* เช็คเงื่อนไขก่อนแสดง chart */}
+            {!hasWelfare ? (
+              <div className="text-center py-8 text-gray-500 text-2xl">
+              ไม่ได้รับสวัสดิการ
+            </div>
+            ):(
+              donughtData && donughtData.labels && (
+                <div className="my-8">
+                  <h2 className="text-xl font-semibold mb-4 flex justify-center">
+                    สวัสดิการสังคม
+                  </h2>
+                  <Doughnut
+                    data={donughtData}
+                    width={400}
+                    height={400}
+                    options={{
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          position: "bottom",
+                        },
+                        tooltip: {
+                          callbacks: {
+                            //ดึงค่าจากข้อมูลที่ hover ออกมาแสดง
+                            label: function (context) {
+                              const label = context.label || "";
+                              const value = context.parsed || 0; //parsed คือข้อมูลที่ map label/data มาแล้ว
+                              //freq
+                              const welfare = socialWelfare.find(
+                                (data) => data.welfare === label
+                              );
+                              const freq = welfare ? welfare.frequency : "";
+                              return `${label}: ${value.toLocaleString()} บาท (${freq})`;
+                            },
                           },
                         },
                       },
-                    },
-                    // ปรับขนาดของกราฟ
-                    cutout: "50%", // ค่าเริ่มต้นคือ 50%, ปรับให้เล็กลงหรือใหญ่ขึ้นตามต้องการ
-                    radius: "80%", // ค่าเริ่มต้นคือ 100%, ปรับให้เล็กลงเพื่อทำให้กราฟเล็กลง
-                  }}
-                />
-              </div>
+                      // ปรับขนาดของกราฟ
+                      cutout: "50%", // ค่าเริ่มต้นคือ 50%, ปรับให้เล็กลงหรือใหญ่ขึ้นตามต้องการ
+                      radius: "80%", // ค่าเริ่มต้นคือ 100%, ปรับให้เล็กลงเพื่อทำให้กราฟเล็กลง
+                    }}
+                  />
+                </div>
+              )
             )}
+            
+            
           </div>
 
           {/* skill */}
