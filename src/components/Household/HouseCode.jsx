@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { Icon } from "@iconify/react";
@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../../config";
 import { Link } from "react-router-dom";
-
 
 const HouseCode = () => {
   const [members, setMembers] = useState([]);
@@ -46,7 +45,7 @@ const HouseCode = () => {
     } catch (error) {
       Swal.fire({
         title: "error",
-        icon:'error',
+        icon: "error",
         text: error.response?.data?.message || error.message,
       });
     }
@@ -83,8 +82,8 @@ const HouseCode = () => {
     return <div className="flex justify-center mt-4">{pages}</div>;
   };
 
-   //Menu toggle
-   const handleMenuToggle = (index) => {
+  //Menu toggle
+  const handleMenuToggle = (index) => {
     if (openMenuIndex === index) {
       // ถ้ากดที่แถวเดิม ให้ปิด menu
       setOpenMenuIndex(null);
@@ -92,6 +91,20 @@ const HouseCode = () => {
       setOpenMenuIndex(index);
     }
   };
+
+  // ติดตามการกดนอก menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".relative")) {
+        setOpenMenuIndex(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   //exportToPDF
   const exportToPDF = () => {
@@ -191,7 +204,7 @@ const HouseCode = () => {
 
         {/* <!-- ตารางข้อมูล --> */}
 
-        <div className="overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="overflow-x-auto w-full shadow-md sm:rounded-lg">
           <table
             id="table-content"
             className=" w-full text-l text-center text-gray-500 dark:text-gray-400 border-collapse"
@@ -232,6 +245,7 @@ const HouseCode = () => {
                   scope="col"
                   className="px-6 py-3 bg-gray-50  width: 20%"
                 ></th>
+              
               </tr>
             </thead>
 
@@ -243,22 +257,21 @@ const HouseCode = () => {
                     key={index}
                     className="border-b border-gray-500 dark:border-gray-900"
                   >
-                    
                     <td className="px-6 py-4 text-black bg-gray-50">
                       {(currentPage - 1) * limit + index + 1}
                     </td>
-                    
+
                     <td className="px-6 py-4 font-semibold bg-gray-100 dark:bg-gray-900 text-black">
                       {member.Household.house_code}
                     </td>
-                    
+
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium bg-gray-50 text-gray-900 whitespace-nowrap  dark:text-white dark:bg-gray-900"
                     >
                       {member.title + " " + member.fname + " " + member.lname}
                     </th>
-                    
+
                     <td className="px-6 py-4 text-black  bg-gray-100 ">
                       {member.Household.house_number +
                         "ต." +
@@ -272,8 +285,7 @@ const HouseCode = () => {
                         " " +
                         member.Household.postcode}
                     </td>
-    
-                    
+
                     <td className="px-6 py-4 text-black bg-gray-50">
                       {member.phone}
                     </td>
@@ -309,6 +321,8 @@ const HouseCode = () => {
                         )}
                       </div>
                     </td>
+
+                  
                   </tr>
                 ))
               ) : (

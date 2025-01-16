@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas"; //ไลบรารีสำหรับแปลง HTML เป็นภาพ (image) เพื่อใช้สร้าง PDF
 import { Icon } from "@iconify/react";
@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../../config";
 import { Link } from "react-router-dom";
+
 
 
 const RealName = () => {
@@ -94,6 +95,20 @@ const RealName = () => {
     }
   };
 
+  // ติดตามการกดนอก menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".relative")) {
+        setOpenMenuIndex(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   //exportToPD
   const exportToPDF = () => {
     const content = document.getElementById("table-content"); // ดึงเฉพาะตาราง
@@ -133,7 +148,6 @@ const RealName = () => {
   return (
     <div>
       <div className="mx-5 my-5">
-
         {/* ค้าหา/download */}
         <div className="flex flex-col md:flex-row items-center gap-2 mb-4">
           <div className="flex items-center gap-2 w-full md:w-auto justify-center">
@@ -225,7 +239,7 @@ const RealName = () => {
                   >
                     {/* ลำดับที่  */}
                     <td className="px-6 py-4 text-black bg-gray-50">
-                    {(currentPage - 1) * limit + index + 1}
+                      {(currentPage - 1) * limit + index + 1}
                     </td>
                     {/* ชื่อ  */}
                     <th
