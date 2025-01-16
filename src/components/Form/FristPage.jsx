@@ -446,7 +446,7 @@ export const FristPage = ({
                 for="house_number"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                บ้านเลขที่
+                บ้านเลขที่ ตัวอย่าง(1/1 หมู่ 1)
               </label>
               <input
                 type="text"
