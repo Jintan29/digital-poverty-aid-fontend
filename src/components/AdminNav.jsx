@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-
-
 import {
   Disclosure,
   Menu,
@@ -10,7 +8,6 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/userSlice";

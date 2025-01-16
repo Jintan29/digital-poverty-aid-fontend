@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
-import { Home } from "./pages/Home";
 
 import { About } from "./pages/About";
 import { Form } from "./pages/Form";
@@ -12,7 +11,7 @@ import axios from "axios";
 import config from "./config";
 import { useDispatch } from "react-redux";
 import { login, logout } from "./store/userSlice";
-import { Map } from "./pages/Map"; // ใช้ default import
+import { Map } from "./pages/Map"; 
 import { PageNotFound } from "./pages/PageNotFound";
 import { TestAPI } from "./pages/TestAPI";
 import { AdminRoute } from "./route/AdminRoute";
@@ -28,14 +27,16 @@ import TrackMember from "./pages/Admin/Tracking/TrackMember";
 import TrackHousehold from "./pages/Admin/Tracking/TrackHousehold";
 import TrackingMemberId from "./pages/Admin/Tracking/TrackingMemberId";
 import MixedChart from "./pages/MixedChart";
-import Householdtracking from "./pages/Householdtracking";
-
+import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
 
 function App() {
   const idToken = localStorage.getItem("token");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   useEffect(() => {
+
+
     if (idToken) {
       handleCurrentUser(idToken);
     }
@@ -180,7 +181,7 @@ function App() {
             />
 
             <Route
-              path="household"
+              path="track-household/:id"
               element={
                 <AdminRoute>
                   <Householdtracking />

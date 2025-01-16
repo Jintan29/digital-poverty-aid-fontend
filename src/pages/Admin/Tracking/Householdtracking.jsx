@@ -14,6 +14,7 @@ import {
     Legend,
     Tooltip,
 } from "chart.js";
+import { useParams } from "react-router-dom";
 
 // ลงทะเบียนองค์ประกอบที่จำเป็น
 ChartJS.register(
@@ -32,12 +33,13 @@ const Householdtracking = () => {
     const [financialData, setFinancialData] = useState(null);
     const [loading, setLoading] = useState(true); // เพิ่ม loading state
     const [error, setError] = useState(null);
+    const { id } = useParams()
 
-    const fetchFinancialData = async (householdId) => {
+    const fetchFinancialData = async () => {
         setLoading(true); // เริ่มสถานะการโหลด
         try {
             const response = await axios.get(
-                `http://localhost:8080/api/financialCapital/getAllSum/${householdId}` // Replace with your API URL
+                `http://localhost:8080/api/financialCapital/getAllSum/${id}` // Replace with your API URL
             );
             setFinancialData(response.data.data);
             setError(null); // ล้างข้อผิดพลาดหากมีข้อมูล
@@ -50,7 +52,7 @@ const Householdtracking = () => {
     };
 
     useEffect(() => {
-        fetchFinancialData(1);
+        fetchFinancialData();
     }, []);
 
     if (loading) {
