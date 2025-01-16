@@ -216,7 +216,7 @@ const ByAgeRange = () => {
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto">
+
         <>
           <div className="overflow-x-auto shadow-md sm:rounded-lg">
             <table
@@ -295,7 +295,7 @@ const ByAgeRange = () => {
                             className="text-slate-700 hover:text-slate-900 focus:outline-none"
                           >
                             <Icon
-                              icon="material-symbols:search-rounded"
+                              icon="material-symbols:visibility-rounded"
                               width="1em"
                               height="1em"
                             />
@@ -333,7 +333,7 @@ const ByAgeRange = () => {
           </div>
           {members.length > 0 ? <div className="">{renderPagination()}</div> : ""}
         </>
-      </div>
+      
     </div>
   );
 };
