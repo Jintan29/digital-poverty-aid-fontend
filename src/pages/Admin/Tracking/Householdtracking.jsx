@@ -14,7 +14,7 @@ import {
     Legend,
     Tooltip,
 } from "chart.js";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // ลงทะเบียนองค์ประกอบที่จำเป็น
 ChartJS.register(
@@ -420,11 +420,12 @@ const Householdtracking = () => {
                                     >
                                         {member.title}{member.fname} {member.lname}
                                     </span>
-                                    <button
+                                    <Link
+                                    to={`/admin/track-member/${member.id}`}
                                         className="px-3 py-1 text-xs font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 whitespace-nowrap flex-shrink-0"
                                     >
                                         ดูรายละเอียด
-                                    </button>
+                                    </Link>
                                 </li>
                             ))
                         ) : (
