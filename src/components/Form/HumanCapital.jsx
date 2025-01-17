@@ -1345,13 +1345,13 @@ export const HumanCapital = ({
                 )}
               </div>
             </div>
-            <div className="mx-6 py-2 grid grid-cols-4 gap-6 ">
+            <div className="mx-6 py-2 grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 gap-4 ">
               <div className="">
                 <label
                   for="agv_income"
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  รายได้เฉลี่ย (บาท/เดือน) save
+                  รายได้เฉลี่ย (บาท/เดือน) 
                 </label>
                 <input
                   type="number"
