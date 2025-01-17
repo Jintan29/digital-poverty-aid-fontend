@@ -150,7 +150,7 @@ export const HumanCapital = ({
     setMembers(updateData);
   };
 
-  //รอแก้
+
   const handleOtherChange = (index, field, value) => {
     setMembers((prevMembers) => {
       const updatedMembers = [...prevMembers];
@@ -176,6 +176,39 @@ export const HumanCapital = ({
         }
       }
 
+      member[field] = fieldArray;
+      updatedMembers[index] = member;
+      return updatedMembers;
+    });
+  };
+
+  const handleOtherChange2 = (index, field, newValue) => {
+    setMembers((prevMembers) => {
+      const updatedMembers = [...prevMembers];
+      const member = { ...updatedMembers[index] };
+      const fieldArray = [...member[field]];
+  
+      // หา index ที่ career_type เริ่มต้นด้วย prefix (เช่น "อื่นๆ ")
+      const otherIndex = fieldArray.findIndex((obj) =>
+        obj.career_type.startsWith(prefix)
+      );
+  
+      if (newValue.trim() === "") {
+        // ถ้าช่อง input เป็นค่าว่าง ลบ item "อื่นๆ "
+        if (otherIndex !== -1) {
+          fieldArray.splice(otherIndex, 1);
+        }
+      } else {
+        // มีการพิมพ์อาชีพในช่อง
+        if (otherIndex !== -1) {
+          // อัปเดตค่า
+          fieldArray[otherIndex].career_type = prefix + newValue;
+        } else {
+          // ถ้ายังไม่มี "อื่นๆ " ก็สร้างใหม่
+          fieldArray.push({ career_type: prefix + newValue });
+        }
+      }
+  
       member[field] = fieldArray;
       updatedMembers[index] = member;
       return updatedMembers;
@@ -225,9 +258,9 @@ export const HumanCapital = ({
       const member = members[index];
 
       // ตรวจสอบหมายเลขบัตรประชาชน
-      if (!member.national_id || member.national_id.length !== 13) {
+      if (!member.national_id || (member.national_id !== '-'  && !/^\d{13}$/.test(member.national_id))) {
         errors.push(
-          `กรุณากรอกเลขบัตรประชาชนของสมาชิคคนที่ ${index + 1} ให้ครบ 13 หลัก`
+          `กรุณากรอกเลขบัตรประชาชนของสมาชิคคนที่ ${index + 1} ให้ครบ 13 หลัก หรือกรอก '-' หากไม่มี`
         );
       }
 
@@ -305,9 +338,6 @@ export const HumanCapital = ({
                   ชื่อ
                 </label>
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                  <label htmlFor="currency" className="sr-only">
-                    Currency
-                  </label>
                   <select
                     id="title"
                     name="title"
@@ -459,7 +489,7 @@ export const HumanCapital = ({
                   for="national_id"
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  หมายเลขบัตรประจำตัวประชาชน
+                  หมายเลขบัตรประจำตัวประชาชน (หากไม่มีกรอก "-")
                 </label>
                 <input
                   type="text"
@@ -1032,10 +1062,8 @@ export const HumanCapital = ({
                 <input
                   id={`career-9-${index}`}
                   type="checkbox"
-                  onChange={(e) =>
-                    handleCarrerChange(index, "อื่นๆ", e.target.checked)
-                  }
-                  checked={member.Career.some(e => e.career_type === 'อื่นๆ')}
+                  onChange={(e) => handleCarrerChange(index, prefix, e.target.checked)}
+                  checked={member.Career.some(e => e.career_type.startsWith(prefix))}
                   value="อื่นๆ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -1045,7 +1073,27 @@ export const HumanCapital = ({
                 >
                   อื่นๆ
                 </label>
-
+                {member.Career.some((e) =>
+                  e.career_type.startsWith(prefix)
+                ) && (
+                  <input
+                    type="text"
+                    value={
+                      member.Career
+                        .find((item) => item.career_type.startsWith(prefix))
+                        ?.career_type.substring(prefix.length) || ""
+                    }
+                    onChange={(e) =>
+                      handleOtherChange2(
+                        index,
+                        "Career",
+                        e.target.value
+                      )
+                    }
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="ระบุอาชีพ"
+                  />
+                )}
                 
               </div>
             </div>

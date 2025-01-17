@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas"; //ไลบรารีสำหรับแปลง HTML เป็นภาพ (image) เพื่อใช้สร้าง PDF
+import html2canvas from "html2canvas";
 import { Icon } from "@iconify/react";
 import debounce from "lodash/debounce";
 import Swal from "sweetalert2";
@@ -8,26 +8,33 @@ import axios from "axios";
 import config from "../../config";
 import { Link } from "react-router-dom";
 
-
-
-const RealName = () => {
+const HouseCode = () => {
   const [members, setMembers] = useState([]);
-
+  const [code, setCode] = useState("");
   const [openMenuIndex, setOpenMenuIndex] = useState(null); //menu icon
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [fname, setFname] = useState(""); //query str
   const limit = 20;
 
-  const fetchData = async (page, searchTerm) => {
+  //หน่วงเวลา
+  const debouncedSearch = useCallback(
+    debounce(async (value) => {
+      setCurrentPage(1); //reset page
+      fetchData(1, value);
+    }, 500),
+    []
+  );
+
+  const fetchData = async (page, search) => {
     try {
       const response = await axios.get(
-        config.api_path + `/member-household/search-by-name`,
+        config.api_path + `/member-household/search-by-houseCode`,
         {
           params: {
             page: page,
             limit,
-            fname: searchTerm,
+            code: search,
           },
           ...config.headers(),
         }
@@ -35,33 +42,23 @@ const RealName = () => {
       setMembers(response.data.results);
       setCurrentPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
-    } catch (err) {
+    } catch (error) {
       Swal.fire({
         title: "error",
         icon: "error",
-        text: err.response?.data?.message || err.message,
+        text: error.response?.data?.message || error.message,
       });
     }
   };
 
-  //หน่วงเวลาหลังพิมพ์เสร็จ
-  const debouncedSearch = useCallback(
-    debounce(async (value) => {
-      setCurrentPage(1); // Reset page หากค้นใหม่
-      fetchData(1, value);
-    }, 500), //500 ms
-    []
-  );
-
   const handleInputChange = (value) => {
-    setFname(value);
+    setCode(value);
     debouncedSearch(value);
   };
 
-  //เปลี่ยนหน้า
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    fetchData(page, fname);
+    fetchData(page, code);
   };
 
   //ปุ่ม Paginate
@@ -109,26 +106,38 @@ const RealName = () => {
     };
   }, []);
 
-  //exportToPD
+  //exportToPDF
   const exportToPDF = () => {
-    const content = document.getElementById("table-content"); // ดึงเฉพาะตาราง
-    if (!content) return; // ตรวจสอบว่าได้ดึงข้อมูลมาแล้ว
+    // ดึงข้อมูลของตารางจาก DOM โดยระบุ id เป็น "table-content"
+    const content = document.getElementById("table-content");
+    if (!content) return; // ตรวจสอบว่าข้อมูลตารางถูกดึงมาแล้ว หากไม่ได้ ให้หยุดการทำงานของฟังก์ชัน
 
-    const title = "สมาชิคครัวเรือจากชื่อจริง";
+    // กำหนดชื่อหัวข้อที่จะแสดงในไฟล์ PDF
+    const title = "สมาชิกครัวเรือนจากเลขที่บ้าน";
 
+    // ใช้ html2canvas เพื่อแปลง HTML เป็นภาพ
     html2canvas(content, {
-      scale: 2, // เพิ่มความคมชัด
-      useCORS: true, // รองรับการใช้งาน cross-origin
+      scale: 2, // กำหนดความละเอียดของภาพให้สูงขึ้น (ค่าเริ่มต้นคือ 1)
+      useCORS: true, // อนุญาตให้ดึงข้อมูลที่มี cross-origin (เช่น รูปภาพจากเว็บไซต์อื่น)
     }).then((canvas) => {
+      // แปลงภาพจาก canvas เป็นข้อมูล Base64 ในฟอร์แมต PNG
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4"); // สร้าง PDF ขนาด A4
-      const imgWidth = 190; // ความกว้างของรูป
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let position = 15; // จุดเริ่มต้น
 
-      // เพิ่มหัวข้อก่อนตาราง
-      pdf.setFont("Sarabun-Regular", "normal");
-      pdf.setFontSize(14);
+      // สร้างเอกสาร PDF ด้วยขนาดกระดาษ A4
+      const pdf = new jsPDF("p", "mm", "a4"); // "p" หมายถึง แนวตั้ง, "mm" คือหน่วยมิลลิเมตร, "a4" คือขนาดกระดาษ
+
+      // กำหนดความกว้างของภาพใน PDF (190 มม.)
+      const imgWidth = 190;
+
+      // คำนวณความสูงของภาพโดยรักษาสัดส่วนเดิม
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // กำหนดตำแหน่งเริ่มต้นของเนื้อหาในแนวตั้ง (20 มม. จากขอบบน)
+      let position = 20;
+
+      // เพิ่มหัวข้อใน PDF
+      pdf.setFont("Sarabun-Regular", "normal"); // ตั้งค่าฟอนต์ให้รองรับภาษาไทย
+      pdf.setFontSize(14); // กำหนดขนาดตัวอักษรเป็น 16
       pdf.text(
         title,
         pdf.internal.pageSize.width / 2,
@@ -136,19 +145,29 @@ const RealName = () => {
         null,
         null,
         "center"
-      ); // เพิ่มชื่อหัวข้อในเอกสาร PDF
-      position += 10; // เพิ่มระยะห่างระหว่างหัวข้อและตาราง
+      );
+      // แสดงข้อความหัวข้อกลางกระดาษ โดยข้อความจะอยู่ตรงกลางแนวนอน และเริ่มที่ตำแหน่ง "position" ในแนวตั้ง
+      position += 10; // เพิ่มตำแหน่งแนวตั้ง (เว้นระยะห่างระหว่างหัวข้อและตาราง)
 
-      // เพิ่มรูปภาพของตาราง
+      // เพิ่มภาพตารางใน PDF
       pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
-      pdf.save(`${title}.pdf`); // ใช้ชื่อหัวข้อเป็นชื่อไฟล์ PDF
+      // วางภาพที่ตำแหน่ง (10, position) โดยเว้นขอบซ้าย 10 มม. และใช้ความกว้าง imgWidth และความสูง imgHeight
+
+      // บันทึกไฟล์ PDF โดยใช้ชื่อหัวข้อเป็นชื่อไฟล์
+      pdf.save(`${title}.pdf`);
     });
   };
 
   return (
     <div>
       <div className="mx-5 my-5">
-        {/* ค้าหา/download */}
+        <div className="flex flex-col  justify-center font-bold text-xl">
+          <div className="block text-center">
+            <h1>ค้นหาสมาชิกครัวเรือนจากรหัสบ้าน </h1>
+          </div>
+        </div>
+
+        {/* ค้าหา/download  */}
         <div className="flex flex-col md:flex-row items-center gap-2 mb-4">
           <div className="flex items-center gap-2 w-full md:w-auto justify-center">
             <div className="flex mb-4 w-80 md:w-96 mt-4">
@@ -157,7 +176,7 @@ const RealName = () => {
                 id="search"
                 className="flex-grow py-3 px-3 text-xs text-gray-900 border border-gray-300 rounded-l-sm bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full"
                 placeholder="ค้นหาสมาชิก"
-                value={fname}
+                value={code}
                 onChange={(e) => handleInputChange(e.target.value)}
               />
               <button
@@ -185,7 +204,7 @@ const RealName = () => {
 
         {/* <!-- ตารางข้อมูล --> */}
 
-        <div className="overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="overflow-x-auto w-full shadow-md sm:rounded-lg">
           <table
             id="table-content"
             className=" w-full text-l text-center text-gray-500 dark:text-gray-400 border-collapse"
@@ -200,21 +219,21 @@ const RealName = () => {
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 bg-gray-100 dark:bg-gray-700 width: 30%"
+                  className="px-6 py-3 bg-gray-100 dark:bg-gray-700 width: 20% "
+                >
+                  รหัสบ้าน
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 bg-gray-50 dark:bg-gray-700 width: 30%"
                 >
                   ข้อมูลสมาชิกครัวเรือน
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 bg-gray-50 dark:bg-gray-800 width: 40%"
+                  className="px-6 py-3 bg-gray-100 dark:bg-gray-800 width: 40%"
                 >
                   ที่อยู่
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 bg-gray-100 dark:bg-gray-700 width: 20% "
-                >
-                  รหัสบ้าน
                 </th>
                 <th
                   scope="col"
@@ -226,6 +245,7 @@ const RealName = () => {
                   scope="col"
                   className="px-6 py-3 bg-gray-50  width: 20%"
                 ></th>
+              
               </tr>
             </thead>
 
@@ -237,19 +257,22 @@ const RealName = () => {
                     key={index}
                     className="border-b border-gray-500 dark:border-gray-900"
                   >
-                    {/* ลำดับที่  */}
                     <td className="px-6 py-4 text-black bg-gray-50">
                       {(currentPage - 1) * limit + index + 1}
                     </td>
-                    {/* ชื่อ  */}
+
+                    <td className="px-6 py-4 font-semibold bg-gray-100 dark:bg-gray-900 text-black">
+                      {member.Household.house_code}
+                    </td>
+
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-100  dark:text-white dark:bg-gray-900"
+                      className="px-6 py-4 font-medium bg-gray-50 text-gray-900 whitespace-nowrap  dark:text-white dark:bg-gray-900"
                     >
                       {member.title + " " + member.fname + " " + member.lname}
                     </th>
-                    {/* ที่อยู่ */}
-                    <td className="px-6 py-4 text-black bg-gray-50">
+
+                    <td className="px-6 py-4 text-black  bg-gray-100 ">
                       {member.Household.house_number +
                         "ต." +
                         member.Household.subdistrict +
@@ -262,11 +285,7 @@ const RealName = () => {
                         " " +
                         member.Household.postcode}
                     </td>
-                    {/* เลขที่บ้าน */}
-                    <td className="px-6 py-4 bg-gray-100 dark:bg-gray-900 text-black">
-                      {member.Household.house_code}
-                    </td>
-                    {/* เบอร์โทรศัพท์ */}
+
                     <td className="px-6 py-4 text-black bg-gray-50">
                       {member.phone}
                     </td>
@@ -292,22 +311,24 @@ const RealName = () => {
                             >
                               ดูข้อมูลรายบุคคล
                             </Link>
-                            <a
-                              href="#"
+                            <Link
+                              to={`/admin/track-household/${member.Household?.id}`}
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
                               ดูข้อมูลครัวเรือน
-                            </a>
+                            </Link>
                           </div>
                         )}
                       </div>
                     </td>
+
+                  
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td colSpan="5" className="py-4 text-red-500 text-center">
-                    ไม่พบข้อมูลสมาชิก กรุณากรอกชื่อให้ถูกต้อง
+                    ไม่พบข้อมูล
                   </td>
                 </tr>
               )}
@@ -320,4 +341,5 @@ const RealName = () => {
     </div>
   );
 };
-export default RealName;
+
+export default HouseCode;

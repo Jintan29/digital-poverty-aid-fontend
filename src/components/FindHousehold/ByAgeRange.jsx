@@ -309,12 +309,12 @@ const ByAgeRange = () => {
                               >
                                 ดูข้อมูลรายบุคคล
                               </Link>
-                              <a
-                                href="#"
+                              <Link
+                                to={`/admin/track-household/${member.Household?.id}`}
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               >
                                 ดูข้อมูลครัวเรือน
-                              </a>
+                              </Link>
                             </div>
                           )}
                         </div>

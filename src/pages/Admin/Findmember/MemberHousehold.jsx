@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import HouseCode from "../../../components/Household/HouseCode";
-import ByAgeRange from "../../../components/Household/ByAgeRange";
-import RealName from "../../../components/Household/RealName";
+import HouseCode from "../../../components/FindHousehold/HouseCode";
+import ByAgeRange from "../../../components/FindHousehold/ByAgeRange";
+import RealName from "../../../components/FindHousehold/RealName";
 import { Icon } from "@iconify/react";
 
 const MemberHousehold = () => {
