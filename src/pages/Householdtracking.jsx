@@ -50,7 +50,7 @@ const Householdtracking = () => {
     };
 
     useEffect(() => {
-        fetchFinancialData(1);
+        fetchFinancialData(2);
     }, []);
 
     if (loading) {
@@ -96,8 +96,19 @@ const Householdtracking = () => {
                     padding: 15, // ระยะห่างระหว่างรายการ
                 },
             },
+            tooltip: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        // ดึงค่าข้อมูลจาก datasets
+                        const value = tooltipItem.raw;
+                        // แสดงค่าพร้อมหน่วยเป็น "บาท"
+                        return `${tooltipItem.label}: ${value.toLocaleString()} บาท`;
+                    },
+                },
+            },
         },
     };
+
 
     // ข้อมูลสำหรับ Bar Chart
     const data2 = {
@@ -123,6 +134,10 @@ const Householdtracking = () => {
                     title: function (tooltipItems) {
                         const index = tooltipItems[0].dataIndex;
                         return financialData.Form.Financialcapital.Savings[index].saving_type; // แสดงข้อความเต็ม
+                    },
+                    label: function (tooltipItem) {
+                        const value = tooltipItem.raw; // ดึงค่าจากข้อมูล
+                        return `จำนวนเงิน: ${value.toLocaleString()} บาท`; // แสดงค่าพร้อมหน่วยเป็น "บาท"
                     },
                 },
             },
@@ -160,18 +175,23 @@ const Householdtracking = () => {
                 backgroundColor: "rgba(255, 0, 0, 0.7)", // Solid red color for the bars
                 borderColor: "rgba(255, 0, 0, 1)", // Solid red color for borders
                 borderWidth: 1,
-                barThickness: 25, // Reduced bar thickness for smaller chart
+                barThickness: 17, // Reduced bar thickness for smaller chart
             },
         ],
     };
     const options3 = {
         responsive: true,
+        maintainAspectRatio: true,
         plugins: {
             tooltip: {
                 callbacks: {
                     title: function (tooltipItems) {
                         const index = tooltipItems[0].dataIndex;
                         return financialData.Form.Financialcapital.Debt.Creditsources[index].form; // แสดงข้อความเต็ม
+                    },
+                    label: function (tooltipItem) {
+                        const value = tooltipItem.raw; // ดึงค่าจากข้อมูล
+                        return `จำนวนเงิน: ${value.toLocaleString()} บาท`; // แสดงค่าพร้อมหน่วยเป็น "บาท"
                     },
                 },
             },
@@ -197,6 +217,8 @@ const Householdtracking = () => {
                     text: "ปี (Year)", // Year label for y-axis
                 },
             },
+            barPercentage: 0.8, // Adjust bar width (0.8 = 80% of available space)
+            categoryPercentage: 0.6,
         },
     };
 
@@ -221,15 +243,32 @@ const Householdtracking = () => {
     // คำนวณจุดหลุดพ้นความจน
     const breakEven = totalIncome >= (totalExpenses + totalCost + totalDebt);
 
-    if (breakEven) {
-        console.log("ครัวเรือนพ้นจากความจน");
-    } else {
-        console.log("ครัวเรือนยังอยู่ในความจน");
-    }
 
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
-            <h1 className="text-2xl font-bold mb-6">ครัวเรือน</h1>
+            {/* <h1 className="text-2xl font-bold mb-6">ครัวเรือน</h1> */}
+            <div className="flex items-center space-x-2 mb-6">
+                <h1 className="text-2xl font-bold">ครัวเรือน</h1>
+                <p
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg shadow-md transition duration-300 transform hover:scale-105
+        ${breakEven
+                            ? "bg-green-100 text-green-600 hover:bg-green-200"
+                            : "bg-red-100 text-red-600 hover:bg-red-200"
+                        }`}
+                >
+                    {breakEven ? (
+                        <>
+                            <Icon icon="mdi:check-circle" className="w-5 h-5" />
+                            <span className="font-medium">หลุดพ้นจากความยากจน</span>
+                        </>
+                    ) : (
+                        <>
+                            <Icon icon="mdi:close-circle" className="w-5 h-5" />
+                            <span className="font-medium">ยังอยู่ในความยากจน</span>
+                        </>
+                    )}
+                </p>
+            </div>
 
             {/* Grid ด้านบน */}
             <div className="grid grid-cols-3 gap-4 mb-6">
@@ -240,13 +279,8 @@ const Householdtracking = () => {
                     </div>
                     <div>
                         <h2 className="text-sm font-medium text-gray-500">หัวหน้าครอบครัว</h2>
-                        {/* <p className="text-xl font-bold">{financialData.host_title}{financialData.host_fname} {financialData.host_lname}</p> */}
-                        <p
-                            className="text-xl font-bold truncate max-w-[20ch] inline-block overflow-hidden whitespace-nowrap cursor-default"
-                            title={`${financialData.host_title}${financialData.host_fname} ${financialData.host_lname}`} // รวมข้อความทั้งหมดใน title
-                        >
-                            {financialData.host_title}{financialData.host_fname} {financialData.host_lname}
-                        </p>
+                        <p className="text-xl font-bold">{financialData.host_title}{financialData.host_fname} {financialData.host_lname}</p>
+                        {/* financialData.host_title}{financialData.host_fname} {financialData.host_lname} */}
                     </div>
                 </div>
 
@@ -264,7 +298,7 @@ const Householdtracking = () => {
                 {/* Card 3 */}
                 <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
                     <div className="text-green-500 text-4xl mr-4">
-                        <Icon icon="mdi:email" />
+                        <Icon icon="mdi:home" />
                     </div>
                     <div>
                         <h2 className="text-sm font-medium text-gray-500">รหัสบ้าน</h2>
@@ -280,15 +314,16 @@ const Householdtracking = () => {
                 <div className="col-span-1 bg-white p-6 shadow-lg rounded-lg border border-gray-200">
                     <h2 className="text-2xl font-semibold mb-6 text-gray-800 border-b pb-2">ข้อมูลครัวเรือน</h2>
                     <div className="space-y-4 text-gray-700">
-                        <p><strong className="text-gray-900">ตำบล:</strong> {financialData.subdistrict || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">อำเภอ:</strong> {financialData.district || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">จังหวัด:</strong> {financialData.province || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">ชื่อหมู่บ้าน:</strong> {financialData.village || "ไม่ระบุ"}</p>
                         <p><strong className="text-gray-900">บ้านเลขที่:</strong> {financialData.house_number || "ไม่ระบุ"}</p>
+                        <p><strong className="text-gray-900">ชื่อหมู่บ้าน:</strong> {financialData.village || "ไม่ระบุ"}</p>
                         <p><strong className="text-gray-900">ถนน:</strong> {financialData.road || "ไม่ระบุ"}</p>
                         <p><strong className="text-gray-900">ซอย:</strong> {financialData.alley || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">มีบ้านที่ดินเป็นของตัวเอง:</strong> {financialData.ownershipStatus ? "มี" : "ไม่มี"}</p>
-                        <p><strong className="text-gray-900">สภาพบ้าน:</strong> {financialData.houseCondition || "ไม่ระบุ"}</p>
+                        <p><strong className="text-gray-900">อำเภอ:</strong> {financialData.district || "ไม่ระบุ"}</p>
+                        <p><strong className="text-gray-900">ตำบล:</strong> {financialData.subdistrict || "ไม่ระบุ"}</p>
+                        <p><strong className="text-gray-900">จังหวัด:</strong> {financialData.province || "ไม่ระบุ"}</p>
+                        <p><strong className="text-gray-900">รหัสไปรษณีย์:</strong> {financialData.postcode || "ไม่ระบุ"}</p>
+                        <p><strong className="text-gray-900">มีบ้านที่ดินเป็นของตัวเอง:</strong> {financialData.Form.PhysicalCapital.is_has_house}</p>
+                        <p><strong className="text-gray-900">สภาพบ้าน:</strong> {financialData.Form.PhysicalCapital.house_status}</p>
                     </div>
                 </div>
 
@@ -331,57 +366,6 @@ const Householdtracking = () => {
                     </div>
                 </div>
             </div>
-            
-            {/* <div className="grid grid-cols-2 gap-6 mb-6">
-                <div className="bg-white p-6 shadow-lg rounded-lg border border-gray-200">
-                    <h2 className="text-2xl font-semibold mb-6 text-gray-800 border-b pb-2">ข้อมูลครัวเรือน</h2>
-                    <div className="space-y-4 text-gray-700">
-                        <p><strong className="text-gray-900">ตำบล:</strong> {financialData.subdistrict || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">อำเภอ:</strong> {financialData.district || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">จังหวัด:</strong> {financialData.province || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">ชื่อหมู่บ้าน:</strong> {financialData.village || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">บ้านเลขที่:</strong> {financialData.house_number || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">ถนน:</strong> {financialData.road || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">ซอย:</strong> {financialData.alley || "ไม่ระบุ"}</p>
-                        <p> <strong className="text-gray-900">มีบ้านที่ดินเป็นของตัวเอง:</strong> {financialData.ownershipStatus ? "มี" : "ไม่มี"}</p>
-                        <p> <strong className="text-gray-900">สภาพบ้าน:</strong> {financialData.houseCondition || "ไม่ระบุ"}</p>
-                    </div>
-                </div>
-
-                <div className="bg-white p-6 shadow-lg rounded-lg border border-gray-200">
-                    <h2 className="text-2xl font-semibold mb-6 text-gray-800 border-b pb-2">รายรับ-รายจ่าย</h2>
-                    <div className="w-72 h-72 mx-auto flex items-center justify-center">
-                        <Pie data={data} options={options} />
-                    </div>
-
-                    <div className="mt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                            <div className="bg-blue-100 p-4 rounded-lg shadow">
-                                <h4 className="text-sm font-medium text-blue-700">รวมรายรับ</h4>
-                                <p className="text-lg font-bold text-blue-900">
-                                    {financialData.financialSummary.totalAmountPerYear.toLocaleString()} บาท
-                                </p>
-                            </div>
-
-                            <div className="bg-red-100 p-4 rounded-lg shadow">
-                                <h4 className="text-sm font-medium text-red-700">รวมรายจ่าย</h4>
-                                <p className="text-lg font-bold text-red-900">
-                                    {financialData.financialSummary.totalExpenses.toLocaleString()} บาท
-                                </p>
-                            </div>
-
-                            <div className="bg-orange-100 p-4 rounded-lg shadow">
-                                <h4 className="text-sm font-medium text-orange-700">รวมต้นทุน</h4>
-                                <p className="text-lg font-bold text-orange-900">
-                                    {financialData.financialSummary.totalCostPerYear.toLocaleString()} บาท
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div> */}
 
             {/* ข้อมูลแถวสอง */}
             <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 mt-6">
@@ -413,8 +397,7 @@ const Householdtracking = () => {
                                     className="flex justify-between items-center p-4 bg-blue-50 rounded-lg shadow-sm"
                                 >
                                     <span
-                                        className="text-md text-gray-700 truncate cursor-default max-w-[70%]" // ใช้ Tailwind CSS แทน style
-                                        title={`${member.title}${member.fname} ${member.lname}`} // แสดงชื่อเต็มเมื่อวางเมาส์
+                                        className="text-md text-gray-700 break-words cursor-default max-w-[70%]" // ใช้ Tailwind CSS แทน style
                                     >
                                         {member.title}{member.fname} {member.lname}
                                     </span>
@@ -433,37 +416,22 @@ const Householdtracking = () => {
                 </div>
             </div>
 
-
             {/* แนวนอน - Bar Chart */}
             <div className="bg-white p-6 shadow-lg rounded-lg w-full mt-6">
                 <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
                     หนี้สินในครัวเรือน
                 </h2>
                 <div className="flex justify-center mb-6">
-                    <Bar data={data3} options={options3} />
+                    <div className="bg-white p-4 shadow rounded w-3/4 mx-auto">
+                        {/* ใช้ w-3/4 ลดความกว้าง */}
+                        <Bar data={data3} options={options3} />
+                    </div>
                 </div>
                 <div className="text-center mt-4 text-gray-700">
                     <p className="text-lg font-medium">
                         รวมหนี้สิน: <span className="font-bold text-red-600">{financialData.financialSummary.totalDebt}</span>
                     </p>
                 </div>
-            </div>
-
-
-            {/* Line Chart */}
-            {/* <div className="bg-white p-6 shadow rounded mt-6">
-                <h2 className="text-xl font-semibold mb-4">รายรับ-รายจ่าย-ต้นทุน และจุดหลุดความจน</h2>
-                <div className="w-full">
-                    <Line data={data4} options={options4} />
-                </div>
-            </div> */}
-            <div>
-                <h2>ผลการคำนวณจุดหลุดพ้นความจน</h2>
-                {breakEven ? (
-                    <p className="text-green-600">ครัวเรือนพ้นจากความจน</p>
-                ) : (
-                    <p className="text-red-600">ครัวเรือนยังอยู่ในความจน</p>
-                )}
             </div>
         </div>
     );
