@@ -1,13 +1,15 @@
 import axios from "axios";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import debounce from "lodash/debounce";
 import { Icon } from "@iconify/react";
 import config from "../../../config";
+import { Link } from "react-router-dom";
 
 const TrackHousehold = () => {
   const [house, setHouse] = useState([]);
 
+  const [openMenuIndex, setOpenMenuIndex] = useState(null); //menu icon
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -52,10 +54,10 @@ const TrackHousehold = () => {
     debouncedSearch(value);
   };
 
-  const handlePageChange = (page)=>{
-    setCurrentPage(page)
-    fetchData(page,search)
-  }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchData(page, search);
+  };
 
   //ปุ่ม Paginate
   const renderPagination = () => {
@@ -77,6 +79,30 @@ const TrackHousehold = () => {
     }
     return <div className=" mt-4">{pages}</div>;
   };
+
+  // ปุ่มค้นหา
+  const handleMenuToggle = (index) => {
+    if (openMenuIndex === index) {
+      // ถ้ากดที่แถวเดิม ให้ปิด menu
+      setOpenMenuIndex(null);
+    } else {
+      setOpenMenuIndex(index);
+    }
+  };
+
+   // ติดตามการกดนอก menu
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (!event.target.closest(".relative")) {
+          setOpenMenuIndex(null);
+        }
+      };
+  
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }, []);
 
   return (
     <>
@@ -153,88 +179,88 @@ const TrackHousehold = () => {
             </thead>
 
             <tbody>
-              {house && house.length > 0
-                ? house.map((data, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-gray-500 dark:border-gray-900"
+              {house && house.length > 0 ? (
+                house.map((data, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-500 dark:border-gray-900"
+                  >
+                    <td className="px-6 py-4 text-black bg-gray-50">
+                      {(currentPage - 1) * limit + index + 1}
+                    </td>
+
+                    <td className="px-6 py-4 font-semibold bg-gray-100 dark:bg-gray-900 text-black">
+                      {data.house_code}
+                    </td>
+
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium bg-gray-50 text-gray-900 whitespace-nowrap  dark:text-white dark:bg-gray-900"
                     >
-                      <td className="px-6 py-4 text-black bg-gray-50">
-                        {(currentPage - 1) * limit + index + 1}
-                      </td>
+                      {data.host_title +
+                        " " +
+                        data.host_fname +
+                        " " +
+                        data.host_lname}
+                    </th>
 
-                      <td className="px-6 py-4 font-semibold bg-gray-100 dark:bg-gray-900 text-black">
-                        {data.house_code}
-                      </td>
+                    <td className="px-6 py-4 text-black  bg-gray-100 ">
+                      {data.house_number +
+                        "ต." +
+                        data.subdistrict +
+                        " " +
+                        "อ. " +
+                        data.district +
+                        " " +
+                        "จ. " +
+                        data.province +
+                        " " +
+                        data.postcode}
+                    </td>
 
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium bg-gray-50 text-gray-900 whitespace-nowrap  dark:text-white dark:bg-gray-900"
-                      >
-                        {data.host_title + " " + data.host_fname + " " + data.host_lname}
-                      </th>
+                    <td className="px-6 py-3 text-black relative bg-gray-50">
+                      <div className="relative inline-block">
+                        <button
+                          onClick={() => handleMenuToggle(index)}
+                          className="text-slate-700 hover:text-slate-900 focus:outline-none"
+                        >
+                          <Icon
+                            icon="material-symbols:search-rounded"
+                            width="1em"
+                            height="1em"
+                          />
+                        </button>
 
-                      <td className="px-6 py-4 text-black  bg-gray-100 ">
-                        {data.house_number +
-                          "ต." +
-                          data.subdistrict +
-                          " " +
-                          "อ. " +
-                          data.district +
-                          " " +
-                          "จ. " +
-                          data.province +
-                          " " +
-                          data.postcode}
-                      </td>
-
-
-                      <td className="px-6 py-3 text-black relative bg-gray-50">
-                        <div className="relative inline-block">
-                          <button
-                            //onClick={() => handleMenuToggle(index)}
-                            className="text-slate-700 hover:text-slate-900 focus:outline-none"
-                          >
-                            <Icon
-                              icon="material-symbols:search-rounded"
-                              width="1em"
-                              height="1em"
-                            />
-                          </button>
-
-                          {/*openMenuIndex === index && (
+                        {openMenuIndex === index && (
                             <div className="absolute right-0 mt-2 py-2 w-40 bg-white rounded-md shadow-xl z-20">
                               <Link
-                                to={`/admin/track-member/${member.id}`}
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              >
-                                ดูข้อมูลรายบุคคล
-                              </Link>
-                              <a
-                                href="#"
+                                to={`/admin/track-household/${data.id}`}
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               >
                                 ดูข้อมูลครัวเรือน
-                              </a>
+                              </Link>
                             </div>
-                          )*/}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                : (
-                  <tr>
-                    <td colSpan="5" className="py-4 text-red-500 text-center">
-                      ไม่พบข้อมูล กรอกรหัสบ้าน หรือ ชื่อเจ้าบ้านให้ถูกต้อง
+                          )}
+                      </div>
                     </td>
                   </tr>
-                )}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="py-4 text-red-500 text-center">
+                    ไม่พบข้อมูล กรอกรหัสบ้าน หรือ ชื่อเจ้าบ้านให้ถูกต้อง
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
-
         </div>
 
-        {house.length > 0 ? <div className="flex justify-end mr-5">{renderPagination()}</div> : ""}
+        {house.length > 0 ? (
+          <div className="flex justify-end mr-5">{renderPagination()}</div>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );
