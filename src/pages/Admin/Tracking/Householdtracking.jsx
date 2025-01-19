@@ -73,7 +73,6 @@ const Householdtracking = () => {
     const [expensesModal, setExpensesModal] = useState(false)
     const [savingModal, setSavingModal] = useState(false)
     const [debtModal, setDebtModal] = useState(false)
-
     const { id } = useParams()
 
     const fetchFinancialData = async () => {
@@ -263,6 +262,7 @@ const Householdtracking = () => {
             },
         },
     };
+    const chartHeight = data3.labels.length > 5 ? data3.labels.length * 70 : 400; // ปรับความสูงอัตโนมัติตามจำนวนข้อมูล
 
     // ข้อมูลจาก JSON
     const incomes = financialData.Form.Financialcapital.NonAGIincomes;
@@ -283,8 +283,6 @@ const Householdtracking = () => {
 
     // คำนวณจุดหลุดพ้นความจน
     const breakEven = totalIncome >= (totalExpenses + totalCost + totalDebt);
-
-
 
     //Saving
     const prefixSaving = "การออมอื่นๆ";
@@ -747,7 +745,6 @@ const Householdtracking = () => {
         });
     };
 
-
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
             {/* <h1 className="text-2xl font-bold mb-6">ครัวเรือน</h1> */}
@@ -809,7 +806,7 @@ const Householdtracking = () => {
                                 className="mr-2"
                                 icon="material-symbols:monetization-on-rounded"
                             />
-                            เพิ่มข้อมูลรายรับ(ครัวเรือน)
+                            เพิ่มข้อมูลรายได้
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setExpensesModal(true)}>
                             <Icon
@@ -818,11 +815,7 @@ const Householdtracking = () => {
                                 className="mr-2"
                                 icon="material-symbols:family-restroom-rounded"
                             />
-
-                            เพิ่มข้อมูลรายจ่าย(ครัวเรือน)
-
                             เพิ่มข้อมูลรายจ่าย
-
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setSavingModal(true)}>
                             <Icon
@@ -846,8 +839,6 @@ const Householdtracking = () => {
                     </Dropdown>
                 </div>
             </div>
-
-
             {/* Grid ด้านบน */}
             <div className="grid grid-cols-3 gap-4 mb-6">
                 {/* Card 1 */}
@@ -952,17 +943,22 @@ const Householdtracking = () => {
                     <h2 className="text-xl font-semibold mb-4 text-center text-gray-800">
                         การออมในครัวเรือน
                     </h2>
-
-                    <div className="flex justify-center mb-6 ">
-                    <div className style={{ width: '100%', maxHeight: '500px', overflowX: 'auto' }}>
-                        <div style={{ width:data2.labels.length > 5 ?  `${data2.labels.length * 150}px` : '800px', }}>
-                        <Bar data={data2} options={options2}/>
-                        </div>
-                    </div>
-
                     <div className="flex justify-center mb-6">
-                        <Bar data={data2} options={options2} />
-
+                        <div
+                            style={{
+                                width: '100%',
+                                maxHeight: '500px',
+                                overflowX: 'auto',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: data2.labels.length > 5 ? `${data2.labels.length * 150}px` : '800px',
+                                }}
+                            >
+                                <Bar data={data2} options={options2} />
+                            </div>
+                        </div>
                     </div>
                     <div className="mt-4 text-center text-gray-700">
                         <p className="text-xl font-medium">
@@ -1014,13 +1010,8 @@ const Householdtracking = () => {
                 <div className="flex justify-center mb-6">
                     <div className="bg-white p-4 shadow rounded w-3/4 mx-auto" style={{ height: '500px', maxHeight: '500px', overflowY: 'auto' }}>
                         {/* ใช้ w-3/4 ลดความกว้าง */}
-
-                        <div style={{ height:data3.labels.length > 5 ? `${data3.labels.length * 70 }px`: '400px', }}>
-                        <Bar data={data3} options={options3}/>
-
                         <div style={{ height: `${chartHeight}px` }}>
                             <Bar data={data3} options={options3} />
-
                         </div>
                     </div>
                 </div>
@@ -1122,9 +1113,6 @@ const Householdtracking = () => {
                     </div>
                 </div>
             </Modal>
-
-            
-
             <Modal
                 title="รายรับ"
                 show={incomeModal}
@@ -2804,8 +2792,7 @@ const Householdtracking = () => {
                     </div>
                 </div>
             </Modal>
-
-        </div>
+        </div >
     );
 };
 export default Householdtracking;
