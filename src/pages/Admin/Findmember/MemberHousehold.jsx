@@ -10,6 +10,13 @@ const MemberHousehold = () => {
 
   return (
     <div>
+      {activeComponent === "" ? (
+          <h2 className="flex justify-center text-2xl font-semibol my-4">
+            กรุณาเลือกหมวดหมู่การค้นหา
+          </h2>
+        ) : (
+          ""
+        )}
       {/* ปุ่มสำหรับเลือกcomponents */}
       <div className="flex  space-x-2 mt-5 mb-5">
         {/* ปุ่มสำหรับแสดง ByAgeRange */}
@@ -63,13 +70,7 @@ const MemberHousehold = () => {
 
       {/* แสดงผลเนื้อหาตามค่าของ activeComponent */}
       <div>
-        {activeComponent === "" ? (
-          <h2 className="flex justify-center text-2xl font-semibol">
-            กรุณาเลือกหมวดหมู่การค้นหา
-          </h2>
-        ) : (
-          ""
-        )}
+        
         {activeComponent === "HouseCode" && <HouseCode />}{" "}
         {activeComponent === "ByAgeRange" && <ByAgeRange />}{" "}
         {activeComponent === "RealName" && (
