@@ -181,9 +181,10 @@ const Householdtracking = () => {
             },
         ],
     };
+    
     const options3 = {
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false, // เพื่อให้กราฟสามารถปรับตามขนาดคอนเทนเนอร์ได้
         plugins: {
             tooltip: {
                 callbacks: {
@@ -223,7 +224,7 @@ const Householdtracking = () => {
             categoryPercentage: 0.6,
         },
     };
-
+    const chartHeight = data3.labels.length > 5 ? data3.labels.length * 70 : 400; // ปรับความสูงอัตโนมัติตามจำนวนข้อมูล
 
     // ข้อมูลจาก JSON
     const incomes = financialData.Form.Financialcapital.NonAGIincomes;
@@ -377,7 +378,7 @@ const Householdtracking = () => {
                         การออมในครัวเรือน
                     </h2>
                     <div className="flex justify-center mb-6">
-                        <Bar data={data2} options={options2} />
+                        <Bar data={data2} options={options2}/>
                     </div>
                     <div className="mt-4 text-center text-gray-700">
                         <p className="text-xl font-medium">
@@ -387,7 +388,9 @@ const Householdtracking = () => {
                 </div>
 
                 {/* รายชื่อสมาชิก */}
-                <div className="bg-white p-6 shadow-lg rounded-lg w-full md:w-1/3">
+                <div className="bg-white p-6 shadow-lg rounded-lg w-full md:w-1/3"
+                style={{ maxHeight: '600px', overflowY: 'auto' }}
+                >
                     <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800 border-b pb-2">
                         รายชื่อสมาชิก
                     </h2>
@@ -425,9 +428,11 @@ const Householdtracking = () => {
                     หนี้สินในครัวเรือน
                 </h2>
                 <div className="flex justify-center mb-6">
-                    <div className="bg-white p-4 shadow rounded w-3/4 mx-auto">
+                <div className="bg-white p-4 shadow rounded w-3/4 mx-auto" style={{ height: '500px', maxHeight: '500px', overflowY: 'auto' }}>
                         {/* ใช้ w-3/4 ลดความกว้าง */}
-                        <Bar data={data3} options={options3} />
+                        <div style={{ height: `${chartHeight}px` }}>
+                        <Bar data={data3} options={options3}/>
+                        </div>
                     </div>
                 </div>
                 <div className="text-center mt-4 text-gray-700">
