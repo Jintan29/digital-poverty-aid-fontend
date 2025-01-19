@@ -3,6 +3,7 @@ import axios from "axios";
 import { Icon } from "@iconify/react";
 import { Pie, Line, Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
+import { Dropdown } from "flowbite-react";
 import {
     Chart as ChartJS,
     ArcElement,
@@ -29,10 +30,20 @@ ChartJS.register(
     annotationPlugin
 );
 
+//components
+import Modal from "../../../components/Modal";
+
 const Householdtracking = () => {
     const [financialData, setFinancialData] = useState(null);
     const [loading, setLoading] = useState(true); // เพิ่ม loading state
     const [error, setError] = useState(null);
+
+    // Modal
+    const [editModal, setEditModal] = useState(false);
+    const [incomeModal, setIncomeModal] = useState(false)
+    const [welfareModal, setWelfareModal] = useState(false)
+    const [careerModal, setCareerModal] = useState(false)
+
     const { id } = useParams()
 
     const fetchFinancialData = async () => {
@@ -219,8 +230,6 @@ const Householdtracking = () => {
                     text: "ปี (Year)", // Year label for y-axis
                 },
             },
-            barPercentage: 0.8, // Adjust bar width (0.8 = 80% of available space)
-            categoryPercentage: 0.6,
         },
     };
 
@@ -246,31 +255,92 @@ const Householdtracking = () => {
     const breakEven = totalIncome >= (totalExpenses + totalCost + totalDebt);
 
 
+
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
             {/* <h1 className="text-2xl font-bold mb-6">ครัวเรือน</h1> */}
-            <div className="flex items-center space-x-2 mb-6">
-                <h1 className="text-2xl font-bold">ครัวเรือน</h1>
-                <p
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg shadow-md transition duration-300 transform hover:scale-105
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-2">
+                    <h1 className="text-2xl font-bold">ครัวเรือน</h1>
+                    <p
+                        className={`flex items-center space-x-2 px-4 py-2 rounded-lg shadow-md transition duration-300 transform hover:scale-105
         ${breakEven
-                            ? "bg-green-100 text-green-600 hover:bg-green-200"
-                            : "bg-red-100 text-red-600 hover:bg-red-200"
-                        }`}
-                >
-                    {breakEven ? (
-                        <>
-                            <Icon icon="mdi:check-circle" className="w-5 h-5" />
-                            <span className="font-medium">หลุดพ้นจากความยากจน</span>
-                        </>
-                    ) : (
-                        <>
-                            <Icon icon="mdi:close-circle" className="w-5 h-5" />
-                            <span className="font-medium">ยังอยู่ในความยากจน</span>
-                        </>
-                    )}
-                </p>
+                                ? "bg-green-100 text-green-600 hover:bg-green-200"
+                                : "bg-red-100 text-red-600 hover:bg-red-200"
+                            }`}
+                    >
+                        {breakEven ? (
+                            <>
+                                <Icon icon="mdi:check-circle" className="w-5 h-5" />
+                                <span className="font-medium">หลุดพ้นจากความยากจน</span>
+                            </>
+                        ) : (
+                            <>
+                                <Icon icon="mdi:close-circle" className="w-5 h-5" />
+                                <span className="font-medium">ยังอยู่ในความยากจน</span>
+                            </>
+                        )}
+                    </p>
+                </div>
+                <div className="ml-auto">
+                    <Dropdown
+                        label="เพิ่มข้อมูล"
+                        dismissOnClick={false}
+                        renderTrigger={() => (
+                            <button
+                                type="button"
+                                className="flex items-center focus:outline-none text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                            >
+                                <Icon
+                                    width={20}
+                                    height={20}
+                                    className="mr-2"
+                                    icon="material-symbols:assignment-add-rounded"
+                                />
+                                เพิ่มข้อมูล
+                            </button>
+                        )}
+                    >
+                        <Dropdown.Item onClick={() => setEditModal(true)}>
+                            <Icon
+                                width={20}
+                                height={20}
+                                className="mr-2"
+                                icon="material-symbols:person-edit-rounded"
+                            />
+                            แก้ไขข้อมูลส่วนบุคคล
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setIncomeModal(true)}>
+                            <Icon
+                                width={20}
+                                height={20}
+                                className="mr-2"
+                                icon="material-symbols:monetization-on-rounded"
+                            />
+                            เพิ่มข้อมูลรายได้
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setWelfareModal(true)}>
+                            <Icon
+                                width={20}
+                                height={20}
+                                className="mr-2"
+                                icon="material-symbols:family-restroom-rounded"
+                            />
+                            เพิ่มสวัสดิการ
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCareerModal(true)}>
+                            <Icon
+                                width={20}
+                                height={20}
+                                className="mr-2"
+                                icon="material-symbols:psychiatry-rounded"
+                            />
+                            เพิ่มทักษะอาชีพ
+                        </Dropdown.Item>
+                    </Dropdown>
+                </div>
             </div>
+
 
             {/* Grid ด้านบน */}
             <div className="grid grid-cols-3 gap-4 mb-6">
@@ -324,8 +394,8 @@ const Householdtracking = () => {
                         <p><strong className="text-gray-900">ตำบล:</strong> {financialData.subdistrict || "ไม่ระบุ"}</p>
                         <p><strong className="text-gray-900">จังหวัด:</strong> {financialData.province || "ไม่ระบุ"}</p>
                         <p><strong className="text-gray-900">รหัสไปรษณีย์:</strong> {financialData.postcode || "ไม่ระบุ"}</p>
-                        <p><strong className="text-gray-900">มีบ้านที่ดินเป็นของตัวเอง:</strong> {financialData.Form.PhysicalCapital.is_has_house}</p>
-                        <p><strong className="text-gray-900">สภาพบ้าน:</strong> {financialData.Form.PhysicalCapital.house_status}</p>
+                        <p><strong className="text-gray-900">หมายเลขบัตรประชาชน:</strong> {financialData.host_national_id || "ไม่ระบุ"}</p>
+                        <p><strong className="text-gray-900">สมุดเกษตร:</strong> {financialData.green_book_id || "ไม่ระบุ"}</p>
                     </div>
                 </div>
 
@@ -404,7 +474,7 @@ const Householdtracking = () => {
                                         {member.title}{member.fname} {member.lname}
                                     </span>
                                     <Link
-                                    to={`/admin/track-member/${member.id}`}
+                                        to={`/admin/track-member/${member.id}`}
                                         className="px-3 py-1 text-xs font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 whitespace-nowrap flex-shrink-0"
                                     >
                                         ดูรายละเอียด
@@ -436,6 +506,100 @@ const Householdtracking = () => {
                     </p>
                 </div>
             </div>
+
+            <Modal
+                title="เพิ่ม/แก้ไข ข้อมูลครัวเรือน"
+                show={editModal}
+                icon="material-symbols:person-edit-rounded"
+                onClose={(e) => setEditModal(false)}
+                size="3xl"
+            >
+                <div className="grid gap-2 grid-cols-2">
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            ชื่อจริง
+                        </label>
+                        <div className="flex items-center gap-2 mb-5">
+                            <select
+                                id="title"
+                                name="title"
+                                className="border border-gray-300 bg-white text-gray-900 text-sm 
+                   rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2
+                   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+                   dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            >
+                                <option>นาย</option>
+                                <option>นาง</option>
+                                <option>นางสาว</option>
+                                <option>เด็กชาย</option>
+                                <option>เด็กหญิง</option>
+                            </select>
+
+                            <input
+                                id="fname"
+                                name="fname"
+                                type="text"
+                                required
+                                placeholder=""
+                                className="border border-gray-300 bg-gray-50 text-gray-900 text-sm 
+                   rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                   w-full dark:bg-gray-700 dark:border-gray-600 
+                   dark:placeholder-gray-400 dark:text-white 
+                   dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            นามสกุล
+                        </label>
+                        <input
+                            id="fname"
+                            name="fname"
+                            type="text"
+                            required
+                            placeholder=""
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm 
+                   rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 
+                   w-full dark:bg-gray-700 dark:border-gray-600 
+                   dark:placeholder-gray-400 dark:text-white 
+                   dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="national_id"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                            หมายเลขบัตรประจำตัวประชาชน
+                        </label>
+                        <input
+                            type="text"
+                            id="national_id"
+                            class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="national_id"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                            สมุดเกษตร
+                        </label>
+                        <input
+                            type="text"
+                            id="national_id"
+                            class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                            required
+                        />
+                    </div>
+                </div>
+            </Modal>
+
+            
         </div>
     );
 };
