@@ -15,7 +15,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   }
 
   const sidebarItem = [
-    { name: "Dashbord", link: "#", logo: "mdi:chart-pie" },
+    { name: "Dashbord", link: "/admin", logo: "mdi:chart-pie" },
     {
       name: "ค้นหาสมาชิกครัวเรือน",
       link: "/admin/find-members",
@@ -38,11 +38,6 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {name:'ข้อมูลผู้ใช้งาน',link:'/admin/manage-user'},
         {name:'อนุมัติผู้ใช้ใหม่',link:'/admin/approve-user'}
       ]
-    },
-    {
-      name: "ติดตามครัวเรือน",
-      link: "/admin/household",
-      logo: "material-symbols:search",
     },
     {
       name: "กลับหน้าหลัก",
