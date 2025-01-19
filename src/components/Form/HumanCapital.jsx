@@ -30,6 +30,12 @@ export const HumanCapital = ({
           frequency: "ครั้งเดียว",
         },
       ],
+      Career: [],
+      MemberFinancial: {
+        agv_income: 0,
+        avg_expenses: 0,
+        inflation: 0,
+      },
       can_speak_TH: "พูดไทยได้",
       can_read_TH: "อ่านไทยได้",
       can_write_TH: "เขียนไทยได้",
@@ -38,10 +44,7 @@ export const HumanCapital = ({
       current_edu_level: "ต่ำกว่าประถม",
       edu_description: "",
       work_status: "ไม่ทำงาน",
-      Career: [],
       work_can_made_income: [],
-      agv_income: 0,
-      inflation: 0,
     },
   ]);
 
@@ -68,6 +71,7 @@ export const HumanCapital = ({
         sex: "ชาย",
         birthdate: "",
         national_id: "",
+        phone: "",
         status_in_house: "มีชื่อและอาศัยอยู่",
         health: "ปกติ",
         SocialWelfare: [
@@ -77,6 +81,12 @@ export const HumanCapital = ({
             frequency: "ครั้งเดียว",
           },
         ],
+        Career: [],
+        MemberFinancial: {
+          agv_income: 0,
+          avg_expenses: 0,
+          inflation: 0,
+        },
         can_speak_TH: "พูดไทยได้",
         can_read_TH: "อ่านไทยได้",
         can_write_TH: "เขียนไทยได้",
@@ -85,10 +95,7 @@ export const HumanCapital = ({
         current_edu_level: "ต่ำกว่าประถม",
         edu_description: "",
         work_status: "ไม่ทำงาน",
-        Career: [],
         work_can_made_income: [],
-        agv_income: 0,
-        inflation: 0,
       },
     ]);
   };
@@ -124,6 +131,13 @@ export const HumanCapital = ({
     setMembers(updatedMembers);
   };
 
+  const handleMemberfinancialChange = (index, field, value) => {
+    const updatedMember = [...members];
+
+    updatedMember[index].MemberFinancial[field] = value;
+    setMembers(updatedMember);
+  };
+
   //เก็บอาชีพ
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedCareerMadeIncome, setSelectedCareerMadeIncome] = useState([]);
@@ -149,7 +163,6 @@ export const HumanCapital = ({
 
     setMembers(updateData);
   };
-
 
   const handleOtherChange = (index, field, value) => {
     setMembers((prevMembers) => {
@@ -187,12 +200,12 @@ export const HumanCapital = ({
       const updatedMembers = [...prevMembers];
       const member = { ...updatedMembers[index] };
       const fieldArray = [...member[field]];
-  
+
       // หา index ที่ career_type เริ่มต้นด้วย prefix (เช่น "อื่นๆ ")
       const otherIndex = fieldArray.findIndex((obj) =>
         obj.career_type.startsWith(prefix)
       );
-  
+
       if (newValue.trim() === "") {
         // ถ้าช่อง input เป็นค่าว่าง ลบ item "อื่นๆ "
         if (otherIndex !== -1) {
@@ -208,7 +221,7 @@ export const HumanCapital = ({
           fieldArray.push({ career_type: prefix + newValue });
         }
       }
-  
+
       member[field] = fieldArray;
       updatedMembers[index] = member;
       return updatedMembers;
@@ -258,9 +271,14 @@ export const HumanCapital = ({
       const member = members[index];
 
       // ตรวจสอบหมายเลขบัตรประชาชน
-      if (!member.national_id || (member.national_id !== '-'  && !/^\d{13}$/.test(member.national_id))) {
+      if (
+        !member.national_id ||
+        (member.national_id !== "-" && !/^\d{13}$/.test(member.national_id))
+      ) {
         errors.push(
-          `กรุณากรอกเลขบัตรประชาชนของสมาชิคคนที่ ${index + 1} ให้ครบ 13 หลัก หรือกรอก '-' หากไม่มี`
+          `กรุณากรอกเลขบัตรประชาชนของสมาชิคคนที่ ${
+            index + 1
+          } ให้ครบ 13 หลัก หรือกรอก '-' หากไม่มี`
         );
       }
 
@@ -899,7 +917,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleCarrerChange(index, "พืชเกษตร", e.target.checked)
                   }
-                  checked={member.Career.some(e => e.career_type === 'พืชเกษตร')}
+                  checked={member.Career.some(
+                    (e) => e.career_type === "พืชเกษตร"
+                  )}
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -916,7 +936,7 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleCarrerChange(index, "ประมง", e.target.checked)
                   }
-                  checked={member.Career.some(e => e.career_type === 'ประมง')}
+                  checked={member.Career.some((e) => e.career_type === "ประมง")}
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -933,7 +953,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleCarrerChange(index, "ปศุสัตว์", e.target.checked)
                   }
-                  checked={member.Career.some(e => e.career_type === 'ปศุสัตว์')}
+                  checked={member.Career.some(
+                    (e) => e.career_type === "ปศุสัตว์"
+                  )}
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -948,9 +970,15 @@ export const HumanCapital = ({
                   id={`career-4-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(index, "รับจ้างภาคการเกษตร", e.target.checked)
+                    handleCarrerChange(
+                      index,
+                      "รับจ้างภาคการเกษตร",
+                      e.target.checked
+                    )
                   }
-                  checked={member.Career.some(e => e.career_type === 'รับจ้างภาคการเกษตร')}
+                  checked={member.Career.some(
+                    (e) => e.career_type === "รับจ้างภาคการเกษตร"
+                  )}
                   value="รับจ้างภาคการเกษตร"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -967,9 +995,16 @@ export const HumanCapital = ({
                   id={`career-5-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(index, "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)", e.target.checked)
+                    handleCarrerChange(
+                      index,
+                      "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)",
+                      e.target.checked
+                    )
                   }
-                  checked={member.Career.some(e => e.career_type === 'รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)')}
+                  checked={member.Career.some(
+                    (e) =>
+                      e.career_type === "รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
+                  )}
                   value="รับจ้างทั่วไปนอกภาคการเกษตร(รายวัน)"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -985,10 +1020,16 @@ export const HumanCapital = ({
                   id={`career-6-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(index, "ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน", e.target.checked)
+                    handleCarrerChange(
+                      index,
+                      "ลูกจ้างทั่วไป บ.เอกชน",
+                      e.target.checked
+                    )
                   }
-                  checked={member.Career.some(e => e.career_type === 'ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน')}
-                  value="ลูกจ้างทั่วไป บ.เอกชน โรงงาน โรงแรม ห้างร้าน"
+                  checked={member.Career.some(
+                    (e) => e.career_type === "ลูกจ้างทั่วไป บ.เอกชน"
+                  )}
+                  value="ลูกจ้างทั่วไป บ.เอกชน"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -1004,9 +1045,15 @@ export const HumanCapital = ({
                   id={`career-6-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(index, "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ", e.target.checked)
+                    handleCarrerChange(
+                      index,
+                      "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
+                      e.target.checked
+                    )
                   }
-                  checked={member.Career.some(e => e.career_type === 'ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
+                  checked={member.Career.some(
+                    (e) => e.career_type === "ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
+                  )}
                   value="ลูกจ้างหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -1023,9 +1070,17 @@ export const HumanCapital = ({
                   id={`career-7-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(index, "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ", e.target.checked)
+                    handleCarrerChange(
+                      index,
+                      "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ",
+                      e.target.checked
+                    )
                   }
-                  checked={member.Career.some(e => e.career_type === 'รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ')}
+                  checked={member.Career.some(
+                    (e) =>
+                      e.career_type ===
+                      "รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
+                  )}
                   value="รับราชการ/พนักงาหน่วยงานภาครัฐ/รัฐวิสาหกิจ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -1042,9 +1097,15 @@ export const HumanCapital = ({
                   id={`career-8-${index}`}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCarrerChange(index, "ธุรกิจส่วนตัว/งานบริการ", e.target.checked)
+                    handleCarrerChange(
+                      index,
+                      "ธุรกิจส่วนตัว/งานบริการ",
+                      e.target.checked
+                    )
                   }
-                  checked={member.Career.some(e => e.career_type === 'ธุรกิจส่วนตัว/งานบริการ')}
+                  checked={member.Career.some(
+                    (e) => e.career_type === "ธุรกิจส่วนตัว/งานบริการ"
+                  )}
                   value="ธุรกิจส่วนตัว/งานบริการ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -1062,8 +1123,12 @@ export const HumanCapital = ({
                 <input
                   id={`career-9-${index}`}
                   type="checkbox"
-                  onChange={(e) => handleCarrerChange(index, prefix, e.target.checked)}
-                  checked={member.Career.some(e => e.career_type.startsWith(prefix))}
+                  onChange={(e) =>
+                    handleCarrerChange(index, prefix, e.target.checked)
+                  }
+                  checked={member.Career.some((e) =>
+                    e.career_type.startsWith(prefix)
+                  )}
                   value="อื่นๆ"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -1079,22 +1144,17 @@ export const HumanCapital = ({
                   <input
                     type="text"
                     value={
-                      member.Career
-                        .find((item) => item.career_type.startsWith(prefix))
-                        ?.career_type.substring(prefix.length) || ""
+                      member.Career.find((item) =>
+                        item.career_type.startsWith(prefix)
+                      )?.career_type.substring(prefix.length) || ""
                     }
                     onChange={(e) =>
-                      handleOtherChange2(
-                        index,
-                        "Career",
-                        e.target.value
-                      )
+                      handleOtherChange2(index, "Career", e.target.value)
                     }
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/2 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="ระบุอาชีพ"
                   />
                 )}
-                
               </div>
             </div>
             <div className="Container ml-5 ">
@@ -1399,14 +1459,34 @@ export const HumanCapital = ({
                   for="agv_income"
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  รายได้เฉลี่ย (บาท/เดือน) 
+                  รายได้เฉลี่ย (บาท/เดือน)
                 </label>
                 <input
                   type="number"
                   id="agv_income"
-                  value={member.agv_income}
+                  value={member.MemberFinancial.agv_income}
                   onChange={(e) =>
-                    handleInputChange(index, "agv_income", e.target.value)
+                    handleMemberfinancialChange(index, "agv_income", e.target.value)
+                  }
+                  class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                />
+              </div>
+
+              <div className="">
+                <label
+                  for="agv_income"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  รายจ่ายเฉลี่ย (บาท/เดือน)
+                </label>
+                <input
+                  type="number"
+                  id="avg_expenses"
+                  value={member.MemberFinancial.avg_expenses}
+                  onChange={(e) =>
+                    handleMemberfinancialChange(index, "avg_expenses", e.target.value)
                   }
                   class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder=""
@@ -1423,9 +1503,9 @@ export const HumanCapital = ({
                 </label>
                 <input
                   type="number"
-                  value={member.inflation}
+                  value={member.MemberFinancial.inflation}
                   onChange={(e) =>
-                    handleInputChange(index, "inflation", e.target.value)
+                    handleMemberfinancialChange(index, "inflation", e.target.value)
                   }
                   class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder=""
