@@ -26,6 +26,13 @@ const IncomeInflationChart = ({ charData }) => {
                 </p>
               );
             }
+            if (data.dataKey === "expenses") {
+              return (
+                <p key={index} style={{ color: data.color }} className="mb-1">
+                  {data.name}: {data.value.toLocaleString()} บาทต่อเดือน
+                </p>
+              );
+            }
             if (data.dataKey === "inflation") {
               return (
                 <p key={index} style={{ color: data.color }} className="mb-1">
@@ -73,11 +80,18 @@ const IncomeInflationChart = ({ charData }) => {
           fill="#413ea0"
           name={"รายได้เฉลี่ย"}
         />
+        <Bar
+          yAxisId="left"
+          dataKey="expenses"
+          barSize={20}
+          fill="#E80700"
+          name={"รายจ่ายเฉลี่ย"}
+        />
         <Line
           yAxisId="right"
           type="monotone"
           dataKey="inflation"
-          stroke="red"
+          stroke="#F9B700"
           name={"อัตราเงินเฟ้อ"}
         />
       </ComposedChart>
