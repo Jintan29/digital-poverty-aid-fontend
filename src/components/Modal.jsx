@@ -25,7 +25,7 @@ const Modal = ({ title, show, onClose, children, size = "md", icon }) => {
         
       </FlowbiteModal.Header>
       <FlowbiteModal.Body>{children}</FlowbiteModal.Body>
-      <FlowbiteModal.Footer className="flex justify-end">
+      {/* <FlowbiteModal.Footer className="flex justify-end">
         <button
           type="button"
           onClick={onClose}
@@ -33,7 +33,7 @@ const Modal = ({ title, show, onClose, children, size = "md", icon }) => {
         >
           บันทึก
         </button>
-      </FlowbiteModal.Footer>
+      </FlowbiteModal.Footer> */}
     </FlowbiteModal>
   );
 };
