@@ -1650,7 +1650,7 @@ const Householdtracking = () => {
                                 checked={formData.Householdexpenses.some((item) =>
                                     item.expenses_type.startsWith(prefixExperss11)
                                 )}
-                                onChange={handleOtherCheckboxClear}
+                                onChange={(e) => handleOtherCheckboxClear(e.target.checked)}
                             />
                             <label
                                 htmlFor="expenses_type_10"
@@ -1699,7 +1699,7 @@ const Householdtracking = () => {
                 show={savingModal}
                 icon="material-symbols:person-edit-rounded"
                 onClose={(e) => setSavingModal(false)}
-                size="3xl"
+                size="7xl"
             >
                 {/* Section 4: Does the household have savings? */}
                 <div className="mb-6">

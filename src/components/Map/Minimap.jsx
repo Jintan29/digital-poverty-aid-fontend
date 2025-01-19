@@ -20,17 +20,17 @@ function Minimap() {
     //           axios.get("http://localhost:8080/api/house-hold/count"),
     //           axios.get("http://localhost:8080/api/member-household/count")
     //         ]);
-            
+
     //         // ตั้งค่าจำนวนสมาชิกในครัวเรือน
     //         setHouseholdCount(householdResponse.data.count);
     //         // ตั้งค่าจำนวนสมาชิกในบ้าน
     //         setMemberHouseholdCount(memberHouseholdResponse.data.data);
-    
+
     //       } catch (error) {
     //         console.error("Error fetching household count:", error);
     //       }
     //     };
-    
+
     //     fetchCounts();
     //   }, []); // ใช้ [] เพื่อให้โหลดแค่ครั้งเดียว
 
@@ -49,15 +49,15 @@ function Minimap() {
 
 
     useEffect(() => {
-      const fetchMemberHouseholdCount = async () => {
-        try {
-          const response = await axios.get("http://localhost:8080/api/member-household/count");
-          setMemberHouseholdCount(response.data.data); // ใช้ response.data.data เพื่อเข้าถึงค่าที่ส่งกลับจาก backend
-        } catch (error) {
-          console.error("Error fetching household count:", error);
-        }
-      };
-      fetchMemberHouseholdCount();
+        const fetchMemberHouseholdCount = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/api/member-household/count");
+                setMemberHouseholdCount(response.data.data); // ใช้ response.data.data เพื่อเข้าถึงค่าที่ส่งกลับจาก backend
+            } catch (error) {
+                console.error("Error fetching household count:", error);
+            }
+        };
+        fetchMemberHouseholdCount();
     }, []); // ใช้ [] เพื่อให้โหลดแค่ครั้งเดียว
 
 
@@ -92,28 +92,30 @@ function Minimap() {
             <div className="w-1/2 p-6 h-screen flex flex-col justify-start pt-20">
                 {/* ส่วนแรก */}
                 <div className="p-4">
-                    <h3 className="text-center text-[24px] font-bold text-shadow-custom">
+                    <h3 className="text-center text-[32px] font-bold text-shadow-custom">
                         จำนวนครัวเรือนฯ
                     </h3>
-                    <p className="text-center text-[18px]">
+                    <p className="text-center text-[20px]">
                         จำนวนครัวเรือนฯ ที่ได้จากการสำรวจ
                     </p>
-                    <p className="text-center text-[22px] font-bold text-red-500">
+                    <p className="text-center text-[28px] font-bold text-red-500">
                         {householdCount.toLocaleString()} <span className="text-black font-normal text-shadow-custom">ครัวเรือน</span>
                     </p>
                 </div>
                 {/* ส่วนสอง */}
                 <div className="p-4 mt-6">
-                    <h3 className="text-center text-[24px] font-bold text-shadow-custom">
+                    <h3 className="text-center text-[32px] font-bold text-shadow-custom">
                         จำนวนสมาชิกฯ
                     </h3>
-                    <p className="text-center text-[18px]">
+                    <p className="text-center text-[20px]">
                         จำนวนสมาชิกที่ได้จากการสำรวจ
                     </p>
-                    <p className="text-center text-[22px] font-bold text-red-500">
+                    <p className="text-center text-[28px] font-bold text-red-500">
                         {memberHouseholdCount.toLocaleString()} <span className="text-black font-normal text-shadow-custom">คน</span>
                     </p>
                 </div>
+
+
             </div>
 
             {/* ขวา */}
