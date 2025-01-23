@@ -1030,9 +1030,10 @@ const Householdtracking = () => {
                 size="3xl"
             >
                 <div className="grid gap-2 grid-cols-2">
+                    {/* ชื่อจริง */}
                     <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            ชื่อจริง
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            ชื่อจริง (เจ้าของบ้าน)
                         </label>
                         <div className="flex items-center gap-2 mb-5">
                             <select
@@ -1064,13 +1065,14 @@ const Householdtracking = () => {
                             />
                         </div>
                     </div>
+                    {/* นามสกุล */}
                     <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            นามสกุล
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            นามสกุล (เจ้าของบ้าน)
                         </label>
                         <input
-                            id="fname"
-                            name="fname"
+                            id="lname"
+                            name="lname"
                             type="text"
                             required
                             placeholder=""
@@ -1081,34 +1083,136 @@ const Householdtracking = () => {
                    dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         />
                     </div>
+                    {/* หมายเลขบัตรประจำตัวประชาชน */}
                     <div>
                         <label
-                            for="national_id"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            htmlFor="national_id"
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
-                            หมายเลขบัตรประจำตัวประชาชน
+                            หมายเลขบัตรประจำตัวประชาชน (เจ้าของบ้าน)
                         </label>
                         <input
                             type="text"
                             id="national_id"
-                            class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            name="national_id"
+                            className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder=""
                             required
                         />
                     </div>
+                    {/* สมุดเกษตร */}
                     <div>
                         <label
-                            for="national_id"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            htmlFor="agriculture_book"
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                             สมุดเกษตร
                         </label>
                         <input
                             type="text"
-                            id="national_id"
-                            class=" bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            id="agriculture_book"
+                            name="agriculture_book"
+                            className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder=""
                             required
+                        />
+                    </div>
+
+                    {/* ข้อมูลที่อยู่ */}
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            บ้านเลขที่
+                        </label>
+                        <input
+                            type="text"
+                            id="house_number"
+                            name="house_number"
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            ชื่อหมู่บ้าน
+                        </label>
+                        <input
+                            type="text"
+                            id="village"
+                            name="village"
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            ถนน
+                        </label>
+                        <input
+                            type="text"
+                            id="road"
+                            name="road"
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            ซอย
+                        </label>
+                        <input
+                            type="text"
+                            id="alley"
+                            name="alley"
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            อำเภอ
+                        </label>
+                        <input
+                            type="text"
+                            id="district"
+                            name="district"
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            ตำบล
+                        </label>
+                        <input
+                            type="text"
+                            id="subdistrict"
+                            name="subdistrict"
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            จังหวัด
+                        </label>
+                        <input
+                            type="text"
+                            id="province"
+                            name="province"
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            รหัสไปรษณีย์
+                        </label>
+                        <input
+                            type="text"
+                            id="postcode"
+                            name="postcode"
+                            className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder=""
                         />
                     </div>
                 </div>
@@ -2084,7 +2188,7 @@ const Householdtracking = () => {
                 show={debtModal}
                 icon="material-symbols:person-edit-rounded"
                 onClose={(e) => setDebtModal(false)}
-                size="3xl"
+                size="7xl"
             >
                 {/* Section 5 */}
                 <div className="mb-6">
