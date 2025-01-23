@@ -87,7 +87,10 @@ const EditModal = ({ show, onClose, member,loadData }) => {
       })
 
       if(res.isConfirmed){
-        const res = await axios.put(config.api_path + `/member-household/update/${member.id}`,formData,config.headers())
+        const res = await axios.put(config.api_path + `/member-household/update/${member.id}`,
+          formData,
+          config.headers()
+        )
       
         if(res.data.message === 'success'){
           await Swal.fire({
