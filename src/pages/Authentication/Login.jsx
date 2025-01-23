@@ -27,7 +27,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(config.api_path + "/user/login", formData);
+      const res = await axios.post(config.api_path + "/auth/login", formData);
       if (res.data.data.user.role == "" || res.data.data.user.role == null) {
         Swal.fire({
           title: "รอ การอนุมัติจากผู้ดูแลระบบ",

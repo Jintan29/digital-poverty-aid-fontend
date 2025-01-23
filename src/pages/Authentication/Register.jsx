@@ -83,7 +83,7 @@ const Register = () => {
             const { confimePassword, ...payload } = formData; // แยกเอา confirm pass ออก
 
             const result = await axios.post(
-              config.api_path + "/user/register",
+              config.api_path + "/auth/register",
               payload
             );
             if (result.data.message === "success") {
