@@ -45,7 +45,7 @@ function App() {
   const handleCurrentUser = async (idToken) => {
     try {
       const response = await axios.get(
-        config.api_path + "/user/currrentUser",
+        config.api_path + "/auth/current-user",
         config.headers()
       );
       console.log(response);
