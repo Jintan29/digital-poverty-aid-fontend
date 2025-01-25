@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import config from "../../../config";
 import { Icon } from "@iconify/react";
-import { useSelector } from "react-redux";
 
 const ManageUser = () => {
   
