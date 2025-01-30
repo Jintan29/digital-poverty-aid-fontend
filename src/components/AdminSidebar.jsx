@@ -13,9 +13,10 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       [index]: !prev[index],
     }))
   }
-
+  
   const sidebarItem = [
     { name: "Dashbord", link: "/admin", logo: "mdi:chart-pie" },
+    { name: "ภาพรวมศักยภาพทุน 5 มิติ",link: "/admin/capital", logo: "icon-park-solid:hold-interface" ,},
     {
       name: "ค้นหาสมาชิกครัวเรือน",
       link: "/admin/find-members",

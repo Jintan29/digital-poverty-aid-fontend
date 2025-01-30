@@ -28,6 +28,9 @@ import TrackHousehold from "./pages/Admin/Tracking/TrackHousehold";
 import TrackingMemberId from "./pages/Admin/Tracking/TrackingMemberId";
 import MixedChart from "./pages/MixedChart";
 import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
+import Capital from "./pages/Overviewcapital/Capital";
+
+
 
 function App() {
   const idToken = localStorage.getItem("token");
@@ -185,6 +188,14 @@ function App() {
               element={
                 <AdminRoute>
                   <Householdtracking />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="capital"
+              element={
+                <AdminRoute>
+                  <Capital />
                 </AdminRoute>
               }
             />
