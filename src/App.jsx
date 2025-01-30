@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 import { login, logout } from "./store/userSlice";
 import { Map } from "./pages/Map"; 
 import { PageNotFound } from "./pages/PageNotFound";
-import { TestAPI } from "./pages/TestAPI";
 import { AdminRoute } from "./route/AdminRoute";
 import HomepageAdmin from "./pages/Admin/HomepageAdmin";
 import UserLayout from "./layouts/UserLayout";
@@ -28,6 +27,15 @@ import TrackHousehold from "./pages/Admin/Tracking/TrackHousehold";
 import TrackingMemberId from "./pages/Admin/Tracking/TrackingMemberId";
 import MixedChart from "./pages/MixedChart";
 import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
+import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
+//Testzone
+
+
+import FormAddress from "./pages/FormAddress";
+
+
+//ทดสอบ map
+
 
 function App() {
   const idToken = localStorage.getItem("token");
@@ -35,8 +43,6 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-
-
     if (idToken) {
       handleCurrentUser(idToken);
     }
@@ -110,7 +116,7 @@ function App() {
             <Route path="reset-password/:id/:token" element={<ResetPassword />} />
 
             <Route path="map" element={<Map />} />
-            <Route path="test" element={<TestAPI />} />
+            <Route path="testAddsress" element={<FormAddress />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
 
@@ -188,6 +194,16 @@ function App() {
                 </AdminRoute>
               }
             />
+
+            <Route
+              path="gis-household"
+              element={
+                <AdminRoute>
+                  <GisHousehold />
+                </AdminRoute>
+              }
+            />
+            
             <Route path="*" element={<PageNotFound />} />
             {/* เพิ่มหน้าอื่น */}
           </Route>
