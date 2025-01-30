@@ -17,12 +17,12 @@ export const HumanCapital = ({
       lname: "",
       age_yaer: 0,
       age_month: 0,
-      sex: "ชาย",
+      sex: "",
       birthdate: "",
       national_id: "",
       phone: "",
-      status_in_house: "มีชื่อและอาศัยอยู่",
-      health: "ปกติ",
+      status_in_house: "",
+      health: "",
       SocialWelfare: [
         {
           welfare: "ไม่ได้รับ",
@@ -32,18 +32,18 @@ export const HumanCapital = ({
       ],
       Career: [],
       MemberFinancial: {
-        agv_income: 0,
-        avg_expenses: 0,
-        inflation: 0,
+        agv_income: null,
+        avg_expenses: null,
+        inflation: null,
       },
-      can_speak_TH: "พูดไทยได้",
-      can_read_TH: "อ่านไทยได้",
-      can_write_TH: "เขียนไทยได้",
-      max_education: "ไม่ได้เรียน",
-      edu_status: "ไปเรียนสม่ำเสมอ",
-      current_edu_level: "ต่ำกว่าประถม",
+      can_speak_TH: "",
+      can_read_TH: "",
+      can_write_TH: "",
+      max_education: "",
+      edu_status: "",
+      current_edu_level: "",
       edu_description: "",
-      work_status: "ไม่ทำงาน",
+      work_status: "",
       work_can_made_income: [],
     },
   ]);
@@ -72,8 +72,8 @@ export const HumanCapital = ({
         birthdate: "",
         national_id: "",
         phone: "",
-        status_in_house: "มีชื่อและอาศัยอยู่",
-        health: "ปกติ",
+        status_in_house: "",
+        health: "",
         SocialWelfare: [
           {
             welfare: "ไม่ได้รับ",
@@ -83,18 +83,18 @@ export const HumanCapital = ({
         ],
         Career: [],
         MemberFinancial: {
-          agv_income: 0,
-          avg_expenses: 0,
-          inflation: 0,
+          agv_income: null,
+          avg_expenses: null,
+          inflation: null,
         },
-        can_speak_TH: "พูดไทยได้",
-        can_read_TH: "อ่านไทยได้",
-        can_write_TH: "เขียนไทยได้",
-        max_education: "ไม่ได้เรียน",
-        edu_status: "ไปเรียนสม่ำเสมอ",
-        current_edu_level: "ต่ำกว่าประถม",
+        can_speak_TH: "",
+        can_read_TH: "",
+        can_write_TH: "",
+        max_education: "",
+        edu_status: "",
+        current_edu_level: "",
         edu_description: "",
-        work_status: "ไม่ทำงาน",
+        work_status: "",
         work_can_made_income: [],
       },
     ]);
@@ -465,13 +465,15 @@ export const HumanCapital = ({
                   id="sex"
                   name="sex"
                   value={member.sex}
+                  required
                   onChange={(e) =>
                     handleInputChange(index, "sex", e.target.value)
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ชาย</option>
-                  <option>หญิง</option>
+                  <option value="">ระบุเพศ</option>
+                  <option  value="ชาย" >ชาย</option>
+                  <option value="หญิง" >หญิง</option>
                 </select>
               </div>
 
@@ -553,14 +555,16 @@ export const HumanCapital = ({
                   id="status_in_house"
                   name="status_in_house"
                   value={member.status_in_house}
+                  required
                   onChange={(e) =>
                     handleInputChange(index, "status_in_house", e.target.value)
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>มีชื่อและอาศัยอยู่</option>
-                  <option>มีชื่อแต่ไม่อาศัย</option>
-                  <option>ไม่มีชื่อแต่อาศัยอยู่</option>
+                  <option value="">ระบุสถานะ</option>
+                  <option value="มีชื่อและอาศัยอยู่">มีชื่อและอาศัยอยู่</option>
+                  <option value="มีชื่อแต่ไม่อาศัย">มีชื่อแต่ไม่อาศัย</option>
+                  <option value="ไม่มีชื่อแต่อาศัยอยู่">ไม่มีชื่อแต่อาศัยอยู่</option>
                 </select>
               </div>
 
@@ -575,15 +579,17 @@ export const HumanCapital = ({
                   id="health"
                   name="health"
                   value={member.health}
+                  required
                   onChange={(e) =>
                     handleInputChange(index, "health", e.target.value)
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ปกติ</option>
-                  <option>ป่วยเรื้อรังไม่ติดเตียง(เช่น หัวใจ เบาหวาน)</option>
-                  <option>พึ่งพาตนเองได้</option>
-                  <option>ผู้ป่วยติดเตียง/พิการพึ่งพาตัวเองไม่ได้</option>
+                  <option value="">ระบุสุขภาพ</option>
+                  <option value="ปกติ">ปกติ</option>
+                  <option value="ป่วยเรื้อรังไม่ติดเตียง(เช่น หัวใจ เบาหวาน)">ป่วยเรื้อรังไม่ติดเตียง(เช่น หัวใจ เบาหวาน)</option>
+                  <option value="พึ่งพาตนเองได้">พึ่งพาตนเองได้</option>
+                  <option value="ผู้ป่วยติดเตียง/พิการพึ่งพาตัวเองไม่ได้">ผู้ป่วยติดเตียง/พิการพึ่งพาตัวเองไม่ได้</option>
                 </select>
               </div>
             </div>
@@ -725,13 +731,15 @@ export const HumanCapital = ({
                   id="can_speak_TH"
                   name="can_speak_TH"
                   value={member.can_speak_TH}
+                  required
                   onChange={(e) =>
                     handleInputChange(index, "can_speak_TH", e.target.value)
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ได้</option>
-                  <option>ไม่ได้</option>
+                  <option value="">ระบุความสามารถ</option>
+                  <option value="พูดไทยได้">ได้</option>
+                  <option value="พูดไทยไม่ได้">ไม่ได้</option>
                 </select>
               </div>
 
@@ -749,10 +757,12 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "can_read_TH", e.target.value)
                   }
+                  required
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ได้</option>
-                  <option>ไม่ได้</option>
+                  <option value="">ระบุความสามารถ</option>
+                  <option value="อ่านไทยได้">ได้</option>
+                  <option value="อ่านไทยไม่ได้">ไม่ได้</option>
                 </select>
               </div>
 
@@ -766,14 +776,16 @@ export const HumanCapital = ({
                 <select
                   id="can_write_TH"
                   name="can_write_TH"
+                  required
                   value={member.can_write_TH}
                   onChange={(e) =>
                     handleInputChange(index, "can_write_TH", e.target.value)
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ได้</option>
-                  <option>ไม่ได้</option>
+                  <option value="">ระบุความสามารถ</option>
+                  <option value="เขียนไทยได้">ได้</option>
+                  <option value="เขียนไทยไม่ได้">ไม่ได้</option>
                 </select>
               </div>
 
@@ -788,21 +800,23 @@ export const HumanCapital = ({
                   id="max_education "
                   name="max_education "
                   value={member.max_education}
+                  required
                   onChange={(e) =>
                     handleInputChange(index, "max_education", e.target.value)
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ไม่ได้เรียน</option>
-                  <option>ต่ำกว่าประถม</option>
-                  <option>ประถมศึกษา</option>
-                  <option>ม.ต้น หรือเทียบเท่า</option>
-                  <option>ม.ปลาย หรือเทียบเท่า</option>
-                  <option>ปวช./ประกาศนียบัตร</option>
-                  <option>ปวส./อนุปริญญา</option>
-                  <option>ป.ตรี หรือเทียบเท่า</option>
-                  <option>สูงกว่าปริญญาตรี</option>
-                  <option>เรียนสายศาสนา</option>
+                  <option value="">ระบุการศึกษาสูงสุด</option>
+                  <option value="ไม่ได้เรียน">ไม่ได้เรียน</option>
+                  <option value="ต่ำกว่าประถม">ต่ำกว่าประถม</option>
+                  <option value="ประถมศึกษา">ประถมศึกษา</option>
+                  <option value="ม.ต้น หรือเทียบเท่า">ม.ต้น หรือเทียบเท่า</option>
+                  <option value="ม.ปลาย หรือเทียบเท่า">ม.ปลาย หรือเทียบเท่า</option>
+                  <option value="ปวช./ประกาศนียบัตร">ปวช./ประกาศนียบัตร</option>
+                  <option value="ปวส./อนุปริญญา">ปวส./อนุปริญญา</option>
+                  <option value="ป.ตรี หรือเทียบเท่า">ป.ตรี หรือเทียบเท่า</option>
+                  <option value="สูงกว่าปริญญาตรี">สูงกว่าปริญญาตรี</option>
+                  <option value="เรียนสายศาสนา">เรียนสายศาสนา</option>
                 </select>
               </div>
 
@@ -820,11 +834,13 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "edu_status", e.target.value)
                   }
+                  required
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ไปเรียนสม่ำเสมอ</option>
-                  <option>หยุดเรียนเป็นระยะ</option>
-                  <option>ออกกลางคัน(Dropout)</option>
+                  <option value="">ระบุสถานภาพ</option>
+                  <option value="ไปเรียนสม่ำเสมอ">ไปเรียนสม่ำเสมอ</option>
+                  <option value="หยุดเรียนเป็นระยะ">หยุดเรียนเป็นระยะ</option>
+                  <option value="ออกกลางคัน(Dropout)">ออกกลางคัน(Dropout)</option>
                 </select>
               </div>
 
@@ -839,6 +855,7 @@ export const HumanCapital = ({
                   id="current_edu_level"
                   name="current_edu_level"
                   value={member.current_edu_level}
+                  required
                   onChange={(e) =>
                     handleInputChange(
                       index,
@@ -848,15 +865,17 @@ export const HumanCapital = ({
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ต่ำกว่าประถม</option>
-                  <option>ประถมศึกษา</option>
-                  <option>ม.ต้น หรือเทียบเท่า</option>
-                  <option>ม.ปลาย หรือเทียบเท่า</option>
-                  <option>ปวช./ประกาศนียบัตร</option>
-                  <option>ปวส./อนุปริญญา</option>
-                  <option>ป.ตรี หรือเทียบเท่า</option>
-                  <option>สูงกว่าปริญญาตรี</option>
-                  <option>เรียนสายศาสนา</option>
+                  <option value="">ระบุการศึกษา</option>
+                  <option value="ไม่ได้เรียน">ไม่ได้เรียน</option>
+                  <option value="ต่ำกว่าประถม">ต่ำกว่าประถม</option>
+                  <option value="ประถมศึกษา">ประถมศึกษา</option>
+                  <option value="ม.ต้น หรือเทียบเท่า">ม.ต้น หรือเทียบเท่า</option>
+                  <option value="ม.ปลาย หรือเทียบเท่า">ม.ปลาย หรือเทียบเท่า</option>
+                  <option value="ปวช./ประกาศนียบัตร">ปวช./ประกาศนียบัตร</option>
+                  <option value="ปวส./อนุปริญญา">ปวส./อนุปริญญา</option>
+                  <option value="ป.ตรี หรือเทียบเท่า">ป.ตรี หรือเทียบเท่า</option>
+                  <option value="สูงกว่าปริญญาตรี">สูงกว่าปริญญาตรี</option>
+                  <option value="เรียนสายศาสนา">เรียนสายศาสนา</option>
                 </select>
               </div>
 
@@ -890,14 +909,16 @@ export const HumanCapital = ({
                   id="work_status "
                   name="work_status "
                   value={member.work_status}
+                  required
                   onChange={(e) =>
                     handleInputChange(index, "work_status", e.target.value)
                   }
                   className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option>ไม่ทำงาน</option>
-                  <option>ว่างงาน</option>
-                  <option>ทำงาน</option>
+                  <option value="">ระบุสถานะ</option>
+                  <option value="ไม่ทำงาน">ไม่ทำงาน</option>
+                  <option value="ว่างงาน">ว่างงาน</option>
+                  <option value="ทำงาน">ทำงาน</option>
                 </select>
               </div>
             </div>

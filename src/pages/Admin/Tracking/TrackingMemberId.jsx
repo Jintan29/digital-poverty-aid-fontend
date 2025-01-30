@@ -30,7 +30,6 @@ import WelfareModal from "../../../components/TrackingMember/Modal/WelfareModal"
 import CareerModal from "../../../components/TrackingMember/Modal/CareerModal";
 
 
-
 const TrackingMemberId = () => {
   const [member, setMember] = useState({});
   const [memberFinancial, setMemberFinancial] = useState([]);
@@ -262,9 +261,9 @@ const TrackingMemberId = () => {
         {/* Modal */}
         
         <EditModal show={editModal} onClose={e=>setEditModal(false)} member={member} loadData={loadData} />
-        <IncomeModal show={incomeModal} onClose={e=>setIncomeModal(false)} memberId={member.id} />
-        <WelfareModal show={welfareModal} onClose={e=>setWelfareModal(false)} />
-        <CareerModal show={careerModal} onClose={e=>setCareerModal(false)} />
+        <IncomeModal show={incomeModal} onClose={e=>setIncomeModal(false)} member={member} loadFinancial={loadFinancial} />
+        <WelfareModal show={welfareModal} onClose={e=>setWelfareModal(false)} socialWelfare={socialWelfare} loadData = {loadData} />
+        <CareerModal show={careerModal} onClose={e=>setCareerModal(false)} carrer={carrer} loadData={loadData} />
 
       </div>
     </>

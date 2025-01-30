@@ -18,6 +18,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     { name: "Dashbord", link: "/admin", logo: "mdi:chart-pie" },
     { name: "ภาพรวมศักยภาพทุน 5 มิติ",link: "/admin/capital", logo: "icon-park-solid:hold-interface" ,},
     {
+      name: "ระบบ GIS ครัวเรือนยากจน",
+      link: "/admin/gis-household",
+      logo: "material-symbols:pin-drop-rounded",
+    },
+    {
       name: "ค้นหาสมาชิกครัวเรือน",
       link: "/admin/find-members",
       logo: "material-symbols:group-search",

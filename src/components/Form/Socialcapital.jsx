@@ -263,7 +263,6 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     });
   };
 
-
   const handleFrequncyCgange = (groupValue, field, value) => {
     setFormData((prevState) => {
       const updatedActivitytype = [...prevState.Activitytype];
@@ -292,8 +291,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     if (mainFormData.Socialcapital) {
       setFormData(mainFormData.Socialcapital);
     }
-  }, [mainFormData])
-
+  }, [mainFormData]);
 
   const validateGrouptype = (formData) => {
     const { Activitygrouptype } = formData;
@@ -302,7 +300,9 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     const incompleteGroups = Activitygrouptype.filter(
       (group) =>
         group.activity_group &&
-        (group.is_member === undefined || group.dependency === undefined || group.dependency === "")
+        (group.is_member === undefined ||
+          group.dependency === undefined ||
+          group.dependency === "")
     );
 
     if (incompleteGroups.length > 0) {
@@ -352,20 +352,22 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     return true;
   };
 
-
   const validateType = (formData) => {
     const { Activitytype } = formData;
-  
+
     // Check for incomplete entries
     const incompleteActivities = Activitytype.filter((group) => {
-      const isOtherActivity = group.activity && group.activity.startsWith("อื่นๆ"); // เช็คว่าเป็นตัวเลือก "อื่นๆ"
-      const isOtherActivityEmpty = isOtherActivity && group.activity.trim() === "อื่นๆ"; // เช็คว่าไม่ได้กรอกข้อความเพิ่มเติม
+      const isOtherActivity =
+        group.activity && group.activity.startsWith("อื่นๆ"); // เช็คว่าเป็นตัวเลือก "อื่นๆ"
+      const isOtherActivityEmpty =
+        isOtherActivity && group.activity.trim() === "อื่นๆ"; // เช็คว่าไม่ได้กรอกข้อความเพิ่มเติม
       return (
-        (!group.frequncy || !group.participation_level) || // Ensure all required fields are filled
+        !group.frequncy ||
+        !group.participation_level || // Ensure all required fields are filled
         isOtherActivityEmpty // Ensure "อื่นๆ" has additional text
       );
     });
-  
+
     if (incompleteActivities.length > 0) {
       Swal.fire({
         icon: "warning",
@@ -375,16 +377,17 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
       });
       return false;
     }
-  
+
     // Ensure at least one valid entry exists
     const isValid = Activitytype.some(
       (group) =>
-        group.activity && 
-        group.frequncy && 
-        group.participation_level && 
-        (!group.activity.startsWith("อื่นๆ") || group.activity.trim() !== "อื่นๆ") // Ensure "อื่นๆ" has valid text
+        group.activity &&
+        group.frequncy &&
+        group.participation_level &&
+        (!group.activity.startsWith("อื่นๆ") ||
+          group.activity.trim() !== "อื่นๆ") // Ensure "อื่นๆ" has valid text
     );
-  
+
     if (!isValid) {
       Swal.fire({
         icon: "warning",
@@ -394,11 +397,9 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
       });
       return false;
     }
-  
+
     return true;
   };
-  
-
 
   //next page
   const handleSubmit = (e) => {
@@ -429,8 +430,8 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
     setCurrentPage(6);
   };
 
-  return ( 
-    <div className="mb-6 mx-10 m-5 p-5 rounded-lg" >
+  return (
+    <div className="mb-6 mx-10 m-5 p-5 rounded-lg">
       <div className="Container">
         <h1 className="text-xl font-bold text-gray-700 mb-5">
           ส่วนที่ 5 การเกื้อกูลและระบบรองรับทางสังคม (ทุนทางสังคม)
@@ -439,7 +440,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
         <div className="mt-5 bg-white p-4 rounded-lg  max-w-4xl overflow-x-auto">
           <table
             className="table-auto border-collapse"
-            style={{ width: '800px' }}
+            style={{ width: "800px" }}
           >
             <thead>
               <tr>
@@ -464,6 +465,78 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td className="border px-4 py-3">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox text-blue-600 mr-2 rounded"
+                      id="activity_group_0"
+                      name="activity_group"
+                      checked={formData.Activitygrouptype.some(
+                        (group) =>
+                          group.activity_group === "ไม่เข่าร่วมกลุ่มกิจกรรม"
+                      )}
+                      value="ไม่เข่าร่วมกลุ่มกิจกรรม"
+                      onChange={(e) =>
+                        handleActivityGroupChange(
+                          e.target.value,
+                          e.target.checked
+                        )
+                      }
+                    />
+                    <span>0) ไม่เข่าร่วมกลุ่มกิจกรรม</span>
+                  </label>
+                </td>
+                <td className="border px-4 py-3 text-center">
+                  <select
+                    className="border  px-2 py-1 rounded-lg shadow-md "
+                    id="is_member_0"
+                    name="is_member"
+                    value={
+                      formData.Activitygrouptype.find(
+                        (group) =>
+                          group.activity_group === "ไม่เข่าร่วมกลุ่มกิจกรรม"
+                      )?.is_member ?? ""
+                    }
+                    onChange={(e) =>
+                      handleIsMemberChange(
+                        "ไม่เข่าร่วมกลุ่มกิจกรรม",
+                        e.target.value
+                      )
+                    }
+                  >
+                    <option value="" disabled>
+                      เลือกสถานะ
+                    </option>
+                    <option value={false}>ไม่เป็น</option>
+                  </select>
+                </td>
+                <td className="border px-4 py-3 text-center ">
+                  <select
+                    className="border rounded px-2 py-1 rounded-lg shadow-md "
+                    id="dependency_0"
+                    name="dependency"
+                    value={
+                      formData.Activitygrouptype.find(
+                        (group) =>
+                          group.activity_group === "ไม่เข่าร่วมกลุ่มกิจกรรม"
+                      )?.dependency ?? ""
+                    }
+                    onChange={(e) =>
+                      handleDependencyChange(
+                        "ไม่เข่าร่วมกลุ่มกิจกรรม",
+                        e.target.value
+                      )
+                    }
+                  >
+                    <option value="" disabled>
+                      เลือกสถานะ
+                    </option>
+                    <option value="ไม่พึ่งพา">ไม่พึ่งพา</option>
+                  </select>
+                </td>
+              </tr>
               <tr>
                 <td className="border px-4 py-3">
                   <label className="flex items-center space-x-2">
@@ -546,6 +619,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                   </select>
                 </td>
               </tr>
+
               <tr>
                 <td className="border px-4 py-3">
                   <label className="flex items-center space-x-2">
@@ -886,18 +960,27 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       onChange={handleOtherChange}
                     />
                     <span>6) กลุ่มอื่น ๆ</span>
-                    {formData.Activitygrouptype.some((group) => //find in array
-                      group.activity_group.startsWith(prefixOtherGroup)
+                    {formData.Activitygrouptype.some(
+                      (
+                        group //find in array
+                      ) => group.activity_group.startsWith(prefixOtherGroup)
                     ) && (
-                        <input
-                          type="text"
-                          placeholder="ระบุ..."
-                          className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                          value={formData.Activitygrouptype?.find((e) =>
-                            e.activity_group.startsWith(prefixOtherGroup)).activity_group.slice(prefixOtherGroup.length)}
-                          onChange={e => handleActivityGroupOther(prefixOtherGroup, 'activity_group', prefixOtherGroup + e.target.value)}
-                        />
-                      )}
+                      <input
+                        type="text"
+                        placeholder="ระบุ..."
+                        className="ml-2 px-2 py-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                        value={formData.Activitygrouptype?.find((e) =>
+                          e.activity_group.startsWith(prefixOtherGroup)
+                        ).activity_group.slice(prefixOtherGroup.length)}
+                        onChange={(e) =>
+                          handleActivityGroupOther(
+                            prefixOtherGroup,
+                            "activity_group",
+                            prefixOtherGroup + e.target.value
+                          )
+                        }
+                      />
+                    )}
                   </label>
                 </td>
                 <td className="border px-4 py-3 text-center">
@@ -906,12 +989,16 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     id="is_member_5"
                     name="is_member"
                     value={
-                      formData.Activitygrouptype.find(
-                        (group) => group.activity_group.startsWith(prefixOtherGroup)
+                      formData.Activitygrouptype.find((group) =>
+                        group.activity_group.startsWith(prefixOtherGroup)
                       )?.is_member ?? ""
                     }
                     onChange={(e) =>
-                      handleActivityGroupOther(prefixOtherGroup, 'is_member', e.target.value)
+                      handleActivityGroupOther(
+                        prefixOtherGroup,
+                        "is_member",
+                        e.target.value
+                      )
                     }
                   >
                     <option value="" disabled>
@@ -927,12 +1014,16 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                     id="dependency_5"
                     name="dependency"
                     value={
-                      formData.Activitygrouptype.find(
-                        (group) => group.activity_group.startsWith(prefixOtherGroup)
+                      formData.Activitygrouptype.find((group) =>
+                        group.activity_group.startsWith(prefixOtherGroup)
                       )?.dependency ?? ""
                     }
                     onChange={(e) =>
-                      handleActivityGroupOther(prefixOtherGroup, 'dependency', e.target.value)
+                      handleActivityGroupOther(
+                        prefixOtherGroup,
+                        "dependency",
+                        e.target.value
+                      )
                     }
                   >
                     <option value="" disabled>
@@ -952,7 +1043,7 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
         <div className="mt-5 bg-white p-4 rounded-lg max-w-4xl overflow-x-auto">
           <table
             className="table-auto border-collapse"
-            style={{ width: '800px' }}
+            style={{ width: "800px" }}
           >
             <thead>
               <tr>
@@ -978,6 +1069,77 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
             </thead>
 
             <tbody>
+            <tr>
+                <td className="border px-4 py-3">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox text-blue-600 mr-2 rounded"
+                      id="activity_group_0"
+                      name="activity_group_Test"
+                      checked={formData.Activitytype?.some(
+                        (group) => group?.activity === "ไม่เข้าร่วมกิจกรรม"
+                      )}
+                      value="ไม่เข้าร่วมกิจกรรม"
+                      onChange={(e) =>
+                        handleActivityChange(e.target.value, e.target.checked)
+                      }
+                    />
+                    <span>0) ไม่เข้าร่วมกิจกรรม</span>
+                  </label>
+                </td>
+
+                <td className="border px-4 py-3 text-center">
+                  <select
+                    className="border  px-2 py-1 rounded-lg shadow-md w-full"
+                    id="frequncy_0"
+                    name="frequncy"
+                    value={
+                      formData.Activitytype.find(
+                        (group) => group.activity === "ไม่เข้าร่วมกิจกรรม"
+                      )?.frequncy ?? ""
+                    }
+                    onChange={(e) =>
+                      handleFrequncyCgange(
+                        "ไม่เข้าร่วมกิจกรรม",
+                        "frequncy",
+                        e.target.value
+                      )
+                    }
+                  >
+                    <option value="" disabled>
+                      เลือกสถานะ
+                    </option>
+                    <option value="ไม่ร่วม">ไม่ร่วม</option>
+                  </select>
+                </td>
+
+                <td className="border px-4 py-3 text-center">
+                  <select
+                    className="border  px-2 py-1 rounded-lg shadow-md"
+                    id="participation_level"
+                    name="participation_level_1"
+                    value={
+                      formData.Activitytype.find(
+                        (group) => group.activity === "ไม่เข้าร่วมกิจกรรม"
+                      )?.participation_level ?? ""
+                    }
+                    onChange={(e) =>
+                      handleFrequncyCgange(
+                        "ไม่เข้าร่วมกิจกรรม",
+                        "participation_level",
+                        e.target.value
+                      )
+                    }
+                  >
+                    <option value="" disabled>
+                      เลือกสถานะ
+                    </option>
+                    <option value="ไม่เคยเข้าร่วมเลย">ไม่เคยเข้าร่วมเลย</option>
+                  </select>
+                </td>
+              </tr>
+
               <tr>
                 <td className="border px-4 py-3">
                   <label className="flex items-center space-x-2">
@@ -1224,9 +1386,11 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
                       className="form-checkbox text-blue-600 mr-2 rounded"
                       id="activity_group_0"
                       name="activity_group_Test"
-                      checked={!!formData.Activitytype.find((e) =>
-                        e.activity.startsWith(prefix)
-                      )}
+                      checked={
+                        !!formData.Activitytype.find((e) =>
+                          e.activity.startsWith(prefix)
+                        )
+                      }
                       value={prefix}
                       onChange={(e) =>
                         handleActivityChange(e.target.value, e.target.checked)
@@ -1313,12 +1477,9 @@ function Socialcapital({ setCurrentPage, setMainFormData, mainFormData }) {
             </tbody>
           </table>
         </div>
-
-
       </div>
 
       <div className="flex justify-end mt-4">
-
         <button
           type="button"
           className="flex justify-center bg-blue-500 text-white px-4 py-2 rounded-lg mr-3"
