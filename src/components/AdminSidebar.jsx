@@ -17,6 +17,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarItem = [
     { name: "Dashbord", link: "/admin", logo: "mdi:chart-pie" },
     {
+      name: "ระบบ GIS ครัวเรือนยากจน",
+      link: "/admin/gis-household",
+      logo: "material-symbols:pin-drop-rounded",
+    },
+    {
       name: "ค้นหาสมาชิกครัวเรือน",
       link: "/admin/find-members",
       logo: "material-symbols:group-search",
