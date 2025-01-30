@@ -3,8 +3,8 @@ import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
   const [formData, setFormData] = useState({
-    pin_latitude: "",
-    pin_longitude: "",
+    lat: null,
+    lon: null,
     is_has_house: "",
     house_rent: null,
     house_status_law: "",
@@ -229,15 +229,15 @@ useEffect(() => {
           <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 mt-4">
             <div>
               <label
-                htmlFor="latitude"
+                htmlFor="lat"
                 className="block mb-2 text-m font-medium text-gray-900 dark:text-white"
               >
                 ละติจูด
               </label>
               <input
                 type="text"
-                name="pin_latitude"
-                value={formData.pin_latitude}
+                name="lat"
+                value={formData.lat}
                 onChange={(e) => {
                   handleInputChange(e.target.name, e.target.value);
                 }}
@@ -247,15 +247,15 @@ useEffect(() => {
             </div>
             <div>
               <label
-                htmlFor="longitude"
+                htmlFor="lon"
                 className="block mb-2 text-m font-medium text-gray-900 dark:text-white"
               >
                 ลองจิจูด
               </label>
               <input
                 type="text"
-                name="pin_longitude"
-                value={formData.pin_longitude}
+                name="lon"
+                value={formData.lon}
                 onChange={(e) => {
                   handleInputChange(e.target.name, e.target.value);
                 }}
@@ -1326,7 +1326,6 @@ useEffect(() => {
                   <input
                     name="water_for_agriculture"
                     type="radio"
-                    required
                     value="แม่น้ำ ลำห้วย ลำเหมือง"
                     checked={
                       formData.water_for_agriculture ===
@@ -1473,7 +1472,6 @@ useEffect(() => {
                   <input
                     name="land_use_issuse"
                     type="radio"
-                    required
                     value="ไม่มีปัญหาเกี่ยวกับพื้นที่ทำกิน"
                     checked={formData.land_use_issuse.includes(
                       "ไม่มีปัญหาเกี่ยวกับพื้นที่ทำกิน"
