@@ -27,14 +27,13 @@ import TrackHousehold from "./pages/Admin/Tracking/TrackHousehold";
 import TrackingMemberId from "./pages/Admin/Tracking/TrackingMemberId";
 import MixedChart from "./pages/MixedChart";
 import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
+import Capital from "./pages/Overviewcapital/Capital";
 import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
 //Testzone
-
-
 import FormAddress from "./pages/FormAddress";
 
 
-//ทดสอบ map
+
 
 
 function App() {
@@ -194,6 +193,15 @@ function App() {
                 </AdminRoute>
               }
             />
+            <Route
+              path="capital"
+              element={
+                <AdminRoute>
+                  <Capital />
+                </AdminRoute>
+              }
+            />
+
 
             <Route
               path="gis-household"

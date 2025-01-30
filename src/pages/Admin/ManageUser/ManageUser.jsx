@@ -4,9 +4,28 @@ import Swal from "sweetalert2";
 import config from "../../../config";
 import { Icon } from "@iconify/react";
 
+// import Modal
+import ManageUserModal from "../../../components/MangageUser/ManageUserModal";
+
+
 const ManageUser = () => {
-  
-  const [users, setUsers] = useState([]); // []
+  const [users, setUsers] = useState([]); // เก็บข้อมูลผู้ใช้งานทั้งหมด
+  const [manageuserModal, setManageUserModal] = useState(false); // ควบคุมการแสดง Modal
+  const [editUser, setEditUser] = useState({}); // เก็บข้อมูลผู้ใช้ที่ต้องการแก้ไข
+
+  // ฟังก์ชันเปิด Modal และตั้งค่า editUser เมื่อกดปุ่มแก้ไขข้อมูล
+  const handleEditUser = (user) => {
+    setManageUserModal(true); // เปิด Modal
+    setEditUser({
+      id: user.id, // ตั้งค่า id ของผู้ใช้ที่ต้องการแก้ไข
+      fname: user.fname,
+      lname: user.lname,
+      email: user.email,
+      phone: user.phone || "", // ถ้าไม่มีเบอร์โทรให้ใส่ค่าเป็นสตริงว่าง
+      password: "",
+      confirmPassword: "",
+    });
+  };
 
   useEffect(() => {
     loadData();
@@ -14,7 +33,7 @@ const ManageUser = () => {
 
   const loadData = async () => {
     try {
-      const res = await axios.get(config.api_path + "/user/list",config.headers());
+      const res = await axios.get(config.api_path + "/user/list", config.headers());
       setUsers(res.data.user);
     } catch (err) {
       Swal.fire({
@@ -24,6 +43,26 @@ const ManageUser = () => {
       });
     }
   };
+
+  const saveUser = async () => {
+    try {
+      await axios.put(config.api_path + `/user/update/${editUser.id}`, editUser, config.headers());
+      Swal.fire({
+        title: "สำเร็จ",
+        icon: "success",
+        text: "แก้ไขข้อมูลเรียบร้อยแล้ว",
+      });
+      loadData();
+      setManageUserModal(false);
+    } catch (err) {
+      Swal.fire({
+        title: "error",
+        icon: "error",
+        text: err.response?.data?.message || "เกิดข้อผิดพลาด",
+      });
+    }
+  };
+
 
   return (
     <>
@@ -58,6 +97,7 @@ const ManageUser = () => {
               </th>
             </tr>
           </thead>
+          
           <tbody>
             {users.map((user, index) => (
               <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -74,9 +114,10 @@ const ManageUser = () => {
                 <td class="px-6 py-4">{user.status}</td>
                 <td class="px-6 py-4">
                   <div className="flex justify-start">
-                    <button
+                  <button
                       type="button"
-                      class="text-white w-15 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      className="text-white w-15 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={() => handleEditUser(user)}
                     >
                       <Icon icon="material-symbols:edit-rounded" />
                     </button>
@@ -88,10 +129,16 @@ const ManageUser = () => {
                       <Icon icon='material-symbols:delete-rounded' /> 
                     </button>
                   </div>
-
                 </td>
               </tr>
-            ))}
+            ))}  
+
+          <ManageUserModal
+              show={manageuserModal}
+              member={editUser} // ส่งข้อมูลผู้ใช้ที่ต้องการแก้ไข
+              loadData={loadData}
+              onClose={() => setManageUserModal(false)}
+        />
           </tbody>
         </table>
       </div>
