@@ -32,6 +32,7 @@ ChartJS.register(
 
 //components
 import Modal from "../../../components/Modal";
+import MapHousehold from "../../../components/Householdtracking/MapHousehold";
 
 //Modal
 import EditHouseHoldModal from "../../../components/Householdtracking/Modal/EditHouseHoldModal";
@@ -40,6 +41,8 @@ import AddExpensesModal from "../../../components/Householdtracking/Modal/AddExp
 import AddSavingModal from "../../../components/Householdtracking/Modal/AddSavingModal";
 import AddDebtModal from "../../../components/Householdtracking/Modal/AddDebtModal";
 import AddMemberModal from "../../../components/Householdtracking/Modal/AddMemberModal";
+import Swal from "sweetalert2";
+
 
 const Householdtracking = () => {
 
@@ -54,6 +57,9 @@ const Householdtracking = () => {
     const [debtModal, setDebtModal] = useState(false)
     const [memberModal, setMemberModal] = useState(false)
     const { id } = useParams()
+
+    //showmap
+    const [showMap,setShowMap] = useState(false)
 
     const fetchhousehold = async () => {
         setLoading(true); // เริ่มสถานะการโหลด
@@ -89,6 +95,22 @@ const Householdtracking = () => {
         const option = { month: "long", year: "numeric" };
         return new Intl.DateTimeFormat("th-TH", option).format(date);
     };
+
+    //check pin หากไม่มี pin แสดงแจ้งเตือน user ก่อน
+    const handleShowMap =()=>{
+        if (!household?.Form?.PhysicalCapital?.lat || !household?.Form?.PhysicalCapital?.lon) {
+             Swal.fire({
+                icon: 'warning',
+                title: 'ข้อมูลแผนที่',
+                text: 'ครัวเรือนนี้ยังไม่ได้ทำการกรอกข้อมูล pin ที่อยู่ ข้อมูลนี้จึงเป็นที่อยู่เพียงคร่าวๆเท่านั้น',
+                showConfirmButton:true
+            }).then(
+                setShowMap(true)
+            )
+        } else {
+            setShowMap(true);
+        }
+    }
 
     // ข้อมูลสำหรับ Pie Chart (แสดงจำนวนเงิน)
     const data = {
@@ -753,6 +775,21 @@ const Householdtracking = () => {
                     </p>
                 </div>
             </div>
+
+            <div className="my-5">
+             <h1 className="text-2xl font-bold py-3">ระบบสารสนเทศภูมิศาสตร์ (GIS) ของ ครัวเรือนยากจน</h1>
+             <button type="button" 
+             onClick={e=>handleShowMap()}
+             class="flex justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            
+                <Icon icon="material-symbols:my-location-rounded" className="w-5 h-5 me-3" />
+                แสดงที่อยู่
+             </button>
+            </div>
+            
+            {/* Map */}
+            {showMap &&(<MapHousehold household={household}/>)}
+            
 
             <EditHouseHoldModal show={editModal} onClose={e => setEditModal(false)} household={household} reloadData={fetchhousehold} />
             <AddIncomeModal show={incomeModal} onClose={e => setIncomeModal(false)} household={household} reloadData={fetchhousehold} />
