@@ -3,8 +3,6 @@ import { longdo, map, LongdoMap } from "../../../longdo-map/LongdoMap.jsx";
 import config from "../../../config.js";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { Link } from "react-router-dom";
-
 
 const GisHousehold = () => {
   const [locationList, setLocationList] = useState([]);
@@ -12,6 +10,13 @@ const GisHousehold = () => {
   useEffect(() => {
     loadData();
   }, []);
+  
+  //หากมีค่าแล้วไป init map
+  useEffect(()=>{
+    if(locationList && locationList!== undefined &&locationList.length>0){
+      initMap()
+    }
+  },[locationList])
 
   const loadData = async () => {
     try {
@@ -19,7 +24,6 @@ const GisHousehold = () => {
         config.api_path + "/physical-capital/location"
       );
       setLocationList(resAPI.data.results);
-      console.log(locationList);
     } catch (err) {
       Swal.fire({
         title: "error",
@@ -52,42 +56,45 @@ const GisHousehold = () => {
   document.head.appendChild(style);
 
   const initMap = () => {
-    if (map && longdo && locationList) {
+    if (map && longdo && locationList && locationList.length > 0) {
       map.Layers.setBase(longdo.Layers.GRAY);
-      //set location and zoom
       map.location({ lon: 100.2634423, lat: 16.8157611 }, true);
       map.zoom(9, true);
 
-      //นำที่อยู่มา Mark
       map.Tags.add(function (zoom) {
-        locationList.map((item) => {
-          const lon = parseFloat(item.lon);
-          const lat = parseFloat(item.lat);
+        locationList.forEach((item) => {
+          // เพิ่มการตรวจสอบข้อมูลก่อนสร้าง Marker
+          if (item.lon && item.lat && 
+              !isNaN(parseFloat(item.lon)) && 
+              !isNaN(parseFloat(item.lat))) {
+            const lon = parseFloat(item.lon);
+            const lat = parseFloat(item.lat);
 
-          // กำหนดขนาด Marker ตามระดับการซูม
-          const markerSize = zoom < 12 ? 20 : zoom < 16 ? 30 : 40;
+            const markerSize = zoom < 12 ? 20 : zoom < 16 ? 30 : 40;
 
-          const marker = new longdo.Marker(
-            { lon, lat },
-            {
-              visibleRange: { min: 7, max: 20 },
-              size: { width: markerSize, height: markerSize },
-              popup: {
-                title: "รายละเอียดครัวเรือน",
-                size: { width: 250, height: 80 },
-                detail: `
-                    <div class="popup-text">บ้านของ: ${item.Household?.host_fname} ${item.Household?.host_lname}</div> <br>
-                    <a href="/admin/track-household/${item.Household?.id}">
-                    <button class="my-custom-button">
-                      ดูข้อมูลครัวเรือน
-                    </button>
-                  </a>
+            const marker = new longdo.Marker(
+              { lon, lat },
+              {
+                visibleRange: { min: 7, max: 20 },
+                size: { width: markerSize, height: markerSize },
+                popup: {
+                  title: "รายละเอียดครัวเรือน",
+                  size: { width: 250, height: 80 },
+                  detail: `
+                    <div class="popup-text">
+                      บ้านของ: ${item.Household?.host_fname || 'ไม่ระบุ'} ${item.Household?.host_lname || 'ไม่ระบุ'}
+                    </div> <br>
+                    <a href="/admin/track-household/${item.Household?.id || ''}">
+                      <button class="my-custom-button">
+                        ดูข้อมูลครัวเรือน
+                      </button>
+                    </a>
                   `,
-              },
-            }
-          );
-          // เพิ่ม Marker ไปยังแผนที่
-          map.Overlays.add(marker);
+                },
+              }
+            );
+            map.Overlays.add(marker);
+          }
         });
       });
     }

@@ -33,6 +33,7 @@ import CareerModal from "../../../components/TrackingMember/Modal/CareerModal";
 const TrackingMemberId = () => {
   const [member, setMember] = useState({});
   const [memberFinancial, setMemberFinancial] = useState([]);
+  const [prediction,setPrediction] = useState(null)
   const [charData, setChartData] = useState([]); //กราฟแรก
   const { id } = useParams(); //id สมาชิกครัวเรือน
 
@@ -52,7 +53,6 @@ const TrackingMemberId = () => {
   //สำหรับ load ข้อมูลเท่านั้น
   useEffect(() => {
     loadData();
-    loadFinancial();
   }, []);
 
   //สำหรับรวม data หลัง call api (rechart)
@@ -65,10 +65,32 @@ const TrackingMemberId = () => {
         inflation: data.inflation,
       }));
 
-      setChartData([ ...financialData]);
+      //เพิ่ม Bar สำหรับแสดง pridict
+      const lastData = memberFinancial[memberFinancial.length - 1];
+      
+      if (lastData && prediction) {
+        const lastDate = new Date(lastData.createdAt);
+        // สร้างวันที่สำหรับปีถัดไป
+        const nextYear = new Date(
+          lastDate.getFullYear() + 1,
+          lastDate.getMonth(),
+          lastDate.getDate()
+        );
+    
+        const predictionData = {
+          month: formatDate(nextYear) + ' (คาดการณ์)',
+          predictedIncome: prediction,
+          expenses: null,
+          inflation: null
+        };
+    
+        setChartData([...financialData, predictionData]);
+      } else {
+        setChartData(financialData);
+      }
 
     
-  }, [ memberFinancial]);
+  }, [ memberFinancial,prediction]);
 
   // กำหนดสีพื้นหลังที่ใช้ในกราฟและ grid items
   const backgroundColors = [
@@ -139,13 +161,29 @@ const TrackingMemberId = () => {
     }
   };
 
+  //เช็คข้อมูล member หากมีค่าแล้วค่อยไป load financial
+  useEffect(()=>{
+    if(member && member.Household?.district){
+      loadFinancial()
+    }
+  },[member])
+
   const loadFinancial = async () => {
     try {
       const res = await axios.get(
-        config.api_path + `/member-household/findCapital/${id}`,
-        config.headers()
+        config.api_path + `/member-financial/${id}/predict`,
+        {
+          params:{
+            district:member.Household?.district
+          },
+          ...config.headers(),
+        }
       );
-      setMemberFinancial(res.data.results);
+      console.log(res);
+      
+      setMemberFinancial(res.data.results.financial);
+      setPrediction(res.data.results.prediction)
+
     } catch (err) {
       Swal.fire({
         title: "errors",

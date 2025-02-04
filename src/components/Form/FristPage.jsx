@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 //จัดการวันที่
-import DatePicker from 'react-datepicker';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import DatePicker from "react-datepicker";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import { Icon } from "@iconify/react";
@@ -17,11 +17,10 @@ export const FristPage = ({
 }) => {
   //เก็บข้อมูลจาก input
   const [formData, setFormData] = useState({
-
-    recder_title: 'นาย',
-    recder_fname: '',
-    recder_lname: '',
-    recder_phone: '',
+    recder_title: "นาย",
+    recder_fname: "",
+    recder_lname: "",
+    recder_phone: "",
     time_rec: null,
 
     Household: {
@@ -39,7 +38,7 @@ export const FristPage = ({
       host_title: "นาย", // ค่า default เป็น นาย
       host_fname: "",
       host_lname: "",
-      host_national_id: ""
+      host_national_id: "",
     },
     //ตารางผู้ให้ข้อมูล
     Informant: {
@@ -61,14 +60,20 @@ export const FristPage = ({
         agency: "",
         phone: "",
       },
-    ]
+    ],
   });
-
 
   //เก็บอำเภอและตำบล
   const districtSubdistrictMap = {
-    "ชาติตระการ": ["ป่าแดง", "ชาติตระการ", "สวนเมี่ยง", "บ้านดง", "บ่อภาค", "ท่าสะแก"],
-    "นครไทย": [
+    ชาติตระการ: [
+      "ป่าแดง",
+      "ชาติตระการ",
+      "สวนเมี่ยง",
+      "บ้านดง",
+      "บ่อภาค",
+      "ท่าสะแก",
+    ],
+    นครไทย: [
       "นครไทย",
       "หนองกะท้าว",
       "บ้านแยง",
@@ -81,16 +86,39 @@ export const FristPage = ({
       "บ้านพร้าว",
       "ห้วยเฮี้ย",
     ],
-    "อำเภอเมืองพิษณุโลก":[
-      "ในเมือง","วังน้ำคู้","วัดจันทร์","วัดพริก",
-      "ท่าทอง","ท่าโพธิ์","สมอแข","ดอนทอง",
-      "บ้านป่า","ปากโทก","หัวรอ","จอมทอง",
-      "บ้านกร่าง","บ้านคลอง","พลายชุมพล","มะขามสูง",
-      "อรัญญิก","บึงพระ","ไผ่ขอดอน","งิ้วงาม",
+    อำเภอเมืองพิษณุโลก: [
+      "ในเมือง",
+      "วังน้ำคู้",
+      "วัดจันทร์",
+      "วัดพริก",
+      "ท่าทอง",
+      "ท่าโพธิ์",
+      "สมอแข",
+      "ดอนทอง",
+      "บ้านป่า",
+      "ปากโทก",
+      "หัวรอ",
+      "จอมทอง",
+      "บ้านกร่าง",
+      "บ้านคลอง",
+      "พลายชุมพล",
+      "มะขามสูง",
+      "อรัญญิก",
+      "บึงพระ",
+      "ไผ่ขอดอน",
+      "งิ้วงาม",
     ],
 
-    "เนินมะปราง": ["ชมพู", "บ้านมุง", "ไทรย้อย", "วังโพรง", "บ้านน้อยซุ้มขี้เหล็ก", "เนินมะปราง", "วังยาง"],
-    "บางกระทุ่ม": [
+    เนินมะปราง: [
+      "ชมพู",
+      "บ้านมุง",
+      "ไทรย้อย",
+      "วังโพรง",
+      "บ้านน้อยซุ้มขี้เหล็ก",
+      "เนินมะปราง",
+      "วังยาง",
+    ],
+    บางกระทุ่ม: [
       "บางกระทุ่ม",
       "บ้านไร่",
       "โคกสลุด",
@@ -101,7 +129,7 @@ export const FristPage = ({
       "เนินกุ่ม",
       "วัดตายม",
     ],
-    "บางระกำ": [
+    บางระกำ: [
       "บางระกำ",
       "ปลักแรด",
       "พันเสา",
@@ -114,7 +142,7 @@ export const FristPage = ({
       "ท่านางงาม",
       "คุยม่วง",
     ],
-    "พรหมพิราม": [
+    พรหมพิราม: [
       "พรหมพิราม",
       "ท่าช้าง",
       "วงฆ้อง",
@@ -128,7 +156,7 @@ export const FristPage = ({
       "ทับยายเชียง",
       "ดงประคำ",
     ],
-    "วังทอง": [
+    วังทอง: [
       "วังทอง",
       "พันชาลี",
       "แม่ระกา",
@@ -141,7 +169,7 @@ export const FristPage = ({
       "ชัยนาม",
       "ดินทอง",
     ],
-    "วัดโบสถ์": ["วัดโบสถ์", "ท่างาม", "ทองแท้", "บ้านยาง", "หินลาด", "คันโช้ง"],
+    วัดโบสถ์: ["วัดโบสถ์", "ท่างาม", "ทองแท้", "บ้านยาง", "หินลาด", "คันโช้ง"],
   };
 
   //เก็บอำเภอที่เลือก
@@ -149,97 +177,99 @@ export const FristPage = ({
 
   const handleInputChange = (subject, field, value) => {
     const updateData = { ...formData };
-    
+
     //str->int
-    if (field === "fam_total_member" || field ==="fam_total_live" || field ==="fam_total_live" 
-      || field === "live_but_has_no_name_in_fam"  || field === "total_has_name_not_live"
+    if (
+      field === "fam_total_member" ||
+      field === "fam_total_live" ||
+      field === "fam_total_live" ||
+      field === "live_but_has_no_name_in_fam" ||
+      field === "total_has_name_not_live"
     ) {
-      value = parseInt(value, 10);  // convert to base 10
+      value = parseInt(value, 10); // convert to base 10
     }
 
     updateData[subject][field] = value;
     setFormData(updateData);
   };
 
-  const handleRecderInput = (field,value)=>{
-    const updateData = {...formData}
-    updateData[field] = value
-    setFormData(updateData)
-  }
+  const handleRecderInput = (field, value) => {
+    const updateData = { ...formData };
+    updateData[field] = value;
+    setFormData(updateData);
+  };
 
   // ฟังก์ชันสำหรับจัดการการเปลี่ยนแปลงวันที่
   const handleDateChange = (date) => {
     //format เวลาให้เป็น utc
-    const formatDate =  dayjs(date).utc().format()
+    const formatDate = dayjs(date).utc().format();
 
     setFormData((prevData) => ({
       ...prevData,
-      time_rec: formatDate, 
+      time_rec: formatDate,
     }));
   };
 
-  const validateInput = ()=>{
+  const validateInput = () => {
     //เลขบัตรประชาชนเจ้าบ้าน
-    if(formData.Household.host_national_id.length !== 13 ){
+    if (formData.Household.host_national_id.length !== 13) {
       Swal.fire({
-        title:'หมายเลขบัตรประชาชนไม่ถูกต้อง',
-        text:'กรุณากรอกเลขบัตรของ "เจ้าบ้าน" ให้ครบ 13 หลัก',
-        icon:'error'
-      })
-      return false
+        title: "หมายเลขบัตรประชาชนไม่ถูกต้อง",
+        text: 'กรุณากรอกเลขบัตรของ "เจ้าบ้าน" ให้ครบ 13 หลัก',
+        icon: "error",
+      });
+      return false;
     }
 
-
-    if(formData.Informant.phone.length !== 10 ){
+    if (formData.Informant.phone.length !== 10) {
       Swal.fire({
-        title:'เบอร์โทรศัพท์ไม่ถูกต้อง',
-        text:'กรุณากรอกเบอร์โทรศัพท์ "ผู้ให้ข้อมูล" ให้ถูกต้อง',
-        icon:'error',
-      })
-      return false
+        title: "เบอร์โทรศัพท์ไม่ถูกต้อง",
+        text: 'กรุณากรอกเบอร์โทรศัพท์ "ผู้ให้ข้อมูล" ให้ถูกต้อง',
+        icon: "error",
+      });
+      return false;
     }
 
-    if(formData.Informant.national_id === '' ){
+    if (formData.Informant.national_id === "") {
       Swal.fire({
-        title:'กรอกข้อมูลไม่ครบ',
-        text:'กรุณากรอกหมายเลขบัตรประชาชนของ "ผู้ให้ข้อมูล" ให้ถูกต้อง',
-        icon:'error',
-      })
-      return false
+        title: "กรอกข้อมูลไม่ครบ",
+        text: 'กรุณากรอกหมายเลขบัตรประชาชนของ "ผู้ให้ข้อมูล" ให้ถูกต้อง',
+        icon: "error",
+      });
+      return false;
     }
 
     //loop check team servey
-    for(let i=0 ; i< formData.TeamServey.length;i++){
-      const teamMember = formData.TeamServey[i]
+    for (let i = 0; i < formData.TeamServey.length; i++) {
+      const teamMember = formData.TeamServey[i];
 
-      if(teamMember.phone.length !== 10){
+      if (teamMember.phone.length !== 10) {
         Swal.fire({
-          title:'เบอร์โทรศัพท์ไม่ถูกต้อง',
-          text:`กรุณากรอกเบอร์โทรศัพท์ของทีมสำรวจคนที่ ${i+1} ให้ถูกต้อง`,
-          icon:'error'
-        })
-        return false
+          title: "เบอร์โทรศัพท์ไม่ถูกต้อง",
+          text: `กรุณากรอกเบอร์โทรศัพท์ของทีมสำรวจคนที่ ${i + 1} ให้ถูกต้อง`,
+          icon: "error",
+        });
+        return false;
       }
     }
 
-    if(formData.recder_phone.length !== 10){
+    if (formData.recder_phone.length !== 10) {
       Swal.fire({
-        title:'เบอร์โทรศัพท์ไม่ถูกต้อง',
-        text:'กรุณากรอกเบอร์โทรศัพท์ "ผู้บันทึกข้อมูล" ให้ถูกต้อง',
-        icon:'error',
-      })
-      return false
+        title: "เบอร์โทรศัพท์ไม่ถูกต้อง",
+        text: 'กรุณากรอกเบอร์โทรศัพท์ "ผู้บันทึกข้อมูล" ให้ถูกต้อง',
+        icon: "error",
+      });
+      return false;
     }
 
-
     //หากผ่านหมดให้ return true
-    return true
-  }
+    return true;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     //validate ไม่ผ่านไม่เปลี่ยนหน้า
-    if(!validateInput()){
+    if (!validateInput()) {
       return;
     }
 
@@ -252,7 +282,6 @@ export const FristPage = ({
 
   //input of teamservey
   const handleTeamServeyChange = (index, field, value) => {
-
     const updatedTeamServey = [...formData.TeamServey];
     updatedTeamServey[index][field] = value;
 
@@ -280,16 +309,16 @@ export const FristPage = ({
   };
 
   //clear Infomant national id and disable input
-  const handleInfomantNationalId = (value,checked)=>{
-    const updateData = {...formData}
+  const handleInfomantNationalId = (value, checked) => {
+    const updateData = { ...formData };
 
-    if(checked){
-      updateData.Informant.national_id = value
-    }else{
-      updateData.Informant.national_id = ''
+    if (checked) {
+      updateData.Informant.national_id = value;
+    } else {
+      updateData.Informant.national_id = "";
     }
-     setFormData(updateData)
-  }
+    setFormData(updateData);
+  };
 
   //Delteam
   const handleDeleteTeamServey = (index) => {
@@ -306,8 +335,9 @@ export const FristPage = ({
   useEffect(() => {
     if (mainFormData && Object.keys(mainFormData).length > 0) {
       setFormData(mainFormData); // ข้อมูลที่เก็บไว้ใน mainFormData
-      if (mainFormData.Household && mainFormData.Household.district) { 
-        setAvailableSubdistricts(  //อำเภอ
+      if (mainFormData.Household && mainFormData.Household.district) {
+        setAvailableSubdistricts(
+          //อำเภอ
           districtSubdistrictMap[mainFormData.Household.district] || []
         );
       }
@@ -320,11 +350,8 @@ export const FristPage = ({
       setAvailableSubdistricts(
         districtSubdistrictMap[formData.Household.district] || [] //เอาค่าของตำบลที่เลือกไปใส่ไว้
       );
-
     }
   }, [formData.Household.district]);
-
-
 
   return (
     <div>
@@ -420,7 +447,7 @@ export const FristPage = ({
               </div>
             </div>
           </div>
-{/*หมู่บ้าน-ปณ.*/}
+          {/*หมู่บ้าน-ปณ.*/}
           <div class="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1  mx-10">
             <div className="">
               <label
@@ -515,7 +542,6 @@ export const FristPage = ({
                 placeholder=""
                 disabled
                 value={formData.Household.province}
-                
               />
             </div>
             <div>
@@ -543,7 +569,6 @@ export const FristPage = ({
                     {district}
                   </option>
                 ))}
-
               </select>
             </div>
             <div>
@@ -573,8 +598,7 @@ export const FristPage = ({
                 ))}
               </select>
             </div>
-            
-            
+
             <div>
               <label
                 for="postcode"
@@ -602,7 +626,7 @@ export const FristPage = ({
               <b>ข้อมูล เจ้าบ้าน</b>
             </h3>
           </div>
-{/* ชื่อเจ้าบ้าน-หมายเลข ปชช เจ้าบ้าน */}
+          {/* ชื่อเจ้าบ้าน-หมายเลข ปชช เจ้าบ้าน */}
           <div className="mb-6 mx-10 grid gap-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 ">
             <div className="relative  rounded-md shadow-sm">
               <label
@@ -694,7 +718,7 @@ export const FristPage = ({
               หรือ ได้รับความยินยอมจากบุคคลในครัวเรือน ให้เป็นผู้ให้ข้อมูล)
             </h3>
           </div>
-{/* ผู้ให้ข้อมูล */}
+          {/* ผู้ให้ข้อมูล */}
           <div className="mb-6 mx-10 grid gap-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-5">
             <div className="relative  rounded-md shadow-sm">
               <label
@@ -768,7 +792,7 @@ export const FristPage = ({
                 type="number"
                 name="Informant"
                 id="national_id"
-                disabled = {formData.Informant.national_id === 'ไม่มีบัตร'}
+                disabled={formData.Informant.national_id === "ไม่มีบัตร"}
                 value={formData.Informant.national_id}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 onChange={(e) =>
@@ -788,11 +812,11 @@ export const FristPage = ({
                 id="national_id"
                 name="Informant"
                 type="checkbox"
-                checked = {formData.Informant.national_id === 'ไม่มีบัตร'}
-                onChange={(e) =>
-                  {handleInfomantNationalId("ไม่มีบัตร",e.target.checked) , console.log(formData.Informant.national_id);
-                  }
-                }
+                checked={formData.Informant.national_id === "ไม่มีบัตร"}
+                onChange={(e) => {
+                  handleInfomantNationalId("ไม่มีบัตร", e.target.checked),
+                    console.log(formData.Informant.national_id);
+                }}
                 class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
                 //required
               />
@@ -921,10 +945,13 @@ export const FristPage = ({
               <b>สำหรับทีมสำรวจข้อมูล</b>
             </h3>
           </div>
-{/* สำรวจ */}
+          {/* สำรวจ */}
           <div class="mx-10 ">
             {formData.TeamServey.map((teamData, index) => (
-              <div className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1" key={index}>
+              <div
+                className="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1"
+                key={index}
+              >
                 <div className="relative  rounded-md shadow-sm col-span-1">
                   <label
                     for="visitors"
@@ -1063,7 +1090,7 @@ export const FristPage = ({
               <b>สำหรับ ผู้บันทึกข้อมูล</b>
             </h3>
           </div>
-{/* ผู้บันทึก */}
+          {/* ผู้บันทึก */}
           <div class="grid gap-6 mb-6 mt-6 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mx-10">
             <div className="relative  rounded-md shadow-sm">
               <label
@@ -1077,10 +1104,7 @@ export const FristPage = ({
                   id="recder_title"
                   name="DataRecorder"
                   onChange={(e) =>
-                    handleRecderInput(
-                      e.target.id,
-                      e.target.value
-                    )
+                    handleRecderInput(e.target.id, e.target.value)
                   }
                   value={formData.recder_title}
                   className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
@@ -1092,9 +1116,7 @@ export const FristPage = ({
               </div>
               <input
                 id="recder_fname"
-                onChange={(e) =>
-                  handleRecderInput( e.target.id, e.target.value)
-                }
+                onChange={(e) => handleRecderInput(e.target.id, e.target.value)}
                 name="DataRecorder"
                 type="text"
                 required
@@ -1116,9 +1138,7 @@ export const FristPage = ({
                 required
                 id="recder_lname"
                 name="DataRecorder"
-                onChange={(e) =>
-                  handleRecderInput( e.target.id, e.target.value)
-                }
+                onChange={(e) => handleRecderInput(e.target.id, e.target.value)}
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 value={formData.recder_lname}
@@ -1138,9 +1158,7 @@ export const FristPage = ({
                 id="recder_phone"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
-                onChange={(e) =>
-                  handleRecderInput( e.target.id, e.target.value)
-                }
+                onChange={(e) => handleRecderInput(e.target.id, e.target.value)}
                 value={formData.recder_phone}
                 required
               />
@@ -1156,13 +1174,15 @@ export const FristPage = ({
               <DatePicker
                 locale="th"
                 dateFormat="dd/MM/yyyy"
-                selected={formData.time_rec ? new Date(formData.time_rec) : null}
+                selected={
+                  formData.time_rec ? new Date(formData.time_rec) : null
+                }
                 onChange={handleDateChange}
                 className="mt-1 block w-full p-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholderText="เลือกวันที่"
               />
             </div>
-            </div>
+          </div>
 
           <div className="my-6 mx-10 ">
             <label
@@ -1203,9 +1223,7 @@ export const FristPage = ({
                 height="25"
               />
             </button>
-
           </div>
-        
         </form>
       </div>
     </div>
