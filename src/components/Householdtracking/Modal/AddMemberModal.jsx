@@ -345,7 +345,7 @@ const AddMemberModal = ({ show, onClose, household, reloadData }) => {
                 <div>
                     <div className="ml-10">
                         <h2 className="text-black text-2xl font-bold  py-5">
-                            ส่วนที่ 1 ทุนมนุษย์
+                             ทุนมนุษย์
                         </h2>
                     </div>
                     {/* ทำการloop */}

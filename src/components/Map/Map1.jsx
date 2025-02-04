@@ -18,18 +18,31 @@ const Map1 = () => {
     useEffect(() => {
         const fetchAllHouseholdCounts = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/house-hold/countByDistrict');
-                const counts = response.data.data.reduce((acc, item) => {
-                    acc[item.district] = item.count;
-                    return acc;
-                }, {});
-                setDistrictCounts(counts); // เก็บข้อมูลใน state
+                const response = await axios.get("http://localhost:8080/api/district/getlatest");
+    
+                // ตรวจสอบโครงสร้างข้อมูลที่ได้
+                console.log("Response Data:", response.data);
+    
+                // เช็คว่ามี `data` และ `data.data.data` หรือไม่
+                if (response.data && response.data.data && response.data.data.data && Array.isArray(response.data.data.data)) {
+                    const counts = response.data.data.data.reduce((acc, item) => {
+                        acc[item.district_name_thai] = item.family; // ใช้ `district_name_thai` และ `family`
+                        return acc;
+                    }, {});
+    
+                    setDistrictCounts(counts); // อัปเดต state
+                } else {
+                    console.error("Invalid data structure:", response.data);
+                }
             } catch (error) {
                 console.error("Error fetching district data:", error);
             }
         };
-        fetchAllHouseholdCounts(); // ดึงข้อมูลครั้งเดียวเมื่อ mount
+    
+        fetchAllHouseholdCounts();
     }, []);
+    
+
 
     // ฟังก์ชันที่ใช้จับตำแหน่งเมื่อ click และกำหนดเนื้อหาของ tooltip
     const handleHover = (event, districtName) => {

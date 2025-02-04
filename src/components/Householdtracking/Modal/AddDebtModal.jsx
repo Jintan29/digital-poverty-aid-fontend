@@ -103,7 +103,7 @@ const AddDebtModal = ({ show, onClose, household, reloadData }) => {
             Swal.fire("ข้อผิดพลาด", "กรุณาเลือกแหล่งสินเชื่ออย่างน้อย 1 รายการ", "error");
             return false;
         }
-    
+
         // ตรวจสอบว่าฟอร์ม "อื่น ๆ" (prefixCredit2 และ prefixCredit) ถูกกรอกครบถ้วนหรือไม่
         for (const prefix of [prefixCredit2, prefixCredit]) {
             const otherSource = formData.Creditsources.find((source) =>
@@ -121,7 +121,7 @@ const AddDebtModal = ({ show, onClose, household, reloadData }) => {
                 }
             }
         }
-    
+
         // ตรวจสอบว่าแหล่งสินเชื่อที่เลือก มีการกรอกจำนวนเงินหรือไม่
         for (const credit of formData.Creditsources) {
             if (!credit.outstanding_amount || credit.outstanding_amount <= 0) {
@@ -133,7 +133,7 @@ const AddDebtModal = ({ show, onClose, household, reloadData }) => {
                 return false;
             }
         }
-    
+
         // ผ่านการตรวจสอบ
         return true;
     };
@@ -185,9 +185,12 @@ const AddDebtModal = ({ show, onClose, household, reloadData }) => {
             title="แหล่งสินเชื่อ"
             show={show}
             onClose={onClose}
-            size="7xl"
+            size="6xl"
         >
             <div className="mt-5 bg-white p-4 rounded-lg  max-w-4xl overflow-x-auto">
+                {/* <h3 className="text-lg font-bold text-black mb-5">
+                    หนี้สินครัวเรือน
+                </h3> */}
                 <table
                     className="table-auto border-collapse table-fixed"
                     style={{ width: '800px' }}
