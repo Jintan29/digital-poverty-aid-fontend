@@ -156,7 +156,7 @@ const AddIncomeModal = ({ show, onClose, household, reloadData }) => {
                 {/* Section 2 รายได้ที่นอกภาคการเกษตร (เฉลี่ย/ปี)*/}
                 <div className="mb-6">
                     <h3 className="text-lg font-bold text-black mb-5 ">
-                        2. รายได้ที่นอกภาคการเกษตร (เฉลี่ย/ปี)
+                         รายได้ที่นอกภาคการเกษตร (เฉลี่ย/ปี)
                     </h3>
                     <div className="pl-10">
                         {/* 1 */}

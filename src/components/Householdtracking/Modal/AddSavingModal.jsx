@@ -228,7 +228,7 @@ const AddSavingModal = ({ show, onClose, household, reloadData }) => {
                 {/* Section 4: Household Savings */}
                 <div className="mb-6">
                     <h3 className="text-lg font-bold text-black mb-5">
-                        4. ครัวเรือนของท่านมีการออมหรือไม่
+                         ครัวเรือนของท่านมีการออมหรือไม่
                     </h3>
                     <div className="pl-10">
                         {/* ตารางแสดงข้อมูลการออม */}

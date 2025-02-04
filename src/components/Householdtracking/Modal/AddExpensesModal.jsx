@@ -221,7 +221,7 @@ const AddExpensesModal = ({ show, onClose, household, reloadData }) => {
                 {/* Section 3: รายจ่ายครัวเรือน */}
                 <div className="mb-6">
                     <h3 className="text-lg font-bold text-black mb-5 ">
-                        3. รายจ่ายครัวเรือน (นอกเหนือจากการลงทุนเพื่อการผลิต)
+                        รายจ่ายครัวเรือน (นอกเหนือจากการลงทุนเพื่อการผลิต)
                         (ตอบได้มากกว่า 1 ข้อ)
                     </h3>
                     <div className="pl-10">

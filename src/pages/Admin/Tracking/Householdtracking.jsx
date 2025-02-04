@@ -40,6 +40,7 @@ import AddExpensesModal from "../../../components/Householdtracking/Modal/AddExp
 import AddSavingModal from "../../../components/Householdtracking/Modal/AddSavingModal";
 import AddDebtModal from "../../../components/Householdtracking/Modal/AddDebtModal";
 import AddMemberModal from "../../../components/Householdtracking/Modal/AddMemberModal";
+import AddPinModal from "../../../components/Householdtracking/Modal/AddPinModal";
 
 const Householdtracking = () => {
 
@@ -53,6 +54,7 @@ const Householdtracking = () => {
     const [savingModal, setSavingModal] = useState(false)
     const [debtModal, setDebtModal] = useState(false)
     const [memberModal, setMemberModal] = useState(false)
+    const [pinModal, setPinModal] = useState(false)
     const { id } = useParams()
 
     const fetchhousehold = async () => {
@@ -476,15 +478,16 @@ const Householdtracking = () => {
                             />
                             เพิ่มหนี้สิน
                         </Dropdown.Item>
-                        {/* <Dropdown.Item onClick={() => setMemberModal(true)}>
+                        <Dropdown.Item onClick={() => setPinModal(true)}>
                             <Icon
                                 width={20}
                                 height={20}
                                 className="mr-2"
-                                icon="material-symbols:group-add"
+                                icon="mdi:map-marker-plus" // ใช้ไอคอนที่สื่อถึงการเพิ่มตำแหน่ง
                             />
-                            เพิ่มสมาชิก
-                        </Dropdown.Item> */}
+                            เพิ่ม/แก้ไข ตำแหน่ง
+                        </Dropdown.Item>
+
 
                     </Dropdown>
                 </div>
@@ -760,6 +763,8 @@ const Householdtracking = () => {
             <AddSavingModal show={savingModal} onClose={e => setSavingModal(false)} household={household} reloadData={fetchhousehold} />
             <AddDebtModal show={debtModal} onClose={e => setDebtModal(false)} household={household} reloadData={fetchhousehold} />
             <AddMemberModal show={memberModal} onClose={e => setMemberModal(false)} household={household} reloadData={fetchhousehold} />
+            <AddPinModal show={pinModal} onClose={e => setPinModal(false)} household={household} reloadData={fetchhousehold} />
+            
         </div >
     );
 };

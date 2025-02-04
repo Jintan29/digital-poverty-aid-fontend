@@ -20,19 +20,40 @@ const Map2 = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/member-household/district-count');
-        if (response.data.success) {
-          setDistrictCounts(response.data.data); // เก็บข้อมูลใน State
+        const response = await axios.get('http://localhost:8080/api/district/getlatest');
+        // console.log("Response Data:", response.data);
+        if (response.data && response.data.data && response.data.data.data && Array.isArray(response.data.data.data)) {
+          const counts = response.data.data.data.reduce((acc, item) => {
+            acc[item.district_name_thai] = item.poor; // ใช้ `district_name_thai` และ `family`
+            return acc;
+          }, {});
+
+          setDistrictCounts(counts); // อัปเดต state
         } else {
-          console.error('Failed to fetch district counts:', response.data.message);
+          console.error("Invalid data structure:", response.data);
         }
       } catch (error) {
-        console.error('Error fetching district counts:', error);
+        console.error("Error fetching district data:", error);
       }
     };
-
     fetchData();
   }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:8080/api/member-household/district-count');
+  //       if (response.data.success) {
+  //         setDistrictCounts(response.data.data); // เก็บข้อมูลใน State
+  //       } else {
+  //         console.error('Failed to fetch district counts:', response.data.message);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching district counts:', error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
 
   // ฟังก์ชันที่ใช้จับตำแหน่งเมื่อ click และกำหนดเนื้อหาของ tooltip
@@ -91,7 +112,7 @@ const Map2 = () => {
       "#FFC925", "#FFC821", "#FFC615", "#FFC209", "#FFC104",
     ];
     if (count === 0) return colors[0];
-    const index = Math.min(Math.floor((count - 1) / 180) + 1, colors.length - 1);
+    const index = Math.min(Math.floor((count - 1) / 200) + 1, colors.length - 1);
     return colors[index];
   };
 
