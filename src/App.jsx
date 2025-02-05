@@ -11,7 +11,7 @@ import axios from "axios";
 import config from "./config";
 import { useDispatch } from "react-redux";
 import { login, logout } from "./store/userSlice";
-import { Map } from "./pages/Map"; 
+import { Map } from "./pages/Map";
 import { PageNotFound } from "./pages/PageNotFound";
 import { AdminRoute } from "./route/AdminRoute";
 import HomepageAdmin from "./pages/Admin/HomepageAdmin";
@@ -29,6 +29,7 @@ import MixedChart from "./pages/MixedChart";
 import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
 import Capital from "./pages/Overviewcapital/Capital";
 import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
+import AddApiToken from "./pages/AddApiToken";
 //Testzone
 import FormAddress from "./pages/FormAddress";
 
@@ -181,7 +182,7 @@ function App() {
               element={
                 <AdminRoute>
                   <TrackHousehold />
-                  </AdminRoute>
+                </AdminRoute>
               }
             />
 
@@ -211,9 +212,16 @@ function App() {
                 </AdminRoute>
               }
             />
-            
+            <Route path="add-ApiToken"
+              element={
+                <AdminRoute>
+                  <AddApiToken />
+                </AdminRoute>}
+            />
+
             <Route path="*" element={<PageNotFound />} />
             {/* เพิ่มหน้าอื่น */}
+
           </Route>
         </Routes>
       </div>

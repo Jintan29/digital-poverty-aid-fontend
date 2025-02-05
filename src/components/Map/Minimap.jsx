@@ -9,66 +9,19 @@ import Map1 from "./Map1";
 
 function Minimap() {
 
-    const [householdCount, setHouseholdCount] = useState(0);
-    const [memberHouseholdCount, setMemberHouseholdCount] = useState(0);
-
-    // useEffect(() => {
-    //     const fetchCounts = async () => {
-    //       try {
-    //         // ใช้ Promise.all เพื่อเรียก API ทั้งสองพร้อมกัน
-    //         const [householdResponse, memberHouseholdResponse] = await Promise.all([
-    //           axios.get("http://localhost:8080/api/house-hold/count"),
-    //           axios.get("http://localhost:8080/api/member-household/count")
-    //         ]);
-
-    //         // ตั้งค่าจำนวนสมาชิกในครัวเรือน
-    //         setHouseholdCount(householdResponse.data.count);
-    //         // ตั้งค่าจำนวนสมาชิกในบ้าน
-    //         setMemberHouseholdCount(memberHouseholdResponse.data.data);
-
-    //       } catch (error) {
-    //         console.error("Error fetching household count:", error);
-    //       }
-    //     };
-
-    //     fetchCounts();
-    //   }, []); // ใช้ [] เพื่อให้โหลดแค่ครั้งเดียว
-
-    useEffect(() => {
-        const fetchHouseholdCount = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/api/house-hold/count");
-                setHouseholdCount(response.data.count);
-            } catch (error) {
-                console.error("Error fetching household count:", error);
-            }
-        };
-
-        fetchHouseholdCount();
-    }, []);
-
+    const [count, setCount] = useState(0);
 
     useEffect(() => {
         const fetchMemberHouseholdCount = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/member-household/count");
-                setMemberHouseholdCount(response.data.data); // ใช้ response.data.data เพื่อเข้าถึงค่าที่ส่งกลับจาก backend
+                const response = await axios.get("http://localhost:8080/api/district/getlatest");
+                setCount(response.data.data); // ใช้ response.data.data เพื่อเข้าถึงค่าที่ส่งกลับจาก backend
             } catch (error) {
                 console.error("Error fetching household count:", error);
             }
         };
         fetchMemberHouseholdCount();
     }, []); // ใช้ [] เพื่อให้โหลดแค่ครั้งเดียว
-
-
-
-
-    // const [showMap, setShowMap] = useState(true);
-
-    // // ฟังก์ชันสำหรับการสลับแผนที่
-    // const handleClick = (isMap) => {
-    //     setShowMap(isMap); // true สำหรับแผนที่แรก, false สำหรับแผนที่ที่สอง
-    // };
 
 
     // อ่านสถานะจาก localStorage ถ้ามี
@@ -99,7 +52,7 @@ function Minimap() {
                         จำนวนครัวเรือนฯ ที่ได้จากการสำรวจ
                     </p>
                     <p className="text-center text-[28px] font-bold text-red-500">
-                        {householdCount.toLocaleString()} <span className="text-black font-normal text-shadow-custom">ครัวเรือน</span>
+                        {count ? count.totalFamily.toLocaleString() : "กำลังโหลด..."}<span className="text-black font-normal text-shadow-custom">ครัวเรือน</span>
                     </p>
                 </div>
                 {/* ส่วนสอง */}
@@ -111,7 +64,7 @@ function Minimap() {
                         จำนวนสมาชิกที่ได้จากการสำรวจ
                     </p>
                     <p className="text-center text-[28px] font-bold text-red-500">
-                        {memberHouseholdCount.toLocaleString()} <span className="text-black font-normal text-shadow-custom">คน</span>
+                        {count ? count.totalPoor.toLocaleString() : "กำลังโหลด..."}  <span className="text-black font-normal text-shadow-custom">คน</span>
                     </p>
                 </div>
 
@@ -139,12 +92,14 @@ function Minimap() {
                     {/* แสดงข้อความในสีที่แตกต่างกันตามแผนที่ */}
                     {showMap ? (
                         <p className="text-[22px] font-bold text-blue-500 mt-2">
-                            {householdCount.toLocaleString()}{" "}
+                            {/* {householdCount.toLocaleString()}{" "} */}
+                            {count ? count.totalFamily.toLocaleString() : "กำลังโหลด..."}
                             <span className="text-black font-normal text-shadow-custom">ครัวเรือน</span>
                         </p>
                     ) : (
                         <p className="text-[22px] font-bold text-yellow-500 mt-2">
-                            {memberHouseholdCount.toLocaleString()}{" "}
+                            {/* {memberHouseholdCount.toLocaleString()}{" "} */}
+                            {count ? count.totalPoor.toLocaleString() : "กำลังโหลด..."}
                             <span className="text-black font-normal text-shadow-custom">คน</span>
                         </p>
                     )}
