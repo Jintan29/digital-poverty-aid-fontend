@@ -1,6 +1,6 @@
 import React from "react";
 
-const FinancialCapital = () => {
+const FinancialCapital = ({financialCapital}) => {
   return (
     <div className="pt-4 pb-6">
       <h3 className="text-2xl font-bold mb-4">
@@ -16,7 +16,7 @@ const FinancialCapital = () => {
               ครัวเรือนของท่านมีการออมหรือไม่ (ไม่มี)
             </p>
             <hr className="border-green-500 my-2" />
-            <p className="text-3xl text-right text-green-500 font-bold">100</p>
+            <p className="text-3xl text-right text-green-500 font-bold">{financialCapital.NoSaving}</p>
           </div>
 
           {/* 5.2 */}
@@ -25,7 +25,7 @@ const FinancialCapital = () => {
               ครัวเรือนของท่านมีหนี้สินหรือไม่ (มี)
             </p>
             <hr className="border-green-500 my-2" />
-            <p className="text-3xl text-right text-green-500 font-bold">100</p>
+            <p className="text-3xl text-right text-green-500 font-bold">{financialCapital.HasDebt}</p>
           </div>
 
           {/* 6.1 */}
@@ -34,7 +34,7 @@ const FinancialCapital = () => {
               ครัวเรือนของท่านมีทรัพย์สินเพื่อการประกอบอาชีพหรือไม่ (ไม่มี)
             </p>
             <hr className="border-green-500 my-2" />
-            <p className="text-3xl text-right text-green-500 font-bold">100</p>
+            <p className="text-3xl text-right text-green-500 font-bold">{financialCapital.NoOccupationalproperty}</p>
           </div>
         </div>
       </div>

@@ -44,24 +44,6 @@ const ManageUser = () => {
     }
   };
 
-  const saveUser = async () => {
-    try {
-      await axios.put(config.api_path + `/user/update/${editUser.id}`, editUser, config.headers());
-      Swal.fire({
-        title: "สำเร็จ",
-        icon: "success",
-        text: "แก้ไขข้อมูลเรียบร้อยแล้ว",
-      });
-      loadData();
-      setManageUserModal(false);
-    } catch (err) {
-      Swal.fire({
-        title: "error",
-        icon: "error",
-        text: err.response?.data?.message || "เกิดข้อผิดพลาด",
-      });
-    }
-  };
 
 
   return (
