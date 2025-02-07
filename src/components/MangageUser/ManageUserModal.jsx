@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Modal from '../Modal';
-import Swal from 'sweetalert2';
+import React, { useState, useEffect } from "react";
+import Modal from "../Modal";
+import Swal from "sweetalert2";
+import axios from "axios";
+import config from "../../config";
 
-const ManageUserModal = ({show, member, onClose, loadData }) => {
 
-// ตั้งค่า state เพื่อเก็บข้อมูลแบบฟอร์ม
-const [formData, setFormData] = useState({
+const ManageUserModal = ({ show, member, onClose, loadData }) => {
+  // ตั้งค่า state เพื่อเก็บข้อมูลแบบฟอร์ม
+  const [formData, setFormData] = useState({
     id: member.id || "",
     fname: member.fname || "",
     lname: member.lname || "",
@@ -19,63 +21,112 @@ const [formData, setFormData] = useState({
   useEffect(() => {
     if (show) {
       setFormData({
-        id: member.id,
+        //id: member.id,
         fname: member.fname || "",
         lname: member.lname || "",
         email: member.email || "",
         phone: member.phone || "",
         password: "",
-        confirmPassword: "",
+       confirmPassword: "",
       });
     }
   }, [show, member]);
 
-      const handleInputChange = (field, value) => {
-        const updateData = { ...formData };
-        updateData[field] = value;
-        setFormData(updateData);
-      };
-      
-
-    // ฟังก์ชันบันทึกข้อมูล (คุณสามารถเพิ่ม logic ได้ตามต้องการ)
-  const saveUser = () => {
-    // Logic สำหรับบันทึกข้อมูล
-    console.log('Saving user:', formData);
-    loadData();
-    onClose();
+  const handleInputChange = (field, value) => {
+    const updateData = { ...formData };
+    updateData[field] = value;
+    setFormData(updateData);
   };
-  
-  //validation
-  const validateInput = ()=>{
-    // ตรวจสอบเบอร์
-    if(!formData.phone ||(formData.phone !== '-'  && !/^\d{10}$/.test(formData.phone))){
-          Swal.fire({
-            title:'เบอร์โทรศัพท์ไม่ถูกต้อง',
-            text:`กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก หรือกรอก '-' หากไม่มี`,
-            icon:'warning',
-          })
-          return false
-  }
-  // ตรวจสอบemail
-    if (!formData.email || !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
-        Swal.fire({
-            title: 'กรอกข้อมูลไม่ถูกต้อง',
-            text: 'กรุณากรอกอีเมลให้ถูกต้อง',
-            icon: 'warning',
-            });
-            return false;
-  }
-  //หากกรอกถูกหมด
-  saveUser();
-};
 
-    const handleSubmit = async(e) =>{
-        e.preventDefault();
-        // validate
-        if(!validateInput()){
-            return
-        }
+
+  // ฟังก์ชันการตรวจสอบข้อมูลก่อนส่ง
+  const validateInput = () => {
+    // ตรวจสอบเบอร์โทรศัพท์
+    if (
+      !formData.phone ||
+      (formData.phone !== "-" && !/^\d{10}$/.test(formData.phone))
+    ) {
+      Swal.fire({
+        title: "เบอร์โทรศัพท์ไม่ถูกต้อง",
+        text: 'กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก หรือกรอก "-" หากไม่มี',
+        icon: "warning",
+      });
+      return false;
     }
+
+    // ตรวจสอบอีเมล
+    if (
+      !formData.email ||
+      !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)
+    ) {
+      Swal.fire({
+        title: "กรอกข้อมูลไม่ถูกต้อง",
+        text: "กรุณากรอกอีเมลให้ถูกต้อง",
+        icon: "warning",
+      });
+      return false;
+    }
+
+    // ตรวจสอบรหัสผ่าน
+    if (formData.password !== formData.confirmPassword) {
+      Swal.fire({
+        title: "รหัสผ่านไม่ตรงกัน",
+        text: "กรุณาตรวจสอบให้แน่ใจว่ารหัสผ่านทั้งสองช่องตรงกัน",
+        icon: "warning",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  // ฟังก์ชันที่ทำงานเมื่อส่งฟอร์ม
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // ตรวจสอบข้อมูลก่อนที่จะส่ง
+    if (!validateInput()) {
+      return;
+    }
+
+    //กรอง confrime pass  ออก 
+    const {confirmPassword, ...dataToSend} = formData
+
+    try {
+      const res = await Swal.fire({
+        title: "แก้ไขข้อมูล",
+        text: "ตรวจสอบข้อมูลถูกต้องแล้วใช่หรือไม่",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "ใช่",
+        cancelButtonText: "ยกเลิก",
+      });
+      if (res.isConfirmed) {
+        const res = await axios.put(
+          config.api_path + `/user/update/${member.id}`,
+          dataToSend,
+          config.headers()
+        );
+
+        if (res.data.message === "User updated successfully") {
+          await Swal.fire({
+            title: "บันทึกข้อมูล",
+            text: "บันทึกข้อมูลสำเร็จ",
+            icon: "success",
+          });
+        }
+
+        loadData(); // โหลดข้อมูลใหม่หลังจากอัปเดต
+        onClose(); // ปิด modal
+      }
+    } catch (error) {
+      Swal.fire(
+        "เกิดข้อผิดพลาด",
+        error.response?.data?.message || error.message,
+        "error"
+      );
+    }
+  };
 
   return (
     <>
@@ -96,7 +147,7 @@ const [formData, setFormData] = useState({
               name="fname"
               type="text"
               value={formData.fname}
-              onChange={ e => handleInputChange(e.target.name,e.target.value )}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               required
               className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
@@ -110,7 +161,7 @@ const [formData, setFormData] = useState({
               name="lname"
               type="text"
               value={formData.lname}
-              onChange={ e => handleInputChange(e.target.name,e.target.value )}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               required
               className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
@@ -121,9 +172,9 @@ const [formData, setFormData] = useState({
             </label>
             <input
               type="text"
-              name='email'
+              name="email"
               value={formData.email}
-              onChange={(e) => handleInputChange(e.target.name,e.target.value)}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               required
               className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
@@ -134,9 +185,9 @@ const [formData, setFormData] = useState({
             </label>
             <input
               type="text"
-              name='phone'
+              name="phone"
               value={formData.phone}
-              onChange={ e => handleInputChange(e.target.name,e.target.value )}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               required
               className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
@@ -149,9 +200,9 @@ const [formData, setFormData] = useState({
             </label>
             <input
               type="password"
-              name='password'
+              name="password"
               value={formData.password}
-              onChange={ e => handleInputChange(e.target.name,e.target.value )}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               placeholder="ระบุรหัสผ่าน"
               required
               className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -163,9 +214,9 @@ const [formData, setFormData] = useState({
             </label>
             <input
               type="password"
-              name='confirmPassword'
+              name="confirmPassword"
               value={formData.confirmPassword}
-              onChange={e=>handleInputChange(e.target.name,e.target.value )}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               placeholder="ยืนยันรหัสผ่าน"
               required
               className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -176,7 +227,7 @@ const [formData, setFormData] = useState({
           <button
             type="button"
             className="px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
-            onClick={e=> handleSubmit(e)}
+            onClick={(e) => handleSubmit(e)}
           >
             แก้ไขข้อมูล
           </button>
