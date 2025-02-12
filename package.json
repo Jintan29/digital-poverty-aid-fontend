@@ -16,6 +16,7 @@
     "@heroicons/react": "^2.1.5",
     "@iconify-icons/material-symbols": "^1.2.58",
     "@iconify/react": "^5.2.0",
+    "@line/liff": "^2.25.1",
     "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.7",
     "chart.js": "^4.4.7",
