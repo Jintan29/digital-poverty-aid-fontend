@@ -32,6 +32,8 @@ import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
 import AddApiToken from "./pages/AddApiToken";
 import LineRegister from "./pages/Line/LineRegister";
 import LineLogin from "./pages/Line/LineLogin";
+import FindAssistance from "./pages/Admin/FindAssistance/FindAssistance"
+import FormAddress from "./pages/FormAddress";
 
 
 //Testzone
@@ -228,7 +230,12 @@ function App() {
                   <AddApiToken />
                 </AdminRoute>}
             />
-
+            <Route path="FindAssistance"
+              element={
+                <AdminRoute>
+                  <FindAssistance />
+                </AdminRoute>}
+            />
             <Route path="*" element={<PageNotFound />} />
             {/* เพิ่มหน้าอื่น */}
 
