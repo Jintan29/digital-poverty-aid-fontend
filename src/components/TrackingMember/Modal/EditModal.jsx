@@ -281,6 +281,7 @@ const EditModal = ({ show, onClose, member,loadData }) => {
               onChange={e=>handleInputChange(e.target.name,e.target.value)}
               className="border border-gray-300  mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
             >
+              <option>ไม่ได้เรียน</option>
               <option>ต่ำกว่าประถม</option>
               <option>ประถมศึกษา</option>
               <option>ม.ต้น หรือเทียบเท่า</option>
