@@ -30,6 +30,7 @@ import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
 import Capital from "./pages/Overviewcapital/Capital";
 import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
 import AddApiToken from "./pages/AddApiToken";
+import FindAssistance from "./pages/Admin/FindAssistance/FindAssistance"
 //Testzone
 import FormAddress from "./pages/FormAddress";
 
@@ -218,7 +219,12 @@ function App() {
                   <AddApiToken />
                 </AdminRoute>}
             />
-
+            <Route path="FindAssistance"
+              element={
+                <AdminRoute>
+                  <FindAssistance />
+                </AdminRoute>}
+            />
             <Route path="*" element={<PageNotFound />} />
             {/* เพิ่มหน้าอื่น */}
 
