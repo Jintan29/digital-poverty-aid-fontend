@@ -30,10 +30,12 @@ import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
 import Capital from "./pages/Overviewcapital/Capital";
 import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
 import AddApiToken from "./pages/AddApiToken";
+import LineRegister from "./pages/Line/LineRegister";
+import LineLogin from "./pages/Line/LineLogin";
+
+
 //Testzone
 import FormAddress from "./pages/FormAddress";
-
-
 
 
 
@@ -102,6 +104,8 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="form" element={<Form />} />
             <Route path="testt" element={<MixedChart />} />
+            
+            
 
 
             {/* Auth */}
@@ -119,6 +123,12 @@ function App() {
             <Route path="testAddsress" element={<FormAddress />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
+
+          {/* สำหรับ LINE ไม่ต้องการ Navbar   */}
+          <Route path="/line" element={<LineRegister />} />
+          <Route path="/line-login" element={<LineLogin />} />
+          
+
 
           {/*Layout for Admin */}
           <Route path="/admin" element={<AdminLayout />}>
