@@ -175,9 +175,8 @@ function App() {
                 </AdminRoute>
               }
             />
-            {/* TrackingMemberId */}
 
-
+              {/* ข้อมูลรายบุคคล */}
             <Route
               path="track-member/:id"
               element={
@@ -204,6 +203,8 @@ function App() {
                 </AdminRoute>
               }
             />
+
+            {/* ข้อมูล5ทุน */}
             <Route
               path="capital"
               element={
@@ -213,7 +214,7 @@ function App() {
               }
             />
 
-
+            {/* GIS map */}
             <Route
               path="gis-household"
               element={
@@ -222,12 +223,16 @@ function App() {
                 </AdminRoute>
               }
             />
+
+            {/* fetch API DSS */}
             <Route path="add-ApiToken"
               element={
                 <AdminRoute>
                   <AddApiToken />
                 </AdminRoute>}
             />
+
+            {/* นำออกข้อมูล Excel */}
             <Route path="FindAssistance"
               element={
                 <AdminRoute>
@@ -235,7 +240,6 @@ function App() {
                 </AdminRoute>}
             />
             <Route path="*" element={<PageNotFound />} />
-            {/* เพิ่มหน้าอื่น */}
 
           </Route>
         </Routes>

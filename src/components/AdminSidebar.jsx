@@ -20,7 +20,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     {
       name: "ระบบ GIS ครัวเรือนยากจน",
       link: "/admin/gis-household",
-      logo: "material-symbols:pin-drop-rounded",
+      logo: "material-symbols:globe-location-pin-sharp",
     },
     {
       name: "ค้นหาสมาชิกครัวเรือน",
@@ -35,6 +35,19 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         { name: 'ติดตามรายบุคคล', link: '/admin/track-member/' },
         { name: 'ติดตามครัวเรือน', link: '/admin/track-household' },
       ]
+    },
+    { name: "API ", 
+      link: "/admin/api", 
+      logo: "material-symbols:integration-instructions-outline-rounded",
+      submenu:[
+        {name:'ดึงข้อมูลจากระบบหลัก',link:'/admin/add-ApiToken'},
+        {name:'เอกสารการใช้งาน',link:'#'}
+      ]
+    },
+    {
+      name: "ระบบนำออกข้อมูล",
+      link: "/admin/FindAssistance",
+      logo: "material-symbols:database-upload-outline-rounded",
     },
     {
       name: "จัดการผู้ใช้งานระบบ",
