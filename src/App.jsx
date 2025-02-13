@@ -34,6 +34,10 @@ import LineRegister from "./pages/Line/LineRegister";
 import LineLogin from "./pages/Line/LineLogin";
 import FindAssistance from "./pages/Admin/FindAssistance/FindAssistance"
 import FormAddress from "./pages/FormAddress";
+import HelpLog from "./pages/Admin/HelpLog/HelpLog";
+
+
+
 
 
 
@@ -233,6 +237,14 @@ function App() {
             />
 
             {/* นำออกข้อมูล Excel */}
+                
+            <Route path="helplog"
+              element={
+                <AdminRoute>
+                  <HelpLog />
+                </AdminRoute>}
+            />
+
             <Route path="FindAssistance"
               element={
                 <AdminRoute>
