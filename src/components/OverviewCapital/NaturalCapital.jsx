@@ -1,6 +1,6 @@
 import React from "react";
 
-const NaturalCapital = () => {
+const NaturalCapital = ({naturalCapital}) => {
   return (
     <div className="pt-4 pb-6">
       <h3 className="text-2xl font-bold mb-4">
@@ -15,7 +15,7 @@ const NaturalCapital = () => {
               ครัวเรือนของท่านมีบ้านพักอาศัยอยู่ในพื้นที่ภัยพิบัติหรือไม่ (อยู่)
             </p>
             <hr className="border-yellow-500 my-2" />
-            <p className="text-3xl text-right text-yellow-500 font-bold">100</p>
+            <p className="text-3xl text-right text-yellow-500 font-bold">{naturalCapital.HouseInDisasterArea}</p>
           </div>
 
           {/* 4 */}
@@ -24,7 +24,7 @@ const NaturalCapital = () => {
               ครัวเรือนของท่านมีที่ทำกินอยู่ในพื้นที่ภัยพิบัติหรือไม่ (อยู่)
             </p>
             <hr className="border-yellow-500 my-2" />
-            <p className="text-3xl text-right text-yellow-500 font-bold">100</p>
+            <p className="text-3xl text-right text-yellow-500 font-bold">{naturalCapital.FarmLandInDisasterArea}</p>
           </div>
         </div>
       </div>

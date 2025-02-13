@@ -19,6 +19,7 @@ export default {
         bodydark1: '#DEE4EE',
         graydark: '#333A48',
         softdark: '#1c2434',
+        "blue-gray-50": "#f8fafc", // เพิ่มสีถ้าขาดหายไป
         'light-green': '#90ee90',
       },
       textShadow: {

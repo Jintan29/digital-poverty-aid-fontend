@@ -1,6 +1,6 @@
 import React from "react";
 
-const PhysicalCapital = () => {
+const PhysicalCapital = ({physicalCapital}) => {
   return (
     <div className="pt-4 pb-6">
       <h3 className="text-2xl font-bold mb-4">ตอนที่ 2 ทุนกายภาพ(ครัวเรือน)</h3>
@@ -15,7 +15,7 @@ const PhysicalCapital = () => {
               เช่าบ้าน/เช่าห้องอยู่
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">100</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.HasHouse}</p>
           </div>
 
           {/* 2 */}
@@ -24,7 +24,7 @@ const PhysicalCapital = () => {
               สภาพของบ้านที่อาศัย(สภาพทรุกโทรม หรือ วัสดุก่อสร้างบ้านไม่ถาวร)
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">311</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.HouseStatus}</p>
           </div>
 
           {/* 3 */}
@@ -34,7 +34,7 @@ const PhysicalCapital = () => {
               (ไม่มีการจัดเก็บสิ่งของเป็นระเบียบรกรุงรัง)
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">1,328</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.ItemStorage}</p>
           </div>
 
           {/* 4 */}
@@ -43,7 +43,7 @@ const PhysicalCapital = () => {
               ครัวเรือนของท่านมีไฟฟ้าใช้หรือไม่ (ไม่มี (เช่น เทียน ตะเกียง))
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">1,328</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.NoElectric}</p>
           </div>
 
           {/* 5 */}
@@ -53,7 +53,7 @@ const PhysicalCapital = () => {
               (ต่อพ่วงไฟฟ้าจากคนอื่น,ไม่มีมิเตอร์ไฟฟ้าของตนเอง)
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">1,328</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.NoMeter}</p>
           </div>
 
           {/* 6 */}
@@ -62,7 +62,7 @@ const PhysicalCapital = () => {
               ครัวเรือนของท่านมีอุปกรณ์สารสนเทศหรือไม่มี(โทรศัพท์บ้าน)(ไม่มีได้เลือก)
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">82</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.NoHomePhone}</p>
           </div>
 
           {/* 7 */}
@@ -71,7 +71,7 @@ const PhysicalCapital = () => {
               ครัวเรือนของท่านมีอุปกรณ์สารสนเทศหรือไม่มี(โทรศัพท์มือถือ)(ไม่มีได้เลือก)
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">52</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.NoPhone}</p>
           </div>
 
           {/* 8 */}
@@ -81,7 +81,7 @@ const PhysicalCapital = () => {
               (ไม่มีที่ทำกินทางการเกษตร)
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">82</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.NoAgiLand}</p>
           </div>
 
           {/* 9 */}
@@ -92,7 +92,7 @@ const PhysicalCapital = () => {
               โดยไม่มีค่าเช่า)
             </p>
             <hr className="border-blue-500 my-2" />
-            <p className="text-3xl text-right text-blue-500 font-bold">100</p>
+            <p className="text-3xl text-right text-blue-500 font-bold">{physicalCapital.AgiLanadNoRent}</p>
           </div>
         </div>
       </div>
