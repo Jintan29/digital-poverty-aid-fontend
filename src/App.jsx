@@ -32,6 +32,10 @@ import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
 import AddApiToken from "./pages/AddApiToken";
 //Testzone
 import FormAddress from "./pages/FormAddress";
+import HelpLog from "./pages/Admin/HelpLog/HelpLog";
+
+
+
 
 
 
@@ -216,6 +220,12 @@ function App() {
               element={
                 <AdminRoute>
                   <AddApiToken />
+                </AdminRoute>}
+            />
+            <Route path="helplog"
+              element={
+                <AdminRoute>
+                  <HelpLog />
                 </AdminRoute>}
             />
 
