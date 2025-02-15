@@ -39,7 +39,7 @@ const HumanCapital = ({ humanCapital }) => {
 
           {/* การศึกษาสูงสุด */}
           <div className="border-2 border-blue-400 p-2 bg-blue-100 rounded-xl">
-            <p className="tracking-tight text-blue-500 md:text-lg dark:text-blue-400">การศึกษาสูงสุด</p>
+            <p className="tracking-tight text-blue-500 md:text-lg dark:text-blue-400">ประถมศึกษา</p>
             <hr className="border-blue-500 my-2" />
             <p className="text-blue-500 text-right text-4xl font-bold">{humanCapital.Education?.Primary}</p>
           </div>
