@@ -1,106 +1,95 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { FaSearchPlus } from "react-icons/fa";
 import { SiMicrosoftexcel } from "react-icons/si";
 import { Card, Typography } from "@material-tailwind/react";
-import Pagination from "@mui/material/Pagination"; // 🔹 นำเข้า Pagination
-import * as XLSX from "xlsx"; // 🔹 นำเข้า XLSX
-import { saveAs } from "file-saver"; // 🔹 ใช้เพื่อบันทึกไฟล์
-import Swal from "sweetalert2";
+import Pagination from "@mui/material/Pagination"; // ✅ ใช้ Pagination จาก MUI
 
 function FindAssistance() {
     const TABLE_HEAD = ["#", "ปีที่สำรวจ", "ชื่อ-นามสกุล", "HC", "จำนวนสมาชิก", "ที่อยู่"];
 
-    const [tableData, setTableData] = useState([]);  //ค่าที่ได้จากการดึง api
-    const [selectYear, setSelectYear] = useState("ทั้งหมด"); //ตัวกรอง year
-    const [houseCode, setHouseCode] = useState("");  //ตัวกรอก รหัสบ้าน
-    const [filterData, setFilterData] = useState([]); // ค่าที่กรองแล้ว
-    const [isFetched, setIsFetched] = useState(false); //เปิดปิดข้อมูลในตาราง
-    const [years, setYears] = useState([]); // เก็บค่าปีที่มีอยู่ในข้อมูล
+    const [selectedYear, setSelectedYear] = useState("ทั้งหมด");  // ปีที่เลือก เอาไว้ update
+    const [houseCode, setHouseCode] = useState("");   // housecode ที่กรอก
+    const [filteredData, setFilteredData] = useState([]); // ข้อมูลที่ได้จากการ filter
+    const [currentPage, setCurrentPage] = useState(1);  //หน้าปัจจุบัน
+    const [totalPages, setTotalPages] = useState(1);  //จำนวนหน้าทั้งหมด
+    const [dataLoaded, setDataLoaded] = useState(false); //ใช้สำหรับเช็คว่าเคยโหลดข้อมูลหรือยัง
+    const [loading, setLoading] = useState(false);  
+    const pageSize = 10; // ✅ กำหนดจำนวนข้อมูลต่อหน้า
+    const [yearOptions, setYearOptions] = useState([]);  //ดึงปีจาก api
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // 🔹 จำนวนข้อมูลต่อหน้า
-
+    // ✅ ดึงปีจาก API เมื่อ Component โหลด
     useEffect(() => {
-        fetchHouseholdData();
+        const fetchYears = async () => {
+            try {
+                const response = await fetch("http://localhost:8080/api/export/getYears");
+                const result = await response.json();
+                if (response.ok) {
+                    setYearOptions(["ทั้งหมด", ...result.years]); // ✅ ใส่ "ทั้งหมด" เป็น Default
+                } else {
+                    console.error("Error fetching years:", result.msg);
+                }
+            } catch (error) {
+                console.error("Error fetching years:", error);
+            }
+        };
+
+        fetchYears();
     }, []);
 
-    const fetchHouseholdData = async () => {
-        try {
-            const response = await axios.get("http://localhost:8080/api/export/gethousehold");
-            const fetchedData = response.data.data;
-            setTableData(fetchedData); //update ค่าที่ดึงมา
+    useEffect(() => {
+        if (dataLoaded) fetchData();
+    }, [currentPage]);
 
-            const uniqueYears = [...new Set(fetchedData.map(item => item.surveyDate.toString()))].sort((a, b) => b - a);
-            setYears(uniqueYears);
+    const fetchData = async () => {
+        setLoading(true);
+        setDataLoaded(true);
+
+        let apiUrl = `http://localhost:8080/api/export/getFind?page=${currentPage}&pageSize=${pageSize}`;
+        if (selectedYear !== "ทั้งหมด") apiUrl += `&year=${selectedYear}`;
+        if (houseCode) apiUrl += `&houseCode=${houseCode}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            const result = await response.json();
+
+            if (response.ok) {
+                setFilteredData(result.data);
+                setTotalPages(result.pagination.totalPages);
+            } else {
+                console.error("Error fetching data:", result.msg);
+            }
         } catch (error) {
             console.error("Error fetching data:", error);
         }
+        setLoading(false);
     };
 
     const handleFilter = () => {
-        let filtered = tableData;
-
-        if (selectYear !== "ทั้งหมด") {
-            filtered = filtered.filter(row => row.surveyDate.toString() === selectYear);
-        }
-        if (houseCode) {
-            filtered = filtered.filter(row => row.housecode.toLowerCase().includes(houseCode.toLowerCase()));
-        }
-
-        filtered = filtered.map((item, index) => ({
-            ...item,
-            id: index + 1,
-        }));
-
-        setFilterData(filtered);
-        setIsFetched(true);  //เปิดข้อมูลในตาราง
-        setCurrentPage(1); // 🔹 รีเซ็ตกลับไปหน้าที่ 1 หลังจากกรองข้อมูลใหม่
+        setCurrentPage(1);
+        fetchData();
     };
 
-    // 🔹 คำนวณข้อมูลของหน้าปัจจุบัน
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = filterData.slice(startIndex, startIndex + itemsPerPage);
 
+    const handleDownloadExcel = async () => {
+        let apiUrl = `http://localhost:8080/api/export/getFind?getAll=true`;
+        if (selectedYear !== "ทั้งหมด") apiUrl += `&year=${selectedYear}`;
+        if (houseCode) apiUrl += `&houseCode=${houseCode}`;
 
-    const exportToExcel = () => {
-        if (filterData.length === 0) {
-            Swal.fire({
-                icon: "warning",
-                title: "ไม่มีข้อมูลให้ Export",
-                text: "โปรดตรวจสอบข้อมูลก่อนทำการ Export",
-            });
-            return;
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error("Error downloading Excel file");
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "HouseholdData.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error("Error downloading Excel:", error);
         }
-
-        // 🔹 แปลงข้อมูลเป็นรูปแบบที่ Excel รองรับ
-        const dataForExcel = filterData.map((item) => ({
-            "ลำดับที่": item.id,
-            "ปีที่สำรวจ": item.surveyDate,
-            "ชื่อ-นามสกุล": item.name,
-            "รหัสบ้าน (HC)": item.housecode,
-            "จำนวนสมาชิก": item.members + " คน",
-            "ที่อยู่": item.address,
-        }));
-
-        // 🔹 สร้าง Workbook และ Worksheet
-        const worksheet = XLSX.utils.json_to_sheet(dataForExcel);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Household Data");
-
-        // 🔹 บันทึกไฟล์
-        const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-        const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-
-        // 🔹 ดาวน์โหลดไฟล์
-        saveAs(data, "Household_Data.xlsx");
-
-        // ✅ แจ้งเตือนเมื่อดาวน์โหลดสำเร็จ
-        Swal.fire({
-            icon: "success",
-            title: "Export สำเร็จ!",
-            text: "ไฟล์ Household_Data.xlsx ถูกดาวน์โหลดแล้ว",
-        });
     };
 
 
@@ -112,16 +101,16 @@ function FindAssistance() {
 
             <div className="p-4 bg-white mt-10">
                 <form className="grid grid-cols-2 gap-4">
+                    {/* ✅ ดึงปีจาก API มาใช้ */}
                     <div>
                         <label htmlFor="year" className="block text-sm font-medium text-gray-700">ปีที่สำรวจ</label>
                         <select
                             id="year"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                            value={selectYear}
-                            onChange={(e) => setSelectYear(e.target.value)}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value={selectedYear}
+                            onChange={(e) => setSelectedYear(e.target.value)}
                         >
-                            <option value="ทั้งหมด">ทั้งหมด</option>
-                            {years.map((year) => (
+                            {yearOptions.map(year => (
                                 <option key={year} value={year}>{year}</option>
                             ))}
                         </select>
@@ -133,7 +122,7 @@ function FindAssistance() {
                             type="text"
                             id="houseCode"
                             placeholder="รหัสบ้าน (HC)"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             value={houseCode}
                             onChange={(e) => setHouseCode(e.target.value)}
                         />
@@ -154,60 +143,72 @@ function FindAssistance() {
 
             <div className="bg-white mt-10 p-4">
                 <div className="flex justify-between items-center">
-                    <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-md shadow-md hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-                        onClick={exportToExcel}
+                    <button
+                        onClick={handleDownloadExcel}
+                        disabled={!dataLoaded || filteredData.length === 0} // ✅ ปิดการใช้งานปุ่มเมื่อยังไม่มีข้อมูล
+                        className={`flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold rounded-md shadow-md transition 
+                                ${!dataLoaded || filteredData.length === 0
+                                ? "bg-gray-400 cursor-not-allowed" // ❌ ปิดการใช้งาน (สีเทา)
+                                : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300" // ✅ ใช้งานได้ปกติ
+                            }`}
                     >
-                        <SiMicrosoftexcel className="text-lg" /> Excel
+                        <SiMicrosoftexcel className="text-lg" /> ดาวน์โหลด Excel
                     </button>
+
+
                 </div>
 
-                {isFetched && currentItems.length > 0 && (
-                    <Card className="h-full w-full overflow-scroll mt-10">
-                        <table className="w-full min-w-max table-auto text-left">
-                            <thead>
-                                <tr>
-                                    {TABLE_HEAD.map((head) => (
-                                        <th key={head} className="border-b p-4 bg-blue-gray-50">
-                                            <Typography variant="small" color="blue-gray" className="font-normal opacity-70">
-                                                {head}
-                                            </Typography>
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentItems.map(({ id, surveyDate, name, housecode, members, address }) => (
-                                    <tr key={id} className="even:bg-blue-gray-50/50">
-                                        <td className="p-4">{id}</td>
-                                        <td className="p-4">{surveyDate}</td>
-                                        <td className="p-4">{name}</td>
-                                        <td className="p-4">{housecode}</td>
-                                        <td className="p-4">{members} คน</td>
-                                        <td className="p-4">{address}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </Card>
-                )}
+                {loading && <p className="text-center mt-4 text-gray-500">กำลังโหลดข้อมูล...</p>}
 
-                {isFetched && currentItems.length === 0 && (
+                {/* ✅ แสดงข้อความ "ไม่พบข้อมูล" เมื่อไม่มีข้อมูลตรงกับเงื่อนไขที่เลือก */}
+                {dataLoaded && filteredData.length === 0 && !loading && (
                     <div className="mt-4 text-center text-gray-500">
                         ไม่พบข้อมูลที่ตรงกับเงื่อนไขที่เลือก
                     </div>
                 )}
 
-                {/* 🔹 Pagination Component */}
-                {isFetched && filterData.length > itemsPerPage && (
-                    <div className="mt-6 flex justify-center">
-                        <Pagination
-                            count={Math.ceil(filterData.length / itemsPerPage)} // จำนวนหน้าทั้งหมด
-                            page={currentPage}
-                            onChange={(event, value) => setCurrentPage(value)} // อัปเดตหน้าที่เลือก
-                            shape="rounded"
-                            color="primary"
-                        />
-                    </div>
+                {dataLoaded && filteredData.length > 0 && (
+                    <>
+                        <Card className="h-full w-full overflow-scroll mt-10">
+                            <table className="w-full min-w-max table-auto text-left">
+                                <thead>
+                                    <tr>
+                                        {TABLE_HEAD.map((head) => (
+                                            <th key={head} className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                                                <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+                                                    {head}
+                                                </Typography>
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredData.map(({ surveyDate, name, housecode, members, address }, index) => (
+                                        <tr key={index} className="even:bg-blue-gray-50/50">
+                                            <td className="p-4">{(currentPage - 1) * pageSize + index + 1}</td>  
+                                            {/* เหมือนเป็น index หน้าแรก (1 - 1) * 10 = 0 */}
+                                            <td className="p-4">{surveyDate}</td>
+                                            <td className="p-4">{name}</td>
+                                            <td className="p-4">{housecode}</td>
+                                            <td className="p-4">{members} คน</td>
+                                            <td className="p-4">{address}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </Card>
+
+                        {/* ✅ ใช้ Pagination ของ MUI */}
+                        <div className="mt-6 flex justify-center">
+                            <Pagination
+                                count={totalPages} // จำนวนหน้าทั้งหมด
+                                page={currentPage} // หน้าปัจจุบัน
+                                onChange={(event, page) => setCurrentPage(page)} // เปลี่ยนหน้าที่เลือก
+                                shape="rounded"
+                                color="primary"
+                            />
+                        </div>
+                    </>
                 )}
             </div>
         </>
