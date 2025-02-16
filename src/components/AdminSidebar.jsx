@@ -36,7 +36,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       link: "/admin/helpLog",
       logo: "mdi:account-edit",
       submenu: [
-        { name: "บันทึกแบบรายคน", link: "/admin/helpLog", logo:"mdi:file-document-multiple-outline"},
+        {
+          name: "บันทึกแบบรายคน",
+          link: "/admin/helpLog",
+          logo: "mdi:file-document-multiple-outline",
+        },
       ],
     },
     {
@@ -44,8 +48,16 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       link: "/admin/find-members",
       logo: "material-symbols:rubric-rounded",
       submenu: [
-        { name: "ติดตามรายบุคคล", link: "/admin/track-member/", logo:"mdi:folder-account" },
-        { name: "ติดตามครัวเรือน", link: "/admin/track-household", logo:"mdi:folder-home" },
+        {
+          name: "ติดตามรายบุคคล",
+          link: "/admin/track-member/",
+          logo: "mdi:folder-account",
+        },
+        {
+          name: "ติดตามครัวเรือน",
+          link: "/admin/track-household",
+          logo: "mdi:folder-home",
+        },
       ],
     },
     { name: "API ", 
@@ -66,8 +78,28 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       link: "#",
       logo: "material-symbols:person-rounded",
       submenu: [
-        { name: "ข้อมูลผู้ใช้งาน", link: "/admin/manage-user", logo: "mdi:account-outline" },
-        { name: "อนุมัติผู้ใช้ใหม่", link: "/admin/approve-user", logo: "mdi:account-plus-outline"},
+        {
+          name: "ข้อมูลผู้ใช้งาน",
+          link: "/admin/manage-user",
+          logo: "mdi:account-outline",
+        },
+        {
+          name: "อนุมัติผู้ใช้ใหม่",
+          link: "/admin/approve-user",
+          logo: "mdi:account-plus-outline",
+        },
+      ],
+    },
+    {
+      name: "สถิติการเข้าใช้งานในระบบ",
+      link: "/admin/usagestatistics",
+      logo: "mdi:chart-line",
+      submenu: [
+        {
+          name: "สถิติการเข้าใช้งานในระบบ",
+          link: "/admin/usagestatistics",
+          logo: "mdi:chart-line",
+        }
       ],
     },
     {
@@ -144,7 +176,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                             className="flex items-center p-2 text-bodydark1 transition duration-75 rounded-lg group hover:bg-graydark"
                           >
                             <span className="mr-2 text-gray-400">
-                            <Icon icon={subItem.logo} width="20" height="20"/>
+                              <Icon
+                                icon={subItem.logo}
+                                width="20"
+                                height="20"
+                              />
                             </span>
                             {subItem.name}
                           </Link>

@@ -4,7 +4,6 @@ import { Typography } from "@material-tailwind/react";
 import { Icon } from "@iconify/react";
 import IndividualRecordModal from "./IndividualRecord/IndividualRecordModal";
 
-
 const ShowHelp = ({ data, goBack }) => {
   const [showModal, setShowModal] = useState(false);
   // กำหนดข้อมูลสำหรับหัวตาราง
@@ -21,7 +20,7 @@ const ShowHelp = ({ data, goBack }) => {
     "จำนวนเงินที่ช่วยเหลือ",
     "รายละเอียดอย่างย่อ",
   ];
-  // กำหนดข้อมูลในตาราง
+  // กำหนดข้อมูลในตารางตัวอย่าง
   const TABLE_ROWS = [
     {
       assistanceDate: "13/02/2025",
@@ -36,35 +35,29 @@ const ShowHelp = ({ data, goBack }) => {
       details: "ช่วยเหลือเรื่องทุนการศึกษา",
     },
   ];
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
 
-  // const handleDelete = (index) => {
-  //   const newData = tableData.filter((_, i) => i !== index);
-  //   setTableData(newData);
-  // };
-
-  const loadData = (newRecord) => {
-    setTableData([...tableData, newRecord]);
-  };
   return (
     <div className="justify-center mb-2">
       {/* Main Content */}
       <header className="flex justify-between items-center">
         <h3 className="text-xl font-semibold">แสดงข้อมูลการช่วยเหลือ</h3>
-        <div className="flex space-x-2">
+        <div className="flex space-x-4">
           <button
             onClick={goBack}
-            className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+            className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-2 rounded"
           >
             <Icon
               icon="material-symbols:keyboard-return-rounded"
               className="mr-2"
-              width="20px"
+              width="18px"
             />
             กลับไปหน้าตาราง
           </button>
-          <button onClick={e=>setShowModal(true)} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+          <button
+            onClick={(e) => setShowModal(true)}
+            className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-2 rounded"
+          >
+            <Icon icon="ic:round-plus" className="mr-2" width="18px" />
             เพิ่มข้อมูลการช่วยเหลือ
           </button>
         </div>
@@ -100,10 +93,6 @@ const ShowHelp = ({ data, goBack }) => {
           </div>
         </div>
       </section>
-      {/* 
-      <div className="mt-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-200">
-      <IndividualRecord/>
-      </div> */}
 
       {/* ตารางแสดงข้อมูลเพิ่มเติม */}
       <Card className="h-full w-full overflow-scroll mt-8">
@@ -152,7 +141,7 @@ const ShowHelp = ({ data, goBack }) => {
                       <Icon
                         icon="mdi:minus-circle-outline"
                         className="mr-2"
-                        width="20" // กำหนดขนาดไอคอน
+                        width="20"
                         height="20"
                       />
                     </button>
@@ -255,8 +244,8 @@ const ShowHelp = ({ data, goBack }) => {
         </table>
       </Card>
       <IndividualRecordModal
-      show={showModal}
-      onClose={()=>setShowModal(false)}
+        show={showModal}
+        onClose={() => setShowModal(false)}
       />
     </div>
   );

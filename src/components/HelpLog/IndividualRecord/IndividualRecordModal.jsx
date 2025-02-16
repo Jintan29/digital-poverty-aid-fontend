@@ -2,6 +2,10 @@ import Modal from "../../Modal";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Swal from "sweetalert2";
+import axios from "axios";
+import config from "../../../config";
+import { Icon } from "@iconify/react";
 
 const IndividualRecordModal = ({ show, onClose }) => {
   const [formData, setFormData] = useState({
@@ -66,23 +70,76 @@ const IndividualRecordModal = ({ show, onClose }) => {
     ],
   };
 
-  // อัปเดตค่าเมื่อมีการเปลี่ยนแปลง input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-      ...(name === "costofliving" && { confirmationcapital: "" }), // รีเซ็ตค่า Dropdown องค์ประกอบทุนเมื่อเปลี่ยนทุนการดำรงชีพ
-    }));
+  // ฟังก์ชันการตรวจสอบข้อมูลก่อนส่ง
+  const validateInput = () => {
+    if (!formData.costofliving) {
+      Swal.fire("ข้อมูลไม่ครบถ้วน", "กรุณาเลือกทุนการดำรงชีพ", "warning");
+      return false;
+    }
+    if (!formData.confirmationcapital) {
+      Swal.fire(
+        "ข้อมูลไม่ครบถ้วน",
+        "กรุณาเลือกองค์ประกอบเชิงยืนยันของทุนการดำรงชีพ",
+        "warning"
+      );
+      return false;
+    }
+    if (!formData.assistance) {
+      Swal.fire("ข้อมูลไม่ครบถ้วน", "กรุณากรอกชื่อการช่วยเหลือ", "warning");
+      return false;
+    }
+    if (!formData.assistance_agencies) {
+      Swal.fire("ข้อมูลไม่ครบถ้วน", "กรุณาระบุหน่วยงานที่ช่วยเหลือ", "warning");
+      return false;
+    }
+    if (!formData.amount || isNaN(formData.amount) || formData.amount <= 0) {
+      Swal.fire(
+        "ข้อมูลไม่ถูกต้อง",
+        "กรุณากรอกจำนวนเงินที่ช่วยเหลือให้ถูกต้อง",
+        "warning"
+      );
+      return false;
+    }
+    if (!formData.assistanceDate) {
+      Swal.fire("ข้อมูลไม่ครบถ้วน", "กรุณาเลือกวันที่ช่วยเหลือ", "warning");
+      return false;
+    }
+    return true;
   };
 
   // ฟังก์ชันจัดการเมื่อมีการส่งฟอร์ม
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      onClose(); // ปิด modal หากฟอร์มถูกต้อง
-      console.log("Form Submitted:", formData);
+
+    if (!validateInput()) {
+      return;
     }
+
+    try {
+      const res = await Swal.fire({
+        title: "ยืนยันการบันทึกข้อมูล",
+        text: "คุณแน่ใจหรือไม่ว่าข้อมูลถูกต้อง?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "ใช่",
+        cancelButtonText: "ยกเลิก",
+      });
+
+      // รอ API
+      // if (res.isConfirmed) {
+      //   await axios.post("API_ENDPOINT_HERE", formData);
+      //   await Swal.fire("สำเร็จ", "บันทึกข้อมูลเรียบร้อย", "success");
+      // }
+
+      onClose();
+    } catch (error) {
+      Swal.fire(
+        "เกิดข้อผิดพลาด",
+        error.response?.data?.message || error.message,
+        "error"
+      );
+    }
+    console.log("Form Submitted:", formData);
   };
 
   return (
@@ -92,7 +149,7 @@ const IndividualRecordModal = ({ show, onClose }) => {
         show={show}
         onClose={onClose}
         size="4xl"
-        icon="material-symbols:person-edit-rounded"
+        icon="mdi:account-multiple-plus-outline"
       >
         <div className="justify-center mb-2 p-4">
           <h3 className="font-bold">
@@ -228,7 +285,7 @@ const IndividualRecordModal = ({ show, onClose }) => {
                       ? new Date(formData.assistanceDate)
                       : null
                   }
-                  oonChange={(date) =>
+                  onChange={(date) =>
                     setFormData({ ...formData, assistanceDate: date })
                   }
                   className="w-3/4 border rounded px-3 py-2 rounded-xl"
@@ -236,7 +293,7 @@ const IndividualRecordModal = ({ show, onClose }) => {
                 />
               </div>
             </div>
-
+            
             {/* รายละเอียดอย่างย่อ */}
             <div className="ml-12">
               <label className="block font-medium mb-2 text-black">
@@ -253,13 +310,15 @@ const IndividualRecordModal = ({ show, onClose }) => {
                 placeholder="อธิบายการช่วยเหลือ..."
               />
             </div>
-
+            <div className="flex justify-end">
             <button
               type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded-xl"
+              className="flex items-center px-4 py-2 border border-green-600 text-green-500 text-sm rounded-md hover:bg-green-500 hover:text-white transition"
             >
+              <Icon icon="ic:baseline-check" className="mr-2" width="20px" />
               บันทึกการช่วยเหลือ
             </button>
+            </div>
           </form>
         </div>
       </Modal>
