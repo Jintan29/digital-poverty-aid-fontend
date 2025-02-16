@@ -35,6 +35,8 @@ import LineLogin from "./pages/Line/LineLogin";
 import FindAssistance from "./pages/Admin/FindAssistance/FindAssistance"
 import FormAddress from "./pages/FormAddress";
 import HelpLog from "./pages/Admin/HelpLog/HelpLog";
+import Usagestatistics from "./pages/Admin/UsageStatistics/Usagestatistics";
+
 
 
 
@@ -246,6 +248,13 @@ function App() {
                   <FindAssistance />
                 </AdminRoute>}
             />
+            <Route path="usagestatistics"
+              element={
+                <AdminRoute>
+                  <Usagestatistics />
+                </AdminRoute>}
+            />
+            
             <Route path="*" element={<PageNotFound />} />
             {/* เพิ่มหน้าอื่น */}
 

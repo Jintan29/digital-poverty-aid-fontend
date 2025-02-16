@@ -168,12 +168,6 @@ const HelphomePage = ({ setSelectedHelp }) => {
     }));
   };
 
-  // ฟังก์ชันจัดการเมื่อมีการส่งฟอร์ม
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     console.log("Form Submitted:", formData);
-  //   };
-
   return (
     <div className="justify-center mb-2">
       <div className="col-span-2 w-full p-10 mt-8 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -285,7 +279,7 @@ const HelphomePage = ({ setSelectedHelp }) => {
 
       {/* แสดงตารางถ้า showTable เป็น true */}
       {showTable && (
-        <Card className="h-full w-full overflow-scroll mt-8 flex justify-center items-center">
+        <Card className="w-full max-h-96 overflow-y-scroll mt-8 flex justify-center items-center">
           <table className="w-full min-w-max table-auto text-center">
             {/* ส่วนหัวของตาราง */}
             <thead>
@@ -296,7 +290,7 @@ const HelphomePage = ({ setSelectedHelp }) => {
                     className="border-b border-blue-gray-100 bg-blue-gray-50 p-4 text-center"
                   >
                     <Typography
-                      variant="small"
+                      variant="base"
                       color="blue-gray"
                       className="font-normal leading-none opacity-70"
                     >
@@ -358,7 +352,9 @@ const HelphomePage = ({ setSelectedHelp }) => {
                   <td className="p-4 text-center">
                     <button
                       className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
-                      onClick={() => setSelectedHelp(date, name, HC, members, address)}
+                      onClick={() =>
+                        setSelectedHelp(date, name, HC, members, address)
+                      }
                       // ส่งข้อมูลไป ShowHelp
                     >
                       <Icon icon="heroicons-solid:search" />
