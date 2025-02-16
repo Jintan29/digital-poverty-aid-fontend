@@ -1524,6 +1524,7 @@ export const HumanCapital = ({
                 </label>
                 <input
                   type="number"
+                  step="0.1"
                   value={member.MemberFinancial.inflation}
                   onChange={(e) =>
                     handleMemberfinancialChange(index, "inflation", e.target.value)

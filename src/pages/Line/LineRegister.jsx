@@ -10,6 +10,8 @@ const LineRegister = () => {
 
   const [formData, setFormData] = useState({
     userId: "",
+    fname:'',
+    lname:'',
     house_code: "",
   });
 
@@ -98,7 +100,7 @@ const LineRegister = () => {
               <div>
                 <label
                   htmlFor="house_code"
-                  className="block text-sm font-medium text-gray-900 dark:text-white"
+                  className="block text-sm text-start mt-3 font-medium text-gray-900 dark:text-white"
                 >
                   กรอกรหัสบ้านให้ถูกต้อง (HC-XXXX)
                 </label>
@@ -109,6 +111,42 @@ const LineRegister = () => {
                   onChange={(e) => handleInputChange(e.target.name, e.target.value)}
                   className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   placeholder="HC-XXXX"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="house_code"
+                  className="block text-sm text-start mt-3 font-medium text-gray-900 dark:text-white"
+                >
+                  ชื่อจริง (ไม่ต้องกรอกคำนำหน้าชื่อ)
+                </label>
+                <input
+                  type="text"
+                  name="fname"
+                  id="house_code"
+                  onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                  className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  placeholder="ชื่อจริง"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="house_code"
+                  className="block text-sm text-start mt-3 font-medium text-gray-900 dark:text-white"
+                >
+                  นามสกุล
+                </label>
+                <input
+                  type="text"
+                  name="lname"
+                  id="house_code"
+                  onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                  className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  placeholder="นามสกุล"
                   required
                 />
               </div>
