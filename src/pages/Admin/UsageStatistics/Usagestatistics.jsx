@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import { Button,Card,CardFooter,IconButton,Typography,} from "@material-tailwind/react";
+import {
+  Button,
+  Card,
+  CardFooter,
+  IconButton,
+  Typography,
+} from "@material-tailwind/react";
+import SystemLoginHistory from "./SystemLoginHistory";
 
 const Usagestatistics = () => {
   // สร้างสถานะ (state) สำหรับการจัดการค่าของเดือน, ปี และช่องค้นหา
   const [month, setMonth] = useState(""); // เก็บค่าเดือนที่เลือก
   const [year, setYear] = useState(""); // เก็บค่าปีที่เลือก
   const [search, setSearch] = useState(""); // เก็บค่าที่พิมพ์ในช่องค้นหา
+  const [showLoginHistory, setShowLoginHistory] = useState("main"); // จัดการหน้าปัจจุบัน
+  const [selectedUser, setSelectedUser] = useState(null); // เก็บข้อมูลของผู้ใช้ที่เลือก
+  
 
   // กำหนดข้อมูลสำหรับหัวตาราง
   const TABLE_HEAD = [
@@ -95,6 +105,21 @@ const Usagestatistics = () => {
     },
   ];
 
+  // ฟังก์ชันที่เรียกเมื่อกดปุ่มไอคอนหน้า Access_History
+  const handleAccessHistoryClick = (user) => {
+    setSelectedUser(user); // เก็บข้อมูลของผู้ใช้ที่เลือก
+    setShowLoginHistory("loginHistory"); // แสดงหน้า SystemLoginHistory
+  };
+
+  /// ถ้าหน้าปัจจุบันเป็น "loginHistory" จะแสดงหน้า SystemLoginHistory
+  if (showLoginHistory === "loginHistory" && selectedUser) {
+    return (
+      <div>
+        <SystemLoginHistory user={selectedUser} />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="text-center mb-1 p-4">
@@ -167,20 +192,24 @@ const Usagestatistics = () => {
       <div className="h-full w-full bg-white rounded-lg shadow">
         {/* แถบค้นหาด้านขวา */}
         <div className="flex justify-end mb-4 mt-8">
-            <div>
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="search"
-            className="border p-2 rounded-md mt-4 mr-6"
-          />
+          <div className="relative">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="search"
+              className="border p-2 rounded-md mt-4 mr-6 pl-10"
+            />
+            <Icon
+              icon="ic:baseline-search"
+              className="absolute left-2 top-1/2 transform -translate-y-2/2" 
+            />
           </div>
         </div>
 
         {/* แสดงตารางเป็น */}
         <Card className="h-full w-full  mt-6 flex justify-center items-center">
-          <table className="w-full min-w-max table-auto text-left text-center">
+          <table className="w-full min-w-max table-auto  text-center">
             <thead>
               <tr>
                 {TABLE_HEAD.map((head) => (
@@ -201,30 +230,18 @@ const Usagestatistics = () => {
             </thead>
             <tbody>
               {/* ข้อมูลในตาราง */}
-              {TABLE_ROWS.map(
-                ({
-                  Access_History,
-                  Role,
-                  Agency,
-                  name,
-                  Username,
-                  Email,
-                  Number_of_times_accessed,
-                }) => (
-                  <tr key={Access_History} className="even:bg-blue-gray-50/50">
+              
+                {TABLE_ROWS.map((user) => (
+                  <tr key={user.Access_History} className="even:bg-blue-gray-50/50">
                     <td className="p-4">
-                      <Typography
-                        variant="base"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {/* ปุ่มไอคอนหน้า Access_History */}
-
-                        <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300">
+                      <Typography variant="base" className="font-normal">
+                        <button
+                          className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
+                          onClick={handleAccessHistoryClick} // เรียกฟังก์ชันเมื่อกดปุ่ม
+                        >
                           <Icon icon="mdi:table-large" />
                         </button>
-
-                        {Access_History}
+                        {user.Access_History}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -233,7 +250,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {Role}
+                        {user.Role}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -242,7 +259,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {Agency}
+                        {user.Agency}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -251,7 +268,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {name}
+                        {user.name}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -260,7 +277,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-medium"
                       >
-                        {Username}
+                        {user.Username}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -269,7 +286,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-medium"
                       >
-                        {Email}
+                        {user.Email}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -278,7 +295,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-medium"
                       >
-                        {Number_of_times_accessed}
+                        {user.Number_of_times_accessed}
                       </Typography>
                     </td>
                   </tr>

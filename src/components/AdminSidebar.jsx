@@ -99,6 +99,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
           name: "สถิติการเข้าใช้งานในระบบ",
           link: "/admin/usagestatistics",
           logo: "mdi:chart-line",
+        },
+        {
+          name: "การเข้าใช้งานในระบบของผู้ใช้แต่ละราย",
+          link: "/admin/Individual-User-Login",
+          logo: "mdi:chart-line",
         }
       ],
     },
