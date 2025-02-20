@@ -1,22 +1,40 @@
 import Modal from "../../Modal";
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../../../config";
 import { Icon } from "@iconify/react";
+//วันที่ภาษาไทย
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale } from "react-datepicker";
+import th from "date-fns/locale/th";
+import { useParams } from "react-router-dom";
+registerLocale("th", th);
 
-const IndividualRecordModal = ({ show, onClose }) => {
+
+const IndividualRecordModal = ({ show, onClose, loadMemberData  }) => {
   const [formData, setFormData] = useState({
-    costofliving: "", // ทุนการดำรงชีพ
-    confirmationcapital: "", // ยืนยันทุน
-    assistance: "", // การช่วยเหลือ
-    assistance_agencies: "", // หน่วยงานที่ช่วยเหลือ
-    amount: "", // จำนวนเงินที่ช่วยเหลือ
-    assistanceDate: "", // วันที่ช่วยเหลือ
-    details: "", // รายละเอียด
+    capital: null, 
+    components: null, 
+    help_name: null, 
+    agency: null, 
+    amount: null, 
+    help_date: null, 
+    description: '', 
+    member_house_id:null
   });
+
+  const {id} = useParams();
+
+  useEffect(()=>{
+    if(id){
+      setFormData({
+        ...formData,
+        member_house_id:parseInt(id,10)
+      })
+    }
+  },[id])
 
   // ตัวเลือกของ "องค์ประกอบเชิงยืนยันของทุน" ตามทุนที่เลือก
   const confirmationOptions = {
@@ -72,11 +90,11 @@ const IndividualRecordModal = ({ show, onClose }) => {
 
   // ฟังก์ชันการตรวจสอบข้อมูลก่อนส่ง
   const validateInput = () => {
-    if (!formData.costofliving) {
+    if (!formData.capital) {
       Swal.fire("ข้อมูลไม่ครบถ้วน", "กรุณาเลือกทุนการดำรงชีพ", "warning");
       return false;
     }
-    if (!formData.confirmationcapital) {
+    if (!formData.components) {
       Swal.fire(
         "ข้อมูลไม่ครบถ้วน",
         "กรุณาเลือกองค์ประกอบเชิงยืนยันของทุนการดำรงชีพ",
@@ -84,11 +102,11 @@ const IndividualRecordModal = ({ show, onClose }) => {
       );
       return false;
     }
-    if (!formData.assistance) {
+    if (!formData.help_name) {
       Swal.fire("ข้อมูลไม่ครบถ้วน", "กรุณากรอกชื่อการช่วยเหลือ", "warning");
       return false;
     }
-    if (!formData.assistance_agencies) {
+    if (!formData.agency) {
       Swal.fire("ข้อมูลไม่ครบถ้วน", "กรุณาระบุหน่วยงานที่ช่วยเหลือ", "warning");
       return false;
     }
@@ -100,7 +118,7 @@ const IndividualRecordModal = ({ show, onClose }) => {
       );
       return false;
     }
-    if (!formData.assistanceDate) {
+    if (!formData.help_date) {
       Swal.fire("ข้อมูลไม่ครบถ้วน", "กรุณาเลือกวันที่ช่วยเหลือ", "warning");
       return false;
     }
@@ -116,7 +134,7 @@ const IndividualRecordModal = ({ show, onClose }) => {
     }
 
     try {
-      const res = await Swal.fire({
+      const resSwal = await Swal.fire({
         title: "ยืนยันการบันทึกข้อมูล",
         text: "คุณแน่ใจหรือไม่ว่าข้อมูลถูกต้อง?",
         icon: "question",
@@ -125,13 +143,19 @@ const IndividualRecordModal = ({ show, onClose }) => {
         cancelButtonText: "ยกเลิก",
       });
 
-      // รอ API
-      // if (res.isConfirmed) {
-      //   await axios.post("API_ENDPOINT_HERE", formData);
-      //   await Swal.fire("สำเร็จ", "บันทึกข้อมูลเรียบร้อย", "success");
-      // }
+      if (resSwal.isConfirmed) {
+        const resAPI = await axios.post(config.api_path+'/help-member/create',formData,config.headers())
+        if(resAPI.data.message ==='success'){
+          Swal.fire({
+            title:'บันทึกข้อมูล',
+            text:'บันทึกข้อมูลสำเร็จ',
+            icon:'success'
+          })
+        }
+      }
 
       onClose();
+      loadMemberData();
     } catch (error) {
       Swal.fire(
         "เกิดข้อผิดพลาด",
@@ -151,8 +175,9 @@ const IndividualRecordModal = ({ show, onClose }) => {
         size="4xl"
         icon="mdi:account-multiple-plus-outline"
       >
-        <div className="justify-center mb-2 p-4">
-          <h3 className="font-bold">
+        <div className="justify-center mb-2 ">
+
+          <h3 className="font-bold mb-3">
             <span className="text-red-600">**</span>
             <span className="text-blue-600">
               เลือกทุนการดำรงชีพและองค์ประกอบเชิงยืนยันของทุนการดำรงชีพที่สอดคล้องกับการช่วยเหลือ
@@ -161,18 +186,18 @@ const IndividualRecordModal = ({ show, onClose }) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4 ">
               {/* ทุนการดำรงชีพ */}
-              <div className="ml-12">
+              <div className="ml-6">
                 <label className="block font-medium mb-2">
                   <span className="text-red-600">*</span>
                   <span className="text-black">ทุนการดำรงชีพ</span>
                 </label>
                 <select
-                  name="costofliving"
-                  value={formData.costofliving}
+                  name="capital"
+                  value={formData.capital}
                   onChange={(e) =>
-                    setFormData({ ...formData, costofliving: e.target.value })
+                    setFormData({ ...formData, capital: e.target.value })
                   }
-                  className="w-3/4 border rounded px-3 py-2 rounded-xl pl-4 text-gray-500 text-sm"
+                  className="w-full border rounded-xl px-3 py-2 pl-4 text-gray-900 text-sm"
                 >
                   {/* Dropdown */}
                   <option value="">-กรุณาเลือกทุนการดำรงชีพ-</option>
@@ -193,20 +218,20 @@ const IndividualRecordModal = ({ show, onClose }) => {
                   </span>
                 </label>
                 <select
-                  name="confirmationcapital"
-                  value={formData.confirmationcapital}
+                  name="components"
+                  value={formData.components}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      confirmationcapital: e.target.value,
+                      components: e.target.value,
                     })
                   }
-                  className="w-3/4 border rounded px-3 py-2 rounded-xl pl-4 text-gray-500 text-sm"
-                  disabled={!formData.costofliving} // ปิดใช้งานหากยังไม่เลือกทุนการดำรงชีพ
+                  className="w-full border  px-3 py-2 rounded-xl pl-4 text-gray-900 text-sm"
+                  disabled={!formData.capital} // ปิดใช้งานหากยังไม่เลือกทุนการดำรงชีพ
                 >
                   <option value="">- กรุณาเลือก -</option>
-                  {formData.costofliving &&
-                    confirmationOptions[formData.costofliving].map((option) => (
+                  {formData.capital &&
+                    confirmationOptions[formData.capital].map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
@@ -215,19 +240,19 @@ const IndividualRecordModal = ({ show, onClose }) => {
               </div>
 
               {/* การช่วยเหลือ */}
-              <div className="ml-12">
+              <div className="ml-6">
                 <label className="block font-medium mb-2">
                   <span className="text-red-600">*</span>
                   <span className="text-black">การช่วยเหลือ</span>
                 </label>
                 <input
                   type="text"
-                  name="assistance"
-                  value={formData.assistance}
+                  name="help_name"
+                  value={formData.help_name}
                   onChange={(e) =>
-                    setFormData({ ...formData, assistance: e.target.value })
+                    setFormData({ ...formData, help_name: e.target.value })
                   }
-                  className="w-3/4 border rounded px-3 py-2 rounded-xl"
+                  className="w-full border  px-3 py-2 rounded-xl"
                   placeholder="ระบุชื่อการช่วยเหลือ"
                 />
               </div>
@@ -240,21 +265,21 @@ const IndividualRecordModal = ({ show, onClose }) => {
                 </label>
                 <input
                   type="text"
-                  name="assistance_agencies"
-                  value={formData.assistance_agencies}
+                  name="agency"
+                  value={formData.agency}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      assistance_agencies: e.target.value,
+                      agency: e.target.value,
                     })
                   }
-                  className="w-3/4 border rounded px-3 py-2 rounded-xl"
+                  className="w-full border  px-3 py-2 rounded-xl"
                   placeholder="ระบุหน่วยงานที่ช่วยเหลือ"
                 />
               </div>
 
               {/* จำนวนเงินที่ช่วยเหลือ */}
-              <div className="ml-12">
+              <div className="ml-6">
                 <label className="block font-medium mb-2">
                   <span className="text-red-600">*</span>
                   <span className="text-black">จำนวนเงินที่ช่วยเหลือ</span>
@@ -267,7 +292,7 @@ const IndividualRecordModal = ({ show, onClose }) => {
                     setFormData({ ...formData, amount: e.target.value })
                   }
                   min=""
-                  className="w-3/4 border rounded px-3 py-2 rounded-xl"
+                  className="w-full border  px-3 py-2 rounded-xl"
                   placeholder="ระบุจำนวนเงินที่ช่วยเหลือ"
                 />
               </div>
@@ -281,32 +306,38 @@ const IndividualRecordModal = ({ show, onClose }) => {
                 <DatePicker
                   dateFormat="dd/MM/yyyy"
                   selected={
-                    formData.assistanceDate
-                      ? new Date(formData.assistanceDate)
+                    formData.help_date
+                      ? new Date(formData.help_date)
                       : null
                   }
                   onChange={(date) =>
-                    setFormData({ ...formData, assistanceDate: date })
+                    setFormData({ ...formData, help_date: date })
                   }
-                  className="w-3/4 border rounded px-3 py-2 rounded-xl"
+                  className="w-full border  px-3 py-2 rounded-xl"
                   placeholderText="เลือกวันที่"
+                  //TH
+                  locale="th"
+                  yearDropdownItemNumber={50}
+                  showYearDropdown
+                  scrollableYearDropdown
+                  dateFormatCalendar="MMMM"
                 />
               </div>
             </div>
             
             {/* รายละเอียดอย่างย่อ */}
-            <div className="ml-12">
+            <div className="ml-6">
               <label className="block font-medium mb-2 text-black">
                 รายละเอียดอย่างย่อ
               </label>
               <textarea
                 type="text"
-                name="details"
-                value={formData.details}
+                name="description"
+                value={formData.description}
                 onChange={(e) =>
-                  setFormData({ ...formData, details: e.target.value })
+                  setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full border rounded px-3 py-2 rounded-xl"
+                className="w-full border  px-3 py-2 rounded-xl"
                 placeholder="อธิบายการช่วยเหลือ..."
               />
             </div>
@@ -315,7 +346,7 @@ const IndividualRecordModal = ({ show, onClose }) => {
               type="submit"
               className="flex items-center px-4 py-2 border border-green-600 text-green-500 text-sm rounded-md hover:bg-green-500 hover:text-white transition"
             >
-              <Icon icon="ic:baseline-check" className="mr-2" width="20px" />
+              <Icon icon="material-symbols:save-outline-rounded" className="mr-2" width="20px" />
               บันทึกการช่วยเหลือ
             </button>
             </div>

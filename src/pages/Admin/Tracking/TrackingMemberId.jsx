@@ -22,6 +22,7 @@ import HouseholdInfo from "../../../components/TrackingMember/HouseholdInfo";
 import IncomeInflationChart from "../../../components/TrackingMember/IncomeInflationChart";
 import WelfareDoughnutChart from "../../../components/TrackingMember/WelfareDoughnutChart";
 import SkillsTimeline from "../../../components/TrackingMember/SkillsTimeline";
+import HelpMemberInfo from "../../../components/TrackingMember/HelpMemberInfo";
 
 //import Modal
 import EditModal from "../../../components/TrackingMember/Modal/EditModal";
@@ -30,11 +31,13 @@ import WelfareModal from "../../../components/TrackingMember/Modal/WelfareModal"
 import CareerModal from "../../../components/TrackingMember/Modal/CareerModal";
 
 
+
 const TrackingMemberId = () => {
   const [member, setMember] = useState({});
   const [memberFinancial, setMemberFinancial] = useState([]);
   const [prediction,setPrediction] = useState(null)
   const [charData, setChartData] = useState([]); //กราฟแรก
+  const [helpData,setHelpData] = useState([])
   const { id } = useParams(); //id สมาชิกครัวเรือน
 
   const [socialWelfare, setSocialWelfare] = useState([]);
@@ -152,6 +155,7 @@ const TrackingMemberId = () => {
       setMember(res.data.data);
       setSocialWelfare(res.data.data.SocialWelfares);
       setCarrer(res.data.data.Careers);
+      setHelpData(res.data.data.HelpMembers)
     } catch (err) {
       Swal.fire({
         title: "error",
@@ -280,6 +284,13 @@ const TrackingMemberId = () => {
         </h2>
         <div className=" mt-10 pt-10 flex justify-center rounded-lg shadow bg-white">
           <IncomeInflationChart charData={charData} />
+        </div>
+
+        <h2 className="text-xl font-bold mt-10">
+          ข้อมูลการได้รับความช่วยเหลือ
+        </h2>
+        <div className=" mt-10 py-10 flex justify-center rounded-lg shadow bg-white max-w-full">
+          <HelpMemberInfo helpData={helpData} />
         </div>
 
         {/* ---- Welfare & Skills ---- */}
