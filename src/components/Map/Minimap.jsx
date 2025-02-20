@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import config from "../../config"
 import Map2 from "./Map2"
 import Map1 from "./Map1";
 
@@ -14,7 +14,7 @@ function Minimap() {
     useEffect(() => {
         const fetchMemberHouseholdCount = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/district/getlatest");
+                const response = await axios.get(`${config.api_path}/district/getlatest`);
                 setCount(response.data.data); // ใช้ response.data.data เพื่อเข้าถึงค่าที่ส่งกลับจาก backend
             } catch (error) {
                 console.error("Error fetching household count:", error);

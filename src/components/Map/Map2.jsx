@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import config from "../../config"
 
 
 const Map2 = () => {
@@ -20,7 +20,7 @@ const Map2 = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/district/getlatest');
+        const response = await axios.get(`${config.api_path}/district/getlatest`);
         // console.log("Response Data:", response.data);
         if (response.data && response.data.data && response.data.data.data && Array.isArray(response.data.data.data)) {
           const counts = response.data.data.data.reduce((acc, item) => {

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { FaSearchPlus } from "react-icons/fa";
 import { SiMicrosoftexcel } from "react-icons/si";
 import { Card, Typography } from "@material-tailwind/react";
-import Pagination from "@mui/material/Pagination"; // ✅ ใช้ Pagination จาก MUI
+import Pagination from "@mui/material/Pagination";
+import config from "../../../config";
+import axios from "axios";
 
 function FindAssistance() {
     const TABLE_HEAD = ["#", "ปีที่สำรวจ", "ชื่อ-นามสกุล", "HC", "จำนวนสมาชิก", "ที่อยู่"];
@@ -13,23 +15,18 @@ function FindAssistance() {
     const [currentPage, setCurrentPage] = useState(1);  //หน้าปัจจุบัน
     const [totalPages, setTotalPages] = useState(1);  //จำนวนหน้าทั้งหมด
     const [dataLoaded, setDataLoaded] = useState(false); //ใช้สำหรับเช็คว่าเคยโหลดข้อมูลหรือยัง
-    const [loading, setLoading] = useState(false);  
-    const pageSize = 10; // ✅ กำหนดจำนวนข้อมูลต่อหน้า
+    const [loading, setLoading] = useState(false);
+    const pageSize = 10; //กำหนดจำนวนข้อมูลต่อหน้า
     const [yearOptions, setYearOptions] = useState([]);  //ดึงปีจาก api
 
-    // ✅ ดึงปีจาก API เมื่อ Component โหลด
+    // ดึงปีจาก API เมื่อ Component โหลด
     useEffect(() => {
         const fetchYears = async () => {
             try {
-                const response = await fetch("http://localhost:8080/api/export/getYears");
-                const result = await response.json();
-                if (response.ok) {
-                    setYearOptions(["ทั้งหมด", ...result.years]); // ✅ ใส่ "ทั้งหมด" เป็น Default
-                } else {
-                    console.error("Error fetching years:", result.msg);
-                }
+                const response = await axios.get(`${config.api_path}/export/getYears`);
+                setYearOptions(["ทั้งหมด", ...response.data.years]); // ✅ ใส่ "ทั้งหมด" เป็น Default
             } catch (error) {
-                console.error("Error fetching years:", error);
+                console.error("Error fetching years:", error.response?.data?.msg || error.message);
             }
         };
 
@@ -44,25 +41,26 @@ function FindAssistance() {
         setLoading(true);
         setDataLoaded(true);
 
-        let apiUrl = `http://localhost:8080/api/export/getFind?page=${currentPage}&pageSize=${pageSize}`;
-        if (selectedYear !== "ทั้งหมด") apiUrl += `&year=${selectedYear}`;
-        if (houseCode) apiUrl += `&houseCode=${houseCode}`;
+        const params = {
+            page: currentPage,
+            pageSize: pageSize,
+            ...(selectedYear !== "ทั้งหมด" && { year: selectedYear }),
+            ...(houseCode && { houseCode }),
+            ...(selectedDistrict && { district: selectedDistrict }), // ✅ ส่งอำเภอไป API
+            ...(selectedSubdistrict && { subdistrict: selectedSubdistrict }) // ✅ ส่งตำบลไป API
+        };
 
         try {
-            const response = await fetch(apiUrl);
-            const result = await response.json();
-
-            if (response.ok) {
-                setFilteredData(result.data);
-                setTotalPages(result.pagination.totalPages);
-            } else {
-                console.error("Error fetching data:", result.msg);
-            }
+            const response = await axios.get(`${config.api_path}/export/getFind`, { params });
+            setFilteredData(response.data.data);
+            setTotalPages(response.data.pagination.totalPages);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching data:", error.response?.data?.msg || error.message);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
+    
 
     const handleFilter = () => {
         setCurrentPage(1);
@@ -71,15 +69,21 @@ function FindAssistance() {
 
 
     const handleDownloadExcel = async () => {
-        let apiUrl = `http://localhost:8080/api/export/getFind?getAll=true`;
-        if (selectedYear !== "ทั้งหมด") apiUrl += `&year=${selectedYear}`;
-        if (houseCode) apiUrl += `&houseCode=${houseCode}`;
+        const params = {
+            getAll: true,
+            ...(selectedYear !== "ทั้งหมด" && { year: selectedYear }),
+            ...(houseCode && { houseCode }),
+            ...(selectedDistrict && { district: selectedDistrict }), // ✅ เพิ่ม filter อำเภอ
+            ...(selectedSubdistrict && { subdistrict: selectedSubdistrict })
+        };
 
         try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error("Error downloading Excel file");
+            const response = await axios.get(`${config.api_path}/export/getFind`, {
+                params,
+                responseType: 'blob', // ✅ รองรับการดาวน์โหลดไฟล์
+            });
 
-            const blob = await response.blob();
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
@@ -88,9 +92,102 @@ function FindAssistance() {
             a.click();
             document.body.removeChild(a);
         } catch (error) {
-            console.error("Error downloading Excel:", error);
+            console.error("Error downloading Excel:", error.response?.data?.msg || error.message);
         }
     };
+
+
+    const districtSubdistrictMap = {
+        "ชาติตระการ": ["ป่าแดง", "ชาติตระการ", "สวนเมี่ยง", "บ้านดง", "บ่อภาค", "ท่าสะแก"],
+        "นครไทย": [
+            "นครไทย",
+            "หนองกะท้าว",
+            "บ้านแยง",
+            "เนินเพิ่ม",
+            "นาบัว",
+            "นครชุม",
+            "น้ำกุ่ม",
+            "ยางโกลน",
+            "บ่อโพธิ์",
+            "บ้านพร้าว",
+            "ห้วยเฮี้ย",
+        ],
+        "อำเภอเมืองพิษณุโลก": [
+            "ในเมือง", "วังน้ำคู้", "วัดจันทร์", "วัดพริก",
+            "ท่าทอง", "ท่าโพธิ์", "สมอแข", "ดอนทอง",
+            "บ้านป่า", "ปากโทก", "หัวรอ", "จอมทอง",
+            "บ้านกร่าง", "บ้านคลอง", "พลายชุมพล", "มะขามสูง",
+            "อรัญญิก", "บึงพระ", "ไผ่ขอดอน", "งิ้วงาม",
+        ],
+
+        "เนินมะปราง": ["ชมพู", "บ้านมุง", "ไทรย้อย", "วังโพรง", "บ้านน้อยซุ้มขี้เหล็ก", "เนินมะปราง", "วังยาง"],
+        "บางกระทุ่ม": [
+            "บางกระทุ่ม",
+            "บ้านไร่",
+            "โคกสลุด",
+            "สนามคลี",
+            "ท่าตาล",
+            "ไผ่ล้อม",
+            "นครป่าหมาก",
+            "เนินกุ่ม",
+            "วัดตายม",
+        ],
+        "บางระกำ": [
+            "บางระกำ",
+            "ปลักแรด",
+            "พันเสา",
+            "วังอิทก",
+            "บึงกอก",
+            "หนองกุลา",
+            "ชุมแสงสงคราม",
+            "นิคมพัฒนา",
+            "บ่อทอง",
+            "ท่านางงาม",
+            "คุยม่วง",
+        ],
+        "พรหมพิราม": [
+            "พรหมพิราม",
+            "ท่าช้าง",
+            "วงฆ้อง",
+            "มะตูม",
+            "หอกลอง",
+            "ศรีภิรมย์",
+            "ตลุกเทียม",
+            "วังวน",
+            "หนองแขม",
+            "มะต้อง",
+            "ทับยายเชียง",
+            "ดงประคำ",
+        ],
+        "วังทอง": [
+            "วังทอง",
+            "พันชาลี",
+            "แม่ระกา",
+            "บ้านกลาง",
+            "วังพิกุล",
+            "แก่งโสภา",
+            "ท่าหมื่นราม",
+            "วังนกแอ่น",
+            "หนองพระ",
+            "ชัยนาม",
+            "ดินทอง",
+        ],
+        "วัดโบสถ์": ["วัดโบสถ์", "ท่างาม", "ทองแท้", "บ้านยาง", "หินลาด", "คันโช้ง"],
+    };
+    const [selectedDistrict, setSelectedDistrict] = useState(""); // เก็บอำเภอที่เลือก
+    const [selectedSubdistrict, setSelectedSubdistrict] = useState(""); // เก็บตำบลที่เลือก
+    const [availableSubdistricts, setAvailableSubdistricts] = useState([]); // ตำบลที่สามารถเลือกได้
+    // ✅ เมื่อเลือกอำเภอ → อัปเดตตำบลที่สามารถเลือกได้
+    useEffect(() => {
+        if (selectedDistrict) {
+            setAvailableSubdistricts(districtSubdistrictMap[selectedDistrict] || []);
+            setSelectedSubdistrict(""); // ✅ รีเซ็ตค่าเป็น "" ทุกครั้งที่เปลี่ยนอำเภอ
+        } else {
+            setAvailableSubdistricts([]);
+            setSelectedSubdistrict(""); // ✅ รีเซ็ตค่าเมื่อเลือก "ทั้งหมด"
+        }
+    }, [selectedDistrict]);
+    
 
 
     return (
@@ -115,7 +212,6 @@ function FindAssistance() {
                             ))}
                         </select>
                     </div>
-
                     <div>
                         <label htmlFor="houseCode" className="block text-sm font-medium text-gray-700">รหัสบ้าน (HC)</label>
                         <input
@@ -128,6 +224,46 @@ function FindAssistance() {
                         />
                         <p className="text-xs text-gray-400 mt-1">* Optional</p>
                     </div>
+
+                    {/* เลือกอำเภอ */}
+                    <div>
+                        <label htmlFor="district" className="block text-sm font-medium text-gray-700">
+                            อำเภอ
+                        </label>
+                        <select
+                            id="district"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value={selectedDistrict}
+                            onChange={(e) => setSelectedDistrict(e.target.value)}
+                        >
+                            <option value="">ทั้งหมด</option>
+                            {Object.keys(districtSubdistrictMap).map((district) => (
+                                <option key={district} value={district}>
+                                    {district}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="subdistrict" className="block text-sm font-medium text-gray-700">
+                            ตำบล
+                        </label>
+                        <select
+                            id="subdistrict"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value={selectedSubdistrict}
+                            onChange={(e) => setSelectedSubdistrict(e.target.value)}
+                            disabled={!selectedDistrict} // ❌ ปิดการเลือกถ้ายังไม่ได้เลือกอำเภอ
+                        >
+                            <option value="">ทั้งหมด</option>
+                            {availableSubdistricts.map((subdistrict) => (
+                                <option key={subdistrict} value={subdistrict}>
+                                    {subdistrict}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
                 </form>
 
                 <div className="mt-4 flex justify-start">
@@ -185,7 +321,7 @@ function FindAssistance() {
                                 <tbody>
                                     {filteredData.map(({ surveyDate, name, housecode, members, address }, index) => (
                                         <tr key={index} className="even:bg-blue-gray-50/50">
-                                            <td className="p-4">{(currentPage - 1) * pageSize + index + 1}</td>  
+                                            <td className="p-4">{(currentPage - 1) * pageSize + index + 1}</td>
                                             {/* เหมือนเป็น index หน้าแรก (1 - 1) * 10 = 0 */}
                                             <td className="p-4">{surveyDate}</td>
                                             <td className="p-4">{name}</td>
