@@ -33,10 +33,14 @@ import AddApiToken from "./pages/AddApiToken";
 import LineRegister from "./pages/Line/LineRegister";
 import LineLogin from "./pages/Line/LineLogin";
 import FindAssistance from "./pages/Admin/FindAssistance/FindAssistance"
-
-
-//Testzone
 import FormAddress from "./pages/FormAddress";
+import SearchHelp from "./pages/Admin/HelpLog/SearchHelp";
+import HelpInfo from "./pages/Admin/HelpLog/HelpInfo";
+import Usagestatistics from "./pages/Admin/UsageStatistics/Usagestatistics";
+import IndividualUserLogin from "./pages/Admin/UsageStatistics/IndividualUserLogin";
+
+
+
 
 
 
@@ -176,9 +180,8 @@ function App() {
                 </AdminRoute>
               }
             />
-            {/* TrackingMemberId */}
 
-
+              {/* ข้อมูลรายบุคคล */}
             <Route
               path="track-member/:id"
               element={
@@ -205,6 +208,8 @@ function App() {
                 </AdminRoute>
               }
             />
+
+            {/* ข้อมูล5ทุน */}
             <Route
               path="capital"
               element={
@@ -214,7 +219,7 @@ function App() {
               }
             />
 
-
+            {/* GIS map */}
             <Route
               path="gis-household"
               element={
@@ -223,20 +228,49 @@ function App() {
                 </AdminRoute>
               }
             />
+
+            {/* fetch API DSS */}
             <Route path="add-ApiToken"
               element={
                 <AdminRoute>
                   <AddApiToken />
                 </AdminRoute>}
             />
+
+            {/* นำออกข้อมูล Excel */}
+                
+            <Route path="helplog"
+              element={
+                <AdminRoute>
+                  <SearchHelp />
+                </AdminRoute>}
+            />
+            <Route path="helplog/:id"
+              element={
+                <AdminRoute>
+                  <HelpInfo />
+                </AdminRoute>}
+            />
+
             <Route path="FindAssistance"
               element={
                 <AdminRoute>
                   <FindAssistance />
                 </AdminRoute>}
             />
+            <Route path="usagestatistics"
+              element={
+                <AdminRoute>
+                  <Usagestatistics />
+                </AdminRoute>}
+            />
+            <Route path="Individual-User-Login"
+              element={
+                <AdminRoute>
+                  <IndividualUserLogin />
+                </AdminRoute>}
+            />
             <Route path="*" element={<PageNotFound />} />
-            {/* เพิ่มหน้าอื่น */}
 
           </Route>
         </Routes>

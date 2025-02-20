@@ -380,7 +380,7 @@ const Householdtracking = () => {
     ),
     datasets: [
       {
-        label: "ค่าใช้จ่าย",
+        label: "ค่าใช้จ่ายต่อเดือน",
         data: household?.Form?.Financialcapital?.Householdexpenses?.map(
           (expense) => expense.amount_per_month
         ),
@@ -405,7 +405,7 @@ const Householdtracking = () => {
           },
           label: function (tooltipItem) {
             const value = tooltipItem.raw; // ดึงค่าจากข้อมูล
-            return `จำนวนเงิน: ${value.toLocaleString()} บาท`; // แสดงค่าพร้อมหน่วยเป็น "บาท"
+            return `จำนวนเงิน: ${value.toLocaleString()} บาท ต่อเดือน`; // แสดงค่าพร้อมหน่วยเป็น "บาท"
           },
         },
       },
@@ -824,7 +824,7 @@ const Householdtracking = () => {
             <p className="text-xl font-medium">
               การออมรวมในครัวเรือน:{" "}
               <span className="font-bold text-blue-600">
-                {household.financialSummary.totalSaving}
+                {parseFloat(household.financialSummary.totalSaving).toLocaleString() +' '+ 'บาท'}
               </span>
             </p>
           </div>
@@ -952,7 +952,7 @@ const Householdtracking = () => {
           <p className="text-lg font-medium">
             รวมหนี้สิน:{" "}
             <span className="font-bold text-red-600">
-              {household.financialSummary.totalDebt}
+              {parseFloat(household.financialSummary.totalDebt).toLocaleString() + ' ' + 'บาท'}
             </span>
           </p>
         </div>
