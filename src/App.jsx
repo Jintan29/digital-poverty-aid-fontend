@@ -34,13 +34,10 @@ import LineRegister from "./pages/Line/LineRegister";
 import LineLogin from "./pages/Line/LineLogin";
 import FindAssistance from "./pages/Admin/FindAssistance/FindAssistance"
 import FormAddress from "./pages/FormAddress";
-import HelpLog from "./pages/Admin/HelpLog/HelpLog";
+import SearchHelp from "./pages/Admin/HelpLog/SearchHelp";
+import HelpInfo from "./pages/Admin/HelpLog/HelpInfo";
 import Usagestatistics from "./pages/Admin/UsageStatistics/Usagestatistics";
 import IndividualUserLogin from "./pages/Admin/UsageStatistics/IndividualUserLogin";
-
-
-
-
 
 
 
@@ -244,7 +241,13 @@ function App() {
             <Route path="helplog"
               element={
                 <AdminRoute>
-                  <HelpLog />
+                  <SearchHelp />
+                </AdminRoute>}
+            />
+            <Route path="helplog/:id"
+              element={
+                <AdminRoute>
+                  <HelpInfo />
                 </AdminRoute>}
             />
 
