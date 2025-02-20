@@ -37,6 +37,7 @@ import FormAddress from "./pages/FormAddress";
 import SearchHelp from "./pages/Admin/HelpLog/SearchHelp";
 import HelpInfo from "./pages/Admin/HelpLog/HelpInfo";
 import Usagestatistics from "./pages/Admin/UsageStatistics/Usagestatistics";
+import IndividualUserLogin from "./pages/Admin/UsageStatistics/IndividualUserLogin";
 
 
 
@@ -262,7 +263,12 @@ function App() {
                   <Usagestatistics />
                 </AdminRoute>}
             />
-            
+            <Route path="Individual-User-Login"
+              element={
+                <AdminRoute>
+                  <IndividualUserLogin />
+                </AdminRoute>}
+            />
             <Route path="*" element={<PageNotFound />} />
 
           </Route>

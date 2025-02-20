@@ -96,6 +96,7 @@ const Usagestatistics = () => {
     }
   };
 
+
   // กำหนดข้อมูลสำหรับหัวตาราง
   const TABLE_HEAD = [
     "ประวัติการเข้าใช้งาน",
@@ -106,6 +107,8 @@ const Usagestatistics = () => {
     "Email",
     "จำนวนครั้งที่เข้าใช้งาน",
   ];
+
+
 
   return (
     <div>
@@ -176,6 +179,7 @@ const Usagestatistics = () => {
               // onChange={(e) => setSearch(e.target.value)}
               placeholder="search"
               className="border p-2 rounded-md mt-4 mr-6"
+
             />
           </div>
         </div>
@@ -205,17 +209,16 @@ const Usagestatistics = () => {
               {users.length > 0 ? (
                 users.map((user) => (
                   <tr key={user.id} className="even:bg-blue-gray-50/50">
-                    <td className="p-4">
-                      <Typography
-                        variant="base"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {/* ปุ่มไอคอนหน้า Access_History */}
 
-                        <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300">
+                    <td className="p-4">
+                      <Typography variant="base" className="font-normal">
+                        <button
+                          className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
+                          onClick={handleAccessHistoryClick} // เรียกฟังก์ชันเมื่อกดปุ่ม
+                        >
                           <Icon icon="mdi:table-large" />
                         </button>
+
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -225,6 +228,7 @@ const Usagestatistics = () => {
                         className="font-normal"
                       >
                         {user.role}
+
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -234,6 +238,7 @@ const Usagestatistics = () => {
                         className="font-normal"
                       >
                         {user.status}
+
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -243,6 +248,7 @@ const Usagestatistics = () => {
                         className="font-normal"
                       >
                         {user.title} {user.fname} {user.lname}
+
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -252,6 +258,7 @@ const Usagestatistics = () => {
                         className="font-medium"
                       >
                         {user.username}
+
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -261,6 +268,7 @@ const Usagestatistics = () => {
                         className="font-medium"
                       >
                         {user.email}
+
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -272,6 +280,7 @@ const Usagestatistics = () => {
                         <span className="text-red-500 font-bold">
                           {user.totalLogin}
                         </span>
+
                       </Typography>
                     </td>
                   </tr>
