@@ -1,98 +1,110 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import { Button,Card,CardFooter,IconButton,Typography,} from "@material-tailwind/react";
+import {
+  Button,
+  Card,
+  CardFooter,
+  IconButton,
+  Typography,
+} from "@material-tailwind/react";
+import Swal from "sweetalert2";
+import config from "../../../config";
+import axios from "axios";
 
 const Usagestatistics = () => {
-  // สร้างสถานะ (state) สำหรับการจัดการค่าของเดือน, ปี และช่องค้นหา
-  const [month, setMonth] = useState(""); // เก็บค่าเดือนที่เลือก
-  const [year, setYear] = useState(""); // เก็บค่าปีที่เลือก
-  const [search, setSearch] = useState(""); // เก็บค่าที่พิมพ์ในช่องค้นหา
+  const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 10;
+
+  //สร้างวันที่ default ปัจจุบันก่อน
+  const [currentYear, setCurrentYear] = useState(() => {
+    let myDate = new Date();
+    return myDate.getFullYear();
+  });
+
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    let myDate = new Date();
+    return myDate.getMonth() + 1; //เดือนเริ่มต้นที่ 0
+  });
+
+  //สร้างArr สำหรับดึงข้อมูลย้อนหลังได้ 5 ปี
+  const [arrYear, setArrYear] = useState(() => {
+    let arr = [];
+    let myDate = new Date();
+    let currentYear = myDate.getFullYear();
+    let yearBefore = currentYear - 5;
+
+    for (let i = currentYear; i >= yearBefore; i--) {
+      arr.push(i);
+    }
+
+    return arr;
+  });
+
+  //loop show month
+  const [arrMonth, setArrMonth] = useState(() => {
+    let arr = [
+      { value: 1, label: "มกราคม" },
+      { value: 2, label: "กุมภาพันธ์" },
+      { value: 3, label: "มีนาคม" },
+      { value: 4, label: "เมษายน" },
+      { value: 5, label: "พฤษภาคม" },
+      { value: 6, label: "มิถุนายน" },
+      { value: 7, label: "กรกฏาคม" },
+      { value: 8, label: "สิงหาคม" },
+      { value: 9, label: "กันยายน" },
+      { value: 10, label: "ตุลาคม" },
+      { value: 11, label: "พฤศจิกายน" },
+      { value: 12, label: "ธันวาคม" },
+    ];
+
+    return arr;
+  });
+
+  useEffect(() => {
+    loadData();
+  }, [currentPage]);
+
+  const loadData = async () => {
+    try {
+      const resAPI = await axios.get(
+        config.api_path + `/user/login-history/${currentMonth}/${currentYear}`,
+        {
+          params: {
+            page: currentPage,
+            limit,
+          },
+          ...config.headers(),
+        }
+      );
+      setUsers(resAPI.data.results);
+      setTotalPages(resAPI.data.totalPages);
+    } catch (err) {
+      Swal.fire({
+        title: "error",
+        text: err.response?.data?.message || err.message,
+        icon: "error",
+      });
+    }
+  };
+
+  //loop เปลี่ยนเลขหน้า
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   // กำหนดข้อมูลสำหรับหัวตาราง
   const TABLE_HEAD = [
-    "ประวัติการเข้าใช้งานในระบบ",
+    "ประวัติการเข้าใช้งาน",
     "บทบาท",
     "หน่วยงาน",
     "ชื่อ-นามสกุล",
     "Username",
     "Email",
     "จำนวนครั้งที่เข้าใช้งาน",
-  ];
-
-  // ข้อมูลตัวอย่างในตาราง
-  const TABLE_ROWS = [
-    {
-      Access_History: "",
-      Role: "superAdmin",
-      Agency: "ทีมวิจัย",
-      name: "เจเจ ลิงลิง",
-      Username: "Username",
-      Email: "pl@sradss.com",
-      Number_of_times_accessed: "123",
-    },
-    {
-      Access_History: "",
-      Role: "superAdmin",
-      Agency: "ทีมวิจัย",
-      name: "เจเจ ลิงลิง",
-      Username: "Username",
-      Email: "pl@sradss.com",
-      Number_of_times_accessed: "123",
-    },
-    {
-      Access_History: "",
-      Role: "superAdmin",
-      Agency: "ทีมวิจัย",
-      name: "เจเจ ลิงลิง",
-      Username: "Username",
-      Email: "pl@sradss.com",
-      Number_of_times_accessed: "123",
-    },
-    {
-      Access_History: "",
-      Role: "Admin",
-      Agency: "อบต.",
-      name: "เจเจ ลิงลิง",
-      Username: "Username",
-      Email: "pl@sradss.com",
-      Number_of_times_accessed: "123",
-    },
-    {
-      Access_History: "",
-      Role: "Admin",
-      Agency: "อบต.",
-      name: "เจเจ ลิงลิง",
-      Username: "Username",
-      Email: "pl@sradss.com",
-      Number_of_times_accessed: "123",
-    },
-    {
-      Access_History: "",
-      Role: "Admin",
-      Agency: "อบต.",
-      name: "เจเจ ลิงลิง",
-      Username: "Username",
-      Email: "pl@sradss.com",
-      Number_of_times_accessed: "123",
-    },
-    {
-      Access_History: "",
-      Role: "Admin",
-      Agency: "อบต.",
-      name: "เจเจ ลิงลิง",
-      Username: "Username",
-      Email: "pl@sradss.com",
-      Number_of_times_accessed: "123",
-    },
-    {
-      Access_History: "",
-      Role: "Admin",
-      Agency: "อบต.",
-      name: "เจเจ ลิงลิง",
-      Username: "Username",
-      Email: "pl@sradss.com",
-      Number_of_times_accessed: "123",
-    },
   ];
 
   return (
@@ -109,30 +121,20 @@ const Usagestatistics = () => {
       {/* ตัวกรองสำหรับเลือกเดือนและปี */}
       <div className="justify-center mb-2">
         <div className="col-span-2 w-full p-8 mt-6 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-5">
             {/* ตัวเลือกเดือน */}
             <div>
               <label className="block text-lg font-medium mb-2">
                 เลือกเดือน
               </label>
               <select
-                value={month} // ค่าในสถานะ month
-                onChange={(e) => setMonth(e.target.value)} // อัปเดตสถานะ month เมื่อมีการเปลี่ยนแปลง
-                className="w-3/4 p-2 border rounded-xl"
+                value={currentMonth} // ค่าในสถานะ month
+                onChange={(e) => setCurrentMonth(e.target.value)} // อัปเดตสถานะ month เมื่อมีการเปลี่ยนแปลง
+                className="w-full p-2 border rounded-xl"
               >
-                <option value="">-กรุณาเลือกเดือน-</option>
-                <option value="มกราคม">มกราคม</option>
-                <option value="กุมภาพันธ์">กุมภาพันธ์</option>
-                <option value="มีนาคม">มีนาคม</option>
-                <option value="เมษายน">เมษายน</option>
-                <option value="พฤษภาคม">พฤษภาคม</option>
-                <option value="มิถุนายน">มิถุนายน</option>
-                <option value="กรกฎาคม">กรกฎาคม</option>
-                <option value="สิงหาคม">สิงหาคม</option>
-                <option value="กันยายน">กันยายน</option>
-                <option value="ตุลาคม">ตุลาคม</option>
-                <option value="พฤศจิกายน">พฤศจิกายน</option>
-                <option value="ธันวาคม">ธันวาคม</option>
+                {arrMonth.map((item) => (
+                  <option value={item.value}>{item.label}</option>
+                ))}
               </select>
             </div>
 
@@ -140,22 +142,22 @@ const Usagestatistics = () => {
             <div>
               <label className="block text-lg font-medium mb-2">เลือกปี</label>
               <select
-                value={year} // ค่าในสถานะ year
-                onChange={(e) => setYear(e.target.value)} // อัปเดตสถานะ year เมื่อมีการเปลี่ยนแปลง
-                className="w-3/4 border p-2 rounded-xl"
+                value={currentYear} // ค่าในสถานะ year
+                onChange={(e) => setCurrentYear(e.target.value)} // อัปเดตสถานะ year เมื่อมีการเปลี่ยนแปลง
+                className="w-full border p-2 rounded-xl"
               >
-                <option value="">-กรุณาเลือกปี-</option>
-                <option value="2568">2568</option>
-                <option value="2567">2567</option>
-                <option value="2566">2566</option>
-                <option value="2565">2565</option>
-                <option value="2564">2564</option>
+                {arrYear.map((item) => (
+                  <option value={item}>{item + 543}</option>
+                ))}
               </select>
             </div>
 
             {/* ปุ่มแสดงข้อมูล */}
             <div className="mt-4">
-              <button className="flex items-center px-4 py-2 border border-blue-500 text-blue-500 text-sm rounded-md hover:bg-blue-500 hover:text-white transition">
+              <button
+                onClick={() => loadData()}
+                className="flex items-center px-4 py-2 border border-blue-500 text-blue-500 text-sm rounded-md hover:bg-blue-500 hover:text-white transition"
+              >
                 <Icon icon="heroicons-solid:search" className="mr-2" />
                 แสดงข้อมูล
               </button>
@@ -167,20 +169,20 @@ const Usagestatistics = () => {
       <div className="h-full w-full bg-white rounded-lg shadow">
         {/* แถบค้นหาด้านขวา */}
         <div className="flex justify-end mb-4 mt-8">
-            <div>
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="search"
-            className="border p-2 rounded-md mt-4 mr-6"
-          />
+          <div>
+            <input
+              type="text"
+              // value={search}
+              // onChange={(e) => setSearch(e.target.value)}
+              placeholder="search"
+              className="border p-2 rounded-md mt-4 mr-6"
+            />
           </div>
         </div>
 
         {/* แสดงตารางเป็น */}
         <Card className="h-full w-full  mt-6 flex justify-center items-center">
-          <table className="w-full min-w-max table-auto text-left text-center">
+          <table className="w-full min-w-max table-auto  text-center">
             <thead>
               <tr>
                 {TABLE_HEAD.map((head) => (
@@ -200,18 +202,9 @@ const Usagestatistics = () => {
               </tr>
             </thead>
             <tbody>
-              {/* ข้อมูลในตาราง */}
-              {TABLE_ROWS.map(
-                ({
-                  Access_History,
-                  Role,
-                  Agency,
-                  name,
-                  Username,
-                  Email,
-                  Number_of_times_accessed,
-                }) => (
-                  <tr key={Access_History} className="even:bg-blue-gray-50/50">
+              {users.length > 0 ? (
+                users.map((user) => (
+                  <tr key={user.id} className="even:bg-blue-gray-50/50">
                     <td className="p-4">
                       <Typography
                         variant="base"
@@ -223,8 +216,6 @@ const Usagestatistics = () => {
                         <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300">
                           <Icon icon="mdi:table-large" />
                         </button>
-
-                        {Access_History}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -233,7 +224,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {Role}
+                        {user.role}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -242,7 +233,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {Agency}
+                        {user.status}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -251,7 +242,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {name}
+                        {user.title} {user.fname} {user.lname}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -260,7 +251,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-medium"
                       >
-                        {Username}
+                        {user.username}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -269,7 +260,7 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-medium"
                       >
-                        {Email}
+                        {user.email}
                       </Typography>
                     </td>
                     <td className="p-4">
@@ -278,31 +269,60 @@ const Usagestatistics = () => {
                         color="blue-gray"
                         className="font-medium"
                       >
-                        {Number_of_times_accessed}
+                        <span className="text-red-500 font-bold">
+                          {user.totalLogin}
+                        </span>
                       </Typography>
                     </td>
                   </tr>
-                )
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" className="text-center p-4">
+                    ไม่พบข้อมูลเข้าใช้งานภายในเดือนนี้
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
 
           {/* การแบ่งหน้า */}
           <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+            
             <div className="flex items-center gap-2">
-              <IconButton variant="outlined" size="sm">
-                1
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                2
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                3
-              </IconButton>
+              {[...Array(totalPages)].map((_, index) => (
+                <IconButton
+                  key={index + 1}
+                  variant={currentPage === index + 1 ? "outlined" : "text"}
+                  size="sm"
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </IconButton>
+              ))}
             </div>
-            <Button variant="outlined" size="sm">
-              Next
-            </Button>
+
+            <div className="flex gap-2">
+              <Button
+                variant="outlined"
+                className="ml-2"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                ก่อนหน้า
+              </Button>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                ถัดไป
+              </Button>
+            </div>
+
+
           </CardFooter>
         </Card>
       </div>
