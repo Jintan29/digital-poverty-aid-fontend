@@ -345,34 +345,10 @@ function FindAssistance() {
                             />
                         </div>
                     </>
-
                 )}
-              </tbody>
-            </table>
-          </Card>
-        )}
-
-        {isFetched && currentItems.length === 0 && (
-          <div className="mt-4 text-center text-gray-500">
-            ไม่พบข้อมูลที่ตรงกับเงื่อนไขที่เลือก
-          </div>
-        )}
-
-        {/* 🔹 Pagination Component */}
-        {isFetched && filterData.length > itemsPerPage && (
-          <div className="mt-6 flex justify-center">
-            <Pagination
-              count={Math.ceil(filterData.length / itemsPerPage)} // จำนวนหน้าทั้งหมด
-              page={currentPage}
-              onChange={(event, value) => setCurrentPage(value)} // อัปเดตหน้าที่เลือก
-              shape="rounded"
-              color="primary"
-            />
-          </div>
-        )}
-      </div>
-    </>
-  );
+            </div>
+        </>
+    );
 }
 
 export default FindAssistance;
