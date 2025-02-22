@@ -27,23 +27,6 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       logo: "material-symbols:globe-location-pin-sharp",
     },
     {
-      name: "ค้นหาสมาชิกครัวเรือน",
-      link: "/admin/find-members",
-      logo: "material-symbols:group-search",
-    },
-    {
-      name: "บันทึกการช่วยเหลือ",
-      link: "/admin/helpLog",
-      logo: "mdi:account-edit",
-      submenu: [
-        {
-          name: "บันทึกแบบรายคน",
-          link: "/admin/helpLog",
-          logo: "mdi:file-document-multiple-outline",
-        },
-      ],
-    },
-    {
       name: "ระบบติดตามข้อมูล",
       link: "/admin/find-members",
       logo: "material-symbols:rubric-rounded",
@@ -60,6 +43,18 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         },
       ],
     },
+    {
+      name: "บันทึกการช่วยเหลือ",
+      link: "/admin/helpLog",
+      logo: "mdi:account-edit",
+      submenu: [
+        {
+          name: "บันทึกแบบรายคน",
+          link: "/admin/helpLog",
+          logo: "mdi:file-document-multiple-outline",
+        },
+      ],
+    },
     { name: "API ", 
       link: "/admin/api", 
       logo: "material-symbols:integration-instructions-outline-rounded",
@@ -68,10 +63,13 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         {name:'เอกสารการใช้งาน',link:'#'}
       ]
     },
-    {
-      name: "ระบบนำออกข้อมูล",
-      link: "/admin/FindAssistance",
+    { name: "ระบบนำออกข้อมูล ", 
+      link: "#", 
       logo: "material-symbols:database-upload-outline-rounded",
+      submenu:[
+        {name:'ข้อมูลครัวเรือนตามปีที่สำรวจ',link:'/admin/FindAssistance'},
+        {name:'ข้อมูลสมาชิกตามช่วงอายุ',link:'/admin/FindMemberByAge'}
+      ]
     },
     {
       name: "จัดการผู้ใช้งานระบบ",

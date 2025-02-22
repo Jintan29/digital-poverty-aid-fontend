@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "@material-tailwind/react";
 import { Typography } from "@material-tailwind/react";
 import { Icon } from "@iconify/react";
-import IndividualRecordModal from "./IndividualRecord/IndividualRecordModal";
+import IndividualRecordModal from "../../../components/HelpLog/IndividualRecord/IndividualRecordModal";
+import Swal from "sweetalert2";
+import axios from "axios";
+import config from "../../../config";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import dayjs from "dayjs";
+import buddhistEra from "dayjs/plugin/buddhistEra";
+dayjs.extend(buddhistEra);
+dayjs.locale("th");
 
-const ShowHelp = ({ data, goBack }) => {
+const HelpInfo = () => {
+  const [member, setMember] = useState({});
+  const [helpData, setHelpData] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   // กำหนดข้อมูลสำหรับหัวตาราง
   const TABLE_HEAD = [
     "#",
@@ -20,39 +33,80 @@ const ShowHelp = ({ data, goBack }) => {
     "จำนวนเงินที่ช่วยเหลือ",
     "รายละเอียดอย่างย่อ",
   ];
-  // กำหนดข้อมูลในตารางตัวอย่าง
-  const TABLE_ROWS = [
-    {
-      assistanceDate: "13/02/2025",
-      name: "นางมา ทับทิมจันทร์",
-      HC: "001",
-      address: "101 ม.2 บ้านใหม่ไทยเจริญ ต.เนินมะปราง อ.เนินมะปราง จ.พิษณุโลก",
-      costofliving: "ทุนมนุษย์",
-      confirmationcapital: "การศึกษาสูงสุด",
-      assistance: "ทุนการศึกษา",
-      assistance_agencies: "องค์กรภาคเอกชน",
-      amount: "3000",
-      details: "ช่วยเหลือเรื่องทุนการศึกษา",
-    },
-  ];
+
+  useEffect(() => {
+    loadMemberData();
+  }, []);
+
+  const loadMemberData = async () => {
+    try {
+      const res = await axios.get(
+        config.api_path + `/help-member/find-help/${id}`,
+        config.headers()
+      );
+      setMember(res.data.result);
+      setHelpData(res.data.result.HelpMembers);
+      if (res.data.msg === "ไม่พบข้อมูลสมาชิก") {
+        navigate("/admin/*");
+      }
+    } catch (err) {
+      Swal.fire({
+        title: "error",
+        text: err.response?.data?.message || err.message,
+        icon: "error",
+      });
+    }
+  };
+
+  //ลบการช่วยเหลือ
+  const handleDelete = async(id)=>{
+    try{
+      const resSwal = await Swal.fire({
+        title:'ลบข้อมูล',
+        text:'ต้องการลบข้อมูลการช่วยเหลือใช่หรือไม่',
+        icon:'warning',
+        showCancelButton:true,
+        showConfirmButton:true,
+        cancelButtonText:'ยกเลิก',
+        confirmButtonText:'ยืนยัน'
+      })
+      if(resSwal.isConfirmed){
+        const resAPI = await axios.delete(config.api_path+`/help-member/delete/${id}`,config.headers())
+        if(resAPI.data.message ==='success'){
+          Swal.fire({
+            title:'ลบข้อมูลสำเร็จ',
+            icon:'success',
+            showConfirmButton:false,
+            timer:1500
+          })
+          loadMemberData()
+        }
+      }
+    }catch(err){
+      Swal.fire({
+        title:'error',
+        text: err.response?.data?.message || err.message,
+        icon:'error'
+      })
+    }
+  }
 
   return (
-    <div className="justify-center mb-2">
+    <div className="justify-center my-10">
       {/* Main Content */}
       <header className="flex justify-between items-center">
         <h3 className="text-xl font-semibold">แสดงข้อมูลการช่วยเหลือ</h3>
         <div className="flex space-x-4">
-          <button
-            onClick={goBack}
-            className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-2 rounded"
-          >
-            <Icon
-              icon="material-symbols:keyboard-return-rounded"
-              className="mr-2"
-              width="18px"
-            />
-            กลับไปหน้าตาราง
-          </button>
+          <Link to={`/admin/track-member/${member.id}`}>
+            <button className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-2 rounded">
+              <Icon
+                icon="material-symbols:lightbulb-2-rounded"
+                className="mr-2"
+                width="18px"
+              />
+              ดูข้อมูลสมาชิกครัวเรือน
+            </button>
+          </Link>
           <button
             onClick={(e) => setShowModal(true)}
             className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-2 rounded"
@@ -67,15 +121,28 @@ const ShowHelp = ({ data, goBack }) => {
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <p className="">
-              <strong>ชื่อ-สกุล:</strong> {data?.name || ""}
+              <strong>ชื่อ-สกุล:</strong> {member?.title} {member?.fname}{" "}
+              {member?.lname}
             </p>
             <p className="mt-4">
-              <strong>ที่อยู่:</strong> {data?.address || ""}
+              <strong>ที่อยู่:</strong>{" "}
+              {member.Household?.house_number +
+                " " +
+                "ต." +
+                member.Household?.subdistrict +
+                " " +
+                member.Household?.district +
+                " " +
+                "จ. " +
+                member.Household?.province +
+                " " +
+                member.Household?.postcode}
             </p>
           </div>
           <div>
             <p>
-              <strong>ปีที่สำรวจ:</strong> {data?.assistanceDate || ""}
+              <strong>ปีที่สำรวจ:</strong>{" "}
+              {dayjs(member.createdAt).format("DD MMMM BBBB")}
             </p>
             <div className="mt-2">
               <p>
@@ -83,10 +150,10 @@ const ShowHelp = ({ data, goBack }) => {
               </p>
               <div className="mt-4">
                 <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">
-                  ได้รับการช่วยเหลือ (0)
+                  ได้รับการช่วยเหลือ ({helpData.length})
                 </button>
                 <button className="bg-purple-500 text-white px-4 py-2 rounded">
-                  สมาชิกในครัวเรือนได้รับการช่วยเหลือ (0)
+                  สมาชิกในครัวเรือนได้รับการช่วยเหลือ ({member.totalGetHelp})
                 </button>
               </div>
             </div>
@@ -118,24 +185,13 @@ const ShowHelp = ({ data, goBack }) => {
           </thead>
           {/* ส่วนข้อมูลภายในตาราง */}
           <tbody>
-            {TABLE_ROWS.map(
-              ({
-                assistanceDate,
-                name,
-                HC,
-                address,
-                costofliving,
-                confirmationcapital,
-                assistance,
-                assistance_agencies,
-                amount,
-                details,
-              }) => (
-                <tr key={name} className="even:bg-blue-gray-50/50">
+            {helpData.length > 0 ? (
+              helpData.map((help) => (
+                <tr key={help.id} className="even:bg-blue-gray-50/50">
                   {/* ปุ่มลบ */}
                   <td className="p-4">
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(help.id)}
                       className="text-red-500 hover:text-red-700 p-2"
                     >
                       <Icon
@@ -153,7 +209,7 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {assistanceDate}
+                      {dayjs(help.help_date).format("DD MMMM BBBB")}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -162,7 +218,7 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {name}
+                      {member?.title} {member?.fname} {member?.lname}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -171,7 +227,7 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {HC}
+                      {member.Household?.house_code}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -180,7 +236,17 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {address}
+                      {member.Household?.house_number +
+                        " " +
+                        "ต." +
+                        member.Household?.subdistrict +
+                        " " +
+                        member.Household?.district +
+                        " " +
+                        "จ. " +
+                        member.Household?.province +
+                        " " +
+                        member.Household?.postcode}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -189,7 +255,7 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {costofliving}
+                      {help.capital}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -198,7 +264,7 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {confirmationcapital}
+                      {help.components}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -207,7 +273,7 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {assistance}
+                      {help.help_name}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -216,7 +282,7 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {assistance_agencies}
+                      {help.agency}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -225,7 +291,7 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {amount}
+                      {parseFloat(help.amount).toLocaleString()} บาท
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -234,16 +300,23 @@ const ShowHelp = ({ data, goBack }) => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {details}
+                      {help.description}
                     </Typography>
                   </td>
                 </tr>
-              )
+              ))
+            ) : (
+              <tr>
+                <td colSpan="10" className="text-center p-4">
+                  ไม่พบข้อมูลการช่วยเหลือ
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
       </Card>
       <IndividualRecordModal
+        loadMemberData={loadMemberData}
         show={showModal}
         onClose={() => setShowModal(false)}
       />
@@ -251,4 +324,4 @@ const ShowHelp = ({ data, goBack }) => {
   );
 };
 
-export default ShowHelp;
+export default HelpInfo;

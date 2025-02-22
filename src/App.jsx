@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 
-import { About } from "./pages/About";
+
 import { Form } from "./pages/Form";
 import Register from "./pages/Authentication/Register";
 import { Login } from "./pages/Authentication/Login";
@@ -17,13 +17,10 @@ import { AdminRoute } from "./route/AdminRoute";
 import HomepageAdmin from "./pages/Admin/HomepageAdmin";
 import UserLayout from "./layouts/UserLayout";
 import AdminLayout from "./layouts/AdminLayout";
-import MemberHousehold from "./pages/Admin/Findmember/MemberHousehold";
 import ManageUser from "./pages/Admin/ManageUser/ManageUser";
 import ApproveUser from "./pages/Admin/ManageUser/ApproveUser";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ResetPassword from "./pages/Authentication/ResetPassword";
-import TrackMember from "./pages/Admin/Tracking/TrackMember";
-import TrackHousehold from "./pages/Admin/Tracking/TrackHousehold";
 import TrackingMemberId from "./pages/Admin/Tracking/TrackingMemberId";
 import MixedChart from "./pages/MixedChart";
 import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
@@ -32,16 +29,16 @@ import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
 import AddApiToken from "./pages/AddApiToken";
 import LineRegister from "./pages/Line/LineRegister";
 import LineLogin from "./pages/Line/LineLogin";
-import FindAssistance from "./pages/Admin/FindAssistance/FindAssistance"
+import FindAssistance from "./pages/Admin/ExportData/FindAssistance";
 import FormAddress from "./pages/FormAddress";
-import HelpLog from "./pages/Admin/HelpLog/HelpLog";
+import SearchHelp from "./pages/Admin/HelpLog/SearchHelp";
+import HelpInfo from "./pages/Admin/HelpLog/HelpInfo";
 import Usagestatistics from "./pages/Admin/UsageStatistics/Usagestatistics";
 import IndividualUserLogin from "./pages/Admin/UsageStatistics/IndividualUserLogin";
 import LineLoginStatistics from "./pages/Admin/UsageStatistics/LineLoginStatistics";
-
-
-
-
+import FindMemberByAgeRange from "./pages/Admin/ExportData/FindMemberByAgeRange";
+import SearchMember from "./pages/Admin/Tracking/SearchMember";
+import SearchHousehold from "./pages/Admin/Tracking/SearchHousehold";
 
 
 
@@ -109,13 +106,9 @@ function App() {
           {/* Layout for user */}
           <Route path="/" element={<UserLayout />}>
             <Route index element={<Map />} />
-            <Route path="about" element={<About />} />
             <Route path="form" element={<Form />} />
             <Route path="testt" element={<MixedChart />} />
             
-            
-
-
             {/* Auth */}
             <Route path="register" element={<Register />} />
             <Route path="login" element={<Login />} />
@@ -148,14 +141,6 @@ function App() {
                 </AdminRoute>
               }
             />
-            <Route
-              path="find-members"
-              element={
-                <AdminRoute>
-                  <MemberHousehold />
-                </AdminRoute>
-              }
-            />
 
             <Route
               path="manage-user"
@@ -179,7 +164,7 @@ function App() {
               path="track-member"
               element={
                 <AdminRoute>
-                  <TrackMember />
+                  <SearchMember />
                 </AdminRoute>
               }
             />
@@ -198,7 +183,7 @@ function App() {
               path="track-household"
               element={
                 <AdminRoute>
-                  <TrackHousehold />
+                  <SearchHousehold />
                 </AdminRoute>
               }
             />
@@ -240,21 +225,36 @@ function App() {
                 </AdminRoute>}
             />
 
-            {/* นำออกข้อมูล Excel */}
                 
             <Route path="helplog"
               element={
                 <AdminRoute>
-                  <HelpLog />
+                  <SearchHelp />
+                </AdminRoute>}
+            />
+            <Route path="helplog/:id"
+              element={
+                <AdminRoute>
+                  <HelpInfo />
                 </AdminRoute>}
             />
 
+            {/* นำออกข้อมูล Excel */}
             <Route path="FindAssistance"
               element={
                 <AdminRoute>
                   <FindAssistance />
                 </AdminRoute>}
             />
+            <Route path="FindMemberByAge"
+              element={
+                <AdminRoute>
+                  <FindMemberByAgeRange />
+                </AdminRoute>}
+            />
+            
+
+            {/* สถิติการเข้าใช่งานระบบ */}
             <Route path="usagestatistics"
               element={
                 <AdminRoute>

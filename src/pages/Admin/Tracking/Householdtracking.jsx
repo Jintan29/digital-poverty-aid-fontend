@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import { Pie, Line, Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { Dropdown } from "flowbite-react";
+// import config from "../../../config";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -69,7 +70,7 @@ const Householdtracking = () => {
     setLoading(true); // เริ่มสถานะการโหลด
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/financialCapital/getAllSum/${id}` // Replace with your API URL
+        `${config.api_path}/financialCapital/getAllSum/${id}` // Replace with your API URL
       );
       setHousehold(response.data.data);
       setError(null); // ล้างข้อผิดพลาดหากมีข้อมูล

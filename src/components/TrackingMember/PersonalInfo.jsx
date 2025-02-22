@@ -1,9 +1,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 
-
-
-const PersonalInfo = ({member,carrer }) => {
+const PersonalInfo = ({ member, carrer }) => {
   return (
     <>
       <div class="col-span-3  w-full p-6 mt-7 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -106,6 +104,8 @@ const PersonalInfo = ({member,carrer }) => {
               <span>ไม่มีข้อมูล</span>
             )}
           </div>
+
+
         </section>
       </div>
     </>
