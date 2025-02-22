@@ -20,6 +20,7 @@ const ManageUser = () => {
       id: user.id, // ตั้งค่า id ของผู้ใช้ที่ต้องการแก้ไข
       fname: user.fname,
       lname: user.lname,
+      username:user.username,
       email: user.email,
       phone: user.phone || "", // ถ้าไม่มีเบอร์โทรให้ใส่ค่าเป็นสตริงว่าง
       password: "",
@@ -52,8 +53,8 @@ const ManageUser = () => {
         <h2 className="text-2xl font-semibold">จัดการผู้ใช้งานระบบ</h2>
       </div>
 
-      <div class="relative mt-9 overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <div class="relative mt-9 overflow-x-auto shadow-md sm:rounded-lg ">
+        <table class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">
@@ -95,7 +96,7 @@ const ManageUser = () => {
                 <td class="px-6 py-4"><span className={user.role === 'superAdmin' ? 'bg-yellow-100 text-red-500 text-sm font-semibold me-2 px-2.5 py-0.5 rounded ' : 'bg-green-100 text-green-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded'}>{user.role}</span></td>
                 <td class="px-6 py-4">{user.status}</td>
                 <td class="px-6 py-4">
-                  <div className="flex justify-start">
+                  <div className="flex justify-start text-center">
                   <button
                       type="button"
                       className="text-white w-15 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"

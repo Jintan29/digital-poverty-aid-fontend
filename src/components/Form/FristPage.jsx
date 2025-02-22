@@ -17,7 +17,7 @@ export const FristPage = ({
 }) => {
   //เก็บข้อมูลจาก input
   const [formData, setFormData] = useState({
-    recder_title: "นาย",
+    recder_title: "",
     recder_fname: "",
     recder_lname: "",
     recder_phone: "",
@@ -35,7 +35,7 @@ export const FristPage = ({
       district: "",
       province: "พิษณุโลก", // จังหวัด
       postcode: "",
-      host_title: "นาย", // ค่า default เป็น นาย
+      host_title: "", // ค่า default เป็น นาย
       host_fname: "",
       host_lname: "",
       host_national_id: "",
@@ -44,7 +44,7 @@ export const FristPage = ({
     Informant: {
       fname: "",
       lname: "",
-      title: "นาย",
+      title: "",
       national_id: "",
       phone: "",
       fam_total_member: null,
@@ -54,7 +54,7 @@ export const FristPage = ({
     },
     TeamServey: [
       {
-        title: "นาย",
+        title: "",
         fname: "",
         lname: "",
         agency: "",
@@ -298,7 +298,7 @@ export const FristPage = ({
       TeamServey: [
         ...prevData.TeamServey,
         {
-          title: "นาย",
+          title: "",
           fname: "",
           lname: "",
           agency: "",
@@ -563,7 +563,7 @@ export const FristPage = ({
                 value={formData.Household.district}
                 required
               >
-                <option value="">เลือกอำเภอ</option>
+                <option value=""disabled>เลือกอำเภอ</option>
                 {Object.keys(districtSubdistrictMap).map((district) => (
                   <option key={district} value={district}>
                     {district}
@@ -590,7 +590,7 @@ export const FristPage = ({
                 required
                 disabled={!formData.Household.district}
               >
-                <option value="">เลือกตำบล</option>
+                <option value=""disabled>เลือกตำบล</option>
                 {availableSubdistricts.map((subdistrict) => (
                   <option key={subdistrict} value={subdistrict}>
                     {subdistrict}
@@ -635,14 +635,36 @@ export const FristPage = ({
               >
                 ชื่อ เจ้าบ้าน ตามทะเบียนบ้าน
               </label>
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <label htmlFor="houseOwnerTitle" className="sr-only">
-                  Title
-                </label>
-                <select
-                  id="host_title"
+              <div className="flex items-center space-x-2">
+                <div className="relative rounded-lg shadow-md">
+                  <label htmlFor="houseOwnerTitle" className="sr-only">
+                    Title
+                  </label>
+                  <select
+                    id="host_title"
+                    name="Household"
+                    className="border border-gray-300 bg-gray-50 text-gray-900 text-sm focus:ring-0 focus:outline-none w-30 focus:border-gray-500 rounded-lg"
+                    onChange={(e) =>
+                      handleInputChange(
+                        e.target.name,
+                        e.target.id,
+                        e.target.value
+                      )
+                    }
+                    value={formData.Household.host_title}
+                  >
+                    <option value="" disabled>เลือก</option>
+                    <option>นาย</option>
+                    <option>นาง</option>
+                    <option>นางสาว</option>
+                  </select>
+                </div>
+                <input
+                  id="host_fname"
                   name="Household"
-                  className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
+                  required
+                  type="text"
+                  placeholder=""
                   onChange={(e) =>
                     handleInputChange(
                       e.target.name,
@@ -650,25 +672,10 @@ export const FristPage = ({
                       e.target.value
                     )
                   }
-                  value={formData.Household.host_title}
-                >
-                  <option>นาย</option>
-                  <option>นาง</option>
-                  <option>นางสาว</option>
-                </select>
+                  value={formData.Household.host_fname}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
               </div>
-              <input
-                id="host_fname"
-                name="Household"
-                required
-                type="text"
-                placeholder=""
-                onChange={(e) =>
-                  handleInputChange(e.target.name, e.target.id, e.target.value)
-                }
-                value={formData.Household.host_fname}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
             </div>
             <div className="">
               <label
@@ -728,10 +735,35 @@ export const FristPage = ({
               >
                 ชื่อ ผู้ให้ข้อมูล
               </label>
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <select
-                  id="title"
+              <div className="flex items-center space-x-2">
+                <div className="relative rounded-lg shadow-md">
+                  <select
+                    id="title"
+                    name="Informant"
+                    onChange={(e) =>
+                      handleInputChange(
+                        e.target.name,
+                        e.target.id,
+                        e.target.value
+                      )
+                    }
+                    value={formData.Informant.title}
+                    className="border border-gray-300 bg-gray-50 text-gray-900 text-sm focus:ring-0 focus:outline-none w-30 focus:border-gray-500 rounded-lg"
+                  >
+                    <option value=""disabled>เลือก</option>
+                    <option>นาย</option>
+                    <option>นาง</option>
+                    <option>นางสาว</option>
+                    <option>เด็กชาย</option>
+                    <option>เด็กหญิง</option>
+                  </select>
+                </div>
+                <input
+                  id="fname"
+                  required
                   name="Informant"
+                  type="text"
+                  value={formData.Informant.fname}
                   onChange={(e) =>
                     handleInputChange(
                       e.target.name,
@@ -739,27 +771,9 @@ export const FristPage = ({
                       e.target.value
                     )
                   }
-                  value={formData.Informant.title}
-                  className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
-                >
-                  <option>นาย</option>
-                  <option>นาง</option>
-                  <option>นางสาว</option>
-                  <option>เด็กชาย</option>
-                  <option>เด็กหญิง</option>
-                </select>
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
               </div>
-              <input
-                id="fname"
-                required
-                name="Informant"
-                type="text"
-                value={formData.Informant.fname}
-                onChange={(e) =>
-                  handleInputChange(e.target.name, e.target.id, e.target.value)
-                }
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
             </div>
             <div className="">
               <label
@@ -959,10 +973,31 @@ export const FristPage = ({
                   >
                     {index + 1}.ชื่อผู้สำรวจ
                   </label>
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                    <select
-                      id="title"
-                      value={teamData.title}
+                  <div className="flex items-center space-x-2">
+                    <div className="relative rounded-lg shadow-md">
+                      <select
+                        id="title"
+                        value={teamData.title}
+                        onChange={(e) =>
+                          handleTeamServeyChange(
+                            index,
+                            e.target.id,
+                            e.target.value
+                          )
+                        }
+                        // name="currency"
+                        className="border border-gray-300  bg-gray-50 text-gray-900 text-sm focus:ring-0 focus:outline-none w-30 focus:border-gray-500 rounded-lg"
+                      >
+                        <option value=""disabled>เลือก</option>
+                        <option>นาย</option>
+                        <option>นาง</option>
+                        <option>นางสาว</option>
+                      </select>
+                    </div>
+                    <input
+                      id="fname"
+                      required
+                      value={teamData.fname}
                       onChange={(e) =>
                         handleTeamServeyChange(
                           index,
@@ -970,25 +1005,11 @@ export const FristPage = ({
                           e.target.value
                         )
                       }
-                      // name="currency"
-                      className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
-                    >
-                      <option>นาย</option>
-                      <option>นาง</option>
-                      <option>นางสาว</option>
-                    </select>
+                      type="text"
+                      placeholder=""
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    />
                   </div>
-                  <input
-                    id="fname"
-                    required
-                    value={teamData.fname}
-                    onChange={(e) =>
-                      handleTeamServeyChange(index, e.target.id, e.target.value)
-                    }
-                    type="text"
-                    placeholder=""
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  />
                 </div>
 
                 <div className="">
@@ -1099,31 +1120,36 @@ export const FristPage = ({
               >
                 ชื่อผู้บันทึก
               </label>
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
-                <select
-                  id="recder_title"
-                  name="DataRecorder"
+              <div className="flex items-center space-x-2">
+                <div className="relative rounded-lg shadow-md">
+                  <select
+                    id="recder_title"
+                    name="DataRecorder"
+                    onChange={(e) =>
+                      handleRecderInput(e.target.id, e.target.value)
+                    }
+                    value={formData.recder_title}
+                    className="border border-gray-300  bg-gray-50 text-gray-900 text-sm focus:ring-0 focus:outline-none w-30 focus:border-gray-500 rounded-lg"
+                  >
+                    <option value=""disabled>เลือก</option>
+                    <option>นาย</option>
+                    <option>นาง</option>
+                    <option>นางสาว</option>
+                  </select>
+                </div>
+                <input
+                  id="recder_fname"
                   onChange={(e) =>
                     handleRecderInput(e.target.id, e.target.value)
                   }
-                  value={formData.recder_title}
-                  className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
-                >
-                  <option>นาย</option>
-                  <option>นาง</option>
-                  <option>นางสาว</option>
-                </select>
+                  name="DataRecorder"
+                  type="text"
+                  required
+                  placeholder=""
+                  value={formData.recder_fname}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
               </div>
-              <input
-                id="recder_fname"
-                onChange={(e) => handleRecderInput(e.target.id, e.target.value)}
-                name="DataRecorder"
-                type="text"
-                required
-                placeholder=""
-                value={formData.recder_fname}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
             </div>
 
             <div className="">

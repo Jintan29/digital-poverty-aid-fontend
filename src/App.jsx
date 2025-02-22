@@ -35,9 +35,11 @@ import SearchHelp from "./pages/Admin/HelpLog/SearchHelp";
 import HelpInfo from "./pages/Admin/HelpLog/HelpInfo";
 import Usagestatistics from "./pages/Admin/UsageStatistics/Usagestatistics";
 import IndividualUserLogin from "./pages/Admin/UsageStatistics/IndividualUserLogin";
+import LineLoginStatistics from "./pages/Admin/UsageStatistics/LineLoginStatistics";
 import FindMemberByAgeRange from "./pages/Admin/ExportData/FindMemberByAgeRange";
 import SearchMember from "./pages/Admin/Tracking/SearchMember";
 import SearchHousehold from "./pages/Admin/Tracking/SearchHousehold";
+
 
 
 
@@ -263,6 +265,12 @@ function App() {
               element={
                 <AdminRoute>
                   <IndividualUserLogin />
+                </AdminRoute>}
+            />
+            <Route path="line-login-statistics"
+              element={
+                <AdminRoute>
+                  <LineLoginStatistics />
                 </AdminRoute>}
             />
             <Route path="*" element={<PageNotFound />} />

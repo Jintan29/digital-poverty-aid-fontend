@@ -12,7 +12,7 @@ export const HumanCapital = ({
   //สถานะเริ่มต้นฟอร์ม
   const [members, setMembers] = useState([
     {
-      title: "นาย",
+      title: "",
       fname: "",
       lname: "",
       age_yaer: 0,
@@ -63,12 +63,12 @@ export const HumanCapital = ({
     setMembers([
       ...members,
       {
-        title: "นาย",
+        title: "",
         fname: "",
         lname: "",
         age_yaer: 0,
         age_month: 0,
-        sex: "ชาย",
+        sex: "",
         birthdate: "",
         national_id: "",
         phone: "",
@@ -355,7 +355,8 @@ export const HumanCapital = ({
                 >
                   ชื่อ
                 </label>
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
+                <div className="flex items-center space-x-2">
+                <div className="relative rounded-lg shadow-md">
                   <select
                     id="title"
                     name="title"
@@ -363,8 +364,9 @@ export const HumanCapital = ({
                     onChange={(e) =>
                       handleInputChange(index, "title", e.target.value)
                     }
-                    className="border border-transparent mb-5 bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 focus:border-gray-500 focus:rounded-md"
+                    className="border border-gray-300 bg-gray-50 text-gray-900 text-sm focus:ring-0 focus:outline-none w-30 focus:border-gray-500 rounded-lg  px-3"
                   >
+                    <option value=""disabled>เลือก</option>
                     <option>นาย</option>
                     <option>นาง</option>
                     <option>นางสาว</option>
@@ -382,8 +384,9 @@ export const HumanCapital = ({
                   }
                   required
                   placeholder=""
-                  className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-24 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
+              </div>
               </div>
 
               <div className="">
@@ -469,9 +472,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "sex", e.target.value)
                   }
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option value="">ระบุเพศ</option>
+                  <option value=""disabled>ระบุเพศ</option>
                   <option  value="ชาย" >ชาย</option>
                   <option value="หญิง" >หญิง</option>
                 </select>
@@ -559,9 +562,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "status_in_house", e.target.value)
                   }
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-900 focus:rounded-md"
                 >
-                  <option value="">ระบุสถานะ</option>
+                  <option value=""disabled>ระบุสถานะ</option>
                   <option value="มีชื่อและอาศัยอยู่">มีชื่อและอาศัยอยู่</option>
                   <option value="มีชื่อแต่ไม่อาศัย">มีชื่อแต่ไม่อาศัย</option>
                   <option value="ไม่มีชื่อแต่อาศัยอยู่">ไม่มีชื่อแต่อาศัยอยู่</option>
@@ -583,9 +586,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "health", e.target.value)
                   }
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-900 focus:rounded-md"
                 >
-                  <option value="">ระบุสุขภาพ</option>
+                  <option value=""disabled>ระบุสุขภาพ</option>
                   <option value="ปกติ">ปกติ</option>
                   <option value="ป่วยเรื้อรังไม่ติดเตียง(เช่น หัวใจ เบาหวาน)">ป่วยเรื้อรังไม่ติดเตียง(เช่น หัวใจ เบาหวาน)</option>
                   <option value="พึ่งพาตนเองได้">พึ่งพาตนเองได้</option>
@@ -623,10 +626,10 @@ export const HumanCapital = ({
                         e.target.value
                       )
                     }
-                    className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none focus:border-gray-500 focus:rounded-md"
+                    className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none focus:border-gray-900 focus:rounded-md"
                   >
                     {/* ... รายการตัวเลือก ... */}
-                    <option>ไม่ได้รับ</option>
+                    <option disabled>ไม่ได้รับ</option>
                     <option>เด็กแรกเกิด</option>
                     <option>เบี้ยสูงอายุ/คนชรา</option>
                     <option>เบี้ยคนพิการ</option>
@@ -687,7 +690,7 @@ export const HumanCapital = ({
                           e.target.value
                         )
                       }
-                      className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none focus:border-gray-500 focus:rounded-md"
+                      className="border border-transparent mb-5 bg-gray-50 rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none focus:border-gray-900 focus:rounded-md"
                     >
                       <option value="ทุกเดือน">ทุกเดือน</option>
                       <option value="ครั้งเดียว">ครั้งเดียว</option>
@@ -735,9 +738,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "can_speak_TH", e.target.value)
                   }
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option value="">ระบุความสามารถ</option>
+                  <option value=""disabled>ระบุความสามารถ</option>
                   <option value="พูดไทยได้">ได้</option>
                   <option value="พูดไทยไม่ได้">ไม่ได้</option>
                 </select>
@@ -758,9 +761,9 @@ export const HumanCapital = ({
                     handleInputChange(index, "can_read_TH", e.target.value)
                   }
                   required
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option value="">ระบุความสามารถ</option>
+                  <option value=""disabled>ระบุความสามารถ</option>
                   <option value="อ่านไทยได้">ได้</option>
                   <option value="อ่านไทยไม่ได้">ไม่ได้</option>
                 </select>
@@ -781,9 +784,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "can_write_TH", e.target.value)
                   }
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option value="">ระบุความสามารถ</option>
+                  <option value=""disabled>ระบุความสามารถ</option>
                   <option value="เขียนไทยได้">ได้</option>
                   <option value="เขียนไทยไม่ได้">ไม่ได้</option>
                 </select>
@@ -804,9 +807,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "max_education", e.target.value)
                   }
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option value="">ระบุการศึกษาสูงสุด</option>
+                  <option value=""disabled>ระบุการศึกษาสูงสุด</option>
                   <option value="ไม่ได้เรียน">ไม่ได้เรียน</option>
                   <option value="ต่ำกว่าประถม">ต่ำกว่าประถม</option>
                   <option value="ประถมศึกษา">ประถมศึกษา</option>
@@ -835,9 +838,9 @@ export const HumanCapital = ({
                     handleInputChange(index, "edu_status", e.target.value)
                   }
                   required
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option value="">ระบุสถานภาพ</option>
+                  <option value=""disabled>ระบุสถานภาพ</option>
                   <option value="ไปเรียนสม่ำเสมอ">ไปเรียนสม่ำเสมอ</option>
                   <option value="หยุดเรียนเป็นระยะ">หยุดเรียนเป็นระยะ</option>
                   <option value="ออกกลางคัน(Dropout)">ออกกลางคัน(Dropout)</option>
@@ -863,9 +866,9 @@ export const HumanCapital = ({
                       e.target.value
                     )
                   }
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option value="">ระบุการศึกษา</option>
+                  <option value=""disabled>ระบุการศึกษา</option>
                   <option value="ไม่ได้เรียน">ไม่ได้เรียน</option>
                   <option value="ต่ำกว่าประถม">ต่ำกว่าประถม</option>
                   <option value="ประถมศึกษา">ประถมศึกษา</option>
@@ -913,9 +916,9 @@ export const HumanCapital = ({
                   onChange={(e) =>
                     handleInputChange(index, "work_status", e.target.value)
                   }
-                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-500 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
+                  className="border border-transparent mb-5 bg-gray-50  rounded-lg w-full text-gray-900 text-sm focus:ring-0 focus:outline-none  focus:border-gray-500 focus:rounded-md"
                 >
-                  <option value="">ระบุสถานะ</option>
+                  <option value=""disabled>ระบุสถานะ</option>
                   <option value="ไม่ทำงาน">ไม่ทำงาน</option>
                   <option value="ว่างงาน">ว่างงาน</option>
                   <option value="ทำงาน">ทำงาน</option>

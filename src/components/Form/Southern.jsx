@@ -116,7 +116,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                     handleInputChange("effect", e.target.value);
                   }}
                   for="default-radio"
-                  class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                  class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
                 />
                 <span class="ml-4 text-sm font-medium text-dark-500">
@@ -136,7 +136,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                     handleInputChange("effect", e.target.value);
                   }}
                   for="default-radio"
-                  class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                  class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
                 />
                 <span class="ml-4 text-sm font-medium text-dark-500">มาก</span>
@@ -154,7 +154,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                     handleInputChange("effect", e.target.value);
                   }}
                   for="default-radio"
-                  class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                  class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
                 />
                 <span class="ml-4 text-sm font-medium text-dark-500">
@@ -175,7 +175,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                     handleInputChange("effect", e.target.value);
                   }}
                   for="default-radio"
-                  class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                  class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
                 />
                 <span class="ml-4 text-sm font-medium text-dark-500">น้อย</span>
@@ -193,7 +193,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                     handleInputChange("effect", e.target.value);
                   }}
                   for="default-radio"
-                  class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                  class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400 "
                 />
                 <span class="ml-4 text-sm font-medium text-dark-500">
@@ -683,7 +683,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                   handleInputChange("urgent_to_do", e.target.value);
                 }}
                 for="default-radio"
-                class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
               <span class="ml-4 text-sm font-medium text-dark-500">
@@ -708,7 +708,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                   handleInputChange("urgent_to_do", e.target.value);
                 }}
                 for="default-radio"
-                class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
               <span class="ml-4 text-sm font-medium text-dark-500">
@@ -733,7 +733,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                   handleInputChange("urgent_to_do", e.target.value);
                 }}
                 for="default-radio"
-                class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
               <span class="ml-4 text-sm font-medium text-dark-500">
@@ -758,7 +758,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                   handleInputChange("urgent_to_do", e.target.value);
                 }}
                 for="default-radio"
-                class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
               <span class="ml-4 text-sm font-medium text-dark-500">
@@ -783,7 +783,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                   handleInputChange("urgent_to_do", e.target.value);
                 }}
                 for="default-radio"
-                class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
               <span class="ml-4 text-sm font-medium text-dark-500">
@@ -808,7 +808,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                   handleInputChange("urgent_to_do", e.target.value);
                 }}
                 for="default-radio"
-                class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
               <span class="ml-4 text-sm font-medium text-dark-500">
@@ -833,7 +833,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                   handleInputChange("urgent_to_do", e.target.value);
                 }}
                 for="default-radio"
-                class="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                class="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
                       focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
               <span class="ml-4 text-sm font-medium text-dark-500">
@@ -854,7 +854,7 @@ export const Southern = ({ setCurrentPage, setMainFormData, mainFormData }) => {
                 onChange={(e) =>
                   handleInputChange("urgent_to_do", e.target.value)
                 }
-                className="w-4 h-4 text-blue-600 bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
+                className="w-4 h-4  bg-gray-200 border-gray-700 rounded-full focus:ring-blue-600 blue:focus:ring-blue-600 blue:ring-offset-gray-800 
             focus:ring-2 blue:bg-gray-700 blue:border-gray-800 ms-8 text-sm font-medium text-blue-500 blue:text-gray-400"
               />
               <span className="ml-4 text-sm font-medium text-dark-500">

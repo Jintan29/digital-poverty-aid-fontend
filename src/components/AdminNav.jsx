@@ -30,7 +30,7 @@ const AdminNav = ({ toggleSidebar }) => {
     <div>
       
       <Disclosure as="nav" className="bg-white fixed top-0 z-20 w-full shadow">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div className="mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex h-20  items-center justify-between">
           
           {/* ซ้าย: ปุ่มเปิด/ปิด Sidebar */}

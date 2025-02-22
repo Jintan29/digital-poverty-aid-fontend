@@ -513,7 +513,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
             formData.HouseInDisasterAreas[0]?.is_in_disaster === true) && (
             <div className="mt-5 bg-white p-4  rounded-md max-w-4xl overflow-x-auto">
               <table
-                className="table-auto border-collapse table-fixed items-center"
+                className="border-collapse table-fixed items-center"
                 style={{  width: '800px'  }}
               >
                 <thead>
@@ -562,7 +562,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "อุทกภัย"
@@ -594,7 +594,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full "
+                        className="border px-2 py-1 rounded-lg shadow-md w-full "
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "อุทกภัย"
@@ -646,7 +646,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "ดินโคลนถล่ม"
@@ -678,7 +678,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "ดินโคลนถล่ม"
@@ -730,7 +730,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "วาตภัย"
@@ -762,7 +762,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "วาตภัย"
@@ -815,7 +815,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "อัคคีภัย"
@@ -847,7 +847,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "อัคคีภัย"
@@ -904,7 +904,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -941,8 +941,8 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
-                        //
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
+                        
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -1000,7 +1000,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "ภัยแล้ง"
@@ -1032,7 +1032,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) => group.disaster_type === "ภัยแล้ง"
@@ -1086,7 +1086,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -1122,7 +1122,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -1180,7 +1180,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         //
                         value={
                           formData.HouseInDisasterAreas.find(
@@ -1217,7 +1217,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -1276,7 +1276,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         //
                         value={
                           formData.HouseInDisasterAreas.find(
@@ -1314,7 +1314,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         //
                         value={
                           formData.HouseInDisasterAreas.find(
@@ -1375,7 +1375,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -1412,7 +1412,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -1472,7 +1472,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -1509,7 +1509,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find(
                             (group) =>
@@ -1581,7 +1581,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.HouseInDisasterAreas.find((group) =>
                             group.disaster_type.startsWith(prefixHouse)
@@ -1613,7 +1613,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.HouseInDisasterAreas.find((group) =>
                             group.disaster_type.startsWith(prefixHouse)
@@ -1695,7 +1695,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
             formData.Farmlandindisasterareas[0]?.is_in_disaster === true) && (
             <div className="mt-5 bg-white p-4 rounded-md max-w-4xl overflow-x-auto">
               <table
-                className="table-auto border-collapse table-fixed"
+                className=" border-collapse table-fixed"
                 style={{ width: '800px' }}
               >
                 <thead>
@@ -1744,7 +1744,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "อุทกภัย"
@@ -1776,7 +1776,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "อุทกภัย"
@@ -1829,7 +1829,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "ดินโคลนถล่ม"
@@ -1861,7 +1861,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "ดินโคลนถล่ม"
@@ -1914,7 +1914,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "วาตภัย"
@@ -1946,7 +1946,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "วาตภัย"
@@ -1999,7 +1999,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "อัคคีภัย"
@@ -2031,7 +2031,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "อัคคีภัย"
@@ -2088,7 +2088,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2125,7 +2125,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2183,7 +2183,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "ภัยแล้ง"
@@ -2215,7 +2215,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) => group.disaster_type === "ภัยแล้ง"
@@ -2269,7 +2269,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2305,7 +2305,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2363,7 +2363,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2399,7 +2399,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2458,7 +2458,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2495,7 +2495,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2555,7 +2555,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2592,7 +2592,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2652,7 +2652,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2689,7 +2689,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find(
                             (group) =>
@@ -2762,7 +2762,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-2/2"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-2/2"
                         value={
                           formData.Farmlandindisasterareas.find((group) =>
                             group.disaster_type.startsWith(prefixHouse)
@@ -2794,7 +2794,7 @@ function Naturalcapital2({ setCurrentPage, setMainFormData, mainFormData }) {
                     </td>
                     <td className="border px-4 py-3 text-center flex">
                       <select
-                        className="border rounded px-2 py-1 rounded-lg shadow-md w-full"
+                        className="border  px-2 py-1 rounded-lg shadow-md w-full"
                         value={
                           formData.Farmlandindisasterareas.find((group) =>
                             group.disaster_type.startsWith(prefixHouse)
