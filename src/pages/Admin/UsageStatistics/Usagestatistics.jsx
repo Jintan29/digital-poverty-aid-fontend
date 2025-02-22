@@ -124,7 +124,7 @@ const Usagestatistics = () => {
     <div>
       <div className="text-center mb-1 p-4">
         {/* หัวข้อของหน้าแสดงสถิติการใช้งาน */}
-        <h1 className="font-bold">
+        <h1 className="font-bold text-left">
           <span className="text-2xl font-bold mt-2 mb-1">
             สถิติการเข้าใช้งานในระบบ
           </span>
@@ -133,7 +133,7 @@ const Usagestatistics = () => {
 
       {/* ตัวกรองสำหรับเลือกเดือนและปี */}
       <div className="justify-center mb-2">
-        <div className="col-span-2 w-full p-8 mt-6 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div className="col-span-2 w-full p-8 mt-2 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
           <div className="grid grid-cols-2 gap-4">
             {/* ตัวเลือกเดือน */}
             <div>

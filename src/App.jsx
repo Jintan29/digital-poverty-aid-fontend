@@ -37,6 +37,7 @@ import FormAddress from "./pages/FormAddress";
 import HelpLog from "./pages/Admin/HelpLog/HelpLog";
 import Usagestatistics from "./pages/Admin/UsageStatistics/Usagestatistics";
 import IndividualUserLogin from "./pages/Admin/UsageStatistics/IndividualUserLogin";
+import LineLoginStatistics from "./pages/Admin/UsageStatistics/LineLoginStatistics";
 
 
 
@@ -264,6 +265,12 @@ function App() {
               element={
                 <AdminRoute>
                   <IndividualUserLogin />
+                </AdminRoute>}
+            />
+            <Route path="line-login-statistics"
+              element={
+                <AdminRoute>
+                  <LineLoginStatistics />
                 </AdminRoute>}
             />
             <Route path="*" element={<PageNotFound />} />

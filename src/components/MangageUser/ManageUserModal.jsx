@@ -4,13 +4,13 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../../config";
 
-
 const ManageUserModal = ({ show, member, onClose, loadData }) => {
   // ตั้งค่า state เพื่อเก็บข้อมูลแบบฟอร์ม
   const [formData, setFormData] = useState({
     id: member.id || "",
     fname: member.fname || "",
     lname: member.lname || "",
+    username: member.username || "",
     email: member.email || "",
     phone: member.phone || "",
     password: "",
@@ -24,10 +24,11 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
         //id: member.id,
         fname: member.fname || "",
         lname: member.lname || "",
+        username: member.username || "",
         email: member.email || "",
         phone: member.phone || "",
         password: "",
-       confirmPassword: "",
+        confirmPassword: "",
       });
     }
   }, [show, member]);
@@ -37,7 +38,6 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
     updateData[field] = value;
     setFormData(updateData);
   };
-
 
   // ฟังก์ชันการตรวจสอบข้อมูลก่อนส่ง
   const validateInput = () => {
@@ -89,8 +89,13 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
       return;
     }
 
-    //กรอง confrime pass  ออก 
-    const {confirmPassword, ...dataToSend} = formData
+    //กรอง confrime pass  ออก
+    const { confirmPassword, password, ...dataToSend } = formData;
+    
+    // ถ้าผู้ใช้ไม่กรอกรหัสผ่านใหม่ ให้นำ password ออกจากข้อมูลที่ส่ง
+    if (!password) {
+      delete dataToSend.password;
+    }
 
     try {
       const res = await Swal.fire({
@@ -137,7 +142,7 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
         onClose={onClose}
         size="xl"
       >
-        <div className="grid gap-1 grid-cols-2">
+        <div className="grid gap-2 grid-cols-2">
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               ชื่อจริง
@@ -149,7 +154,7 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
               value={formData.fname}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               required
-              className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
           <div>
@@ -163,12 +168,25 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
               value={formData.lname}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               required
-              className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              e-mail
+              Username
+            </label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              required
+              className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          {/* <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              E-mail
             </label>
             <input
               type="text"
@@ -178,7 +196,7 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
               required
               className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-          </div>
+          </div> */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               เบอร์โทรศัพท์
@@ -189,13 +207,26 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
               value={formData.phone}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               required
-              className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="border border-gray-300 bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
         </div>
         <div className="grid gap-1 grid-cols-1">
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">
+              E-mail
+            </label>
+            <input
+              type="text"
+              name="email"
+              value={formData.email}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              required
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">
               รหัสผ่าน
             </label>
             <input
@@ -205,11 +236,11 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
               placeholder="ระบุรหัสผ่าน"
               required
-              className="bg-gray-50 border mb-5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">
               ยืนยันรหัสผ่าน
             </label>
             <input
