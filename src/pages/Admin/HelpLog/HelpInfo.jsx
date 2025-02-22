@@ -97,14 +97,14 @@ const HelpInfo = () => {
       <header className="flex justify-between items-center">
         <h3 className="text-xl font-semibold">แสดงข้อมูลการช่วยเหลือ</h3>
         <div className="flex space-x-4">
-          <Link to={"/admin/helpLog"}>
-            <button className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-2 rounded">
+          <Link to={`/admin/track-member/${member.id}`}>
+            <button className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-2 rounded">
               <Icon
-                icon="material-symbols:keyboard-return-rounded"
+                icon="material-symbols:lightbulb-2-rounded"
                 className="mr-2"
                 width="18px"
               />
-              ย้อนกลับ
+              ดูข้อมูลสมาชิกครัวเรือน
             </button>
           </Link>
           <button

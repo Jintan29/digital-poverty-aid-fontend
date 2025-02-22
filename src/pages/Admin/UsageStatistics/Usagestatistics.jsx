@@ -214,7 +214,7 @@ const Usagestatistics = () => {
                       <Typography variant="base" className="font-normal">
                         <button
                           className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
-                          onClick={handleAccessHistoryClick} // เรียกฟังก์ชันเมื่อกดปุ่ม
+                          // onClick={handleAccessHistoryClick} // เรียกฟังก์ชันเมื่อกดปุ่ม
                         >
                           <Icon icon="mdi:table-large" />
                         </button>

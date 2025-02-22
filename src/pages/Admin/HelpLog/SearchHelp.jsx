@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 dayjs.extend(buddhistEra);
 dayjs.locale("th");
 
-
 const SearchHelp = () => {
   //form data
   const [formData, setFormData] = useState({
@@ -224,274 +223,296 @@ const SearchHelp = () => {
   };
 
   return (
-    <div className="justify-center mb-2">
-      <div className="col-span-2 w-full p-10 mt-8 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-lg font-medium mb-2">อำเภอ</label>
-            <select
-              name="district"
-              value={formData.district}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
-            >
-              {/* Dropdown */}
-              <option value="">-กรุณาเลือกอำเภอ-</option>
-              <option>เมืองพิษณุโลก</option>
-              <option>นครไทย</option>
-              <option>เนินมะปราง</option>
-              <option>ชาติตระการ</option>
-              <option>บางกระทุ่ม</option>
-              <option>บางระกำ</option>
-              <option>พรหมพิราม</option>
-              <option>วัดโบสถ์</option>
-              <option>วังทอง</option>
-            </select>
-          </div>
+    <>
+      <div className="p-4">
+        <h2 className="text-2xl font-semibold">
+          ระบบบันทึกความช่วยเหลือสมาชิกครัวเรือนรายบุคคล
+        </h2>
 
-          <div>
-            <label className="block text-lg font-medium mb-2">ตำบล</label>
-            <select
-              name="subdistrict"
-              value={formData.subdistrict}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
-            >
-              <option>กรุณาเลือกตำบล</option>
-              {formData.district &&
-                subdistrictOptions[formData.district].map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-lg font-medium mb-2">ปีที่สำรวจ</label>
-            <select
-              name="year"
-              value={formData.year}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
-            >
-              <option value="">-กรุณาเลือกปีที่สำรวจ-</option>
-              {arrYear.map((item) => (
-                <option value={item}>{item + 543}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-lg font-medium mb-2">
-              รหัสบ้าน (HC)
-            </label>
-            <input
-              type="text"
-              name="house_code"
-              value={formData.house_code}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
-              placeholder="รหัสบ้าน (HC)"
-            />
-          </div>
-          <div>
-            <label className="block text-lg font-medium mb-2">
-              รหัสบัตรประชาชน
-            </label>
-            <input
-              type="text"
-              name="national_id"
-              value={formData.national_id}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
-              placeholder="รหัสบัตรประชาชน"
-            />
-          </div>
-          <div>
-            <label className="block text-lg font-medium mb-2">ชื่อ</label>
-            <input
-              type="text"
-              name="fname"
-              value={formData.fname}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
-              placeholder="ไม่ต้องใส่คำหน้าชื่อ"
-            />
-          </div>
-        </div>
+        <ul class="text-base space-y-1 text-gray-900 list-disc list-inside dark:text-gray-400 mt-4">
+          <li>เลือกหมวดหมู่การค้นหาอย่างใดอย่างหนึ่งเพื่อแสดงรายชื่อสมาชิกครัวเรือน</li>
+        </ul>
 
-        <div className="mt-4 ">
-          <button
-            onClick={() => {
-              loadData();
-              setShowTable(true);
-            }}
-            className="flex items-center px-4 py-2 border border-blue-500 text-blue-500 text-sm rounded-md hover:bg-blue-500 hover:text-white transition"
-          >
-            <Icon icon="heroicons-solid:search" className="mr-2" />
-            แสดงรายชื่อ
-          </button>
-        </div>
-
-        <div className="my-4 text-blue-500 ">
-          **คำอธิบายเพิ่มเติม
-        </div>
-        <div className="flex items-start">
-          <button className="p-2  rounded-full  flex text-green-500 " disabled>
-            <Icon icon="heroicons-solid:search" className="mr-2 mt-1 text-sm" />
-            ได้รับการช่วยเหลือแล้ว
-          </button>
-
-          <button className="p-2  rounded-full  ml-3 flex  text-red-500" disabled>
-            <Icon icon="heroicons-solid:search" className="mr-2 mt-1 text-sm" />
-            ยังไม่เคยได้รับการช่วยเหลือ
-          </button>
-        </div>
       </div>
 
-      {/* แสดงตารางถ้า showTable เป็น true */}
-      {showTable && (
-        <Card className="w-full  overflow-y-scroll mt-8 flex justify-center items-center ">
-          <table className="w-full min-w-max table-auto text-center">
-            {/* ส่วนหัวของตาราง */}
-            <thead>
-              <tr>
-                {TABLE_HEAD.map((head) => (
-                  <th
-                    key={head}
-                    className="border-b border-blue-gray-100 bg-blue-gray-50 p-4 text-center"
-                  >
-                    <Typography
-                      variant="base"
-                      color="blue-gray"
-                      className="font-normal leading-none opacity-70"
-                    >
-                      {head}
-                    </Typography>
-                  </th>
+      <div className="justify-center mb-2">
+        
+        <div className="col-span-2 w-full p-10 mt-4 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-lg font-medium mb-2">อำเภอ</label>
+              <select
+                name="district"
+                value={formData.district}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-xl"
+              >
+                {/* Dropdown */}
+                <option value="">-กรุณาเลือกอำเภอ-</option>
+                <option>เมืองพิษณุโลก</option>
+                <option>นครไทย</option>
+                <option>เนินมะปราง</option>
+                <option>ชาติตระการ</option>
+                <option>บางกระทุ่ม</option>
+                <option>บางระกำ</option>
+                <option>พรหมพิราม</option>
+                <option>วัดโบสถ์</option>
+                <option>วังทอง</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-lg font-medium mb-2">ตำบล</label>
+              <select
+                name="subdistrict"
+                value={formData.subdistrict}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-xl"
+              >
+                <option>กรุณาเลือกตำบล</option>
+                {formData.district &&
+                  subdistrictOptions[formData.district].map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-lg font-medium mb-2">
+                ปีที่สำรวจ
+              </label>
+              <select
+                name="year"
+                value={formData.year}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-xl"
+              >
+                <option value="">-กรุณาเลือกปีที่สำรวจ-</option>
+                {arrYear.map((item) => (
+                  <option value={item}>{item + 543}</option>
                 ))}
-              </tr>
-            </thead>
-            {/* ข้อมูลในตาราง */}
-            <tbody>
-              {members.length > 0 ? (
-                members.map((member) => (
-                  <tr key={member.id} className="even:bg-blue-gray-50/50">
-                    <td className="p-4 text-center">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {dayjs(member.createdAt).format("BBBB")}
-                      </Typography>
-                    </td>
-                    <td className="p-4 text-center">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {member.title} {member.fname} {member.lname}
-                      </Typography>
-                    </td>
-                    <td className="p-4 text-center">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {member.Household?.house_code}
-                      </Typography>
-                    </td>
-                    <td className="p-4 text-center">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {member.memberCount}
-                      </Typography>
-                    </td>
-                    <td className="p-4 text-center">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {member.Household?.house_number} ต.
-                        {member.Household?.subdistrict} อ.
-                        {member.Household?.district} จ.
-                        {member.Household?.province}{" "}
-                        {member.Household?.postcode}
-                      </Typography>
-                    </td>
-                    <td className="p-4 text-center">
-                    <Link
-                    to={`/admin/helpLog/${member.id}`}
+              </select>
+            </div>
+            <div>
+              <label className="block text-lg font-medium mb-2">
+                รหัสบ้าน (HC)
+              </label>
+              <input
+                type="text"
+                name="house_code"
+                value={formData.house_code}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-xl"
+                placeholder="รหัสบ้าน (HC)"
+              />
+            </div>
+            <div>
+              <label className="block text-lg font-medium mb-2">
+                รหัสบัตรประชาชน
+              </label>
+              <input
+                type="text"
+                name="national_id"
+                value={formData.national_id}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-xl"
+                placeholder="รหัสบัตรประชาชน"
+              />
+            </div>
+            <div>
+              <label className="block text-lg font-medium mb-2">ชื่อ</label>
+              <input
+                type="text"
+                name="fname"
+                value={formData.fname}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-xl"
+                placeholder="ไม่ต้องใส่คำหน้าชื่อ"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 ">
+            <button
+              onClick={() => {
+                loadData();
+                setShowTable(true);
+              }}
+              className="flex items-center px-4 py-2 border border-blue-500 text-blue-500 text-sm rounded-md hover:bg-blue-500 hover:text-white transition"
+            >
+              <Icon icon="heroicons-solid:search" className="mr-2" />
+              แสดงรายชื่อ
+            </button>
+          </div>
+
+          <div className="my-4 text-blue-500 ">**คำอธิบายเพิ่มเติม</div>
+          <div className="flex items-start">
+            <button
+              className="p-2  rounded-full  flex text-green-500 "
+              disabled
+            >
+              <Icon
+                icon="heroicons-solid:search"
+                className="mr-2 mt-1 text-sm"
+              />
+              ได้รับการช่วยเหลือแล้ว
+            </button>
+
+            <button
+              className="p-2  rounded-full  ml-3 flex  text-red-500"
+              disabled
+            >
+              <Icon
+                icon="heroicons-solid:search"
+                className="mr-2 mt-1 text-sm"
+              />
+              ยังไม่เคยได้รับการช่วยเหลือ
+            </button>
+          </div>
+        </div>
+
+        {/* แสดงตารางถ้า showTable เป็น true */}
+        {showTable && (
+          <Card className="w-full  overflow-y-scroll mt-8 flex justify-center items-center ">
+            <table className="w-full min-w-max table-auto text-center">
+              {/* ส่วนหัวของตาราง */}
+              <thead>
+                <tr>
+                  {TABLE_HEAD.map((head) => (
+                    <th
+                      key={head}
+                      className="border-b border-blue-gray-100 bg-blue-gray-50 p-4 text-center"
                     >
-                      <button
-                         className={`${
-                          member.helpStatus==='ได้รับการช่วยเหลือแล้ว' 
-                          ? 'text-green-500 hover:bg-green-300 bg-green-200 p-2 rounded-full'
-                          :' text-red-500 hover:bg-red-300 bg-red-200 p-2 rounded-full'
-                        }`}
-                        // className="p-2 bg-gray-200 rounded-full hover:bg-gray-300" 
+                      <Typography
+                        variant="base"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-70"
                       >
-                        
-                        <Icon icon="heroicons-solid:search" />
-                      </button>
-                    </Link>
-                      
+                        {head}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              {/* ข้อมูลในตาราง */}
+              <tbody>
+                {members.length > 0 ? (
+                  members.map((member) => (
+                    <tr key={member.id} className="even:bg-blue-gray-50/50">
+                      <td className="p-4 text-center">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {dayjs(member.createdAt).format("BBBB")}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {member.title} {member.fname} {member.lname}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {member.Household?.house_code}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {member.memberCount}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {member.Household?.house_number} ต.
+                          {member.Household?.subdistrict} อ.
+                          {member.Household?.district} จ.
+                          {member.Household?.province}{" "}
+                          {member.Household?.postcode}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Link to={`/admin/helpLog/${member.id}`}>
+                          <button
+                            className={`${
+                              member.helpStatus === "ได้รับการช่วยเหลือแล้ว"
+                                ? "text-green-500 hover:bg-green-300 bg-green-200 p-2 rounded-full"
+                                : " text-red-500 hover:bg-red-300 bg-red-200 p-2 rounded-full"
+                            }`}
+                            // className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
+                          >
+                            <Icon icon="heroicons-solid:search" />
+                          </button>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center p-4">
+                      ไม่พบข้อมูล
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center p-4">
-                    ไม่พบข้อมูล
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
 
-          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <div className="flex items-center gap-2">
-              {[...Array(totalPages)].map((_, index) => (
-                <IconButton
-                  key={index + 1}
-                  variant={currentPage === index + 1 ? "outlined" : "text"}
+            <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+              <div className="flex items-center gap-2">
+                {[...Array(totalPages)].map((_, index) => (
+                  <IconButton
+                    key={index + 1}
+                    variant={currentPage === index + 1 ? "outlined" : "text"}
+                    size="sm"
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </IconButton>
+                ))}
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  variant="outlined"
+                  className="ml-2"
                   size="sm"
-                  onClick={() => handlePageChange(index + 1)}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
                 >
-                  {index + 1}
-                </IconButton>
-              ))}
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                variant="outlined"
-                className="ml-2"
-                size="sm"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                ก่อนหน้า
-              </Button>
-              <Button
-                variant="outlined"
-                size="sm"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                ถัดไป
-              </Button>
-            </div>
-          </CardFooter>
-        </Card>
-      )}
-    </div>
+                  ก่อนหน้า
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="sm"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  ถัดไป
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+        )}
+      </div>
+    </>
   );
 };
 
