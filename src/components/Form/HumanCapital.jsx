@@ -1,7 +1,5 @@
-import { Field } from "@headlessui/react";
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import axios from "axios";
 import Swal from "sweetalert2";
 
 export const HumanCapital = ({
@@ -359,6 +357,7 @@ export const HumanCapital = ({
                 <div className="relative rounded-lg shadow-md">
                   <select
                     id="title"
+                    required
                     name="title"
                     value={member.title}
                     onChange={(e) =>
