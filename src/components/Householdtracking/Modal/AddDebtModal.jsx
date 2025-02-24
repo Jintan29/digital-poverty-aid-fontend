@@ -192,7 +192,7 @@ const AddDebtModal = ({ show, onClose, household, reloadData }) => {
                     หนี้สินครัวเรือน
                 </h3> */}
                 <table
-                    className="table-auto border-collapse table-fixed"
+                    className=" border-collapse table-fixed"
                     style={{ width: '800px' }}
                 >
                     <thead>
