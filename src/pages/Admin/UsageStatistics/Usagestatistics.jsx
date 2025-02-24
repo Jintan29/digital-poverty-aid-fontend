@@ -61,7 +61,8 @@ const Usagestatistics = () => {
 
     return arr;
   });
-
+  
+  //call api ตามหน้าที่เปลี่ยน
   useEffect(() => {
     loadData();
   }, [currentPage]);
