@@ -39,6 +39,7 @@ import LineLoginStatistics from "./pages/Admin/UsageStatistics/LineLoginStatisti
 import FindMemberByAgeRange from "./pages/Admin/ExportData/FindMemberByAgeRange";
 import SearchMember from "./pages/Admin/Tracking/SearchMember";
 import SearchHousehold from "./pages/Admin/Tracking/SearchHousehold";
+import ExclusiveSummaryReport from "./pages/Admin/ExportData/ExclusiveSummaryReport";
 
 
 
@@ -239,7 +240,7 @@ function App() {
                 </AdminRoute>}
             />
 
-            {/* นำออกข้อมูล Excel */}
+            {/* นำออกข้อมูล Excel & PDF */}
             <Route path="FindAssistance"
               element={
                 <AdminRoute>
@@ -250,6 +251,12 @@ function App() {
               element={
                 <AdminRoute>
                   <FindMemberByAgeRange />
+                </AdminRoute>}
+            />
+            <Route path="ExclusiveReport"
+              element={
+                <AdminRoute>
+                  <ExclusiveSummaryReport />
                 </AdminRoute>}
             />
             

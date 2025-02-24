@@ -68,7 +68,8 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       logo: "material-symbols:database-upload-outline-rounded",
       submenu:[
         {name:'ข้อมูลครัวเรือนตามปีที่สำรวจ',link:'/admin/FindAssistance'},
-        {name:'ข้อมูลสมาชิกตามช่วงอายุ',link:'/admin/FindMemberByAge'}
+        {name:'ข้อมูลสมาชิกตามช่วงอายุ',link:'/admin/FindMemberByAge'},
+        {name:'รายงานความช่วยเหลือ',link:'/admin/ExclusiveReport'}
       ]
     },
     {
