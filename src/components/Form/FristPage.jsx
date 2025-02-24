@@ -643,6 +643,7 @@ export const FristPage = ({
                   <select
                     id="host_title"
                     name="Household"
+                    required
                     className="border border-gray-300 bg-gray-50 text-gray-900 text-sm focus:ring-0 focus:outline-none w-30 focus:border-gray-500 rounded-lg"
                     onChange={(e) =>
                       handleInputChange(
@@ -739,6 +740,7 @@ export const FristPage = ({
                 <div className="relative rounded-lg shadow-md">
                   <select
                     id="title"
+                    required
                     name="Informant"
                     onChange={(e) =>
                       handleInputChange(
@@ -977,6 +979,7 @@ export const FristPage = ({
                     <div className="relative rounded-lg shadow-md">
                       <select
                         id="title"
+                        required
                         value={teamData.title}
                         onChange={(e) =>
                           handleTeamServeyChange(
@@ -1124,6 +1127,7 @@ export const FristPage = ({
                 <div className="relative rounded-lg shadow-md">
                   <select
                     id="recder_title"
+                    required
                     name="DataRecorder"
                     onChange={(e) =>
                       handleRecderInput(e.target.id, e.target.value)
