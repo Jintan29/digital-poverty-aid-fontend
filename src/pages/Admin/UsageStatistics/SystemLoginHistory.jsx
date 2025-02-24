@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardFooter, Typography } from "@material-tailwind/react";
 import { FaFilePdf } from "react-icons/fa";
-import config from "../../../config"
+import axios from "axios";
+import config from "../../../config";
 
 const SystemLoginHistory = ({ user }) => {
   const [logs, setLogs] = useState([]);
@@ -16,23 +17,16 @@ const SystemLoginHistory = ({ user }) => {
     const limitParam = rowsPerPage === "all" ? "all" : rowsPerPage;
     const url = `${config.api_path}/log/list?page=${currentPage}&limit=${limitParam}`;
 
-    fetch(url, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-      .then((res) => {
-        const contentType = res.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          return res.json();
-        } else {
-          return res.text().then(text => { throw new Error(text) });
+    axios
+      .get(url, {
+        headers: {
+          "Authorization": `Bearer ${token}`
         }
       })
-      .then((data) => {
+      .then((response) => {
         // สมมุติว่า backend ส่งกลับในรูปแบบ { total, logs }
-        setLogs(data.result.logs);
-        setTotal(data.result.total);
+        setLogs(response.data.result.logs);
+        setTotal(response.data.result.total);
       })
       .catch((err) => console.error(err));
   }, [token, currentPage, rowsPerPage]);
@@ -71,7 +65,6 @@ const SystemLoginHistory = ({ user }) => {
             <span>ดาวน์โหลด PDF</span>
           </button>
 
-
           {/* ส่วน entries per page อยู่ทางขวา */}
           <div className="flex items-center">
             <span className="mr-4 text-gray-700">entries per page</span>
@@ -96,7 +89,6 @@ const SystemLoginHistory = ({ user }) => {
             </select>
           </div>
         </div>
-
 
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse border border-gray-300 text-center">
@@ -133,17 +125,18 @@ const SystemLoginHistory = ({ user }) => {
 
         <CardFooter className="flex items-center justify-end border-blue-gray-50 p-4">
           <div className="flex items-center gap-2">
-            {rowsPerPage !== "all" && Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <Button
-                key={page}
-                variant={page === currentPage ? "filled" : "outlined"}
-                size="sm"
-                onClick={() => setCurrentPage(page)}
-                className={page === currentPage ? "bg-gray-300" : ""}
-              >
-                {page}
-              </Button>
-            ))}
+            {rowsPerPage !== "all" &&
+              Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <Button
+                  key={page}
+                  variant={page === currentPage ? "filled" : "outlined"}
+                  size="sm"
+                  onClick={() => setCurrentPage(page)}
+                  className={page === currentPage ? "bg-gray-300" : ""}
+                >
+                  {page}
+                </Button>
+              ))}
             {rowsPerPage !== "all" && (
               <Button
                 variant="outlined"
