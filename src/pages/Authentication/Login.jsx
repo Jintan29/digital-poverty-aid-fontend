@@ -46,9 +46,11 @@ export const Login = () => {
             token: res.data.Token,
           })
         );
-        localStorage.setItem('token',res.data.Token)
+        localStorage.setItem("token", res.data.Token);
+        // รีเฟรชหน้าและเปลี่ยนเส้นทางไปที่หน้าแรก
+        window.location.href = "/";
       }
-
+      
     } catch (err) {
       Swal.fire({
         title: "error",
@@ -146,11 +148,11 @@ export const Login = () => {
                   <div className="mt-3">
                     ยังไม่มีบัญชีผู้ใช้ ?
                     <Link to={"/register"} className="mx-3 text-sky-700">
-                      ลงทะเบียน 
+                      ลงทะเบียน
                     </Link>
                     <br />
-                     หรือ 
-                     <Link to={"/forgot-pass"} className="ml-3 text-sky-700">
+                    หรือ
+                    <Link to={"/forgot-pass"} className="ml-3 text-sky-700">
                       ลืมรหัสผ่าน
                     </Link>
                   </div>

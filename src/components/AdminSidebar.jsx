@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import "flowbite";
 
 const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState({}); //ex. { 2: false, 1: true }
+  const navigate = useNavigate(); // ใช้สำหรับการนำทางไปยังหน้าอื่น
 
   //เปิดปิด sub menu ตาม index ที่รับเข้ามา { index : (T/F) }
   const toggleDropdown = (index) => {
@@ -12,6 +13,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       ...prev,
       [index]: !prev[index],
     }));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // ลบ token ออกจาก localStorage
+    window.location.href = "/login"; // รีเฟรชหน้าและเปลี่ยนเส้นทางไปหน้า login
   };
 
   const sidebarItem = [
@@ -25,6 +31,23 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       name: "ระบบ GIS ครัวเรือนยากจน",
       link: "/admin/gis-household",
       logo: "material-symbols:globe-location-pin-sharp",
+    },
+    {
+      name: "ค้นหาสมาชิกครัวเรือน",
+      link: "/admin/find-members",
+      logo: "material-symbols:group-search",
+    },
+    {
+      name: "บันทึกการช่วยเหลือ",
+      link: "/admin/helpLog",
+      logo: "mdi:account-edit",
+      submenu: [
+        {
+          name: "บันทึกแบบรายคน",
+          link: "/admin/helpLog",
+          logo: "mdi:file-document-multiple-outline",
+        },
+      ],
     },
     {
       name: "ระบบติดตามข้อมูล",
@@ -44,32 +67,18 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       ],
     },
     {
-      name: "บันทึกการช่วยเหลือ",
-      link: "/admin/helpLog",
-      logo: "mdi:account-edit",
+      name: "API ",
+      link: "/admin/api",
+      logo: "material-symbols:integration-instructions-outline-rounded",
       submenu: [
-        {
-          name: "บันทึกแบบรายคน",
-          link: "/admin/helpLog",
-          logo: "mdi:file-document-multiple-outline",
-        },
+        { name: "ดึงข้อมูลจากระบบหลัก", link: "/admin/add-ApiToken" },
+        { name: "เอกสารการใช้งาน", link: "#" },
       ],
     },
-    { name: "API ", 
-      link: "/admin/api", 
-      logo: "material-symbols:integration-instructions-outline-rounded",
-      submenu:[
-        {name:'ดึงข้อมูลจากระบบหลัก',link:'/admin/add-ApiToken'},
-        {name:'เอกสารการใช้งาน',link:'#'}
-      ]
-    },
-    { name: "ระบบนำออกข้อมูล ", 
-      link: "#", 
+    {
+      name: "ระบบนำออกข้อมูล",
+      link: "/admin/FindAssistance",
       logo: "material-symbols:database-upload-outline-rounded",
-      submenu:[
-        {name:'ข้อมูลครัวเรือนตามปีที่สำรวจ',link:'/admin/FindAssistance'},
-        {name:'ข้อมูลสมาชิกตามช่วงอายุ',link:'/admin/FindMemberByAge'}
-      ]
     },
     {
       name: "จัดการผู้ใช้งานระบบ",
@@ -107,7 +116,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
           name: "สถิติการเข้าดูข้อมูลLine user",
           link: "/admin/line-login-statistics",
           logo: "ic:sharp-bar-chart",
-        }
+        },
       ],
     },
     {
@@ -115,7 +124,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       link: "/",
       logo: "material-symbols-light:keyboard-backspace",
     },
-    { name: "ออกจากระบบ", link: "#", logo: "ic:round-log-out" },
+    { name: "ออกจากระบบ", action: handleLogout, logo: "ic:round-log-out" },
   ];
 
   return (
@@ -196,6 +205,16 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                       ))}
                     </ul>
                   </>
+                ) : item.action ? (
+                  <button
+                    onClick={handleLogout} // ใช้ handleLogout โดยตรง
+                    className="flex w-full items-center p-2 text-bodydark1 rounded-lg dark:text-white hover:bg-graydark dark:hover:bg-gray-700 group"
+                  >
+                    <span className="text-gray-500 dark:text-gray-400">
+                      <Icon icon={item.logo} width="25" height="25" />
+                    </span>
+                    <span className="ms-3">{item.name}</span>
+                  </button>
                 ) : (
                   <Link
                     to={item.link}
