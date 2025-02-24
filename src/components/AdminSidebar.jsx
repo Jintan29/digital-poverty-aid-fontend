@@ -33,11 +33,6 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       logo: "material-symbols:globe-location-pin-sharp",
     },
     {
-      name: "ค้นหาสมาชิกครัวเรือน",
-      link: "/admin/find-members",
-      logo: "material-symbols:group-search",
-    },
-    {
       name: "บันทึกการช่วยเหลือ",
       link: "/admin/helpLog",
       logo: "mdi:account-edit",
