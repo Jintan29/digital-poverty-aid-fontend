@@ -48,7 +48,7 @@ const SystemLoginHistory = ({ user }) => {
       hour: "2-digit",
       minute: "2-digit",
     });
-    return `วัน ${dayName} ที่ ${datePart} เวลา ${timePart} น.`;
+    return ` ${dayName} ที่ ${datePart} เวลา ${timePart} น.`;
   }
 
   return (
