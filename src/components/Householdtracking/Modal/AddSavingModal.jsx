@@ -233,7 +233,7 @@ const AddSavingModal = ({ show, onClose, household, reloadData }) => {
                     <div className="pl-10">
                         {/* ตารางแสดงข้อมูลการออม */}
                         <div className="mt-5 bg-white p-4 rounded-lg max-w-4xl overflow-x-auto">
-                            <table className="table-auto border-collapse table-fixed" style={{ width: '800px' }}>
+                            <table className=" border-collapse table-fixed" style={{ width: '800px' }}>
                                 <thead>
                                     <tr>
                                         <th className="border px-4 py-2 bg-gray-200 text-black" style={{ width: "50%" }}>

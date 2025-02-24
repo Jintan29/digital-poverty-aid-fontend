@@ -126,7 +126,7 @@ const EditHouseHoldModal = ({ show, onClose, household, reloadData }) => {
                 //     formData, // Data payload
                 //     config.headers() // Headers
                 // );
-                if (res.data.message === 'success') {
+                if (res.data.msg === 'success') {
                     await Swal.fire({
                         title: 'บันทึกข้อมูล',
                         text: 'บันทึกข้อมูลสำเร็จ',

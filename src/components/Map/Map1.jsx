@@ -18,7 +18,7 @@ const Map1 = () => {
     useEffect(() => {
         const fetchAllHouseholdCounts = async () => {
             try {
-                const response = await axios.get(`${config.api_path}/api/district/getlatest`);
+                const response = await axios.get(`${config.api_path}/district/getlatest`);
     
                 // ตรวจสอบโครงสร้างข้อมูลที่ได้
                 console.log("Response Data:", response.data);
