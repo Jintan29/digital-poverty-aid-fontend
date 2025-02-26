@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import { data } from "autoprefixer";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import config from "../../config";
 import {
   LineChart,
   Line,
@@ -9,76 +12,62 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { set } from "date-fns";
 
 const HelpInformation = () => {
   // สร้าง state เพื่อสลับข้อมูล
+  const [capitalData, setCapitalData] = useState([]);
+  const [moneyData, setMoneyData] = useState([]);
   const [showAssistance, setShowAssistance] = useState(true);
+  const [capitalCount, setCapitalCount] = useState(0);
+  const [moneyCount, setMoneyCount] = useState(0);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${config.api_path}/capital/lists`);
+      const data = response.data;
+
+      // 💾 จัดรูปแบบข้อมูลสำหรับกราฟ
+      const formattedCapitalData = Object.keys(data.capitalByYear).map((year) => ({
+        year: year,
+        humanCapital: data.capitalByYear[year]["ทุนมนุษย์"].count,
+        physicalCapital: data.capitalByYear[year]["ทุนกายภาพ"].count,
+        businessCapital: data.capitalByYear[year]["ทุนทางเศรษฐกิจ"].count,
+        nationalCapital:data.capitalByYear[year]["ทุนธรรมชาติ"].count,
+        socialCapital: data.capitalByYear[year]["ทุนทางสังคม"].count,
+      }));
+
+      const formattedMoneyData = Object.keys(data.capitalByYear).map((year) => ({
+        year: year,
+        amountHumanCapital: data.capitalByYear[year]["ทุนมนุษย์"].amount,
+        amountPhysicalCapital: data.capitalByYear[year]["ทุนกายภาพ"].amount,
+        amountBusinessCapital: data.capitalByYear[year]["ทุนทางเศรษฐกิจ"].amount,
+        amountNationalCapital: data.capitalByYear[year]["ทุนธรรมชาติ"].amount,
+        amountSocialCapital: data.capitalByYear[year]["ทุนทางสังคม"].amount,
+      }));
+
+      setCapitalData(formattedCapitalData);
+      setMoneyData(formattedMoneyData);
+      setCapitalCount(data.capitalAllCount);
+      setMoneyCount(data.totalAmount);
+
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  }
+
+  // 💡 ใช้ useEffect เพื่อเรียก API เมื่อ Component โหลดครั้งแรก
+  useEffect(() => {
+    fetchData();
+  }, []);
+
 
   // ฟังก์ชันสลับระหว่าง "จำนวนการช่วยเหลือ" และ "จำนวนเงินช่วยเหลือ"
   const handleToggle = (isAssistance) => {
     setShowAssistance(isAssistance);
     localStorage.setItem("showAssistance", JSON.stringify(isAssistance)); // บันทึกสถานะใน localStorage
   };
-//   ข้อมูลทุน
-  const data = [
-    {
-      year: 2562,
-      humanCapital: 500,
-      physicalCapital: 0,
-      businessCapital: 0,
-      nationalCapital: 0,
-      socialCapital: 0,
-    },
-    {
-      year: 2563,
-      humanCapital: 0,
-      physicalCapital: 0,
-      businessCapital: 0,
-      nationalCapital: 0,
-      socialCapital: 0,
-    },
-    {
-      year: 2564,
-      humanCapital: 0,
-      physicalCapital: 0,
-      businessCapital: 0,
-      nationalCapital: 0,
-      socialCapital: 0,
-    },
-    {
-      year: 2565,
-      humanCapital: 3040,
-      physicalCapital: 0,
-      businessCapital: 0,
-      nationalCapital: 0,
-      socialCapital: 0,
-    },
-    {
-      year: 2566,
-      humanCapital: 3680,
-      physicalCapital: 0,
-      businessCapital: 0,
-      nationalCapital: 0,
-      socialCapital: 0,
-    },
-    {
-      year: 2567,
-      humanCapital: 0,
-      physicalCapital: 0,
-      businessCapital: 0,
-      nationalCapital: 0,
-      socialCapital: 0,
-    },
-  ];
-  // ข้อมูล(จำนวนเงินช่วยเหลือ)
-  const moneyData = [
-    { year: 2562, amountHumanCapital: 10000, amountPhysicalCapital: 0, amountBusinessCapital: 0, amountNationalCapital: 0, amountSocialCapital: 0 },
-    { year: 2563, amountHumanCapital: 15000, amountPhysicalCapital: 0, amountBusinessCapital: 0, amountNationalCapital: 0, amountSocialCapital: 0 },
-    { year: 2564, amountHumanCapital: 13000, amountPhysicalCapital: 0, amountBusinessCapital: 0, amountNationalCapital: 0, amountSocialCapital: 0 },
-    { year: 2565, amountHumanCapital: 25000, amountPhysicalCapital: 0, amountBusinessCapital: 0, amountNationalCapital: 0, amountSocialCapital: 0 },
-    { year: 2566, amountHumanCapital: 30000, amountPhysicalCapital: 0, amountBusinessCapital: 0, amountNationalCapital: 0, amountSocialCapital: 0 },
-    { year: 2567, amountHumanCapital: 35000, amountPhysicalCapital: 0, amountBusinessCapital: 0, amountNationalCapital: 0, amountSocialCapital: 0 },
-  ];
+
 
   return (
     <>
@@ -88,20 +77,18 @@ const HelpInformation = () => {
         </h2>
       </div>
 
-       {/* ปุ่มสลับข้อมูล */}
-       <div className="flex justify-center items-center mb-4">
+      {/* ปุ่มสลับข้อมูล */}
+      <div className="flex justify-center items-center mb-4">
         <div
-          className={`px-3 py-1 rounded-l-full font-medium text-xs cursor-pointer ${
-            showAssistance ? "bg-yellow-400 text-white" : "bg-gray-200 text-gray-700"
-          }`}
+          className={`px-3 py-1 rounded-l-full font-medium text-xs cursor-pointer ${showAssistance ? "bg-yellow-400 text-white" : "bg-gray-200 text-gray-700"
+            }`}
           onClick={() => handleToggle(true)}
         >
           จำนวนการช่วยเหลือ
         </div>
         <div
-          className={`px-3 py-1 rounded-r-full font-medium text-xs cursor-pointer ${
-            !showAssistance ? "bg-green-400 text-white" : "bg-gray-200 text-gray-700"
-          }`}
+          className={`px-3 py-1 rounded-r-full font-medium text-xs cursor-pointer ${!showAssistance ? "bg-green-400 text-white" : "bg-gray-200 text-gray-700"
+            }`}
           onClick={() => handleToggle(false)}
         >
           จำนวนเงินช่วยเหลือ
@@ -112,7 +99,7 @@ const HelpInformation = () => {
       <div className="flex justify-center">
         <ResponsiveContainer width="80%" minHeight={300} maxHeight={300}>
           <LineChart
-            data={showAssistance ? data : moneyData}  // เปลี่ยนข้อมูลตามสถานะ showAssistance
+            data={showAssistance ? capitalData : moneyData} // เปลี่ยนข้อมูลตามสถานะ showAssistance
             margin={{ top: 10, right: 30, left: 20, bottom: 50 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
@@ -139,17 +126,22 @@ const HelpInformation = () => {
                 <Line type="monotone" dataKey="nationalCapital" stroke="#FF8042" name="ทุนธรรมชาติ" strokeWidth={2} dot={{ r: 2 }} />
                 <Line type="monotone" dataKey="socialCapital" stroke="#8884d8" name="ทุนสังคม" strokeWidth={2} dot={{ r: 2 }} />
               </>
-           ) : (
-            <>
-              <Line type="monotone" dataKey="amountHumanCapital" stroke="#0088FE" name="ทุนมนุษย์" strokeWidth={2} dot={{ r: 2 }} />
-              <Line type="monotone" dataKey="amountPhysicalCapital" stroke="#00C49F" name="ทุนกายภาพ" strokeWidth={2} dot={{ r: 2 }} />
-              <Line type="monotone" dataKey="amountBusinessCapital" stroke="#FFBB28" name="ทุนเศรษฐกิจ" strokeWidth={2} dot={{ r: 2 }} />
-              <Line type="monotone" dataKey="amountNationalCapital" stroke="#FF8042" name="ทุนธรรมชาติ" strokeWidth={2} dot={{ r: 2 }} />
-              <Line type="monotone" dataKey="amountSocialCapital" stroke="#8884d8" name="ทุนสังคม" strokeWidth={2} dot={{ r: 2 }} />
-            </>
+            ) : (
+              <>
+                <Line type="monotone" dataKey="amountHumanCapital" stroke="#0088FE" name="ทุนมนุษย์" strokeWidth={2} dot={{ r: 2 }} />
+                <Line type="monotone" dataKey="amountPhysicalCapital" stroke="#00C49F" name="ทุนกายภาพ" strokeWidth={2} dot={{ r: 2 }} />
+                <Line type="monotone" dataKey="amountBusinessCapital" stroke="#FFBB28" name="ทุนเศรษฐกิจ" strokeWidth={2} dot={{ r: 2 }} />
+                <Line type="monotone" dataKey="amountNationalCapital" stroke="#FF8042" name="ทุนธรรมชาติ" strokeWidth={2} dot={{ r: 2 }} />
+                <Line type="monotone" dataKey="amountSocialCapital" stroke="#8884d8" name="ทุนสังคม" strokeWidth={2} dot={{ r: 2 }} />
+              </>
             )}
           </LineChart>
         </ResponsiveContainer>
+      </div>
+
+      <div className="text-center text-[20px] font-bold mt-6">
+        <p>จำนวนการช่วยเหลือทั้งหมด: <span className="text-red-500">{capitalCount.toLocaleString()} คน</span></p>
+        <p>จำนวนเงินช่วยเหลือทั้งหมด: <span className="text-red-500">{moneyCount.toLocaleString()} บาท</span></p>
       </div>
     </>
   );
