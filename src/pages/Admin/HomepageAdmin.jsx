@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Modal from "../../components/Modal";
+import React from "react";
 
 const HomepageAdmin = () => {
   return (

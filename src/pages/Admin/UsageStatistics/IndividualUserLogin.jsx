@@ -1,21 +1,20 @@
 import { Card, Typography } from "@material-tailwind/react";
 import { Icon } from "@iconify/react";
 import React, { useEffect, useState } from "react";
-import SystemLoginHistory from "./SystemLoginHistory";
+import SystemLoginHistory from "../ExportData/SystemLoginHistory";
 import axios from "axios";
 import config from "../../../config";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const IndividualUserLogin = () => {
   const [users, setUsers] = useState([]); // เก็บข้อมูลผู้ใช้จาก API
   const [search, setSearch] = useState(""); // เก็บค่าที่พิมพ์ในช่องค้นหา
-  const [showLoginHistory, setShowLoginHistory] = useState("main"); // จัดการหน้าปัจจุบัน (main หรือ loginHistory)
-  const [selectedUser, setSelectedUser] = useState(null); // เก็บข้อมูลของผู้ใช้ที่เลือก
 
   const [tableHead] = useState({
     id: "#",
     role: "บทบาท",
-    agency: "หน่วยงาน", 
+    agency: "หน่วยงาน",
     name: "ชื่อ-นามสกุล",
     username: "Username",
     email: "Email",
@@ -50,12 +49,9 @@ const IndividualUserLogin = () => {
   const filteredUsers = users.filter(
     (user) =>
       (user.name && user.name.toLowerCase().includes(search.toLowerCase())) ||
-      (user.username && user.username.toLowerCase().includes(search.toLowerCase()))
+      (user.username &&
+        user.username.toLowerCase().includes(search.toLowerCase()))
   );
-
-  if (showLoginHistory === "loginHistory" && selectedUser) {
-    return <SystemLoginHistory user={selectedUser} />;
-  }
 
   return (
     <div>
@@ -178,12 +174,11 @@ const IndividualUserLogin = () => {
                         color="blue-gray"
                         className="font-medium"
                       >
-                        <button
-                          className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
-                          onClick={() => handleAccessHistoryClick(user)} // ส่งข้อมูลผู้ใช้ที่เลือกไปในฟังก์ชัน
-                        >
-                          <Icon icon="mdi:table-large" />
-                        </button>
+                        <Link to={`/admin/Report-to-PDF/${user.id}`}>
+                          <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300">
+                            <Icon icon="mdi:table-large" />
+                          </button>
+                        </Link>
                         {user.Access_History}
                       </Typography>
                     </td>
