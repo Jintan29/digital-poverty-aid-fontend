@@ -86,16 +86,9 @@ function Minimap() {
               ของจังหวัดพิษณุโลก
             </p>
           </div>
-
-          <div className="flex flex-col mt-4 px-32">
-            <p className="font-bold text-[20px]">จำนวนการช่วยเหลือ</p>
-            <p className="text-[18px] text-red-500">500 คน</p>{" "}
-            {/* ตัวเลขเป็นสีแดง */}
-            <p className="font-bold text-[20px]">จำนวนเงินช่วยเหลือ</p>
-            <p className="text-[18px] text-red-500">10,000 บาท</p>{" "}
-            {/* ตัวเลขเป็นสีแดง */}
-          </div>
         </div>
+        {/* ส่วนของ HelpInformation ที่มีกราฟ */}
+        <HelpInformation />
       </div>
 
       {/* ขวา */}
@@ -135,14 +128,9 @@ function Minimap() {
         </div>
 
         {/* ล่าง */}
-        <div className="h-5/6 p-4">
+        <div className="h-4/6 p-4 flex flex-col justify-start">
           {/* แสดงแผนที่ตามการเลือก */}
-          <div>{showMap ? <Map1 /> : <Map2 />}</div>
-        </div>
-
-        <div className="mt-32 mb-8 container mx-auto">
-          {/* ส่วนของ HelpInformation ที่มีกราฟ */}
-          <HelpInformation />
+          <div className="flex-grow mt-[-80px] ml-[-180px]">{showMap ? <Map1 /> : <Map2 />}</div>
         </div>
       </div>
     </div>
