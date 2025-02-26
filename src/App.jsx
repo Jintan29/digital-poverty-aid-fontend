@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 
-
 import { Form } from "./pages/Form";
 import Register from "./pages/Authentication/Register";
 import { Login } from "./pages/Authentication/Login";
@@ -22,7 +21,6 @@ import ApproveUser from "./pages/Admin/ManageUser/ApproveUser";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ResetPassword from "./pages/Authentication/ResetPassword";
 import TrackingMemberId from "./pages/Admin/Tracking/TrackingMemberId";
-import MixedChart from "./pages/MixedChart";
 import Householdtracking from "./pages/Admin/Tracking/Householdtracking";
 import Capital from "./pages/Overviewcapital/Capital";
 import GisHousehold from "./pages/Admin/GISHouseHold/GisHousehold";
@@ -30,7 +28,6 @@ import AddApiToken from "./pages/AddApiToken";
 import LineRegister from "./pages/Line/LineRegister";
 import LineLogin from "./pages/Line/LineLogin";
 import FindAssistance from "./pages/Admin/ExportData/FindAssistance";
-import FormAddress from "./pages/FormAddress";
 import SearchHelp from "./pages/Admin/HelpLog/SearchHelp";
 import HelpInfo from "./pages/Admin/HelpLog/HelpInfo";
 import Usagestatistics from "./pages/Admin/UsageStatistics/Usagestatistics";
@@ -39,9 +36,7 @@ import LineLoginStatistics from "./pages/Admin/UsageStatistics/LineLoginStatisti
 import FindMemberByAgeRange from "./pages/Admin/ExportData/FindMemberByAgeRange";
 import SearchMember from "./pages/Admin/Tracking/SearchMember";
 import SearchHousehold from "./pages/Admin/Tracking/SearchHousehold";
-import ExclusiveSummaryReport from "./pages/Admin/ExportData/ExclusiveSummaryReport";
-
-
+import SystemLoginHistory from "./pages/Admin/ExportData/SystemLoginHistory";
 
 
 
@@ -66,7 +61,8 @@ function App() {
 
       dispatch(
         login({
-          name: response.data.username,
+          id:response.data.id,
+          name: response.data.fname,
           role: response.data.role,
           status: response.data.status,
           token: idToken,
@@ -108,8 +104,7 @@ function App() {
           <Route path="/" element={<UserLayout />}>
             <Route index element={<Map />} />
             <Route path="form" element={<Form />} />
-            <Route path="testt" element={<MixedChart />} />
-            
+
             {/* Auth */}
             <Route path="register" element={<Register />} />
             <Route path="login" element={<Login />} />
@@ -118,19 +113,17 @@ function App() {
               path="reset-password/:id/:token"
               element={<ResetPassword />}
             />
-
-            <Route path="reset-password/:id/:token" element={<ResetPassword />} />
-
+            <Route
+              path="reset-password/:id/:token"
+              element={<ResetPassword />}
+            />
             <Route path="map" element={<Map />} />
-            <Route path="testAddsress" element={<FormAddress />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
 
           {/* สำหรับ LINE ไม่ต้องการ Navbar   */}
           <Route path="/line" element={<LineRegister />} />
           <Route path="/line-login" element={<LineLogin />} />
-          
-
 
           {/*Layout for Admin */}
           <Route path="/admin" element={<AdminLayout />}>
@@ -170,7 +163,7 @@ function App() {
               }
             />
 
-              {/* ข้อมูลรายบุคคล */}
+            {/* ข้อมูลรายบุคคล */}
             <Route
               path="track-member/:id"
               element={
@@ -178,7 +171,6 @@ function App() {
                   <TrackingMemberId />
                 </AdminRoute>
               }
-
             />
             <Route
               path="track-household"
@@ -219,69 +211,86 @@ function App() {
             />
 
             {/* fetch API DSS */}
-            <Route path="add-ApiToken"
+            <Route
+              path="add-ApiToken"
               element={
                 <AdminRoute>
                   <AddApiToken />
-                </AdminRoute>}
+                </AdminRoute>
+              }
             />
 
-                
-            <Route path="helplog"
+            <Route
+              path="helplog"
               element={
                 <AdminRoute>
                   <SearchHelp />
-                </AdminRoute>}
+                </AdminRoute>
+              }
             />
-            <Route path="helplog/:id"
+            <Route
+              path="helplog/:id"
               element={
                 <AdminRoute>
                   <HelpInfo />
-                </AdminRoute>}
+                </AdminRoute>
+              }
             />
 
             {/* นำออกข้อมูล Excel & PDF */}
-            <Route path="FindAssistance"
+            <Route
+              path="FindAssistance"
               element={
                 <AdminRoute>
                   <FindAssistance />
-                </AdminRoute>}
+                </AdminRoute>
+              }
             />
-            <Route path="FindMemberByAge"
+            <Route
+              path="FindMemberByAge"
               element={
                 <AdminRoute>
                   <FindMemberByAgeRange />
-                </AdminRoute>}
+                </AdminRoute>
+              }
             />
-            <Route path="ExclusiveReport"
+            {/* PDF */}
+            <Route
+              path="Report-to-PDF/:id"
               element={
                 <AdminRoute>
-                  <ExclusiveSummaryReport />
-                </AdminRoute>}
+                  <SystemLoginHistory />
+                </AdminRoute>
+              }
             />
-            
 
             {/* สถิติการเข้าใช่งานระบบ */}
-            <Route path="usagestatistics"
+            <Route
+              path="usagestatistics"
               element={
                 <AdminRoute>
                   <Usagestatistics />
-                </AdminRoute>}
+                </AdminRoute>
+              }
             />
-            <Route path="Individual-User-Login"
+            <Route
+              path="Individual-User-Login"
               element={
                 <AdminRoute>
                   <IndividualUserLogin />
-                </AdminRoute>}
+                </AdminRoute>
+              }
             />
-            <Route path="line-login-statistics"
+            
+            <Route
+              path="line-login-statistics"
               element={
                 <AdminRoute>
                   <LineLoginStatistics />
-                </AdminRoute>}
+                </AdminRoute>
+              }
             />
             <Route path="*" element={<PageNotFound />} />
-
           </Route>
         </Routes>
       </div>

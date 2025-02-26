@@ -10,6 +10,8 @@ import {
 import Swal from "sweetalert2";
 import config from "../../../config";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 
 const Usagestatistics = () => {
   const [users, setUsers] = useState([]);
@@ -214,12 +216,14 @@ const Usagestatistics = () => {
 
                     <td className="p-4">
                       <Typography variant="base" className="font-normal">
-                        <button
+                         <Link to={`/admin/Report-to-PDF/${user.id}`}>
+                         <button
                           className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
-                          // onClick={handleAccessHistoryClick} // เรียกฟังก์ชันเมื่อกดปุ่ม
                         >
                           <Icon icon="mdi:table-large" />
                         </button>
+                        </Link>
+                        
 
                       </Typography>
                     </td>

@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
+import { useSelector } from "react-redux";
 import "flowbite";
+
 
 const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState({}); //ex. { 2: false, 1: true }
   const navigate = useNavigate(); // ใช้สำหรับการนำทางไปยังหน้าอื่น
+
+  //ดึงข้อมูลผู้ใช้งานจาก Redux
+  const {user} = useSelector((state)=>({...state}))
+  const userId = user.user.id
+  const userRole = user.user.role
+  
 
   //เปิดปิด sub menu ตาม index ที่รับเข้ามา { index : (T/F) }
   const toggleDropdown = (index) => {
@@ -66,7 +74,9 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       link: "/admin/api",
       logo: "material-symbols:integration-instructions-outline-rounded",
       submenu: [
-        { name: "ดึงข้อมูลจากระบบหลัก", link: "/admin/add-ApiToken" },
+        ...(userRole === "superAdmin" // แสดงเฉพาะ superAdmin
+          ? [{ name: "ดึงข้อมูลจากระบบหลัก", link: "/admin/add-ApiToken" }]
+          : []),
         { name: "เอกสารการใช้งาน", link: "#" },
       ],
     },
@@ -77,7 +87,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       submenu:[
         {name:'ข้อมูลครัวเรือนตามปีที่สำรวจ',link:'/admin/FindAssistance'},
         {name:'ข้อมูลสมาชิกตามช่วงอายุ',link:'/admin/FindMemberByAge'},
-        {name:'รายงานความช่วยเหลือ',link:'/admin/ExclusiveReport'}
+        {name:'รายงานความช่วยเหลือ',link:`/admin/Report-to-PDF/${userId}`},
       ]
 
     },
@@ -104,12 +114,12 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       logo: "mdi:chart-line",
       submenu: [
         {
-          name: "สถิติการเข้าใช้งานในระบบ",
+          name: "สถิติการเข้าสู่ระบบ",
           link: "/admin/usagestatistics",
           logo: "mdi:chart-bar",
         },
         {
-          name: "การเข้าใช้งานในระบบของผู้ใช้แต่ละราย",
+          name: "ประวัติการเข้าใช้งาน",
           link: "/admin/Individual-User-Login",
           logo: "mdi:chart-line",
         },

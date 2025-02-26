@@ -40,7 +40,8 @@ export const Login = () => {
         alert("ลงชื่อเข้าใช้สำเร็จ");
         dispatch(
           loginRedux({
-            name: res.data.data.user.username,
+            id: res.data.data.user.id,
+            name: res.data.data.user.name,
             role: res.data.data.user.role,
             status: res.data.data.user.status,
             token: res.data.Token,

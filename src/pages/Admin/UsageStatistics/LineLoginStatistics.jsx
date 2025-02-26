@@ -160,7 +160,7 @@ const LineLoginStatistics = () => {
             {/* ปุ่มแสดงข้อมูล */}
             <div className="mt-4">
               <button
-                // onClick={() => loadData()}
+                onClick={() => loadData()}
                 className="flex items-center px-4 py-2 border border-blue-500 text-blue-500 text-sm rounded-md hover:bg-blue-500 hover:text-white transition"
               >
                 <Icon icon="heroicons-solid:search" className="mr-2" />

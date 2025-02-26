@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import config from "../../../config";
 import { Link, useParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import Modal from "../../../components/Modal";
 import { Dropdown } from "flowbite-react";
 //แปลง พศ (day js)
 import dayjs from "dayjs";
