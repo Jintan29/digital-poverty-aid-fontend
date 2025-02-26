@@ -75,7 +75,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
       logo: "material-symbols:integration-instructions-outline-rounded",
       submenu: [
         ...(userRole === "superAdmin" // แสดงเฉพาะ superAdmin
-          ? [{ name: "ดึงข้อมูลจากระบบหลัก", link: "/admin/add-ApiToken" }]
+          ? [{ name: "ดึงข้อมูลจากระบบหลัก", link: "/admin/add-ApiToken" ,logo:"mdi:database-plus-outline"}] 
           : []),
         { name: "เอกสารการใช้งาน", link: "#" },
       ],
@@ -83,10 +83,10 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     {
       name: "ระบบนำออกข้อมูล",
       link: "/admin/FindAssistance",
-      logo: "material-symbols:database-upload-outline-rounded",
+      logo: "material-symbols:database-upload-outline-rounded",  
       submenu:[
-        {name:'ข้อมูลครัวเรือนตามปีที่สำรวจ',link:'/admin/FindAssistance'},
-        {name:'ข้อมูลสมาชิกตามช่วงอายุ',link:'/admin/FindMemberByAge'},
+        {name:'ข้อมูลครัวเรือนตามปีที่สำรวจ',link:'/admin/FindAssistance',logo:"material-symbols:manage-search-rounded"},
+        {name:'ข้อมูลสมาชิกตามช่วงอายุ',link:'/admin/FindMemberByAge',logo:"mdi:human-male-female-child"},
         {name:'รายงานความช่วยเหลือ',link:`/admin/Report-to-PDF/${userId}`},
       ]
 
