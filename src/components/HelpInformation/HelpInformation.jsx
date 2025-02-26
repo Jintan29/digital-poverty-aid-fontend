@@ -87,7 +87,7 @@ const HelpInformation = () => {
   </div>
 </div>
 
-<div className="w-4/5 ml-[900px] mt-[-220px] relative"> {/* เพิ่ม position: relative */}
+<div className="w-4/5 ml-[800px] mt-[-220px] relative"> {/* เพิ่ม position: relative */}
   <div className="text-center">
     <h2 className="font-bold text-shadow-custom text-[28px] text-gray-900 mb-4">
       ข้อมูลการช่วยเหลือ จังหวัดพิษณุโลก
