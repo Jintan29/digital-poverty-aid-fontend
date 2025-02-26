@@ -6,7 +6,7 @@ export const Map = () => {
         <>
             <div>
                 {/* จังหวัด */}
-                <h1 className="mt-18 ml-6 text-[24px]">
+                <h1 className="mt-18 ml-6 text-[30px]">
                     <span className="font-bold text-shadow-custom">
                         จังหวัด:
                     </span>
@@ -16,11 +16,11 @@ export const Map = () => {
                 </h1>
 
                 {/* ข้อมูล */}
-                <h2 className="mt-4 ml-auto mr-auto text-[22px] w-fit">
+                <h1 className="mt-4 ml-auto mr-auto text-[30px] w-fit">
                     <span className="font-bold">
                         ข้อมูลครัวเรือนยากจน จังหวัดพิษณุโลก
                     </span>
-                </h2>
+                </h1>
             </div>
             <Minimap/>
 
