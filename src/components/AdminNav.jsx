@@ -50,7 +50,7 @@ const AdminNav = ({ toggleSidebar }) => {
                 <div className="flex items-center space-x-2">
                   <span className="text-slate-500">
                     {user?.role && user?.status
-                      ? `${user.role} : ${user.status}`
+                      ? `${user.status} : ${user.name}`
                       : ""}
                   </span>
 

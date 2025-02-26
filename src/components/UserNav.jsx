@@ -108,7 +108,7 @@ const UserNav = () => {
                   <Menu as="div" className="flex flex-row ml-3">
                     <div className="span text-white mx-5 mt-2">
                       {user?.role && user?.status
-                        ? `${user.role} : ${user.status}`
+                        ? `${user.status} : ${user.name}`
                         : ""}
                     </div>
 
