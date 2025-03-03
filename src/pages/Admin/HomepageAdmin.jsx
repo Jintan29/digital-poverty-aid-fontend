@@ -5,7 +5,10 @@ const HomepageAdmin = () => {
     <>
       <div className="p-4">
         <h2 className="text-2xl font-semibold">
-          ระบบแสดงรายละเอียดข้อมูลครัวเรือนยากจน จังหวัดพิษณุโลก
+        ดิจิทัลแพลตฟอร์มสำหรับการจัดการข้อมูล การแก้ปัญหาความยากจน ภายในจังหวัดพิษณุโลก
+        </h2>
+        <h2 className="text-xl font-normal">
+        (Comprehensive data management and poverty reduction platform. )
         </h2>
         <ul class="text-xl space-y-1 text-gray-900 list-disc list-inside dark:text-gray-400 mt-4">
           <li>ระบบติดตามข้อมูล (รายครัวเรือน)</li>
