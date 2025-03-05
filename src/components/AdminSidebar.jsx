@@ -43,7 +43,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     {
       name: "บันทึกการช่วยเหลือ",
       link: "/admin/helpLog",
-      logo: "mdi:account-edit",
+      logo: "material-symbols:handshake-outline",
       submenu: [
         {
           name: "บันทึกแบบรายคน",

@@ -265,6 +265,21 @@ const TrackingMemberId = () => {
                 />
                 เพิ่มทักษะอาชีพ
               </Dropdown.Item>
+              <Dropdown.Item >
+                <Link
+                className="flex justify-center"
+                to={`/admin/helplog/${member.id}`}
+                >
+                  <Icon
+                  width={20}
+                  height={20}
+                  className="mr-2"
+                  icon="material-symbols:handshake-outline"
+                />
+                เพิ่มข้อมูลการช่วยเหลือ
+                </Link>
+                
+              </Dropdown.Item>
             </Dropdown>
           </div>
         </div>

@@ -49,6 +49,14 @@ const Register = () => {
 
       return false
     }
+    if(formData.password.length <4){
+      Swal.fire({
+        title:'รหัสผ่านสั้นเกินไป',
+        text:'กรุณากรอกขั้นต่ำอย่างน้อย 4 ตัวอักษร',
+        icon:'warning'
+      })
+      return false
+    }
 
     if(formData.status ===''){
       Swal.fire({
