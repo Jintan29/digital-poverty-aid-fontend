@@ -237,8 +237,8 @@ const EditHouseHoldModal = ({ show, onClose, household, reloadData }) => {
                         </label>
                         <div className="flex items-center gap-2 mb-5">
                             <select
-                                id="title"
-                                name="title"
+                                id="host_title"
+                                name="host_title"
                                 value={formData.host_title}
                                 onChange={handleChange}
                                 className="border border-gray-300 bg-white text-gray-900 text-sm 
