@@ -50,6 +50,7 @@ import AddPinModal from "../../../components/Householdtracking/Modal/AddPinModal
 const Householdtracking = () => {
   const [household, setHousehold] = useState(null);
   const [incomeData, setIncomeData] = useState(null); //แสดงรายรับทั้งในและนอกการเกษตร
+  const [totalGetHelped,setTotalGetHelp] = useState(null)
   const [predictionData, setPredictionData] = useState(null);
   const [loading, setLoading] = useState(true); // เพิ่ม loading state
   const [error, setError] = useState(null);
@@ -73,6 +74,7 @@ const Householdtracking = () => {
         `${config.api_path}/financialCapital/getAllSum/${id}` // Replace with your API URL
       );
       setHousehold(response.data.data);
+      setTotalGetHelp(response.data.data.totalHelped)
       setError(null); // ล้างข้อผิดพลาดหากมีข้อมูล
     } catch (err) {
       setError(err.message || "Failed to fetch data");
@@ -93,7 +95,7 @@ const Householdtracking = () => {
           ...config.headers(),
         }
       );
-      console.log(resAPI);
+      // console.log(resAPI);
       setIncomeData(resAPI.data.result.incomeData);
       setPredictionData(resAPI.data.result.prediction);
     } catch (err) {
@@ -729,6 +731,10 @@ const Householdtracking = () => {
             <p>
               <strong className="text-gray-900">สมุดเกษตร:</strong>{" "}
               {household.green_book_id || "ไม่มี"}
+            </p>
+            <p>
+              <strong className="text-gray-900">จำนวนครั้งที่ได้รับความช่วยเหลือ:</strong>{" "}
+              {totalGetHelped || "ไม่มี"} ครั้ง
             </p>
           </div>
         </div>
