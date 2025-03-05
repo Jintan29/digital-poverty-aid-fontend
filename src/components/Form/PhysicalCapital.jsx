@@ -79,6 +79,14 @@ function PhysicalCapital({ setCurrentPage, setMainFormData, mainFormData }) {
       update["house_rent"] = 0;
     }
 
+    //แก้ pin (lat,lon) กรณีกรอกแล้วลบ
+    if (field === 'lat' && value ==''){
+      update['lat'] = null
+    }
+    if (field === 'lon' && value ==''){
+      update['lon'] = null
+    }
+
     setFormData(update);
   };
 
