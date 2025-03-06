@@ -40,7 +40,7 @@ function Minimap() {
   return (
     <div className="flex flex-wrap mt-4 items-stretch">
       {/* ซ้าย */}
-      <div className="w-full sm:w-1/2 p-6 min-h-screen sm:h-screen flex flex-col justify-start pt-20 ">
+      <div className="w-full p-6 min-h-screen flex flex-col justify-start pt-20  md:w-full lg:w-1/2  lg:h-screen">
         {/* ส่วนแรก */}
         <div className="p-4">
           <h3 className="text-center text-[32px] font-bold text-shadow-custom">
@@ -72,30 +72,14 @@ function Minimap() {
           </p>
         </div>
 
-        {/* จำนวนการช่วยเหลือตามประเภททุน 5 ด้าน */}
-        <div className="p-4 mt-80 mb-4">
-          <div className="flex justify-center items-center mb-2">
-            <h3 className="text-[32px] font-bold text-shadow-custom">
-              จำนวนการช่วยเหลือ ตามประเภททุน 5 ด้าน
-            </h3>
-          </div>
 
-          <div className="text-blue-700 px-32">
-            <p className="text-[20px]">
-              ทุนมนุษย์ ทุนกายภาพ ทุนเศรษฐกิจ ทุนธรรมชาติ ทุนสังคม
-              ของจังหวัดพิษณุโลก
-            </p>
-          </div>
-        </div>
-        {/* ส่วนของ HelpInformation ที่มีกราฟ */}
-        <HelpInformation />
       </div>
 
       {/* ขวา */}
-      <div className="w-full sm:w-1/2 h-auto sm:h-screen flex flex-col">
+      <div className="w-full h-screen flex flex-col -mt-24 md:-mt-[500px]   lg:mt-0 lg:w-1/2 xl:mt-0 xl:w-1/2">
         {/* บน */}
         <div className="h-1/6 p-4">
-          <div className="flex justify-start items-center">
+          <div className="flex justify-start items-center md:justify-center lg:justify-start xl:justify-start">
             <div
               className="bg-blue-500 text-white px-2 py-1 rounded-l-full font-medium text-sm cursor-pointer"
               onClick={() => handleClick(true)} // กดแสดง Map
@@ -111,16 +95,16 @@ function Minimap() {
           </div>
           {/* แสดงข้อความในสีที่แตกต่างกันตามแผนที่ */}
           {showMap ? (
-            <p className="text-[22px] font-bold text-blue-500 mt-2">
+            <p className="text-[22px] font-bold text-blue-500 mt-2 text-center lg:text-left ">
               {count ? count.totalFamily.toLocaleString() : "กำลังโหลด..."}
-              <span className="text-black font-normal text-shadow-custom">
+              <span className="text-black font-normal text-shadow-custom ml-1">
                 ครัวเรือน
               </span>
             </p>
           ) : (
-            <p className="text-[22px] font-bold text-yellow-500 mt-2">
+            <p className="text-[22px] font-bold text-yellow-500 mt-2 text-center lg:text-left">
               {count ? count.totalPoor.toLocaleString() : "กำลังโหลด..."}
-              <span className="text-black font-normal text-shadow-custom">
+              <span className="text-black font-normal text-shadow-custom ml-1">
                 คน
               </span>
             </p>
@@ -128,11 +112,42 @@ function Minimap() {
         </div>
 
         {/* ล่าง */}
-        <div className="h-4/6 p-4 flex flex-col justify-start">
+        <div className="h-5/6 p-4 ">
           {/* แสดงแผนที่ตามการเลือก */}
-          <div className="flex-grow mt-[-80px] ml-[-180px]">{showMap ? <Map1 /> : <Map2 />}</div>
+          <div>
+            {showMap ?
+              <Map1 /> : <Map2 />}
+          </div>
         </div>
       </div>
+
+
+      {/* จำนวนการช่วยเหลือตามประเภททุน 5 ด้าน */}
+      <div className="p-4 mb-4 md:-mt-40 lg:-mt-[500px] lg:ml-40 xl:ml-0 xl:mt-80">
+        <div className="flex justify-center items-center mb-2">
+          <h3 className="text-[18px] font-bold text-shadow-custom md:ml-18 md:text-[24px] lg:text-[32px] xl:text-[32px] ">
+            จำนวนการช่วยเหลือ ตามประเภททุน 5 ด้าน
+          </h3>
+        </div>
+
+        <div className="text-blue-700 px-4 md:px-40   xl:px-0 text-center">
+          {/* สำหรับหน้าจอ lg ขึ้นไป แสดงทั้งหมดในบรรทัดเดียว */}
+          <p className="text-[18px] xl:text-[20px] hidden xl:block">
+            ทุนมนุษย์ ทุนกายภาพ ทุนเศรษฐกิจ ทุนธรรมชาติ ทุนสังคม ของจังหวัดพิษณุโลก
+          </p>
+
+          {/* สำหรับหน้าจอขนาดเล็กถึง md แบ่งเป็น 2 บรรทัด */}
+          <p className="text-[18px]  md:text-[22px] lg:text-[24px] block xl:hidden">
+            ทุนมนุษย์ ทุนกายภาพ ทุนเศรษฐกิจ
+          </p>
+          <p className="text-[18px] md:text-[22px] lg:text-[24px]  block xl:hidden">
+            ทุนธรรมชาติ ทุนสังคม ของจังหวัดพิษณุโลก
+          </p>
+        </div>
+
+      </div>
+      {/* ส่วนของ HelpInformation ที่มีกราฟ */}
+      <HelpInformation />
     </div>
   );
 }

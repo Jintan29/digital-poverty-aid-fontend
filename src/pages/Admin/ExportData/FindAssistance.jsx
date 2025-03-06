@@ -5,6 +5,8 @@ import { Card, Typography } from "@material-tailwind/react";
 import Pagination from "@mui/material/Pagination";
 import config from "../../../config";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { FaSpinner } from "react-icons/fa"; // ไอคอนหมุน
 
 function FindAssistance() {
   const TABLE_HEAD = [
@@ -15,7 +17,7 @@ function FindAssistance() {
     "จำนวนสมาชิก",
     "ที่อยู่",
   ];
-
+  const [isSaving, setIsSaving] = useState(false);
   const [selectedYear, setSelectedYear] = useState("ทั้งหมด"); // ปีที่เลือก เอาไว้ update
   const [houseCode, setHouseCode] = useState(""); // housecode ที่กรอก
   const [filteredData, setFilteredData] = useState([]); // ข้อมูลที่ได้จากการ filter
@@ -82,23 +84,39 @@ function FindAssistance() {
   };
 
   const handleDownloadExcel = async () => {
+    if (isSaving) return; // ❌ ป้องกันการกดซ้ำ
+    setIsSaving(true); // ⏳ เริ่มดาวน์โหลด
+
     const params = {
       getAll: true,
       ...(selectedYear !== "ทั้งหมด" && { year: selectedYear }),
       ...(houseCode && { houseCode }),
-      ...(selectedDistrict && { district: selectedDistrict }), // ✅ เพิ่ม filter อำเภอ
+      ...(selectedDistrict && { district: selectedDistrict }),
       ...(selectedSubdistrict && { subdistrict: selectedSubdistrict }),
     };
 
     try {
+      // ✅ แสดง SweetAlert ยืนยันก่อนดาวน์โหลด
+      const res = await Swal.fire({
+        title: "ดาวน์โหลดข้อมูล",
+        text: "ตรวจสอบข้อมูลถูกต้องแล้วใช่หรือไม่",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "ใช่",
+        cancelButtonText: "ยกเลิก",
+      });
+
+      // ❌ ถ้าผู้ใช้กดยกเลิก ให้หยุดทำงาน
+      if (!res.isConfirmed) return;
+
+      // ✅ ดึงข้อมูลจาก API
       const response = await axios.get(`${config.api_path}/export/getFind`, {
         params,
         responseType: "blob", // ✅ รองรับการดาวน์โหลดไฟล์
       });
 
-      const blob = new Blob([response.data], {
-        type: response.headers["content-type"],
-      });
+      // ✅ ดาวน์โหลดไฟล์ Excel
+      const blob = new Blob([response.data], { type: response.headers["content-type"] });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -106,13 +124,36 @@ function FindAssistance() {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+
+      // ✅ เช็คว่าเซิร์ฟเวอร์ส่งข้อความ JSON มาหรือไม่
+      if (response.headers["content-type"].includes("application/json")) {
+        const text = await response.data.text();
+        const jsonData = JSON.parse(text);
+
+        if (jsonData.message === "Data saved successfully from API") {
+          await Swal.fire({
+            title: "บันทึกข้อมูล",
+            text: "บันทึกข้อมูลสำเร็จ",
+            icon: "success",
+          });
+        }
+      }
+
+      // ✅ แจ้งเตือนเมื่อดาวน์โหลดสำเร็จ
+      await Swal.fire({
+        title: "ดาวน์โหลดเสร็จสิ้น",
+        text: "ไฟล์ถูกดาวน์โหลดสำเร็จ",
+        icon: "success",
+      });
+
     } catch (error) {
-      console.error(
-        "Error downloading Excel:",
-        error.response?.data?.msg || error.message
-      );
+      console.error("Error downloading Excel:", error);
+      Swal.fire("เกิดข้อผิดพลาด", error.message || "ไม่สามารถดาวน์โหลดไฟล์ได้", "error");
+    } finally {
+      setIsSaving(false); // ✅ ปล่อยให้กดปุ่มใหม่
     }
   };
+
 
   const districtSubdistrictMap = {
     ชาติตระการ: [
@@ -235,7 +276,7 @@ function FindAssistance() {
     }
   }, [selectedDistrict]);
 
-  
+
   return (
     <>
       <div className="p-4 mt-2">
@@ -347,13 +388,20 @@ function FindAssistance() {
             onClick={handleDownloadExcel}
             disabled={!dataLoaded || filteredData.length === 0} // ✅ ปิดการใช้งานปุ่มเมื่อยังไม่มีข้อมูล
             className={`flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold rounded-md shadow-md transition 
-                                ${
-                                  !dataLoaded || filteredData.length === 0
-                                    ? "bg-gray-400 cursor-not-allowed" // ❌ ปิดการใช้งาน (สีเทา)
-                                    : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300" // ✅ ใช้งานได้ปกติ
-                                }`}
+                                ${!dataLoaded || filteredData.length === 0
+                ? "bg-gray-400 cursor-not-allowed" // ❌ ปิดการใช้งาน (สีเทา)
+                : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300" // ✅ ใช้งานได้ปกติ
+              }`}
           >
-            <SiMicrosoftexcel className="text-lg" /> ดาวน์โหลด Excel
+            {isSaving ? (
+        <>
+          <FaSpinner className="animate-spin text-lg" /> กำลังดาวน์โหลด...
+        </>
+      ) : (
+        <>
+          <SiMicrosoftexcel className="text-lg" /> ดาวน์โหลด Excel
+        </>
+      )}
           </button>
         </div>
 

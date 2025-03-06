@@ -149,18 +149,18 @@ const Householdtracking = () => {
 
   // ข้อมูลสำหรับ Pie Chart (แสดงจำนวนเงิน)
   const data = {
-    labels: ["รายรับนอกการเกษตร", "รายรับจากการเกษตร","ต้นทุน","รายจ่าย"],
+    labels: ["รายรับนอกการเกษตร", "รายรับจากการเกษตร", "ต้นทุน", "รายจ่าย"],
     datasets: [
       {
         data: [
-          household.financialSummary.totalAmountPerYear, 
+          household.financialSummary.totalAmountPerYear,
           household.financialSummary.totalAGIincomePerYear,
-          household.financialSummary.totalCostPerYear, 
-          household.financialSummary.totalExpenses, 
+          household.financialSummary.totalCostPerYear,
+          household.financialSummary.totalExpenses,
         ],
-        backgroundColor: ["#2196F3","#4CAF50",  "#FF9602","#FF0000"], // สีสำหรับแต่ละส่วน (เขียว, แดง, ฟ้า)
-        hoverBackgroundColor: ["#1976D2","#388E3C","#FEB043", "#CC0000" ], // สีเมื่อโฮเวอร์ (เขียวเข้ม, แดงเข้ม, ฟ้าเข้ม)
-      
+        backgroundColor: ["#2196F3", "#4CAF50", "#FF9602", "#FF0000"], // สีสำหรับแต่ละส่วน (เขียว, แดง, ฟ้า)
+        hoverBackgroundColor: ["#1976D2", "#388E3C", "#FEB043", "#CC0000"], // สีเมื่อโฮเวอร์ (เขียวเข้ม, แดงเข้ม, ฟ้าเข้ม)
+
       },
     ],
   };
@@ -505,37 +505,86 @@ const Householdtracking = () => {
   };
   const chartHeight = data5.labels.length > 5 ? data5.labels.length * 70 : 400; // ปรับความสูงอัตโนมัติตามจำนวนข้อมูล
 
-  // ข้อมูลจาก JSON
-  const incomes = household.Form.Financialcapital.NonAGIincomes;
-  const expenses = household.Form.Financialcapital.Householdexpenses;
-  const debts = household.Form.Financialcapital.Debt?.Creditsources || [];
+  // // ข้อมูลจาก JSON
+  // const incomes = household.Form.Financialcapital.NonAGIincomes;
+  // const expenses = household.Form.Financialcapital.Householdexpenses;
+  // const debts = household.Form.Financialcapital.Debt?.Creditsources || [];
+
+  // // คำนวณรายรับรวมต่อปี
+  // const totalIncome = incomes.reduce(
+  //   (sum, income) => sum + income.amount_per_year,
+  //   0
+  // );
+
+  // // คำนวณรายจ่ายรวมต่อปี
+  // const totalExpenses = expenses.reduce(
+  //   (sum, expense) => sum + expense.amount_per_month * 12,
+  //   0
+  // );
+
+  // // คำนวณต้นทุนรวมต่อปี
+  // const totalCost = incomes.reduce(
+  //   (sum, income) => sum + income.cost_per_year,
+  //   0
+  // );
+
+  // // คำนวณหนี้สินรวม
+  // const totalDebt = debts.reduce(
+  //   (sum, debt) => sum + debt.outstanding_amount,
+  //   0
+  // );
+
+  // // คำนวณจุดหลุดพ้นความจน
+  // const breakEven = totalIncome >= totalExpenses + totalCost + totalDebt;
+
+  // -------------
+  // กำหนดเส้นความยากจน (สามารถปรับเปลี่ยนได้ตามมาตรฐาน)
+  const povertyLine = 36000; // สมมติว่าเส้นความยากจนอยู่ที่ 36,000 บาท/ปี
+
+  // ข้อมูลจาก JSON (ป้องกัน undefined)
+  const incomes = household?.Form?.Financialcapital?.NonAGIincomes ?? [];
+  const expenses = household?.Form?.Financialcapital?.Householdexpenses ?? [];
+  const debts = household?.Form?.Financialcapital?.Debt?.Creditsources ?? [];
+  const savings = household?.Form?.Financialcapital?.Savings ?? [];
 
   // คำนวณรายรับรวมต่อปี
   const totalIncome = incomes.reduce(
-    (sum, income) => sum + income.amount_per_year,
+    (sum, income) => sum + (income.amount_per_year ?? 0),
     0
   );
 
   // คำนวณรายจ่ายรวมต่อปี
   const totalExpenses = expenses.reduce(
-    (sum, expense) => sum + expense.amount_per_month * 12,
+    (sum, expense) => sum + (expense.amount_per_month ?? 0) * 12,
     0
   );
 
   // คำนวณต้นทุนรวมต่อปี
   const totalCost = incomes.reduce(
-    (sum, income) => sum + income.cost_per_year,
+    (sum, income) => sum + (income.cost_per_year ?? 0),
     0
   );
 
-  // คำนวณหนี้สินรวม
+  // คำนวณหนี้สินรวม (หนี้สินที่ยังค้างชำระ)
   const totalDebt = debts.reduce(
-    (sum, debt) => sum + debt.outstanding_amount,
+    (sum, debt) => sum + (debt.outstanding_amount ?? 0),
     0
   );
 
-  // คำนวณจุดหลุดพ้นความจน
-  const breakEven = totalIncome >= totalExpenses + totalCost + totalDebt;
+  // คำนวณการออมรวม (เงินออมทั้งหมดที่ครัวเรือนมี)
+  const totalSavings = savings.reduce(
+    (sum, saving) => sum + (saving.amount ?? 0),
+    0
+  );
+
+  // คำนวณรายได้สุทธิ (Net Income) รวมการออมเข้าไป
+  const netIncome = totalIncome + totalSavings - totalExpenses - totalCost - totalDebt;
+
+
+  // ตรวจสอบจุดหลุดพ้นความยากจน (รวมภาระหนี้และการออม)
+  const breakEven = (netIncome >= povertyLine) 
+
+
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -545,11 +594,10 @@ const Householdtracking = () => {
           <h1 className="text-2xl font-bold">ครัวเรือน</h1>
           <p
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg shadow-md transition duration-300 transform hover:scale-105
-        ${
-          breakEven
-            ? "bg-green-100 text-green-600 hover:bg-green-200"
-            : "bg-red-100 text-red-600 hover:bg-red-200"
-        }`}
+        ${breakEven
+                ? "bg-green-100 text-green-600 hover:bg-green-200"
+                : "bg-red-100 text-red-600 hover:bg-red-200"
+              }`}
           >
             {breakEven ? (
               <>
@@ -824,7 +872,7 @@ const Householdtracking = () => {
             <p className="text-xl font-medium">
               การออมรวมในครัวเรือน:{" "}
               <span className="font-bold text-blue-600">
-                {parseFloat(household.financialSummary.totalSaving).toLocaleString() +' '+ 'บาท'}
+                {parseFloat(household.financialSummary.totalSaving).toLocaleString() + ' ' + 'บาท'}
               </span>
             </p>
           </div>
