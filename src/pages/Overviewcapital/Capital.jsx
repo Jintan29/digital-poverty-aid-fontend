@@ -44,12 +44,17 @@ const Capital = () => {
   return (
     <div className="p-4">
       <h1 className="text-3xl text-center font-bold mb-4">ภาพรวมศักยภาพทุน 5 มิติ</h1>
+      {allCapital ? (
+        <>
+        <HumanCapital humanCapital={allCapital?.HumenCapital} />
+        <PhysicalCapital physicalCapital={allCapital?.PhysicalCapital}/>  
+        <FinancialCapital financialCapital={allCapital?.FinancialCapital}/> 
+        <NaturalCapital naturalCapital={allCapital?.NaturalCapital}/>
+         <SocialCapital socialCapital={allCapital?.SocialCapital}/>
+        </>
+        
+      ):(<h1>กำลังโหลดข้อมูล</h1>)}
       
-      {allCapital &&( <HumanCapital humanCapital={allCapital?.HumenCapital} />)}
-      {allCapital &&( <PhysicalCapital physicalCapital={allCapital?.PhysicalCapital}/>)}  
-      {allCapital &&( <FinancialCapital financialCapital={allCapital?.FinancialCapital}/>)} 
-      {allCapital &&( <NaturalCapital naturalCapital={allCapital?.NaturalCapital}/>)}
-      {allCapital &&( <SocialCapital socialCapital={allCapital?.SocialCapital}/>)}
     </div>
   )
 }

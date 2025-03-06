@@ -29,14 +29,12 @@ import IncomeModal from "../../../components/TrackingMember/Modal/IncomeModal";
 import WelfareModal from "../../../components/TrackingMember/Modal/WelfareModal";
 import CareerModal from "../../../components/TrackingMember/Modal/CareerModal";
 
-
-
 const TrackingMemberId = () => {
   const [member, setMember] = useState({});
   const [memberFinancial, setMemberFinancial] = useState([]);
-  const [prediction,setPrediction] = useState(null)
+  const [prediction, setPrediction] = useState(null);
   const [charData, setChartData] = useState([]); //กราฟแรก
-  const [helpData,setHelpData] = useState([])
+  const [helpData, setHelpData] = useState([]);
   const { id } = useParams(); //id สมาชิกครัวเรือน
 
   const [socialWelfare, setSocialWelfare] = useState([]);
@@ -51,7 +49,6 @@ const TrackingMemberId = () => {
   const [welfareModal, setWelfareModal] = useState(false);
   const [careerModal, setCareerModal] = useState(false);
 
-
   //สำหรับ load ข้อมูลเท่านั้น
   useEffect(() => {
     loadData();
@@ -59,40 +56,38 @@ const TrackingMemberId = () => {
 
   //สำหรับรวม data หลัง call api (rechart)
   useEffect(() => {
-      const financialData = memberFinancial.map((data, index) => ({
-        // return [{},{},..]
-        month: formatDate(data.createdAt),
-        income: data.agv_income,
-        expenses: data.avg_expenses,
-        inflation: data.inflation,
-      }));
+    const financialData = memberFinancial.map((data, index) => ({
+      // return [{},{},..]
+      month: formatDate(data.createdAt),
+      income: data.agv_income,
+      expenses: data.avg_expenses,
+      inflation: data.inflation,
+    }));
 
-      //เพิ่ม Bar สำหรับแสดง pridict
-      const lastData = memberFinancial[memberFinancial.length - 1];
-      
-      if (lastData && prediction) {
-        const lastDate = new Date(lastData.createdAt);
-        // สร้างวันที่สำหรับปีถัดไป
-        const nextYear = new Date(
-          lastDate.getFullYear() + 1,
-          lastDate.getMonth(),
-          lastDate.getDate()
-        );
-    
-        const predictionData = {
-          month: formatDate(nextYear) + ' (คาดการณ์)',
-          predictedIncome: prediction,
-          expenses: null,
-          inflation: null
-        };
-    
-        setChartData([...financialData, predictionData]);
-      } else {
-        setChartData(financialData);
-      }
+    //เพิ่ม Bar สำหรับแสดง pridict
+    const lastData = memberFinancial[memberFinancial.length - 1];
 
-    
-  }, [ memberFinancial,prediction]);
+    if (lastData && prediction) {
+      const lastDate = new Date(lastData.createdAt);
+      // สร้างวันที่สำหรับปีถัดไป
+      const nextYear = new Date(
+        lastDate.getFullYear() + 1,
+        lastDate.getMonth(),
+        lastDate.getDate()
+      );
+
+      const predictionData = {
+        month: formatDate(nextYear) + " (คาดการณ์)",
+        predictedIncome: prediction,
+        expenses: null,
+        inflation: null,
+      };
+
+      setChartData([...financialData, predictionData]);
+    } else {
+      setChartData(financialData);
+    }
+  }, [memberFinancial, prediction]);
 
   // กำหนดสีพื้นหลังที่ใช้ในกราฟและ grid items
   const backgroundColors = [
@@ -154,7 +149,7 @@ const TrackingMemberId = () => {
       setMember(res.data.data);
       setSocialWelfare(res.data.data.SocialWelfares);
       setCarrer(res.data.data.Careers);
-      setHelpData(res.data.data.HelpMembers)
+      setHelpData(res.data.data.HelpMembers);
     } catch (err) {
       Swal.fire({
         title: "error",
@@ -165,28 +160,27 @@ const TrackingMemberId = () => {
   };
 
   //เช็คข้อมูล member หากมีค่าแล้วค่อยไป load financial
-  useEffect(()=>{
-    if(member && member.Household?.district){
-      loadFinancial()
+  useEffect(() => {
+    if (member && member.Household?.district) {
+      loadFinancial();
     }
-  },[member])
+  }, [member]);
 
   const loadFinancial = async () => {
     try {
       const res = await axios.get(
         config.api_path + `/member-financial/${id}/predict`,
         {
-          params:{
-            district:member.Household?.district
+          params: {
+            district: member.Household?.district,
           },
           ...config.headers(),
         }
       );
       console.log(res);
-      
-      setMemberFinancial(res.data.results.financial);
-      setPrediction(res.data.results.prediction)
 
+      setMemberFinancial(res.data.results.financial);
+      setPrediction(res.data.results.prediction);
     } catch (err) {
       Swal.fire({
         title: "errors",
@@ -265,20 +259,19 @@ const TrackingMemberId = () => {
                 />
                 เพิ่มทักษะอาชีพ
               </Dropdown.Item>
-              <Dropdown.Item >
+              <Dropdown.Item>
                 <Link
-                className="flex justify-center"
-                to={`/admin/helplog/${member.id}`}
+                  className="flex justify-center"
+                  to={`/admin/helplog/${member.id}`}
                 >
                   <Icon
-                  width={20}
-                  height={20}
-                  className="mr-2"
-                  icon="material-symbols:handshake-outline"
-                />
-                เพิ่มข้อมูลการช่วยเหลือ
+                    width={20}
+                    height={20}
+                    className="mr-2"
+                    icon="material-symbols:handshake-outline"
+                  />
+                  เพิ่มข้อมูลการช่วยเหลือ
                 </Link>
-                
               </Dropdown.Item>
             </Dropdown>
           </div>
@@ -294,7 +287,7 @@ const TrackingMemberId = () => {
 
         {/* Chart Income */}
         <h2 className="text-xl font-bold mt-10">
-          รายได้เปรียบเทียบอัตตราเงินเฟ้อ
+          รายได้เปรียบเทียบอัตราเงินเฟ้อ
         </h2>
         <div className=" mt-10 pt-10 flex justify-center rounded-lg shadow bg-white">
           <IncomeInflationChart charData={charData} />
@@ -303,9 +296,7 @@ const TrackingMemberId = () => {
         <h2 className="text-xl font-bold mt-10">
           ข้อมูลการได้รับความช่วยเหลือ
         </h2>
-        <div className=" mt-10 py-10 flex justify-center rounded-lg shadow bg-white max-w-full">
-          <HelpMemberInfo helpData={helpData} />
-        </div>
+        <HelpMemberInfo helpData={helpData} />
 
         {/* ---- Welfare & Skills ---- */}
         <h2 className="text-xl font-bold my-5">
@@ -322,12 +313,31 @@ const TrackingMemberId = () => {
         </div>
 
         {/* Modal */}
-        
-        <EditModal show={editModal} onClose={e=>setEditModal(false)} member={member} loadData={loadData} />
-        <IncomeModal show={incomeModal} onClose={e=>setIncomeModal(false)} member={member} loadFinancial={loadFinancial} />
-        <WelfareModal show={welfareModal} onClose={e=>setWelfareModal(false)} socialWelfare={socialWelfare} loadData = {loadData} />
-        <CareerModal show={careerModal} onClose={e=>setCareerModal(false)} carrer={carrer} loadData={loadData} />
 
+        <EditModal
+          show={editModal}
+          onClose={(e) => setEditModal(false)}
+          member={member}
+          loadData={loadData}
+        />
+        <IncomeModal
+          show={incomeModal}
+          onClose={(e) => setIncomeModal(false)}
+          member={member}
+          loadFinancial={loadFinancial}
+        />
+        <WelfareModal
+          show={welfareModal}
+          onClose={(e) => setWelfareModal(false)}
+          socialWelfare={socialWelfare}
+          loadData={loadData}
+        />
+        <CareerModal
+          show={careerModal}
+          onClose={(e) => setCareerModal(false)}
+          carrer={carrer}
+          loadData={loadData}
+        />
       </div>
     </>
   );

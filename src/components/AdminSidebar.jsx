@@ -29,7 +29,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   };
 
   const sidebarItem = [
-    { name: "Dashbord", link: "/admin", logo: "mdi:chart-pie" },
+    { name: "Dashboard", link: "/admin", logo: "mdi:chart-pie" },
     {
       name: "ภาพรวมศักยภาพทุน 5 มิติ",
       link: "/admin/capital",

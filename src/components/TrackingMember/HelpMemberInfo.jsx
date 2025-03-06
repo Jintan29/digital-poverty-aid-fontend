@@ -22,7 +22,7 @@ const HelpMemberInfo = ({ helpData }) => {
   ];
 
   return (
-    <div>
+    <div className="mt-10 py-5 flex justify-center rounded-lg shadow bg-white max-w-full">
       <Card className="h-full w-full overflow-x-auto max-w-6xl ">
         <table className="w-full min-w-max table-auto text-center ">
           {/* ส่วนหัวของตาราง*/}
