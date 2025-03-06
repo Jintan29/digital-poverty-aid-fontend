@@ -186,11 +186,12 @@ const Usagestatistics = () => {
 
             />
           </div>
+          
         </div>
 
         {/* แสดงตารางเป็น */}
         <Card className="h-full w-full  mt-6 flex justify-center items-center">
-          <table className="w-full min-w-max table-auto  text-center">
+          <table className="w-full  table-auto  text-center">
             <thead>
               <tr>
                 {TABLE_HEAD.map((head) => (

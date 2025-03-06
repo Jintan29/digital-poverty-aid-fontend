@@ -734,7 +734,7 @@ const Householdtracking = () => {
             </p>
             <p>
               <strong className="text-gray-900">จำนวนครั้งที่ได้รับความช่วยเหลือ:</strong>{" "}
-              {totalGetHelped || "ไม่มี"} ครั้ง
+              {totalGetHelped + ' '+'ครั้ง' || "ไม่มี"} 
             </p>
           </div>
         </div>
