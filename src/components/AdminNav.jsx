@@ -29,7 +29,7 @@ const AdminNav = ({ toggleSidebar }) => {
   return (
     <div>
       
-      <Disclosure as="nav" className="bg-white fixed top-0 z-20 w-full shadow">
+      <Disclosure as="nav" className="bg-white fixed top-0 z-20 w-full shadow ">
       <div className="mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex h-20  items-center justify-between">
           
@@ -70,15 +70,15 @@ const AdminNav = ({ toggleSidebar }) => {
                 >
                   <MenuItem>
                     {({ active }) => (
-                      <a
-                        href="#"
+                      <Link
+                        to={'/'}
                         className={classNames(
                           active ? "bg-gray-100" : "",
                           "block px-4 py-2 text-sm text-gray-700"
                         )}
                       >
-                        Your Profile
-                      </a>
+                        กลับหน้าหลัก
+                      </Link>
                     )}
                   </MenuItem>
                   <MenuItem>
