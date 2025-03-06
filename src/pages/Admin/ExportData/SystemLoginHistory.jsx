@@ -20,6 +20,8 @@ const SystemLoginHistory = () => {
   const { user } = useSelector((state) => ({ ...state }));
   const adminId = user.user.id;
 
+  const [isProcessing,setIsProcessing] = useState(false) //จัดการ call API
+
   useEffect(() => {
     loadData();
   }, [currentPage, rowsPerPage]);
@@ -73,6 +75,7 @@ const SystemLoginHistory = () => {
   //Download to PDF
   const handleDownload = async () => {
     try {
+      setIsProcessing(true)
       const response = await axios.get(
         config.api_path + "/log/summary-report",
         {
@@ -96,6 +99,8 @@ const SystemLoginHistory = () => {
         text: err.response?.data?.message || err.message,
         icon: "error",
       });
+    } finally{
+      setIsProcessing(false)
     }
   };
 
@@ -117,8 +122,10 @@ const SystemLoginHistory = () => {
             {/* ปุ่มดาวน์โหลด อยู่ทางซ้ายหาก id admin ที่ login เข้ามาตรงกับ idของ id ที่ดูข้อมูล log อยู่ */}
             {adminId == id && logs.length > 0 ? (
               <button
+                disabled={isProcessing}
                 onClick={() => handleDownload()}
-                className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded shadow transition duration-300"
+                className={`flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded shadow transition duration-300
+                  ${ isProcessing ? "opacity-50 cursor-not-allowed":''}`}
               >
                 <FaFilePdf className="text-xl" />
                 <span>ดาวน์โหลด PDF</span>

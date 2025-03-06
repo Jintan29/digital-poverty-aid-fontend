@@ -53,7 +53,8 @@ const ManageUser = () => {
         <h2 className="text-2xl font-semibold">จัดการผู้ใช้งานระบบ</h2>
       </div>
 
-      <div class="relative mt-9 overflow-x-auto shadow-md sm:rounded-lg ">
+      {users ? (
+        <div class="relative mt-9 overflow-x-auto shadow-md sm:rounded-lg ">
         <table class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -125,6 +126,10 @@ const ManageUser = () => {
           </tbody>
         </table>
       </div>
+      ):(
+        <h1>กำลังโหลดข้อมูล</h1>
+      )}
+      
     </>
   );
 };
