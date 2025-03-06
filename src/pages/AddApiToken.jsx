@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../config";
+import { FaSpinner } from "react-icons/fa"; // ✅ Import ไอคอนหมุน
 
 function AddApiToken() {
   const [apiUrl, setApiUrl] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
   const validateInput = () => {
     if (!apiUrl.trim()) {
       Swal.fire("เกิดข้อผิดพลาด", "กรุณากรอก API URL", "error");
@@ -16,9 +19,9 @@ function AddApiToken() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateInput()) {
-      return;
-    }
+    if (!validateInput() || isSaving) return; // ❌ ป้องกันการกดซ้ำ
+
+    setIsSaving(true); // ⏳ ตั้งค่ากำลังบันทึก
 
     try {
       const res = await Swal.fire({
@@ -53,6 +56,8 @@ function AddApiToken() {
         error.response?.data?.message || error.message,
         "error"
       );
+    } finally {
+      setIsSaving(false); // ✅ ปล่อยให้กดใหม่ได้
     }
   };
 
@@ -64,19 +69,19 @@ function AddApiToken() {
           <li>เลือก Service ข้อมูลครัวเรือนยากจน</li>
           <li>ตั้งค่า mode เป็น 2</li>
           <li>ตัวอย่าง URL : <span className="text-sm">http://sradss.ppaos.com/sradss/api/01poor.php?API-TOKEN=MzBiZDdhY2EyODY1YWNiZmU0Nzc0OW&&province_id=65&&yearget=all&mode=2</span></li>
-          
+
         </ul>
       </div>
 
       <div className="flex items-center justify-center py-20 bg-white rounded-lg">
-        
+
         <div className="relative w-[700px] h-[400px] bg-gray-100 rounded-2xl shadow-lg p-6">
-            
+
           {/* Title */}
           <h1
             className="text-center text-2xl font-semibold text-black mb-4"
           >
-            กรอก URL ตัวเต็มของ service 
+            กรอก URL ตัวเต็มของ service
           </h1>
           <hr className="w-[400px] border-t-[1px] border-gray-200 mx-auto my-4" />
 
@@ -91,13 +96,21 @@ function AddApiToken() {
             />
           </div>
 
-          {/* Go Button */}
+          {/* Save Button */}
           <div className="absolute bottom-6 right-6">
             <button
-              className="bg-blue-500 text-white text-base font-semi-bold w-[100px] h-[50px] rounded-xl shadow-md hover:bg-blue-600 transition"
+              className={`flex items-center justify-center bg-blue-500 text-white text-base font-semi-bold w-[140px] h-[50px] rounded-xl shadow-md 
+                ${isSaving ? "bg-gray-400 cursor-not-allowed" : "hover:bg-blue-600 transition"}`}
               onClick={handleSubmit}
+              disabled={isSaving} // ❌ ปิดปุ่มระหว่างบันทึก
             >
-              บันทึกข้อมูล
+              {isSaving ? (
+                <>
+                  <FaSpinner className="animate-spin mr-2" /> กำลังบันทึก...
+                </>
+              ) : (
+                "บันทึกข้อมูล"
+              )}
             </button>
           </div>
         </div>
