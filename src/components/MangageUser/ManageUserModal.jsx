@@ -90,10 +90,10 @@ const ManageUserModal = ({ show, member, onClose, loadData }) => {
     }
 
     //กรอง confrime pass  ออก
-    const { confirmPassword, password, ...dataToSend } = formData;
+    const { confirmPassword, ...dataToSend } = formData;
     
     // ถ้าผู้ใช้ไม่กรอกรหัสผ่านใหม่ ให้นำ password ออกจากข้อมูลที่ส่ง
-    if (!password) {
+    if (!dataToSend.password) {
       delete dataToSend.password;
     }
 
