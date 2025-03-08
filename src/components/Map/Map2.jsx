@@ -87,7 +87,7 @@ const Map2 = () => {
           </span>
           <br />
           <span className="text-black font-bold text-center">
-            {householdCount} คน
+            {householdCount.toLocaleString()} คน
           </span>
         </div>
       ),
@@ -119,13 +119,14 @@ const Map2 = () => {
   return (
     <>
       <div className="flex justify-center items-start">
-        <div className="mt-[-40px] ml-[-200px]">
+        <div className="mt-[-40px] ml-[-200px] md:-mt-[150px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="800"
             height="533"
             viewBox="0 0 800 533"
             baseProfile="full"
+            className="w-[550px] h-[350px] ml-40   md:w-[850px] md:h-[650px] xl:w-[800px] xl:h-[533px] xl:ml-[50px] mltransition-all duration-300"
           >
             <path
               d="m343.76 402.53.58 11.147 1.026.773 3.968-.714 1.494-1.962 1.717.238 2.34 1.308 9.03 2.319 1.56-1.278 1.183.713.4-.654 2.453-1.427 3.233-.505 2.051-2.26 1.672-1.159.558.952-1.093 1.932.401.297.625-.446.446.476 2.876 4.845.87-.119.735-1.843.624-.238 2.163 2.052.089 1.01.513.327-.38.506.224.267 1.761 1.19.357-.982 6.621-1.367 3.1-1.368 1.47-1.783-.623-.684.111-1.01 2.051-1.368.112-1.397-.402-.803.513-1.248-.134-.565.937-.832-.2-3.003-.135-.832-1.337-1.962-.201-2.646-1.026-4.459-1.137-2.675-3.723-3.36-3.456.09-2.162-2.497-.669-2.23-3.3-.03-.178-1.337.267-1.19.67-.415.557.297-.045-.535-3.835-2.705-4.236-.773.29-1.279-.424-.03-.601-1.04-.825-.267-1.405.862.022-.862-.49-.09-.959-1.872-.691-.476-.49-2.17-.67-.267-1.605-2.379.067-.832-1.872-2.913-.96-.743-1.76-.416-.201-1.04-2.542.386-1.337-.625-.67 1.16.268 1.397-.78.743.401 1.13-.067 2.616.58 2.735-1.048 2.05-.468 2.676.067 2.23-.847 2.883-1.115.713-1.427-.327-7.982 1.517-2.296-.714-2.185.06-.758-1.814-1.583.03.49 2.556 2.743 3.062.423 1.16.29 8.62z"
@@ -383,33 +384,39 @@ const Map2 = () => {
             </text>
           </svg>
 
-          {/* แทบสี */}
-          <svg width="250" height="60" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: "300px", marginTop: "-60px" }}>
-            {/* Define the gradient */}
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style={{ stopColor: "#ffffff", stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: "#ffd700", stopOpacity: 1 }} />
-              </linearGradient>
-            </defs>
+          <div className="flex justify-center mt-2 ml-48 md:-mt-16 xl:-mt-12 xl:ml-12 ">
+            <svg
+              className="w-[250px] h-[60px] md:w-[300px] md:h-[65px] lg:w-[950px] lg:h-[650px]  xl:w-[250px] xl:h-[60px]"
+              viewBox="0 0 250 60"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Define the gradient */}
+              <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style={{ stopColor: "#ffffff", stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: "#ffd700", stopOpacity: 1 }} />
+                </linearGradient>
+              </defs>
 
-            {/* Gradient bar */}
-            <rect x="0" y="15" width="250" height="10" fill="url(#gradient)" />
+              {/* Gradient bar */}
+              <rect x="0" y="15" width="250" height="10" fill="url(#gradient)" />
 
-            {/* Labels */}
-            <text x="0" y="40" fontSize="10" fill="#000">0</text>
-            <text x="62.5" y="40" fontSize="10" fill="#000">5k</text>
-            <text x="125" y="40" fontSize="10" fill="#000">10k</text>
-            <text x="187.5" y="40" fontSize="10" fill="#000">15k</text>
+              {/* Labels */}
+              <text x="0" y="40" fontSize="10" fill="#000">0</text>
+              <text x="62.5" y="40" fontSize="10" fill="#000">5k</text>
+              <text x="125" y="40" fontSize="10" fill="#000">10k</text>
+              <text x="187.5" y="40" fontSize="10" fill="#000">15k</text>
 
-            {/* Arrow */}
-            {arrowPosition !== null && (
-              <polygon
-                points={`${arrowPosition},15 ${arrowPosition - 5},10 ${arrowPosition + 5},10`}
-                fill="#808080"
-              />
-            )}
-          </svg>
+              {/* Arrow */}
+              {arrowPosition !== null && (
+                <polygon
+                  points={`${arrowPosition},15 ${arrowPosition - 5},10 ${arrowPosition + 5},10`}
+                  fill="#808080"
+                />
+              )}
+            </svg>
+          </div>
+
 
         </div>
 
