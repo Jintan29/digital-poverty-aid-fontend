@@ -15,9 +15,9 @@ const Register = () => {
     username: "",
     password: "",
     confimePassword: "",
-    title:'นาย',
-    fname:'',
-    lname:'',
+    title: "นาย",
+    fname: "",
+    lname: "",
     phone: "",
     status: "",
   });
@@ -30,7 +30,6 @@ const Register = () => {
     setFormData(updateData);
   };
 
- 
   const validation = () => {
     if (formData.password !== formData.confimePassword) {
       Swal.fire({
@@ -40,32 +39,32 @@ const Register = () => {
       });
       return false;
     }
-    if(formData.phone.length <10){
+    if (formData.phone.length < 10) {
       Swal.fire({
-        title:'เบอร์โทรไม่ถูกต้อง',
-        text:'กรุนากรอกรให้ครบ 10 หลัก',
-        icon:'warning'
-      })
+        title: "เบอร์โทรไม่ถูกต้อง",
+        text: "กรุนากรอกรให้ครบ 10 หลัก",
+        icon: "warning",
+      });
 
-      return false
+      return false;
     }
-    if(formData.password.length <4){
+    if (formData.password.length < 4) {
       Swal.fire({
-        title:'รหัสผ่านสั้นเกินไป',
-        text:'กรุณากรอกขั้นต่ำอย่างน้อย 4 ตัวอักษร',
-        icon:'warning'
-      })
-      return false
+        title: "รหัสผ่านสั้นเกินไป",
+        text: "กรุณากรอกขั้นต่ำอย่างน้อย 4 ตัวอักษร",
+        icon: "warning",
+      });
+      return false;
     }
 
-    if(formData.status ===''){
+    if (formData.status === "") {
       Swal.fire({
-        title:'กรอกข้อมูลไม่ครบ',
-        text:'กรุณาเลือกบทบาท',
-        icon:'warning'
-      })
+        title: "กรอกข้อมูลไม่ครบ",
+        text: "กรุณาเลือกบทบาท",
+        icon: "warning",
+      });
 
-      return false
+      return false;
     }
     return true;
   };
@@ -144,7 +143,7 @@ const Register = () => {
           <div className="w-full px-10 border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2 mt-5">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                สมัครสมาชิค
+                สมัครสมาชิก
               </h2>
 
               <form onSubmit={(e) => handleSubmit(e)}>
@@ -266,49 +265,48 @@ const Register = () => {
                 </div>
 
                 <div className="relative rounded-md shadow-sm mb-6">
-                  <label
-                    className="mb-2.5 block font-medium text-black dark:text-white"
-                  >
+                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     ชื่อจริง
                   </label>
-
-                  {/* Select ตัวเลือก */}
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pt-7">
+                  <div className="flex items-center gap-2 mb-5">
                     <select
+                      id="title"
+                      name="title"
                       onChange={(e) =>
                         handleInputChange("title", e.target.value)
                       }
-                      className="border border-transparent bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-20 py-3 focus:border-gray-500 focus:rounded-md"
+                      className="border  border-stroke rounded-lg border-gray-500 bg-transparent text-gray-500 text-sm focus:ring-0 focus:outline-none w-25 py-4 focus:border-primary "
                     >
                       <option>นาย</option>
                       <option>นาง</option>
                       <option>นางสาว</option>
+                      <option>เด็กชาย</option>
+                      <option>เด็กหญิง</option>
                     </select>
-                  </div>
 
-                  {/* Input ช่องกรอก */}
-                  <input
-                    onChange={(e) =>
-                      handleInputChange("fname", e.target.value)
-                    }
-                    required
-                    onInvalid={(e) =>
-                      e.target.setCustomValidity("กรุณากรอกข้อมูลให้ครบ")
-                    }
-                    onInput={(e) => e.target.setCustomValidity("")}
-                    type="text"
-                    placeholder="กรอกชื่อจริง"
-                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-24 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-
-                  <span className="absolute right-4 top-4 mt-6">
+                    <input
+                      id="fname"
+                      name="fname"
+                      type="text"
+                      onChange={(e) => handleInputChange("fname", e.target.value)}
+                      required
+                      onInvalid={(e) =>
+                        e.target.setCustomValidity("กรุณากรอกข้อมูลให้ครบ")
+                      }
+                      onInput={(e) => e.target.setCustomValidity("")}
+                      placeholder="กรอกชื่อจริง"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4  pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                    <span className="absolute right-4 top-4 mt-6">
                     <Icon
                       icon="material-symbols:person-rounded"
                       width="34"
                       height="34"
                     />
                   </span>
+                  </div>
                 </div>
+                
 
                 <div className="mb-6">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
