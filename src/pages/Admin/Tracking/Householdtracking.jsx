@@ -50,7 +50,7 @@ import AddPinModal from "../../../components/Householdtracking/Modal/AddPinModal
 const Householdtracking = () => {
   const [household, setHousehold] = useState(null);
   const [incomeData, setIncomeData] = useState(null); //แสดงรายรับทั้งในและนอกการเกษตร
-  const [totalGetHelped,setTotalGetHelp] = useState(null)
+  const [totalGetHelped, setTotalGetHelp] = useState(null)
   const [predictionData, setPredictionData] = useState(null);
   const [loading, setLoading] = useState(true); // เพิ่ม loading state
   const [error, setError] = useState(null);
@@ -540,51 +540,6 @@ const Householdtracking = () => {
   // const breakEven = totalIncome >= totalExpenses + totalCost + totalDebt;
 
   // -------------
-  // กำหนดเส้นความยากจน (สามารถปรับเปลี่ยนได้ตามมาตรฐาน)
-  const povertyLine = 36000; // สมมติว่าเส้นความยากจนอยู่ที่ 36,000 บาท/ปี
-
-  // ข้อมูลจาก JSON (ป้องกัน undefined)
-  const incomes = household?.Form?.Financialcapital?.NonAGIincomes ?? [];
-  const expenses = household?.Form?.Financialcapital?.Householdexpenses ?? [];
-  const debts = household?.Form?.Financialcapital?.Debt?.Creditsources ?? [];
-  const savings = household?.Form?.Financialcapital?.Savings ?? [];
-
-  // คำนวณรายรับรวมต่อปี
-  const totalIncome = incomes.reduce(
-    (sum, income) => sum + (income.amount_per_year ?? 0),
-    0
-  );
-
-  // คำนวณรายจ่ายรวมต่อปี
-  const totalExpenses = expenses.reduce(
-    (sum, expense) => sum + (expense.amount_per_month ?? 0) * 12,
-    0
-  );
-
-  // คำนวณต้นทุนรวมต่อปี
-  const totalCost = incomes.reduce(
-    (sum, income) => sum + (income.cost_per_year ?? 0),
-    0
-  );
-
-  // คำนวณหนี้สินรวม (หนี้สินที่ยังค้างชำระ)
-  const totalDebt = debts.reduce(
-    (sum, debt) => sum + (debt.outstanding_amount ?? 0),
-    0
-  );
-
-  // คำนวณการออมรวม (เงินออมทั้งหมดที่ครัวเรือนมี)
-  const totalSavings = savings.reduce(
-    (sum, saving) => sum + (saving.amount ?? 0),
-    0
-  );
-
-  // คำนวณรายได้สุทธิ (Net Income) รวมการออมเข้าไป
-  const netIncome = totalIncome + totalSavings - totalExpenses - totalCost - totalDebt;
-
-
-  // ตรวจสอบจุดหลุดพ้นความยากจน (รวมภาระหนี้และการออม)
-  const breakEven = (netIncome >= povertyLine) 
 
 
 
@@ -596,12 +551,12 @@ const Householdtracking = () => {
           <h1 className="text-2xl font-bold">ครัวเรือน</h1>
           <p
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg shadow-md transition duration-300 transform hover:scale-105
-        ${breakEven
+    ${household?.financialSummary?.breakEven
                 ? "bg-green-100 text-green-600 hover:bg-green-200"
                 : "bg-red-100 text-red-600 hover:bg-red-200"
               }`}
           >
-            {breakEven ? (
+            {household?.financialSummary?.breakEven ? (
               <>
                 <Icon icon="mdi:check-circle" className="w-5 h-5" />
                 <span className="font-medium">หลุดพ้นจากความยากจน</span>
@@ -613,6 +568,7 @@ const Householdtracking = () => {
               </>
             )}
           </p>
+
         </div>
         <div className="ml-auto">
           <Dropdown
@@ -782,7 +738,7 @@ const Householdtracking = () => {
             </p>
             <p>
               <strong className="text-gray-900">จำนวนครั้งที่ได้รับความช่วยเหลือ:</strong>{" "}
-              {totalGetHelped + ' '+'ครั้ง' || "ไม่มี"} 
+              {totalGetHelped + ' ' + 'ครั้ง' || "ไม่มี"}
             </p>
           </div>
         </div>

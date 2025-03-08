@@ -81,13 +81,13 @@ function Minimap() {
         <div className="h-1/6 p-4">
           <div className="flex justify-start items-center md:justify-center lg:justify-start xl:justify-start">
             <div
-              className="bg-blue-500 text-white px-2 py-1 rounded-l-full font-medium text-sm cursor-pointer"
+              className="bg-blue-500 text-white px-2 py-1 rounded-l-full font-medium text-sm cursor-pointer z-10"
               onClick={() => handleClick(true)} // กดแสดง Map
             >
               จำนวนครัวเรือนยากจน
             </div>
             <div
-              className="bg-yellow-400 text-white px-2 py-1 rounded-r-full font-medium text-sm cursor-pointer"
+              className="bg-yellow-400 text-white px-2 py-1 rounded-r-full font-medium text-sm cursor-pointer z-10"
               onClick={() => handleClick(false)} // กดแสดง Map2
             >
               จำนวนสมาชิกครัวเรือนยากจน
