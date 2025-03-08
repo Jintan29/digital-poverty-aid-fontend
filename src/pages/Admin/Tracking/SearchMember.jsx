@@ -240,7 +240,7 @@ const SearchMember = () => {
           ...config.headers(),
         }
       );
-      console.log(resApi);
+      // console.log(resApi);
       setMembers(resApi.data.results);
       setTotalPages(resApi.data.totalPages);
     } catch (err) {
