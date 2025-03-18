@@ -109,10 +109,10 @@ const IncomeModal = ({ show, onClose, member, loadFinancial }) => {
               <thead class="text-base text-gray-700 uppercase bg-blue-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th scope="col" class="px-6 py-3">
-                    รายได้เฉลี่ย
+                    รายได้เฉลี่ย/เดือน
                   </th>
                   <th scope="col" class="px-6 py-3">
-                    รายจ่ายเฉลี่ย
+                    รายจ่ายเฉลี่ย/เดือน
                   </th>
                   <th scope="col" class="px-6 py-3">
                     อัตราเงินเฟ้อ
@@ -159,7 +159,7 @@ const IncomeModal = ({ show, onClose, member, loadFinancial }) => {
                 {/* Income */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900">
-                    รายได้เฉลี่ย
+                    รายได้เฉลี่ย/เดือน
                   </label>
 
                   <div className="relative">
@@ -183,7 +183,7 @@ const IncomeModal = ({ show, onClose, member, loadFinancial }) => {
                 {/* Expense Input */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    รายจ่ายเฉลี่ย
+                    รายจ่ายเฉลี่ย/เดือน
                   </label>
                   <div className="relative">
                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">

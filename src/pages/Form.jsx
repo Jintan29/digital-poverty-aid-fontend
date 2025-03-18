@@ -51,6 +51,7 @@ export const Form = () => {
             icon: 'success',
             showConfirmButton: true
           });
+          window.location.reload(); // refresh web
         }
       }
     }catch(e){
