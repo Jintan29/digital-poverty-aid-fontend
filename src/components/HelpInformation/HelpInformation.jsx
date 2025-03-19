@@ -26,40 +26,38 @@ const HelpInformation = () => {
     try {
       const response = await axios.get(`${config.api_path}/capital/lists`);
       const data = response.data;
-
-      // 💾 จัดรูปแบบข้อมูลสำหรับกราฟ
-      const formattedCapitalData = Object.keys(data.capitalByYear).map(
-        (year) => ({
-          year: year,
-          humanCapital: data.capitalByYear[year]["ทุนมนุษย์"].count,
-          physicalCapital: data.capitalByYear[year]["ทุนกายภาพ"].count,
-          businessCapital: data.capitalByYear[year]["ทุนทางเศรษฐกิจ"].count,
-          nationalCapital: data.capitalByYear[year]["ทุนธรรมชาติ"].count,
-          socialCapital: data.capitalByYear[year]["ทุนทางสังคม"].count,
-        })
-      );
-
-      const formattedMoneyData = Object.keys(data.capitalByYear).map(
-        (year) => ({
-          year: year,
-          amountHumanCapital: data.capitalByYear[year]["ทุนมนุษย์"].amount,
-          amountPhysicalCapital: data.capitalByYear[year]["ทุนกายภาพ"].amount,
-          amountBusinessCapital: data.capitalByYear[year]["ทุนทางเศรษฐกิจ"].amount,
-          amountNationalCapital: data.capitalByYear[year]["ทุนธรรมชาติ"].amount,
-          amountSocialCapital: data.capitalByYear[year]["ทุนทางสังคม"].amount,
-        })
-      );
-
+  
+      const currentYear = (new Date().getFullYear() + 543).toString(); // ปีปัจจุบัน (พ.ศ.)
+      const years = Object.keys(data.capitalByYear).length ? Object.keys(data.capitalByYear) : [currentYear]; // ถ้าไม่มีปีเลยให้ใช้ปีปัจจุบัน
+      
+      // จัดรูปแบบข้อมูลสำหรับกราฟ
+      const formattedCapitalData = years.map((year) => ({
+        year,
+        humanCapital: data.capitalByYear[year]?.["ทุนมนุษย์"]?.count || 0,
+        physicalCapital: data.capitalByYear[year]?.["ทุนกายภาพ"]?.count || 0,
+        businessCapital: data.capitalByYear[year]?.["ทุนทางเศรษฐกิจ"]?.count || 0,
+        nationalCapital: data.capitalByYear[year]?.["ทุนธรรมชาติ"]?.count || 0,
+        socialCapital: data.capitalByYear[year]?.["ทุนทางสังคม"]?.count || 0,
+      }));
+  
+      const formattedMoneyData = years.map((year) => ({
+        year,
+        amountHumanCapital: data.capitalByYear[year]?.["ทุนมนุษย์"]?.amount || 0,
+        amountPhysicalCapital: data.capitalByYear[year]?.["ทุนกายภาพ"]?.amount || 0,
+        amountBusinessCapital: data.capitalByYear[year]?.["ทุนทางเศรษฐกิจ"]?.amount || 0,
+        amountNationalCapital: data.capitalByYear[year]?.["ทุนธรรมชาติ"]?.amount || 0,
+        amountSocialCapital: data.capitalByYear[year]?.["ทุนทางสังคม"]?.amount || 0,
+      }));
+  
       setCapitalData(formattedCapitalData);
       setMoneyData(formattedMoneyData);
       setCapitalCount(data.capitalAllCount);
       setMoneyCount(data.totalAmount);
-
-
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
   };
+  
 
   // 💡 ใช้ useEffect เพื่อเรียก API เมื่อ Component โหลดครั้งแรก
   useEffect(() => {
