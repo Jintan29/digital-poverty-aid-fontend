@@ -32,7 +32,7 @@ function FindAssistance() {
   useEffect(() => {
     const fetchYears = async () => {
       try {
-        const response = await axios.get(`${config.api_path}/export/getYears`);
+        const response = await axios.get(`${config.api_path}/export/getYears`,config.headers());
         setYearOptions(["ทั้งหมด", ...response.data.years]); // ✅ ใส่ "ทั้งหมด" เป็น Default
       } catch (error) {
         console.error(
@@ -65,6 +65,7 @@ function FindAssistance() {
     try {
       const response = await axios.get(`${config.api_path}/export/getFind`, {
         params,
+        ...config.headers()
       });
       setFilteredData(response.data.data);
       setTotalPages(response.data.pagination.totalPages);
@@ -107,11 +108,15 @@ function FindAssistance() {
       });
 
       // ❌ ถ้าผู้ใช้กดยกเลิก ให้หยุดทำงาน
-      if (!res.isConfirmed) return;
+      if (!res.isConfirmed) {
+        setIsSaving(false); // ✅ ต้องเซ็ต isSaving เป็น false ที่นี่ด้วย
+        return;
+      }
 
       // ✅ ดึงข้อมูลจาก API
       const response = await axios.get(`${config.api_path}/export/getFind`, {
         params,
+        ...config.headers(),
         responseType: "blob", // ✅ รองรับการดาวน์โหลดไฟล์
       });
 
@@ -125,6 +130,8 @@ function FindAssistance() {
       a.click();
       document.body.removeChild(a);
 
+
+
       // ✅ เช็คว่าเซิร์ฟเวอร์ส่งข้อความ JSON มาหรือไม่
       if (response.headers["content-type"].includes("application/json")) {
         const text = await response.data.text();
@@ -136,6 +143,7 @@ function FindAssistance() {
             text: "บันทึกข้อมูลสำเร็จ",
             icon: "success",
           });
+          
         }
       }
 
@@ -148,9 +156,10 @@ function FindAssistance() {
 
     } catch (error) {
       console.error("Error downloading Excel:", error);
-      Swal.fire("เกิดข้อผิดพลาด", error.message || "ไม่สามารถดาวน์โหลดไฟล์ได้", "error");
+      await Swal.fire("เกิดข้อผิดพลาด", error.message || "ไม่สามารถดาวน์โหลดไฟล์ได้", "error");
     } finally {
       setIsSaving(false); // ✅ ปล่อยให้กดปุ่มใหม่
+      console.log("Download process completed, isSaving set to false");
     }
   };
 
